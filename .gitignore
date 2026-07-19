@@ -1,0 +1,12 @@
+# Build-Zwischenstände (Inhaltsblöcke + Vorlage werden in die Hefte gespleisst)
+_content/
+
+# Betriebssystem / Editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Node (falls je genutzt)
+node_modules/

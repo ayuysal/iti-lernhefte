@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITI26 – Anwendungsdienste &amp; Netzmanagement</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("iti26:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">ITI26 <span>· 0723K05</span></div>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Anwendungsdienste &amp; Netzmanagement</h1>
+      <p class="sub">Client-Server- und Peer-to-Peer-Netze, Internetanwendungen von WWW über E-Mail bis Blockchain, Netzwerkmanagement mit SNMP und Grundlagen der Informationssicherheit – mit Einsendeaufgabe Typ A und Lösungswegen.</p>
+      <div class="meta">
+        <span>ITI26 · 0723K05</span>
+        <span>4 Kapitel · 80 Seiten</span>
+        <span>Einsendeaufgabe: 100 Pkt.</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Peer-to-Peer- und Client-Server-Netze">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Peer-to-Peer- und Client-Server-Netze</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Aus administrativer Sicht gibt es letztlich nur zwei Netzarchitekturen: <strong>Client-Server</strong> und <strong>Peer-to-Peer (P2P)</strong>. Beide folgen auf den unteren OSI-Schichten exakt dem gleichen TCP/IP-Prinzip – der Unterschied liegt allein in der Rollenverteilung auf der Anwendungsschicht.</p>
+
+    <div class="box def">
+      <span class="lbl">Server ist eine Rolle, kein Rechner</span>
+      <p>Ein <strong>Server</strong> ist ein Programm (Prozess), das einem anderen Programm, dem <strong>Client</strong> (Kunde, Dienstnutzer), Zugang zu einem Dienst verschafft. Ein Rechner kann Server und Client zugleich sein. Im <strong>P2P-Netz</strong> (Peer = Gleichgestellter) ist genau das der Normalfall: Jeder Peer ist gleichzeitig Client und Server, das Rollenspiel wechselt laufend.</p>
+    </div>
+
+    <h4>Client-Server vs. Peer-to-Peer</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>Client-Server</th><th>Peer-to-Peer</th></tr></thead>
+      <tbody>
+        <tr><td>Rollen</td><td>ein oder mehrere Knoten stellen Dienste bereit, andere nutzen sie nur</td><td>alle Knoten sind gleichberechtigt, bieten und nutzen Dienste zugleich</td></tr>
+        <tr><td>Verwaltung</td><td>zentral; Betriebssicherheit leichter zu realisieren</td><td>dezentral, selbstorganisierend – das Netz „wächst von allein“</td></tr>
+        <tr><td>Schwachpunkt</td><td>Server = Single Point of Failure, Bottleneck bei Massenanfragen</td><td>Sicherheits- und Administrationsprobleme, schwer kontrollierbar</td></tr>
+        <tr><td>Skalierbarkeit</td><td>begrenzt durch Serverkapazität</td><td>gut: Ausfall einzelner Peers ist kein Gesamtproblem</td></tr>
+        <tr><td>Beispiele</td><td>WWW, E-Mail, Datenbank-/File-Server, Cloud-Computing</td><td>BitTorrent, Gnutella, eDonkey, Blockchain/Bitcoin</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle: OSI-Schichten</span>
+      <p>Der Unterschied zwischen Client-Server und P2P liegt <strong>ausschliesslich auf der Anwendungsschicht</strong> (Rollenverteilung). Auf den darunterliegenden Schichten – Transport (TCP/UDP) und Vermittlung (IP) – läuft in beiden Architekturen exakt das gleiche TCP/IP-Protokoll. Das ist die zentrale <em>Gemeinsamkeit</em>, nach der Prüfungsfragen gern fragen.</p>
+    </div>
+
+    <p>Historisch ist P2P sogar die Ursprungsform: Die ersten vier ARPANET-Hosts waren gleichberechtigte Rechner. Heute dominieren Client-Server-Netze, vor allem dank Cloud-Computing; P2P lebt in Nischen weiter (File-Sharing) und in neuer Form in der Blockchain, siehe Kapitel 2. Eine Mischform sind <strong>verteilte Systeme</strong>: eine logische Erweiterung des Client-Server-Modells, bei der Aufgaben auf mehrere Server verteilt werden.</p>
+
+    <h4>Server-Prozesse: Sockets und Ports</h4>
+    <p>Zwischen zwei Kommunikationsprozessen besteht eine feste Zuordnung aus Protokoll, lokaler/entfernter Rechneradresse und lokaler/entfernter Portnummer. Die Kombination aus <strong>IP-Adresse und Portnummer</strong> heisst <strong>Socket</strong>.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Portbereich</th><th>Bezeichnung</th></tr></thead>
+      <tbody>
+        <tr><td>0 – 1023</td><td>Well-Known Ports (RFC 1700): Standarddienste wie HTTP, FTP, SMTP, POP3</td></tr>
+        <tr><td>1024 – 49151</td><td>Registered Ports</td></tr>
+        <tr><td>49152 – 65535</td><td>Dynamic/Private Ports, frei verfügbar</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Der Server bindet sich mit <code>bind()</code> fest an seinen Well-Known Port, der Client erhält vom Betriebssystem eine freie Nummer – der Server erfährt sie aus der eingehenden Anfrage. Beide Seiten kommunizieren über eine feste Abfolge von Systemaufrufen:</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Aufruf</th><th>Ereignis</th></tr></thead>
+      <tbody>
+        <tr><td>socket</td><td>Anforderung eines Kommunikationsendpunktes</td></tr>
+        <tr><td>bind</td><td>Portnummer festlegen (Server)</td></tr>
+        <tr><td>listen</td><td>Pufferzahl für Anfragen festlegen (Server)</td></tr>
+        <tr><td>accept</td><td>auf Anfragen warten – blockiert den Server-Prozess (Server)</td></tr>
+        <tr><td>connect</td><td>Verbindung zum Server anfordern (Client)</td></tr>
+        <tr><td>send / recv</td><td>Daten senden / empfangen</td></tr>
+        <tr><td>close</td><td>Socket schliessen</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Iterativer vs. paralleler Server</h4>
+    <p>Ein Server muss stets mehrere Clients bedienen (1:n-Beziehung). Dafür gibt es zwei Arbeitsweisen:</p>
+
+    <div class="box">
+      <span class="lbl">Zwei Serverklassen</span>
+      <p><strong>Iterativer Server:</strong> bearbeitet jede Anfrage selbst, sendet die Antwort und geht danach zurück in den Wartezustand – einfach, aber es kann immer nur ein Client gleichzeitig bedient werden. <strong>Paralleler Server:</strong> startet für jede eingehende Anfrage einen neuen Prozess/Thread (auch Child-Server-Prozess, Forking Server oder Concurrent Server genannt), der die Antwort übernimmt; der Hauptprozess ist sofort wieder frei für die nächste Anfrage – quasi nach dem Multitasking-Prinzip.</p>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle</span>
+      <p>„Paralleler Server ist immer besser“ stimmt <strong>nicht</strong>: Bei hoher Netzbelastung leidet trotzdem das Gesamtverhalten, und nicht jede Aufgabe profitiert von Parallelität – ein Netzwerkdrucker hat trotzdem meist nur einen Papierschacht bzw. Laserkopf. Der parallele Server ist zudem kein Multiprozessorsystem; es handelt sich um <strong>Nebenläufigkeit (Concurrency)</strong>, nicht zwingend um echte Parallelität.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Anwendungen im Internet">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Anwendungen im Internet</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead"><strong>Internet ≠ WWW.</strong> Das ARPANET als Vorläufer des Internets ging 1969 in Betrieb, das World Wide Web erfand Tim Berners-Lee erst 20 Jahre später (März 1989, CERN) als Wissensmanagement-Projekt. Das WWW hat das Internet zur Erfolgsgeschichte gemacht, ist aber nur einer seiner Dienste.</p>
+
+    <h4>World Wide Web, HTTP und HTML</h4>
+    <div class="box def">
+      <span class="lbl">WWW als Client-Server-Dienst</span>
+      <p>Das WWW folgt dem Client-Server-Prinzip und ist <strong>verbindungsorientiert</strong>. Der Browser (Client) fordert Inhalte per <strong>HTTP-Request</strong> an, der WWW-Server liefert per HTTP-Response. <strong>HTTP</strong> (Hypertext Transfer Protocol) baut auf TCP auf und ist <strong>zustandslos</strong> – ein einfaches Frage-Antwort-Schema ohne Gedächtnis zwischen den Anfragen. <strong>HTTPS</strong> überträgt zusätzlich verschlüsselt; seit 2015 gibt es mit <strong>HTTP/2</strong> (RFC 7540) eine performantere Weiterentwicklung.</p>
+    </div>
+
+    <p>Inhalte liegen als <strong>Hypermedia-Dokumente</strong> vor – vernetzt über <strong>Hyperlinks</strong>. Die Darstellungssprache ist <strong>HTML</strong> (Hypertext Markup Language): eine Markup-, keine Programmiersprache, mit Fokus auf Struktur und Formatierung. <strong>XML</strong> (eXtensible Markup Language, W3C 1998) ist eine Meta-Markup-Sprache, aus der anwendungsspezifische Sprachen wie WML, RSS oder SVG abgeleitet sind. Ergänzend trennt <strong>CSS</strong> Inhalt und Darstellung, <strong>JavaScript</strong> ermöglicht clientseitig dynamische Seiten, und <strong>PHP</strong> erzeugt serverseitig dynamische Inhalte.</p>
+
+    <h4>Aufbau einer URL</h4>
+    <p>Über eine <strong>URL</strong> (Uniform Resource Locator) ruft der Browser eine Ressource ab; ein <strong>DNS</strong>-Dienst (Domain Name System) löst den Namen rekursiv – von rechts nach links gelesen – in eine IP-Adresse auf.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Bestandteil</th><th>Beispiel aus <code>https://www.youtube.com/watch?v=GUrDI6OkJfU</code></th></tr></thead>
+      <tbody>
+        <tr><td>Protokoll</td><td>https</td></tr>
+        <tr><td>Subdomain</td><td>www</td></tr>
+        <tr><td>Domainname</td><td>youtube.com</td></tr>
+        <tr><td>Top-Level-Domain</td><td>.com</td></tr>
+        <tr><td>Pfad</td><td>/watch (Datei/Verzeichnis auf dem Server)</td></tr>
+        <tr><td>Parameter = Wert</td><td>v=GUrDI6OkJfU (eingeleitet durch „?“)</td></tr>
+      </tbody>
+    </table></div>
+    <p>Optional kann eine URL zusätzlich Portnummer sowie Benutzername/Passwort enthalten. Der Aufrufdialog folgt sechs Schritten: URL eingeben → HTTP-Anfrage senden (inkl. DNS-Auflösung) → Server empfängt Anfrage → Server sucht Ressource auf der Festplatte → Server liest Datei → Server antwortet mit HTTP-Response. Eine einzelne Webseite braucht dafür oft mehrere solcher Anfragen.</p>
+
+    <h4>E-Mail: Aufbau, SMTP, POP3, IMAP</h4>
+    <div class="box def">
+      <span class="lbl">Aufbau einer E-Mail</span>
+      <p>Eine E-Mail besteht aus drei Teilen: <strong>Envelope</strong> (gehört zum Transportprotokoll, für den Empfänger nicht sichtbar), <strong>Header</strong> (Metadaten wie Date, From, To, Cc, Bcc, Reply-To, Subject, Message-ID) und <strong>Body</strong> (eigentlicher Inhalt). Die Adresssyntax <code>benutzer@domain.tld</code> folgt RFC 5321/5322: „@“ ist das einzige Trennzeichen, der Punkt im Domainnamen trennt Domain und TLD – gleiche Logik wie bei einer URL. Der <strong>MIME-Standard</strong> (1993) erweitert das ursprünglich reine 7-Bit-ASCII-Format um Anhänge (Bild, Audio, Video …) und nationale Sonderzeichen.</p>
+    </div>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Protokoll</th><th>Port</th><th>Aufgabe</th></tr></thead>
+      <tbody>
+        <tr><td>SMTP</td><td>25 (465 mit TLS/SSL)</td><td>Versenden zwischen MTAs (Message Transfer Agents); reines Sendeprotokoll nach Client-Server-Prinzip, auch zwischen zwei Servern</td></tr>
+        <tr><td>POP3</td><td>110</td><td>Abruf: lädt E-Mails herunter und löscht sie danach vom Server – wie ein klassischer Briefkasten</td></tr>
+        <tr><td>IMAP</td><td>143</td><td>Abruf: lädt zunächst nur die Header, der Mailserver bleibt zentrales Repository – synchron über mehrere Endgeräte</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle POP3 vs. IMAP</span>
+      <p>POP3 <strong>entleert</strong> das Postfach beim Abruf (effizient, aber nicht geräteübergreifend synchron). IMAP hält die <strong>gesamte Ordnerstruktur</strong> zentral auf dem Server – Posteingang, Gesendet, Entwürfe, Gelöscht – und synchronisiert sie auf allen Geräten. Wer mehrere Endgeräte nutzt, braucht IMAP.</p>
+    </div>
+
+    <h4>Blockchain</h4>
+    <div class="box def">
+      <span class="lbl">Definition</span>
+      <p>Die <strong>Blockchain</strong> ist ein auf beliebig vielen Rechnern verteiltes, öffentliches <strong>Transaktions-Logbuch (Distributed Ledger)</strong> für ein digitales Gut. Sie entstand 2008/2009 (Satoshi Nakamoto, Whitepaper „Bitcoin: A Peer-to-Peer Electronic Cash System“) aus dem Vertrauensverlust in Banken nach der Finanzkrise – Ziel war ein System <em>ohne zentrale Instanz</em>, ganz im Sinne des P2P-Prinzips aus Kapitel 1.</p>
+    </div>
+
+    <p>Jede Transaktion wird digital signiert, im P2P-Netz verteilt und von allen Teilnehmern geprüft (<strong>Konsensverfahren</strong>). Nach Konsens wird sie einem neuen <strong>Block</strong> hinzugefügt; jeder Block referenziert per Hashwert den vorigen – so entsteht die <strong>Chain</strong>. Die Transaktionen eines Blocks werden zusätzlich in einem <strong>Merkle-Tree</strong> (Ralph Merkle, 1979) zusammengefasst. Konkurrierende Miner lösen dafür ein mathematisches Rätsel (<strong>Mining</strong>); wer zuerst fertig ist, erhält eine Belohnung. Entstehen dabei zeitgleich zwei Zweige (<strong>Fork</strong>), gilt eine feste Regel:</p>
+
+    <p class="formula">Die längste Kette ist stets die gültige Kette.</p>
+    <p>Der kürzere Zweig wird zum <strong>Orphan-Block</strong> und verwaist. Der allererste Block einer Chain heisst <strong>Genesis-Block</strong>. Weil jede nachträgliche Änderung alle Folge-Hashes bricht und mindestens die Hälfte aller Teilnehmer manipuliert werden müsste, gilt die Blockchain als praktisch fälschungssicher. <strong>Smart Contracts</strong> erweitern sie um selbstausführende Verträge nach dem If-Then-Prinzip.</p>
+
+    <p>Kernvorteile: kein Intermediär nötig, hohe Manipulationssicherheit, schnelle automatisierte Abwicklung von Standardprozessen. Anwendungsgebiete finden sich praktisch branchenübergreifend, u. a. in <strong>Logistik/Warenwirtschaft</strong> (lückenlose Herkunftsverfolgung), <strong>Finanzwesen</strong> (Kryptowährungen, Zahlungsabwicklung), <strong>Energieversorgung</strong> (P2P-Stromhandel), <strong>Medizin/Pharma</strong> (fälschungssichere Patientenakten), Identitätsmanagement sowie Cloud Computing und Internet of Things.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Management von Computernetzen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Management von Computernetzen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Netzwerkmanagement kümmert sich um Hard- und Softwareprobleme, Überlastungen und Verbindungsunterbrechungen auf Netzkomponenten und Servern – betrachtet nach Netztyp, Informationsart, Disziplin, Funktionsklasse und Betriebsphase. Damit Aussagen wie „das Internet ist heute langsam“ objektiv vergleichbar werden, standardisiert das <strong>OSI Management Framework</strong> (ISO/IEC 7498-4) das Vorgehen.</p>
+
+    <h4>Netzwerk-Monitoring</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Unterscheidung</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Internes</strong> Monitoring</td><td>Überwachung direkt auf den einzelnen Netzkomponenten</td></tr>
+        <tr><td><strong>Externes</strong> Monitoring</td><td>zusätzliche, an das Netzwerk angeschlossene Analyse-Tools</td></tr>
+        <tr><td><strong>Passives</strong> Monitoring</td><td>der Netzverkehr wird nur „mitgehört“ (Protokollanalyse)</td></tr>
+        <tr><td><strong>Aktives</strong> Monitoring</td><td>Test-Pakete werden gezielt gesendet, z. B. <code>ping</code> mit ICMP Echo Request/Reply</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box def">
+      <span class="lbl">OSI Management Framework – fünf Funktionsklassen</span>
+      <p><strong>Performance-Management:</strong> Bewertung von Verhalten und Effektivität der Verbindungsaktivitäten. <strong>Fault-Management:</strong> Erkennung, Bearbeitung und Behebung von Fehlerzuständen, Alarm- und Log-Handling. <strong>Configuration-Management:</strong> zentrale Identifikation, Überwachung und Kontrolle der Managed Objects zur unterbrechungsfreien Operation. <strong>Security-Management:</strong> Kontrolle und Verteilung von Informationen zur Sicherstellung der Informationsintegrität. <strong>Accounting-Management:</strong> leistungsbezogene Verrechnung des Netzwerk-Management-Dienstes.</p>
+    </div>
+
+    <h4>SNMP – Simple Network Management Protocol</h4>
+    <p>SNMP sitzt im TCP/IP-Modell auf der Anwendungsschicht und nutzt <strong>UDP</strong> (Port 161, Traps auf Port 162). Aktuelle Version: SNMPv3 (seit Dezember 2002, abwärtskompatibel). Die Kommunikation läuft standardmässig im <strong>Klartext</strong> – ein bekanntes Sicherheitsrisiko, weshalb SNMP an Netzgrenzen oft blockiert werden sollte.</p>
+
+    <div class="box def">
+      <span class="lbl">Manager und Agent</span>
+      <p>SNMP basiert auf zwei Rollen: Der <strong>Manager</strong> (Software auf einem NMS, Network Management System) überwacht, steuert und protokolliert – <strong>nur er führt Analysen durch</strong>. Die <strong>Agenten</strong> laufen als Managed Objects direkt auf den Netzkomponenten (Router, Switch, Server) und melden ihren Status. Das Frage-Antwort-Schema zwischen beiden ist bewusst simpel gehalten.</p>
+    </div>
+
+    <div class="tw"><table>
+      <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>MIB</strong> (Management Information Base)</td><td>hierarchische Datenbank aller Managed Objects, verwaltet von ISO/ITU; MIB-II (RFC 1213) ist die heute gültige Fassung</td></tr>
+        <tr><td><strong>SMI</strong> (Structure and Identification of Management Information)</td><td>genormte Struktur, nach der die MIB aufgebaut ist; Notationssprache ASN.1</td></tr>
+        <tr><td><strong>OID</strong> (Object Identifier)</td><td>eindeutige Baum-Position eines Managed Object, z. B. 1.3.6.1 = iso.org.dod.internet</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Message</th><th>Ausgelöst durch</th><th>Zweck</th></tr></thead>
+      <tbody>
+        <tr><td>GET / GET-NEXT / GET-RESPONSE</td><td>Manager</td><td>Status-Information vom Agenten abrufen</td></tr>
+        <tr><td>SET</td><td>Manager</td><td>Status/Parameter beim Agenten setzen</td></tr>
+        <tr><td>TRAP</td><td>Agent</td><td>meldet unaufgefordert ein Ereignis, z. B. CPU-Alarm</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle</span>
+      <p>Der <strong>Agent</strong> ist nicht in das NMS eingebettet, sondern läuft auf der überwachten Komponente selbst. TRAP-Messages werden vom <strong>Agenten</strong> ausgelöst, nicht vom Manager – nur GET und SET gehen vom Manager aus. Und: Jede OID ist per Definition eindeutig, es gibt sie immer nur einmal.</p>
+    </div>
+
+    <div class="box">
+      <span class="lbl">Implementierungen in der Praxis</span>
+      <p><strong>WMI</strong> (Windows Management Instrumentation) ist das flexiblere Windows-Bordmittel. <strong>Hyperic HQ</strong> (Open Source) eignet sich für virtuelle Maschinen und Cloud-Infrastrukturen, mit automatischer Ressourcenerkennung (Auto-Discovery). <strong>Nagios</strong> gilt als Industriestandard, arbeitet als Baukastensystem (Windows-Hosts benötigen zusätzlich den NSClient++). <strong>PRTG</strong> (Paessler, kommerziell) sucht Sensoren automatisch, statt sie wie bei Nagios manuell einzutragen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Informationssicherheit">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4 · rechenlastig</p>
+      <h2>Informationssicherheit</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Verschlüsselung ist <strong>kein Bestandteil</strong> des OSI-Schichtenmodells – ohne kryptografische Verfahren könnte jedes Datenpaket auf seinem Weg durchs Netz mitgelesen oder verändert werden (Stichwort Man-in-the-Middle). Kryptografie sichert damit Vertraulichkeit, Integrität und Authentizität der Kommunikation.</p>
+
+    <div class="box">
+      <span class="lbl">Kerckhoff-Prinzip</span>
+      <p>Die Sicherheit eines kryptografischen Verfahrens soll auf der <strong>Geheimhaltung des Schlüssels</strong> beruhen, nicht auf der Geheimhaltung des Verfahrens selbst. Ein Verfahren lässt sich ohnehin kaum dauerhaft geheim halten; öffentlich bekannte, von Experten geprüfte Verfahren wie AES oder RSA gelten gerade deshalb als sicher.</p>
+    </div>
+
+    <h4>Kryptografie: symmetrisch vs. asymmetrisch</h4>
+    <p>Verschlüsselung des Klartextes (Plaintext) P mit dem Encryption Key: C = E_K(P). Entschlüsselung des Chiffretextes (Cipher-Text) C mit dem Decryption Key: P = D_K(C) – Decryption ist die Umkehrfunktion der Encryption.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Symmetrisch</th><th>Asymmetrisch</th></tr></thead>
+      <tbody>
+        <tr><td>Schlüssel</td><td>ein gemeinsamer Schlüssel für Ver- und Entschlüsselung (EK = DK)</td><td>Schlüsselpaar: öffentlicher Schlüssel (Public Key) + privater Schlüssel (Private Key)</td></tr>
+        <tr><td>Risiko</td><td>der Schlüsselaustausch selbst ist die Schwachstelle</td><td>Public Key ist beliebig verteilbar – risikofrei</td></tr>
+        <tr><td>Aufwand</td><td>gering, schnell</td><td>rechenintensiv, dafür ab ca. 5 Teilnehmern deutlich weniger Schlüssel nötig</td></tr>
+        <tr><td>Beispiele</td><td>DES, IDEA, AES</td><td>RSA (1977, Rivest/Shamir/Adleman)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box def">
+      <span class="lbl">RSA-Verfahren – Rechenbeispiel</span>
+      <p>RSA basiert auf dem Produkt zweier grosser Primzahlen, dessen Faktorisierung praktisch nicht in vertretbarer Zeit lösbar ist. Ablauf anhand kleiner Zahlen:</p>
+      <div class="step">1. Primzahlen wählen:        p = 17, q = 31
+2. Produkt:                  N = p · q = 527
+3. Eulersche Phi-Funktion:   φ(N) = (p−1)(q−1) = 16 · 30 = 480
+4. e teilerfremd zu φ(N) und kleiner als φ(N) wählen: e = 13
+   → öffentlicher Schlüssel (e, N) = (13, 527)
+5. d als Modulo-Inverses zu e bestimmen:
+   e · d mod φ(N) = 1  →  13 · 37 mod 480 = 481 mod 480 = 1
+   → privater Schlüssel (d, N) = (37, 527)
+
+Verschlüsseln (mit öffentlichem Schlüssel):  C = Mᵉ mod N
+   Nachricht „X“ = ASCII 88  →  C = 88¹³ mod 527 = 522
+
+Entschlüsseln (mit privatem Schlüssel):      M = Cᵈ mod N
+   M = 522³⁷ mod 527 = 88 = „X“</div>
+      <p>In der Praxis verlangt das BSI Schlüssellängen von N ab 2000 bis 3000 Bit, damit die Primfaktorzerlegung selbst mit heutiger Rechenleistung Jahre dauert und so vor <strong>Brute-Force-Attacken</strong> schützt.</p>
+    </div>
+
+    <h4>Digitale Signatur</h4>
+    <p>Die digitale Signatur ist eine <strong>hybride</strong> Anwendung: asymmetrische Verschlüsselung kombiniert mit einer Hashfunktion (Hybride Verschlüsselung insgesamt: asymmetrisch für den Schlüsseltausch, symmetrisch für die eigentliche Nutzdatenverschlüsselung). Eine <strong>Hashfunktion</strong> ist eine Einweg-Funktion (kein Rückschluss auf die Eingabe möglich) mit fester Ausgabelänge, die zusätzlich kollisionssicher sein muss – keine zwei Eingaben dürfen den gleichen Hashwert liefern.</p>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle: Schlüsselrichtung gedreht</span>
+      <p>Bei der digitalen Signatur wird die Schlüsselnutzung der normalen asymmetrischen Verschlüsselung <strong>umgekehrt</strong>: Der Sender verschlüsselt den Hashwert seiner Nachricht mit seinem <strong>eigenen privaten Schlüssel</strong> (Signatur). Der Empfänger prüft mit dem <strong>öffentlichen Schlüssel des Senders</strong> (Verifikation). Die Nachricht selbst bleibt dabei im Klartext lesbar – nur der Hashwert wird signiert.</p>
+    </div>
+
+    <h4>Sicherheitsangriffe</h4>
+    <p>Bei <strong>passiven Angriffen</strong> sammelt der Angreifer nur Informationen (Sniffing), ohne einzugreifen; erst der <strong>aktive Angriff</strong> manipuliert gezielt, etwa als Man-in-the-Middle.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Angriff</th><th>Merkmal</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Brute-Force</strong></td><td>systematisches Durchprobieren aller Zeichenkombinationen, bis Passwort/Schlüssel gefunden ist</td></tr>
+        <tr><td><strong>Social Engineering</strong></td><td>„Chef-Trick statt Enkel-Trick“ – psychologische Manipulation von Mitarbeitenden anhand recherchierter Insider-Informationen; die Schwachstelle „Mensch“ lässt sich nur durch regelmässiges Training absichern</td></tr>
+        <tr><td><strong>Man-in-the-Middle</strong></td><td>Angreifer nistet sich zwischen zwei Kommunikationspartner, hört mit und manipuliert</td></tr>
+        <tr><td><strong>Spoofing</strong></td><td>Vortäuschung einer falschen Identität – als IP-, DNS-, Mail- oder Call-ID-Spoofing</td></tr>
+        <tr><td>Phishing</td><td>gefälschte Login-Seiten, um Zugangsdaten abzugreifen</td></tr>
+        <tr><td>DoS / DDoS</td><td>gezielte Überlastung eines Systems bis zum Ausfall der Verfügbarkeit</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Malware unterscheidet sich vor allem nach Verbreitungsweg: <strong>Viren</strong> brauchen einen Wirt und werden erst beim Ausführen aktiv, <strong>Würmer</strong> verbreiten sich selbständig (z. B. via Adressbuch), <strong>Trojaner</strong> verstecken sich in scheinbar nützlicher Software und spähen Daten aus, <strong>Backdoors</strong> öffnen versteckte, oft erst Jahre später aktive Hintertüren, <strong>Spyware</strong> protokolliert Nutzeraktivitäten (z. B. Keylogger).</p>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang I · ITI26-XX02-K05 · 100 Punkte</p>
+      <h2>Einsendeaufgabe Typ A</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="box warn">
+      <span class="lbl">Hinweis zur Nutzung</span>
+      <p>Die Lösungen unten sind meine eigenen Rechen- und Argumentationswege zum Abgleich, nicht der offizielle Lösungsschlüssel. Formuliere für die Abgabe in eigenen Worten und rechne die Zahlen selbst nach – kleine Rundungsabweichungen sind normal.</p>
+    </div>
+
+    <!-- Aufgabe 1 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">1</span><span class="task-t">Client-Server vs. Peer-to-Peer</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <p>Erklären Sie den Unterschied zwischen einem Client-Server und einem Peer-to-Peer Netzwerk. Nennen Sie ebenso Beispiele oder Einsatzgebiete und wesentliche Anforderungen und Eigenschaften. Auf welchen OSI-Schichten gibt es eine Unterscheidung bzw. Gemeinsamkeiten?</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>Client-Server:</strong> Ein dedizierter Server stellt Dienste bzw. Ressourcen bereit, die Clients sind reine Leistungsnehmer. Vorteile: zentrale Verwaltung und Datensicherung, Betriebssicherheit leichter zu realisieren. Nachteil: Der Server ist ein <strong>Single Point of Failure</strong> und kann bei Massenanfragen zum Bottleneck werden.</p>
+        <p><strong>Peer-to-Peer:</strong> Alle Knoten sind gleichberechtigt, jeder Knoten ist gleichzeitig Client und Server. Das Netz ist dezentral und selbstorganisierend, das bringt gute Skalierbarkeit und Fehlertoleranz – der Ausfall einzelner Peers ist kein Gesamtproblem. Dem stehen Sicherheits- und Administrationsprobleme gegenüber, da es keine zentrale Kontrollinstanz gibt.</p>
+        <div class="step">Beispiele Client-Server:  WWW (Browser ↔ Webserver), E-Mail, Datenbank-/File-Server
+Beispiele P2P:            BitTorrent, Blockchain/Bitcoin</div>
+        <p><strong>OSI-Schichten:</strong> Der Unterschied besteht ausschliesslich auf der <strong>Anwendungsschicht</strong> – dort wird festgelegt, wer welche Rolle (Dienstanbieter/Dienstnutzer) einnimmt. Auf den darunterliegenden Schichten, insbesondere Transport- und Vermittlungsschicht, laufen beide Architekturen über das identische TCP/IP-Protokoll. Das ist die wesentliche <strong>Gemeinsamkeit</strong>.</p>
+        <div class="res">Unterschied: Rollenverteilung (zentral vs. gleichberechtigt) auf der Anwendungsschicht · Gemeinsamkeit: identisches TCP/IP auf Transport-/Vermittlungsschicht</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 2 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">2</span><span class="task-t">P2P-Netzwerke: zutreffende Aussagen</span><span class="task-p">4 Pkt.</span></div>
+      <div class="task-q">
+        <p>Welche Aussagen in Bezug auf P2P-Netzwerke sind zutreffend?</p>
+        <ol type="a">
+          <li>Die Knoten eines P2P-Netzwerkes können gleichzeitig Server und Clients sein.</li>
+          <li>In einem P2P-Netzwerk werden die Management-Server durch eine Abstimmung von allen Knoten vorausgewählt.</li>
+          <li>Ein P2P-Netzwerk hat einen Management- und einen Datenbank-Server.</li>
+          <li>In einem P2P-Netzwerk sind alle Knoten (Nutzer) gleichberechtigt.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Kernmerkmal von P2P ist gerade das <strong>Fehlen</strong> zentraler Instanzen. Damit scheiden b) und c) aus – es gibt weder abgestimmte Management-Server noch einen Management-/Datenbank-Server.</p>
+        <p>a) und d) beschreiben genau das P2P-Grundprinzip: Jeder Knoten kann Server und Client zugleich sein, und alle Knoten sind gleichberechtigt.</p>
+        <div class="res">Zutreffend: a) und d)</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 3 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">3</span><span class="task-t">Netzwerkmanagement: Manager, Agent, MIB</span><span class="task-p">14 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Welche beiden Instanzen unterscheidet man innerhalb des Netzwerkmanagements?</li>
+          <li>Was versteht man unter dem Begriff „Managementinformation“?</li>
+          <li>Erklären Sie den Zusammenhang zwischen den Begriffen „Managed Objects (MO)“, „Structur and Identification of Management Information (SMI)“ und „Management Information Base (MIB)“.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a) (2 Pkt.)</strong> Man unterscheidet den <strong>Manager</strong> (Management-Prozess, läuft auf dem NMS) und den <strong>Agenten</strong> (Agent-Prozess, läuft auf der überwachten Netzkomponente).</p>
+        <p><strong>b) (6 Pkt.)</strong> Managementinformation ist die Gesamtheit der standardisiert beschriebenen, verwaltbaren Daten bzw. Objekte eines Geräts – z. B. Zustände, Zähler, Konfigurationswerte –, die zwischen Manager und Agent ausgetauscht werden.</p>
+        <p><strong>c) (6 Pkt.)</strong> Die drei Begriffe bauen aufeinander auf: <strong>Managed Objects (MO)</strong> sind die einzelnen verwaltbaren Ressourcen bzw. Eigenschaften eines Geräts. <strong>SMI</strong> ist das Regelwerk, nach dem diese Objekte strukturiert, definiert und benannt werden (ASN.1-basiert). Die <strong>MIB</strong> ist die nach SMI aufgebaute, hierarchische Datenbank (Baumstruktur) aller MOs, in der jedes Objekt über eine eindeutige OID adressiert wird. Kurz: SMI legt die Bauregeln fest, die MIB ist die danach gebaute Objektdatenbank, und SNMP greift per OID auf die einzelnen MOs darin zu.</p>
+        <div class="res">a) Manager + Agent · b) ausgetauschte Gerätedaten/-objekte · c) SMI = Bauplan, MIB = danach strukturierte Objektdatenbank, MO = ihre Einträge</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 4 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">4</span><span class="task-t">URL-Aufbau</span><span class="task-p">7 Pkt.</span></div>
+      <div class="task-q">
+        <p>Sie haben folgende URL. Erklären Sie die Bedeutung der einzelnen Komponenten dieser URL.</p>
+        <p><code>https://www.wb-fernstudium.de/studium/weitere-services/faq.html</code></p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">https                       → Protokoll (gesicherte, verschlüsselte Übertragung)
+www                         → Subdomain / Hostname
+wb-fernstudium              → Domainname (Second-Level-Domain)
+.de                         → Top-Level-Domain (TLD)
+/studium/weitere-services/  → Pfad / Verzeichnis auf dem Server
+faq.html                    → angeforderte Ressource / Datei (HTML-Seite)</div>
+        <div class="res">Protokoll · Subdomain · Domainname · TLD · Pfad · Dateiname – gleiche Struktur wie am YouTube-Beispiel in Kapitel 2 gezeigt</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 5 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">5</span><span class="task-t">Blockchain-Technologie und Einsatzgebiete</span><span class="task-p">24 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Beschreiben Sie die Blockchain-Technologie. Achten Sie dabei darauf, wesentliche Charakteristika zu benennen.</li>
+          <li>Nennen Sie Anwendungsgebiete bzw. Industrien (wenigstens drei Stück), wo diese zum Einsatz kommen kann/könnte. Geben Sie jeweils pro Industrie einen Verwendungszweck an.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a) (18 Pkt.)</strong> Die Blockchain ist ein <strong>verteiltes, öffentliches, manipulationssicheres Transaktions-Logbuch</strong> (Distributed Ledger), das identisch auf vielen Rechnern (Nodes) eines P2P-Netzes vorliegt. Wesentliche Charakteristika:</p>
+        <div class="step">- Transaktionen werden in Blöcken gebündelt
+- jeder Block ist über einen Hashwert mit dem vorigen verkettet
+  (ein Merkle-Tree fasst die Transaktionen eines Blocks zusammen)
+- nachträgliche Änderungen sind erkennbar, da sie alle Folge-Hashes
+  brechen würden
+- neue Blöcke entstehen per Konsensverfahren (Mining/Proof-of-Work);
+  konkurrierende Miner lösen ein mathematisches Rätsel
+- bei Verzweigung (Fork) gilt: die längste Kette ist die gültige Kette;
+  der kürzere Zweig wird zum Orphan-Block
+- Ursprung ist der Genesis-Block (erster Block der Kette)
+- dezentral: kein zentraler Verwalter/Intermediär nötig
+- transparent und praktisch unveränderbar
+- erweiterbar um Smart Contracts (selbstausführende If-Then-Verträge)</div>
+        <p><strong>b) (6 Pkt.)</strong> Mindestens drei Industrien mit Verwendungszweck:</p>
+        <div class="step">Finanzwesen        → Kryptowährungen, Zahlungsabwicklung ohne Bank als Intermediär
+Logistik/Handel    → lückenlose Herkunfts- und Lieferverfolgung von Waren
+Energieversorgung  → dezentraler P2P-Stromhandel und automatisierte Abrechnung
+Medizin/Pharma     → fälschungssichere, nachvollziehbare Patienten-/Chargendaten</div>
+        <div class="res">a) verteiltes, verkettetes, konsensbasiertes Logbuch ohne zentrale Instanz · b) z. B. Finanzwesen, Logistik, Energie, Medizin</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 6 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">6</span><span class="task-t">Brute-Force und Social Engineering</span><span class="task-p">7 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Was versteht man unter einer Brute-Force-Attacke?</li>
+          <li>Was versteht man unter Social Engineering und wieso ist es wichtig, dass bei allen Mitarbeitern eines Unternehmens immer wieder trainiert wird, hier sensibel und vorsichtig zu sein?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a) (3 Pkt.)</strong> Bei einer Brute-Force-Attacke probiert eine Software in schneller Abfolge systematisch alle möglichen Zeichenkombinationen durch, bis das richtige Passwort bzw. der richtige Schlüssel gefunden ist. Gegenmittel: lange, komplexe Passwörter/Schlüssel sowie Sperren nach mehreren Fehlversuchen.</p>
+        <p><strong>b) (4 Pkt.)</strong> Social Engineering ist die gezielte psychologische Manipulation von Menschen – über Vertrauen, Hilfsbereitschaft, Autorität oder Druck –, um an Informationen oder Zugänge zu gelangen (z. B. Phishing, „Chef-Trick“). Regelmässiges Training ist wichtig, weil der <strong>Mensch das schwächste Glied</strong> der Sicherheitskette ist: Selbst die beste technische Absicherung wird wirkungslos, wenn Mitarbeitende getäuscht werden und Zugänge oder Daten freiwillig preisgeben.</p>
+        <div class="res">a) systematisches Durchprobieren aller Kombinationen · b) Manipulation der Schwachstelle Mensch – Training als wirksamster Schutz</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 7 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">7</span><span class="task-t">Man-in-the-Middle: IP- und ARP-Spoofing</span><span class="task-p">18 Pkt.</span></div>
+      <div class="task-q">
+        <p>Für eine Man-in-the-Middle-Attacke bieten sich verschiedene Verfahren an. Ein mögliches Verfahren ist das IP- und ARP-Spoofing.</p>
+        <ol type="a">
+          <li>Worin unterscheidet sich IP- von ARP-Spoofing?</li>
+          <li>Erklären Sie den Ablauf eines ARP-Spoofing.</li>
+          <li>Kann eine Firewall gegen einen solchen Angriff schützen?</li>
+          <li>Welche Massnahme kann helfen?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a) (2 Pkt.)</strong> <strong>IP-Spoofing</strong> fälscht die IP-Absenderadresse eines Pakets. <strong>ARP-Spoofing</strong> fälscht dagegen die Zuordnung zwischen IP- und MAC-Adresse im ARP-Cache der Zielrechner.</p>
+        <p><strong>b) (6 Pkt.)</strong> Ablauf eines ARP-Spoofing:</p>
+        <div class="step">1. Der Angreifer sendet gefälschte (Gratuitous) ARP-Replies ins LAN.
+2. Diese verknüpfen seine eigene MAC-Adresse mit der IP-Adresse
+   des Gateways bzw. des Opfers.
+3. Opfer und Gateway übernehmen die falsche Zuordnung
+   ungeprüft in ihren ARP-Cache.
+4. Der gesamte Datenverkehr zwischen beiden läuft nun über den
+   Angreifer (Man-in-the-Middle) → er kann mitlesen und manipulieren.</div>
+        <p><strong>c) (2 Pkt.)</strong> Nein, in der Regel <strong>nicht</strong>: ARP-Spoofing spielt sich innerhalb des LAN auf <strong>Schicht 2</strong> (Sicherungsschicht) ab, während eine Firewall meist am Netzübergang sitzt und den lokalen LAN-Verkehr gar nicht sieht.</p>
+        <p><strong>d) (8 Pkt.)</strong> Wirksame Massnahmen:</p>
+        <div class="step">- statische ARP-Einträge für kritische Systeme (z. B. Gateway)
+- Dynamic ARP Inspection (DAI) auf managed Switches
+- Port Security an den Switch-Ports
+- Netzsegmentierung / VLANs
+- Ende-zu-Ende-Verschlüsselung (TLS, VPN) gegen das Mitlesen
+- ARP-Monitoring bzw. Intrusion-Detection-Systeme (IDS)</div>
+        <div class="res">a) IP- vs. MAC-Zuordnung gefälscht · c) Firewall hilft nicht (Schicht 2, LAN-intern) · d) DAI, Port Security, VLANs, Verschlüsselung, Monitoring</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 8 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">8</span><span class="task-t">Public-Key-Kryptografie</span><span class="task-p">6 Pkt.</span></div>
+      <div class="task-q">
+        <p>Welche Aussagen in Bezug auf Public-Key-Kryptografie treffen zu? <em>Hinweis: Es können sowohl nur eine als auch mehrere Antworten richtig sein.</em></p>
+        <ol type="a">
+          <li>
+            <ul>
+              <li>(1) Die Nachricht kann mit einem öffentlichen Schlüssel (Public Key) verschlüsselt und mit einem geheimen Schlüssel (Private Key) entschlüsselt werden.</li>
+              <li>(2) Die Nachrichten werden mit einem einzigen kryptografischen Schlüssel ver- und entschlüsselt.</li>
+              <li>(3) Der geheime Schlüssel (Private Key) wird für das Signieren der Nachrichten und der öffentliche Schlüssel für die Verifikation der Signaturen eingesetzt.</li>
+              <li>(4) Jeder Nutzer hat ein kryptografisches Schlüssel-Paar, das aus einem geheimen (Private Key) und einem öffentlichen Schlüssel (Public Key) besteht.</li>
+            </ul>
+          </li>
+          <li>Teilnehmer A und B wollen mittels asymmetrischer Verschlüsselung Nachrichten austauschen. Mit welchem Schlüssel muss Teilnehmer B die Nachricht an Teilnehmer A verschlüsseln?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a) (4 Pkt.)</strong> Zutreffend sind <strong>(1), (3) und (4)</strong>: Public Key verschlüsselt/Private Key entschlüsselt (1); Private Key signiert/Public Key verifiziert (3); jeder Nutzer besitzt ein Schlüsselpaar (4). <strong>(2) ist falsch</strong> – ein einziger Schlüssel für Ver- und Entschlüsselung beschreibt die <em>symmetrische</em>, nicht die asymmetrische Verschlüsselung.</p>
+        <p><strong>b) (2 Pkt.)</strong> Teilnehmer B verschlüsselt die Nachricht an A mit dem <strong>öffentlichen Schlüssel (Public Key) von A</strong>. Nur A kann sie anschliessend mit seinem eigenen privaten Schlüssel wieder entschlüsseln.</p>
+        <div class="res">a) (1), (3), (4) korrekt – (2) beschreibt Symmetrie · b) Verschlüsselung mit dem Public Key des Empfängers A</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck vor der Abgabe">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kurzkontrolle</p>
+      <h2>Schnellcheck vor der Abgabe</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="tw"><table>
+      <thead><tr><th>Aufgabe</th><th>Prüfe</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Unterschied liegt auf der Anwendungsschicht (Rollenverteilung); Transport-/Vermittlungsschicht bei CS und P2P identisch (TCP/IP) – als Gemeinsamkeit explizit nennen</td></tr>
+        <tr><td><strong>2</strong></td><td>P2P hat keine zentralen Management-/Datenbank-Server → b) und c) falsch; a) und d) richtig</td></tr>
+        <tr><td><strong>3</strong></td><td>Manager + Agent; MO = Objekte, SMI = Bauplan/Struktur, MIB = danach aufgebaute Datenbank, OID = eindeutige Adresse im Baum</td></tr>
+        <tr><td><strong>4</strong></td><td>Protokoll · Subdomain · Domain · TLD · Pfad · Datei – jede Komponente einzeln benennen</td></tr>
+        <tr><td><strong>5</strong></td><td>Distributed Ledger, Blockverkettung per Hash, Konsensverfahren/Mining, längste Kette gültig, Smart Contracts; mindestens 3 Industrien je mit Verwendungszweck</td></tr>
+        <tr><td><strong>6</strong></td><td>Brute-Force = Durchprobieren aller Kombinationen; Social Engineering = Manipulation Mensch → nur Training hilft dauerhaft</td></tr>
+        <tr><td><strong>7</strong></td><td>ARP-Spoofing fälscht IP↔MAC-Zuordnung im Cache; Firewall hilft nicht (Schicht 2, LAN-intern); Gegenmittel: DAI, Port Security, VLANs, Verschlüsselung</td></tr>
+        <tr><td><strong>8</strong></td><td>Public Key verschlüsselt/Private Key entschlüsselt; bei Signatur umgekehrt; B verschlüsselt an A stets mit dem Public Key von A</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ ABKÜRZUNGEN ══════════════ -->
+<section class="sec" id="abk" data-num="C" data-title="Abkürzungsverzeichnis">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">C</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang C</p>
+      <h2>Abkürzungs- und Formelverzeichnis</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>AES</dt><dd>Advanced Encryption Standard</dd></div>
+      <div class="abbr-row"><dt>ARPANET</dt><dd>Advanced Research Projects Agency Network</dd></div>
+      <div class="abbr-row"><dt>ASCII</dt><dd>American Standard Code for Information Interchange</dd></div>
+      <div class="abbr-row"><dt>ASN.1</dt><dd>Abstract Syntax Notification One</dd></div>
+      <div class="abbr-row"><dt>BSI</dt><dd>Bundesamt für Sicherheit in der Informationstechnik</dd></div>
+      <div class="abbr-row"><dt>CSS</dt><dd>Cascading Style Sheets</dd></div>
+      <div class="abbr-row"><dt>DDoS</dt><dd>Distributed Denial of Service</dd></div>
+      <div class="abbr-row"><dt>DES</dt><dd>Data Encryption Standard</dd></div>
+      <div class="abbr-row"><dt>DNS</dt><dd>Domain Name System</dd></div>
+      <div class="abbr-row"><dt>DoS</dt><dd>Denial of Service</dd></div>
+      <div class="abbr-row"><dt>FTP</dt><dd>File Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>HTML</dt><dd>Hypertext Markup Language</dd></div>
+      <div class="abbr-row"><dt>HTTP</dt><dd>Hypertext Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>HTTPS</dt><dd>Hypertext Transfer Protocol Secure</dd></div>
+      <div class="abbr-row"><dt>ICMP</dt><dd>Internet Control Message Protocol</dd></div>
+      <div class="abbr-row"><dt>IDEA</dt><dd>International Data Encryption Algorithm</dd></div>
+      <div class="abbr-row"><dt>IMAP</dt><dd>Internet Message Access Protocol</dd></div>
+      <div class="abbr-row"><dt>ITU</dt><dd>International Telecommunication Union</dd></div>
+      <div class="abbr-row"><dt>MIB</dt><dd>Management Information Base</dd></div>
+      <div class="abbr-row"><dt>MIME</dt><dd>Multipurpose Internet Mail Extension</dd></div>
+      <div class="abbr-row"><dt>MTA</dt><dd>Message Transfer Agent</dd></div>
+      <div class="abbr-row"><dt>NMS</dt><dd>Network Management System</dd></div>
+      <div class="abbr-row"><dt>OID</dt><dd>Object Identifier</dd></div>
+      <div class="abbr-row"><dt>OSI</dt><dd>Open Systems Interconnection</dd></div>
+      <div class="abbr-row"><dt>P2P</dt><dd>Peer to Peer</dd></div>
+      <div class="abbr-row"><dt>PDU</dt><dd>Process Data Unit</dd></div>
+      <div class="abbr-row"><dt>POP3</dt><dd>Post Office Protocol Version 3</dd></div>
+      <div class="abbr-row"><dt>RFC</dt><dd>Request for Comments</dd></div>
+      <div class="abbr-row"><dt>RSA</dt><dd>Rivest, Shamir und Adleman (benannt nach den Erfindern)</dd></div>
+      <div class="abbr-row"><dt>SMI</dt><dd>Structure and Identification of Management Information</dd></div>
+      <div class="abbr-row"><dt>SMTP</dt><dd>Simple Mail Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>SNMP</dt><dd>Simple Network Management Protocol</dd></div>
+      <div class="abbr-row"><dt>TCP</dt><dd>Transmission Control Protocol</dd></div>
+      <div class="abbr-row"><dt>TLS/SSL</dt><dd>Transport Layer Security / Secure Sockets Layer</dd></div>
+      <div class="abbr-row"><dt>UDP</dt><dd>User Datagram Protocol</dd></div>
+      <div class="abbr-row"><dt>URL</dt><dd>Uniform Resource Locator</dd></div>
+      <div class="abbr-row"><dt>WWW</dt><dd>World Wide Web</dd></div>
+      <div class="abbr-row"><dt>XML</dt><dd>eXtensible Markup Language</dd></div>
+    </dl></div>
+
+    <h4>Formelzeichen und Kernbegriffe (Auswahl)</h4>
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>P / C</dt><dd>Plaintext (Klartext) / Ciphertext (Chiffretext)</dd></div>
+      <div class="abbr-row"><dt>E_K / D_K</dt><dd>Encryption Key / Decryption Key</dd></div>
+      <div class="abbr-row"><dt>N</dt><dd>RSA-Modul, N = p · q</dd></div>
+      <div class="abbr-row"><dt>φ(N)</dt><dd>Eulersche Phi-Funktion, φ(N) = (p−1)(q−1)</dd></div>
+      <div class="abbr-row"><dt>e, d</dt><dd>öffentlicher bzw. privater RSA-Exponent</dd></div>
+      <div class="abbr-row"><dt>MO</dt><dd>Managed Object</dd></div>
+      <div class="abbr-row"><dt>OID</dt><dd>eindeutige Baum-Adresse eines Managed Object</dd></div>
+      <div class="abbr-row"><dt>NMS</dt><dd>Rechner, auf dem der SNMP-Manager läuft</dd></div>
+    </dl></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft ITI26 · Anwendungsdienste und Netzmanagement · Druck-Code 0723K05 · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "iti26:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll("#ea details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

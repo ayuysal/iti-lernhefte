@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITI24 – TCP/IP-Protokollfamilie</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("iti24:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">ITI24 <span>· 0124K08</span></div>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>TCP/IP-Protokollfamilie</h1>
+      <p class="sub">Die Protokolle der Netzwerk- und Transportschicht im Internet: IP-Adressierung (v4/v6), IP-Protokolle wie ARP, DNS, DHCP und NAT, Routing-Verfahren und -Protokolle sowie TCP/UDP und Netzbefehle zur Fehlerdiagnose – mit Einsendeaufgabe Typ A und Lösungswegen.</p>
+      <div class="meta">
+        <span>ITI24 · 0124K08</span>
+        <span>7 Kapitel · 95 Seiten</span>
+        <span>Einsendeaufgabe: 100 Pkt.</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Einführung und Überblick">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Einführung und Überblick</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Zur TCP/IP-Protokollfamilie gehören ca. 500 Protokolle; namensgebend sind das <strong>Internet Protocol (IP)</strong> und das <strong>Transmission Control Protocol (TCP)</strong>, die Cerf und Kahn 1973 erstmals veröffentlichten. Die Protokolle werden in <strong>RFCs</strong> (Request for Comments) spezifiziert. Dieses Heft fokussiert die Netzwerk- und die Transportschicht des OSI-Modells – die „transportorientierten Schichten".</p>
+
+    <div class="box def">
+      <span class="lbl">Protokollstack</span>
+      <p>Ein <strong>Protokollstack</strong> ist ein Stapel von Protokollen, die miteinander in Bezug stehen und funktional zusammenarbeiten. Client und Server durchlaufen ihn spiegelbildlich: Anwendung → Transport (TCP/UDP) → Vermittlung (IP) → Sicherung (LLC/MAC) → Übertragungsmedium.</p>
+    </div>
+
+    <h4>Netzwerkschicht (Vermittlungsschicht)</h4>
+    <p>Sie vermittelt Datenwege zwischen Sender und Empfänger: Ein Segment der Transportschicht wird als <strong>Datagramm</strong> gekapselt und über Zwischensysteme (<strong>Router</strong>) durch das Netz transportiert. Kernaufgaben:</p>
+    <ul>
+      <li>eindeutige Adressierung der Hosts mittels logischer Adressen</li>
+      <li>Ermittlung der Route zwischen Quell- und Zielhost (<strong>Routing</strong>)</li>
+      <li>Weiterleitung ankommender Pakete auf die richtige Ausgangsleitung (<strong>Forwarding</strong>)</li>
+      <li>Fehlererkennung und -behebung, z. B. Verwerfen fehlerhafter Pakete</li>
+      <li>Internetworking – Verbindungen über Subnetzgrenzen hinweg</li>
+    </ul>
+    <p>Im Internet bietet die Netzwerkschicht nur den <strong>Best-Effort-Dienst</strong>: einen verbindungslosen, nicht garantierten Host-zu-Host-Datagrammdienst ohne Bandbreiten-, Reihenfolge- oder Verlustfreiheitsgarantie. Andere Architekturen (z. B. ATM) arbeiten in Schicht 3 verbindungsorientiert über virtuelle Leitungen (Virtual Circuit, VC).</p>
+
+    <div class="box">
+      <span class="lbl">Hop und Next Hop</span>
+      <p>Die Anzahl der <strong>Hops</strong> (Hop Count) ist die Anzahl der Router auf dem Pfad zwischen Quelle und Ziel eines Pakets. Der <strong>Next Hop</strong> ist der nächste Router auf dem Weg zum Ziel. Ein Router ist von einem direkt angeschlossenen Netz 0 Hops entfernt.</p>
+    </div>
+
+    <h4>Transportschicht</h4>
+    <p>Sie realisiert die logische <strong>Ende-zu-Ende-Kommunikation</strong> zwischen Anwendungsprozessen auf unterschiedlichen Hosts – aus Anwendungssicht, als wären beide Hosts direkt verbunden. Die Protokolle der Transportschicht laufen ausschliesslich auf den <strong>Endsystemen</strong>, nicht auf Routern. Sie bietet entweder einen zuverlässigen verbindungsorientierten Dienst (<strong>TCP</strong>) oder einen unzuverlässigen verbindungslosen Dienst (<strong>UDP</strong>). Mehrere gleichzeitig laufende Prozesse werden mittels <strong>Multiplexing</strong> über <strong>Portnummern</strong> auseinandergehalten.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>Netzwerkschicht</th><th>Transportschicht</th></tr></thead>
+      <tbody>
+        <tr><td>Verbindung zwischen</td><td>Hosts</td><td>Anwendungsprozessen</td></tr>
+        <tr><td>Implementiert auf</td><td>Hosts und Routern</td><td>nur Endsystemen</td></tr>
+        <tr><td>Typischer Dienst</td><td>Best Effort (Internet)</td><td>TCP (zuverlässig) oder UDP (unzuverlässig)</td></tr>
+        <tr><td>Adressierung über</td><td>IP-Adresse</td><td>Portnummer</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle</span>
+      <p>Warum sind auf <strong>Routern keine Protokolle der Transportschicht</strong> implementiert? Router werten nur die Informationen der Netzwerkschicht (IP-Header) aus und stellen Verbindungen zwischen <em>Hosts</em> her; die Transportschicht organisiert Verbindungen zwischen <em>Anwendungen</em> und ist deshalb nur auf den Endsystemen nötig.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="IP-Adressierung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2 · rechenlastig</p>
+      <h2>IP-Adressierung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">IP-Adressen sind – wie eine Telefonnummer – hierarchisch aufgebaut: ein Netzteil (Vorwahl) und ein Hostteil (Teilnehmernummer). Hosts im selben Subnetz kommunizieren direkt, sonst vermittelt ein Router. Die Zuordnung Netz-/Hostteil erfolgt über die <strong>Netzmaske</strong>.</p>
+
+    <div class="box def">
+      <span class="lbl">Netzmaske</span>
+      <p>Die Netzmaske gibt an, wie viele Bits der IP-Adresse zum <strong>Netzpräfix</strong> gehören. Eine „1" in der Netzmaske markiert Netzbits, eine „0" Hostbits. Alternative Schreibweise: <strong>CIDR-Notation</strong> <code>IP-Adresse/Anzahl-Einsen</code>, z. B. 192.68.50.10/24 statt 192.68.50.10 mit 255.255.255.0.</p>
+    </div>
+
+    <h4>Klassenbasierte IPv4-Adressierung</h4>
+    <p>Traditionell war der Adressraum in Klassen A–E eingeteilt, deren erste 3–4 Bits die Klasse bestimmen:</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Klasse</th><th>Bereich 1. Byte</th><th>Aufteilung</th><th>Netze</th><th>Hosts/Netz</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>1–126</td><td>N.H.H.H</td><td>126</td><td>16 777 214</td></tr>
+        <tr><td>B</td><td>128–191</td><td>N.N.H.H</td><td>16 384</td><td>65 534</td></tr>
+        <tr><td>C</td><td>192–223</td><td>N.N.N.H</td><td>2 097 152</td><td>254</td></tr>
+        <tr><td>D</td><td>224–239</td><td>Multicast</td><td>–</td><td>–</td></tr>
+        <tr><td>E</td><td>240–255</td><td>reserviert</td><td>–</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <p>Je Netz gehen 2 Adressen für Netz- und Broadcastadresse ab, deshalb sind nur 2ⁿ−2 Hosts adressierbar.</p>
+
+    <h4>Spezielle und private Adressen</h4>
+    <ul>
+      <li><strong>0.0.0.0</strong> als Quelladresse: eigene, noch unbekannte Adresse</li>
+      <li><strong>Hostteil = alle „1"</strong>: Broadcastadresse des Netzes (wird von Routern nicht weitergeleitet)</li>
+      <li><strong>255.255.255.255</strong>: begrenzter Broadcast im aktuellen Segment</li>
+      <li><strong>Hostteil = alle „0"</strong>: bezeichnet das Netz selbst, keinen Host</li>
+      <li><strong>127.0.0.0/8</strong>, insbesondere <strong>127.0.0.1</strong> („localhost"): Loopback-Adressen</li>
+      <li><strong>169.254.0.0/16</strong>: APIPA/IPAC – automatische Adresse ohne DHCP-Server</li>
+    </ul>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Bereich (RFC 1918)</th><th>CIDR</th><th>Hosts je Netz</th></tr></thead>
+      <tbody>
+        <tr><td>10.0.0.0–10.255.255.255</td><td>10.0.0.0/8</td><td>16 777 214</td></tr>
+        <tr><td>172.16.0.0–172.31.255.255</td><td>172.16.0.0/12</td><td>je 65 534 (16×B)</td></tr>
+        <tr><td>192.168.0.0–192.168.255.255</td><td>192.168.0.0/16</td><td>je 254 (256×C)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Klassenlose Adressierung – CIDR</h4>
+    <p>Da 1992 die Class-B-Adressen knapp wurden, löste <strong>CIDR</strong> (Classless Interdomain Routing) die starre Klasseneinteilung ab: Adressblöcke werden in beliebiger Grösse passend zum Bedarf vergeben. Die Netzadresse ergibt sich aus der <strong>UND-Verknüpfung</strong> von IP-Adresse und Netzmaske, die Broadcastadresse aus der <strong>ODER-Verknüpfung</strong> von Netzadresse und invertierter Netzmaske.</p>
+
+    <div class="box">
+      <span class="lbl">Beispiel: 135.7.107.5/22</span>
+      <p>Netzmaske /22 = 255.255.252.0. Netzadresse: <strong>135.7.104.0</strong>. Broadcastadresse: <strong>135.7.107.255</strong>. Adressierbare Hosts: 2¹⁰−2 = <strong>1022</strong>.</p>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Rechenfalle</span>
+      <p>UND/ODER verknüpfen <em>bitweise</em>, nicht dezimal! Immer erst in Binär umrechnen und dann Bit für Bit UND (Netzadresse) bzw. ODER mit der <em>invertierten</em> Maske (Broadcastadresse) verknüpfen – besonders wenn die Maskengrenze nicht auf einer Bytegrenze liegt (z. B. /20, /22, /25).</p>
+    </div>
+
+    <p>Mehrere benachbarte Netze lassen sich zu einem <strong>Supernetz</strong> zusammenfassen (<strong>Routenaggregation</strong>/Route Summarization) – das reduziert Einträge in Routingtabellen sowie Latenz-, Prozessor- und Speicherbedarf der Router. Umgekehrt kann ein Administrator ein zugewiesenes Netz per <strong>Subnetting</strong> weiter in kleinere Subnetze zerlegen, indem er Bits vom Host- in den Subnetzteil verschiebt.</p>
+
+    <h4>IPv6-Adressen</h4>
+    <p>IPv6 erweitert die Adresse auf <strong>128 Bit</strong> (2¹²⁸ ≈ 3403·10³⁸ Adressen), dargestellt in 8 Blöcken zu 4 Hex-Ziffern, getrennt durch Doppelpunkte. Führende Nullen dürfen entfallen, eine zusammenhängende Nullfolge darf einmal je Adresse durch <code>::</code> ersetzt werden. Eine Netzmaske gibt es <strong>nicht mehr</strong>: Das <strong>Netzpräfix</strong> (64 Bit) und der <strong>Interface Identifier/IID</strong> (64 Bit) sind fest getrennt.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Adressbereich</th><th>Präfix</th><th>Gültigkeit</th></tr></thead>
+      <tbody>
+        <tr><td>Link-Local-Unicast</td><td>FE80::/10</td><td>nur lokales Segment, nicht geroutet</td></tr>
+        <tr><td>Unique-Local-Unicast</td><td>FC00::/7</td><td>privat, analog RFC 1918 bei IPv4</td></tr>
+        <tr><td>Multicast</td><td>FF00::/8</td><td>Gruppenadressen (kein Broadcast bei IPv6!)</td></tr>
+        <tr><td>Global-Unicast</td><td>2000::/3</td><td>öffentlich, weltweit geroutet</td></tr>
+      </tbody>
+    </table></div>
+    <p>Eine Global-Unicast-Adresse gliedert sich in Global-Routing-Präfix, Subnetz-ID und Interface Identifier. Provider erhalten von der RIR meist ein <strong>/32</strong>, Endkunden vom Provider ein <strong>/48</strong> oder <strong>/56</strong>. Wichtige Sonderadressen: <strong>::/128</strong> (unspezifiziert, wie 0.0.0.0), <strong>::1/128</strong> (Loopback), <strong>::FFFF:0:0/96</strong> (IPv4-mapped), <strong>2002::/4</strong> (6to4-Tunneling), <strong>2001:0000::/32</strong> (Teredo).</p>
+
+    <h4>Interface Identifier (modifiziertes EUI-64)</h4>
+    <p>Der Interface Identifier kann per <strong>SLAAC</strong> (Stateless Address Autoconfiguration) aus der 48-Bit-MAC-Adresse gebildet werden: <code>0xFFFE</code> wird zwischen 3. und 4. Byte eingefügt, danach das Universal/Local-Bit (7. Bit von links im 1. Byte) invertiert.</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Schritt</th><th>Wert</th></tr></thead>
+      <tbody>
+        <tr><td>MAC-Adresse</td><td>00:04:75:1B:6E:58</td></tr>
+        <tr><td>+ FFFE eingefügt</td><td>00:04:75:FF:FE:1B:6E:58</td></tr>
+        <tr><td>Interface Identifier (U/L-Bit 00→02 invertiert)</td><td>02:04:75:FF:FE:1B:6E:58</td></tr>
+      </tbody>
+    </table></div>
+    <p>Da dies den Host anhand seiner MAC-Adresse im gesamten Internet identifizierbar macht, generieren <strong>Privacy Extensions</strong> alternativ einen zufallsbasierten, periodisch wechselnden Interface Identifier – bei Servern/Routern unerwünscht, da diese dauerhaft unter derselben Adresse erreichbar sein müssen.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="IP-Protokolle">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3 · umfangreich</p>
+      <h2>IP-Protokolle</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Das grösste Kapitel des Hefts bündelt alle Protokolle rund um die Adressierung: <strong>IPv4/IPv6</strong> selbst sowie <strong>ICMP, ARP, RARP, NDP, DNS, DHCP</strong> und <strong>NAT</strong>. IP arbeitet paketorientiert, verbindungslos und realisiert mit Best Effort einen Datagrammservice – ohne Garantie für Reihenfolge oder Zustellung.</p>
+
+    <h4>IPv4-Paket und Fragmentierung</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Feld</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>IHL</td><td>Headerlänge in 4-Byte-Einheiten, min. 5 (20 Byte), max. 15 (60 Byte)</td></tr>
+        <tr><td>Service (DSCP/ECN)</td><td>Dienstgüteklasse (DSCP, 6 Bit) und Staukontrolle (ECN, 2 Bit)</td></tr>
+        <tr><td>Kennung, Flags, Fragment-Offset</td><td>steuern Fragmentierung; M-Bit = „More Data", D-Bit = „Don't fragment"</td></tr>
+        <tr><td>TTL</td><td>Time to Live – jeder Router dekrementiert um mind. 1; bei 0 wird das Paket verworfen (verhindert Endlosschleifen)</td></tr>
+        <tr><td>Protokoll</td><td>ID des Transportprotokolls: 1 = ICMP, 6 = TCP, 17 = UDP</td></tr>
+        <tr><td>Header-Checksumme</td><td>sichert nur den Header ab</td></tr>
+      </tbody>
+    </table></div>
+    <p>Die <strong>MTU</strong> (Maximum Transmission Unit) begrenzt die Paketlänge je Übertragungsmedium (Ethernet: 1500 Byte). Überschreitet ein IP-Paket die MTU, muss es <strong>fragmentiert</strong> werden; der Fragment-Offset zählt in 8-Byte-Einheiten ab dem 1. Fragment.</p>
+    <div class="box">
+      <span class="lbl">Beispiel: 2000 Byte Nutzdaten über Ethernet</span>
+      <p>Netto-MTU = 1500 − 20 (IP-Header) = 1480 Byte. Offset = 1480 : 8 = 185.</p>
+      <p class="formula">Fragment 1: 1480 Byte, D=0, M=1, Offset=0 · Fragment 2: 520 Byte, D=0, M=0, Offset=185</p>
+    </div>
+
+    <h4>IPv6-Protokoll</h4>
+    <p>Kernänderungen gegenüber IPv4: erweiterter Adressraum, Autokonfiguration, vereinfachter <strong>fester</strong> 40-Byte-Header (Optionen werden in Erweiterungs-Headern ausgelagert), integriertes <strong>IPSec</strong>, Traffic-Class/Flow-Label statt Service-Feld für Dienstgüte und Flusskennzeichnung. TTL heisst nun <strong>Hop Limit</strong>, „Protokoll" heisst <strong>Next Header</strong>. Die minimale MTU steigt von 576 auf <strong>1280 Byte</strong>; entscheidend: <strong>Router fragmentieren bei IPv6 nicht mehr</strong> – ein zu grosses Paket wird verworfen, Fragmentierung/Defragmentierung findet nur noch in den Hosts statt.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>IPv4</th><th>IPv6</th></tr></thead>
+      <tbody>
+        <tr><td>Adressraum</td><td>2³²</td><td>2¹²⁸</td></tr>
+        <tr><td>Konfiguration</td><td>manuell, DHCP</td><td>manuell, SLAAC, DHCPv6</td></tr>
+        <tr><td>Header</td><td>variable Länge, mit Prüfsumme, Fragmentierung im Header</td><td>feste Länge, keine Prüfsumme, Fragmentierung ausgelagert</td></tr>
+        <tr><td>Sicherheit</td><td>keine Vorkehrungen im Protokoll</td><td>IPSec integriert (Authentifikation/Verschlüsselung)</td></tr>
+        <tr><td>Quality of Service</td><td>wenig ausgeprägt</td><td>Flow-Label, Differentiated Services</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Die Migration erfolgt über <strong>Dual Stack</strong> (IPv4 und IPv6 parallel auf Host/Router) oder <strong>Tunneling</strong> von IPv6 durch IPv4-Netze: <strong>6to4</strong> kapselt IPv6 direkt in IPv4, <strong>ISATAP</strong> baut automatisch einen Host-zu-Host-Tunnel ohne IPv6-Router auf (Adresse <code>&lt;Präfix&gt;:0000:5EFE:&lt;IPv4-Adresse&gt;</code>), <strong>Teredo</strong> kommt zum Einsatz, wenn zusätzlich NAT im Weg steht.</p>
+
+    <h4>ICMP – Fehler- und Statusmeldungen</h4>
+    <p>Das <strong>Internet Control Message Protocol</strong> transportiert Fehler- und Statusinformationen (Protokoll-Nr. 1; bei IPv6 <strong>ICMPv6</strong> mit Nr. 58 – dort zwingend erforderlich, ohne ICMPv6 funktioniert IPv6 nicht). Ausgewählte Type-Felder:</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Type</th><th>Funktion</th></tr></thead>
+      <tbody>
+        <tr><td>0 / 8</td><td>Echo Reply / Echo Request (Ping)</td></tr>
+        <tr><td>3</td><td>Destination Unreachable (Netz/Host/Protokoll/Port), Details im Feld Code</td></tr>
+        <tr><td>4</td><td>Source Quench – Datenpuffer des Empfängers voll</td></tr>
+        <tr><td>5</td><td>Redirect – besserer Router verfügbar</td></tr>
+        <tr><td>11</td><td>Time Exceeded – TTL/Hop Limit = 0 erreicht</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Traceroute</strong> (Windows: <code>tracert</code>) nutzt genau diesen Mechanismus: Es sendet UDP-Datagramme mit TTL = 1, 2, 3 … Jeder Router auf dem Weg dekrementiert die TTL; erreicht sie 0, meldet der jeweilige Router „Time Exceeded" zurück. So ermittelt der Quellhost schrittweise Adresse und Antwortzeit jedes Routers auf dem Pfad, bis das Ziel antwortet oder „Destination Unreachable" liefert.</p>
+
+    <h4>ARP, RARP und NDP – Adressauflösung</h4>
+    <p>Das <strong>Address Resolution Protocol</strong> (RFC 826) findet zu einer IP-Adresse die zugehörige MAC-Adresse. Ohne Treffer im lokalen <strong>ARP-Cache</strong> (<code>arp –a</code>, löschen mit <code>arp –d</code>) sendet der Host einen <strong>ARP-Request als Broadcast</strong>; der Zielhost antwortet als <strong>Unicast-ARP-Reply</strong> mit seiner MAC-Adresse, und beide Seiten tragen die Adresskombination im Cache ein. Liegt das Ziel in einem anderen Segment, wird stattdessen die MAC-Adresse des Standardgateways ermittelt.</p>
+    <p><strong>RARP</strong> (Reverse ARP) macht das Gegenteil – ein Host kennt seine MAC-, aber nicht seine IP-Adresse und erfragt sie per Broadcast bei einem RARP-Server je Segment; RARP wurde fast vollständig von DHCP verdrängt.</p>
+    <p>Für IPv6 übernimmt das <strong>Neighbor Discovery Protocol</strong> (NDP, RFC 4861, über ICMPv6) die erweiterte Adressauflösung: Router-/Präfix-Ermittlung, Parameterermittlung (MTU, Hop Limit), Adress-Autokonfiguration (SLAAC), <strong>Neighbor Unreachability Detection</strong> (NUD) und <strong>Duplicate Address Detection</strong> (DAD). Statt ARP-Broadcasts nutzt NDP gezielte Multicasts: Ein Host sendet eine <strong>Neighbor Solicitation</strong> (ICMPv6 Typ 135) an die Solicited-Node-Multicast-Adresse des Ziels (Präfix FF02:0:0:0:0:1:FF00::/104 plus letzte 24 Bit der Ziel-IID); die Antwort ist eine <strong>Neighbor Advertisement</strong> (Typ 136) als Unicast. Für die Router-Erkennung sendet der Host eine <strong>Router Solicitation</strong> (Typ 133) an FF02::2 (alle Router); die Router antworten mit <strong>Router Advertisement</strong> (Typ 134).</p>
+
+    <div class="box warn">
+      <span class="lbl">Sicherheit: ARP- und DNS-Spoofing</span>
+      <p>Beim <strong>ARP-Spoofing</strong> (ARP Cache Poisoning) antwortet ein Angreifer ungefragt mit einem gefälschten <strong>Gratuitous ARP</strong> (GARP) und trägt seine eigene MAC-Adresse zur IP-Adresse des Opfers im Cache eines Dritten ein – ein klassischer <strong>Man-in-the-Middle</strong>-Angriff. Analog liefert ein <strong>Rogue-DNS-Server</strong> gefälschte Antworten auf DNS-Anfragen, sofern er schneller antwortet als der echte Server; Gegenmassnahme ist <strong>DNSSEC</strong> (digitale Signatur der DNS-Antworten).</p>
+    </div>
+
+    <h4>DNS – Domain Name System</h4>
+    <div class="box def">
+      <span class="lbl">Domain Name System</span>
+      <p>Ein DNS ist ein Namensdienst, der Domain-Namen in zugehörige IP-Adressen oder umgekehrt auflöst (RFC 1034/1035). Es ist eine verteilte, hierarchische Datenbank; Transportprotokoll ist meist <strong>UDP Port 53</strong>, für den Zonentransfer zwischen primärem und sekundärem Server <strong>TCP Port 53</strong>.</p>
+    </div>
+    <p>Der Namensraum ist baumartig strukturiert: <code>hostname.subdomain…top_level_domain</code>, aufgelöst von rechts nach links (<strong>FQDN</strong> – Fully Qualified Domain Name). Der wichtigste Resource-Record-Typ ist bei IPv4 <strong>A</strong>, bei IPv6 <strong>AAAA</strong>; ein „Forward Lookup" löst Name → Adresse auf, ein „Reverse Lookup" (Zone <code>in-addr.arpa</code> bzw. <code>IP6.ARPA</code>) den umgekehrten Weg. Ein <strong>autoritativer</strong> (primärer) DNS-Server ist für eine Zone zuständig; sekundäre Server erhalten seine Daten per Zonentransfer als Redundanz. Bei der <strong>rekursiven</strong> Abfrage übernimmt der befragte Server selbst die Weiterleitung bis zur Auflösung; bei der <strong>iterativen</strong> Abfrage liefert er nur einen Verweis auf den nächsthöheren Server, den der Client erneut selbst anfragt.</p>
+
+    <h4>DHCP und DHCPv6 – Automatische Konfiguration</h4>
+    <p>Das <strong>Dynamic Host Configuration Protocol</strong> vergibt IP-Konfiguration automatisch über UDP (Server-Port 67, Client-Port 68) im Ablauf <strong>Discover → Offer → Request → ACK</strong>: Der Client sendet einen Broadcast (Quelladresse 0.0.0.0, Ziel 255.255.255.255, da er noch keine eigene Adresse hat), verfügbare Server antworten mit einem Angebot (Offer), der Client wählt eines per Request, der Server bestätigt per ACK. Vor der Nutzung prüft der Client die Adresse per ARP-Request auf Kollisionsfreiheit. Die <strong>Lease-Dauer</strong> bestimmt die Gültigkeit der Zuweisung; ohne DHCP-Server im Segment übernimmt ein <strong>DHCP-Relay-Agent</strong> die Weiterleitung.</p>
+    <p>Bei IPv6 übernimmt für die reine Adresse meist <strong>SLAAC</strong> (Router Solicitation/Advertisement mit Präfix); <strong>DHCPv6</strong> (Stateful Address Configuration, UDP Port 546/547) wird zusätzlich für DNS-/NTP-Server-Informationen oder – bei gesetztem „managed"-Flag im Router Advertisement – auch für die Adresse selbst benötigt.</p>
+
+    <h4>NAT – Network Address Translation</h4>
+    <p>NAT ordnet private, nicht geroutete Adressen einer öffentlichen Adresse zu: Der NAT-Router ersetzt bei ausgehenden Paketen die private IP-Adresse und Portnummer durch seine öffentliche Adresse und eine eigene Portnummer, merkt sich die Zuordnung in der <strong>NAT-Tabelle</strong> und macht sie bei eingehenden Antworten wieder rückgängig. Da Verbindungen nur von innen nach aussen aufgebaut werden können, wirkt NAT zusätzlich wie eine einfache Firewall.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Routing-Verfahren und Routing-Algorithmen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4 · rechenlastig</p>
+      <h2>Routing-Verfahren und Routing-Algorithmen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box def">
+      <span class="lbl">Routing versus Forwarding</span>
+      <p><strong>Routing</strong> ist die Wegeberechnung: Sie ermittelt den <em>gesamten</em> Pfad zwischen Quell- und Zielhost und trägt das Ergebnis in <strong>Routingtabellen</strong> ein. <strong>Forwarding</strong> ist die Weiterleitungsentscheidung <em>pro Paket</em> an einem einzelnen Netzknoten, basierend auf der daraus abgeleiteten <strong>Forwardingtabelle</strong>. Umgangssprachlich werden beide Begriffe oft als „Routingtabelle" vermischt.</p>
+    </div>
+
+    <h4>Forwarding in IP-Netzen</h4>
+    <p>Ob Ziel- und Quellhost im selben Netz liegen, prüft man durch <strong>UND-Verknüpfung</strong> von IP-Adresse und Subnetzmaske auf beiden Seiten: Sind die Ergebnisse gleich, liegt das Ziel im eigenen Netz und wird direkt zugestellt; sonst wird das Paket an den <strong>Standardgateway</strong> übergeben. Gibt es in der Forwardingtabelle mehrere passende Einträge mit unterschiedlichem Präfix, gewinnt der Eintrag mit dem <strong>längsten Präfix</strong> (Longest Prefix Match), da er die genaueste Route beschreibt.</p>
+
+    <h4>Statisches und dynamisches Routing</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Statisch</th><th>Dynamisch (adaptiv)</th></tr></thead>
+      <tbody>
+        <tr><td>Routen einmal manuell eingetragen, feste Programmierung</td><td>Router tauschen Informationen aus, Wege werden laufend per Algorithmus/Metrik berechnet</td></tr>
+        <tr><td>geeignet für kleine, stabile Netze</td><td>geeignet für grosse, variable Netze</td></tr>
+        <tr><td>arbeitsintensiv bei Änderungen, fehleranfällig</td><td>geringer Verwaltungsaufwand, erzeugt aber zusätzliche Netzlast</td></tr>
+      </tbody>
+    </table></div>
+    <p>Zwei einfache, nicht adaptive Sonderverfahren: <strong>Fluten</strong> (jedes Paket geht an alle Nachbarn ausser dem Absender – hohe Netzlast) und <strong>Hot Potato</strong> (Paket geht auf die Leitung mit der kürzesten Warteschlange, unabhängig vom kürzesten Weg).</p>
+
+    <h4>Distanz-Vektor-Algorithmus</h4>
+    <p>Jeder Knoten kennt zunächst nur die Kosten zu seinen direkten Nachbarn und teilt seinen kompletten Distanzvektor periodisch den Nachbarn mit (<em>„Teile deinem Nachbarn mit, wie die Welt aussieht"</em>). <strong>RIP</strong> implementiert dieses auch als <strong>Bellman-Ford-Algorithmus</strong> bekannte Verfahren.</p>
+    <div class="box def">
+      <span class="lbl">Bellman-Ford-Gleichung</span>
+      <p>Die Kosten des günstigsten Pfads von Knoten x zum Ziel y ergeben sich iterativ als Minimum über alle Nachbarn v von x:</p>
+      <p class="formula">d_x(y) = min_v [ c(x,v) + d_v(y) ]</p>
+      <p>c(x,v) sind die Kosten zum Nachbarn v, d_v(y) dessen zuletzt gemeldete Distanz zum Ziel y. Jeder Knoten wiederholt die Berechnung, bis sich nichts mehr ändert (Konvergenz).</p>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Count to Infinity</span>
+      <p>Fällt eine Verbindung aus, kann ein Nachbar eine <em>veraltete</em>, scheinbar günstigere Alternativroute zurückmelden – die Kosten schaukeln sich wie ein Ping-Pong-Spiel hoch (Routingschleife). Gegenmassnahmen: <strong>Split Horizon</strong> (eine Route nicht in die Richtung zurückmelden, aus der sie gelernt wurde), <strong>Poisoned Reverse</strong> (tote Route explizit mit Kosten ∞ melden statt sie zu löschen), <strong>Hop-Count-Limit</strong>, <strong>Triggered Updates</strong> (sofort bei Änderung senden) und <strong>Hold Down Timer</strong> (Änderungen kurzzeitig sperren).</p>
+    </div>
+
+    <h4>Link-State-Algorithmus</h4>
+    <p>Beim <strong>Link-State-Algorithmus</strong> (LSA, auch SPF-Routing) verteilt jeder Knoten seine direkten Nachbarn samt Linkkosten per <strong>Flooding</strong> an <em>alle</em> Knoten im Netz (per Sequenznummer vor Duplikaten/veralteten Paketen geschützt: <em>„Teile der Welt mit, wer deine Nachbarn sind"</em>). Damit besitzt jeder Knoten ein vollständiges Abbild der Topologie und berechnet selbstständig mit dem <strong>Dijkstra-Algorithmus</strong> (Shortest Path First, SPF) die kostengünstigsten Pfade. <strong>Hello-Pakete</strong> prüfen laufend, ob Nachbarn noch erreichbar sind. OSPF und IS-IS setzen den LS-Algorithmus ein.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>Distanz-Vektor</th><th>Link-State</th></tr></thead>
+      <tbody>
+        <tr><td>Lernt von</td><td>nur den direkten Nachbarn</td><td>der gesamten Netztopologie (Flooding)</td></tr>
+        <tr><td>Vorteil</td><td>geringe Anforderungen an den Router</td><td>schnelle, schleifenarme Konvergenz</td></tr>
+        <tr><td>Nachteil</td><td>langsame Konvergenz, Routing-Loops, begrenzte Netzgrösse</td><td>hoher Speicher-/Rechenbedarf, komplexe Konfiguration</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Multicast-, Broadcast- und hierarchisches Routing</h4>
+    <p>Beim <strong>Multicast-Routing</strong> (Klasse-D-Adressen bzw. FF00::/8 bei IPv6) meldet ein Host per <strong>IGMP</strong> (Internet Group Management Protocol) seinem Router die Mitgliedschaft in einer Gruppe; die Router bilden daraus einen Verteilbaum. <strong>Broadcast-Routing</strong> nutzt kontrolliertes Fluten (per Sequenznummer) oder Spannbäume, um Duplikate und Broadcast-Stürme zu vermeiden.</p>
+    <p>Ab einer gewissen Netzgrösse (Internet: über 100 000 Netze) ist „flaches" Routing nicht mehr praktikabel. Router werden deshalb in <strong>autonomen Systemen</strong> (AS) organisiert – Gruppen von Netzen unter derselben Verwaltung, identifiziert durch eine eindeutige AS-Nummer. Innerhalb eines AS routen <strong>Interior-Gateway-Protokolle</strong> (IGP, z. B. RIP, OSPF), zwischen AS <strong>Exterior-Gateway-Protokolle</strong> (EGP, im Internet ausschliesslich BGP). Die Betreiber (IP-Carrier) tauschen Daten an zentralen <strong>Commercial Internet Exchange Points</strong> (CIX) aus, dem grössten deutschen Knoten DE-CIX in Frankfurt.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 5 ══════════════ -->
+<section class="sec" id="k5" data-num="5" data-title="Routing-Protokolle">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">5</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 5</p>
+      <h2>Routing-Protokolle</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle</span>
+      <p>IP ist <strong>kein</strong> Routing-Protokoll, sondern ein <strong>geroutetes</strong> Protokoll – es transportiert die Pakete. <strong>Routing-Protokolle</strong> wie RIP oder OSPF implementieren die Algorithmen aus Kapitel 4, um die Routingtabellen der Router überhaupt erst aufzubauen und aktuell zu halten.</p>
+    </div>
+
+    <h4>RIP – Routing Information Protocol</h4>
+    <p>RIP (RFC 1058) implementiert den <strong>Distanz-Vektor-Algorithmus</strong> über UDP. Als Metrik dient allein die <strong>Anzahl der Hops</strong> (jeder Link kostet 1); maximal sind <strong>15 Hops</strong> zulässig, 16 gilt als „nicht erreichbar" – RIP eignet sich deshalb nur für kleinere autonome Systeme. Jeder Router sendet <strong>alle 30 s</strong> als Broadcast ein RIP-Advertisement, unabhängig davon, ob sich etwas geändert hat. Routen altern nach 3 Minuten ohne Update und werden nach 5 Minuten aus der Tabelle gelöscht. <strong>RIPv2</strong> (RFC 2453) ergänzt die Übertragung der Subnetzmaske (CIDR-fähig), Multicast-Adressierung (224.0.0.9) und Authentifizierung; <strong>RIPng</strong> ist die Anpassung für IPv6.</p>
+
+    <h4>OSPF – Open Shortest Path First</h4>
+    <p>OSPF setzt den <strong>Link-State-Algorithmus</strong> um: Jeder Router kennt die vollständige Topologie und berechnet selbst den Shortest Path Tree. Es gibt <strong>keine</strong> periodischen Voll-Updates, sondern nur Änderungen (LSA-Nachrichten per Multicast) sowie alle 30 Minuten eine zusammenfassende Synchronisation; ein <strong>Hello-Protokoll</strong> überwacht die Nachbarn. Als Metrik dient nicht die Hop-Zahl, sondern die <strong>Cost</strong> (Referenzbandbreite/verfügbare Bandbreite, min. 1). OSPF unterstützt VLSM/CIDR, ist schleifenfrei und für grosse Netze geeignet; Authentifizierung erfolgt per Klartext-Passwort oder sicherer per <strong>MD5-Hash</strong>. In grossen Areas bündelt ein <strong>designierter Router</strong> (höchste IP-Adresse) die Informationen. Aktuell im Einsatz: OSPFv2 (IPv4, RFC 2328) und OSPFv3 (IPv6, RFC 2740).</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>RIP</th><th>OSPF</th></tr></thead>
+      <tbody>
+        <tr><td>Algorithmus</td><td>Distanz-Vektor</td><td>Link-State (Dijkstra/SPF)</td></tr>
+        <tr><td>Metrik</td><td>Anzahl Hops (max. 15)</td><td>Cost aus Referenz-/verfügbarer Bandbreite</td></tr>
+        <tr><td>Updates</td><td>alle 30 s, vollständig</td><td>nur bei Änderung, alle 30 min Sync</td></tr>
+        <tr><td>Einsatz</td><td>kleine autonome Systeme</td><td>grosse, skalierbare Netze</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>BGP – Border Gateway Protocol</h4>
+    <p>Das <strong>Border Gateway Protocol</strong> (RFC 4271) ist das im Internet einzige eingesetzte <strong>EGP</strong> für das Routing <em>zwischen</em> autonomen Systemen. Es realisiert schleifenfreies Routing, unterstützt CIDR und Routenaggregation und überträgt seine Updates – anders als RIP/OSPF – über <strong>TCP</strong>. Jeder BGP-Router führt eine eigene Datenbank aller erreichbaren autonomen Systeme.</p>
+
+    <h4>IPv6-Routing</h4>
+    <p>Statisches Routing funktioniert bei IPv6 analog zu IPv4. Für dynamisches Routing stehen <strong>OSPFv3</strong> (kann auch IPv4 und IPv6 gemeinsam routen), <strong>RIPng</strong> und <strong>IS-IS</strong> zur Verfügung.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 6 ══════════════ -->
+<section class="sec" id="k6" data-num="6" data-title="Transportprotokolle">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">6</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 6</p>
+      <h2>Transportprotokolle</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die Transportschicht stellt zwei Anwendungsprozessen eine <strong>Ende-zu-Ende-Verbindung</strong> bereit und ist – anders als die Netzwerkschicht – nur auf den <strong>Endsystemen</strong> implementiert, nicht auf Routern. Mehrere gleichzeitig aktive Prozesse werden per <strong>Multiplexing/Demultiplexing</strong> auseinandergehalten.</p>
+
+    <div class="box def">
+      <span class="lbl">Port und Socket</span>
+      <p>Ein <strong>Port</strong> ordnet TCP-/UDP-Verbindungen einem Anwendungsprozess zu; die Portnummer umfasst 16 Bit (0–65535). Die Kombination aus <strong>IP-Adresse und Portnummer</strong> heisst <strong>Socket</strong> – Quell- und Ziel-Socket definieren eine Verbindung eindeutig.</p>
+    </div>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Bereich</th><th>Ports</th><th>Nutzung</th></tr></thead>
+      <tbody>
+        <tr><td>System/Well-known</td><td>0–1023</td><td>Standarddienste (z. B. HTTP 80, DNS 53)</td></tr>
+        <tr><td>Registered</td><td>1024–49151</td><td>registrierte Dienste, auch für Clients</td></tr>
+        <tr><td>Dynamic</td><td>49152–65535</td><td>vom Betriebssystem dynamisch für Clients vergeben</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>TCP – Transmission Control Protocol</h4>
+    <p>TCP (RFC 793) ist <strong>verbindungsorientiert</strong> und garantiert eine fehlerfreie, vollständige und reihenfolgetreue Zustellung. Jedes Segment wird mit einem <strong>ACK</strong> bestätigt; die Flusskontrolle nutzt das <strong>Sliding-Window-Verfahren</strong>. Bleibt eine Quittung aus, läuft der Retransmission-Timer (<strong>RTO</strong>) ab, der dynamisch aus der gemessenen <strong>Round Trip Time</strong> (RTT) berechnet wird. Eine TCP-Verbindung ist eindeutig durch 4 Werte definiert: Quell-IP/-Port und Ziel-IP/-Port.</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Phase</th><th>Ablauf</th></tr></thead>
+      <tbody>
+        <tr><td>Verbindungsaufbau (3-Wege-Handshake)</td><td>SYN(seq=x) → SYN,ACK(seq=y, ack=x+1) → ACK(ack=y+1)</td></tr>
+        <tr><td>Verbindungsabbau (4 Segmente)</td><td>FIN(seq=x) → ACK(x+1) → FIN(seq=y) → ACK(y+1)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>UDP – User Datagram Protocol</h4>
+    <p>UDP (RFC 768) ist <strong>verbindungslos, unbestätigt und ohne Fehlerkorrektur</strong> – eine „leere" Transportschicht mit minimalem Header (nur Ports, Länge, Checksumme) und entsprechend wenig Overhead. Geeignet für Anwendungen, bei denen Geschwindigkeit wichtiger ist als Zuverlässigkeit (Streaming, Onlinespiele) oder bei denen die Nutzdaten ohnehin in ein Paket passen (DNS).</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>TCP</th><th>UDP</th></tr></thead>
+      <tbody>
+        <tr><td>Verbindungsorientierung</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>Einhaltung der Reihenfolge</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>Bestätigung</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>Flusskontrolle</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>Overhead</td><td>hoch</td><td>niedrig</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Sicherheit: SYN-Flooding</span>
+      <p>Ein Angreifer schickt massenhaft SYN-Pakete mit gefälschten Absenderadressen; der Server legt für jede Anfrage einen <strong>Transmission Control Block</strong> an und wartet vergeblich auf das abschliessende ACK der „halb offenen" Verbindung. Irgendwann sind alle Ressourcen gebunden, reguläre Anfragen werden nicht mehr bedient. Gegenmassnahmen: mehr Systemressourcen, kürzere SYN-Received-Timer, SYN-Caches/SYN-Cookies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 7 ══════════════ -->
+<section class="sec" id="k7" data-num="7" data-title="Netzbefehle und Troubleshooting">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">7</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 7 · praktisch</p>
+      <h2>Netzbefehle und Troubleshooting</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Das kurze Abschlusskapitel bündelt die „Bordmittel" zur Fehlerdiagnose in IP-Netzen und fasst damit praktisch zusammen, was die vorigen Kapitel theoretisch behandelt haben.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Windows</th><th>Linux</th><th>Zweck</th></tr></thead>
+      <tbody>
+        <tr><td>arp –a</td><td>arp –a</td><td>ARP-Cache anzeigen</td></tr>
+        <tr><td>ipconfig /all</td><td>ifconfig</td><td>Netzkonfiguration anzeigen</td></tr>
+        <tr><td>netstat</td><td>netstat</td><td>Status-/Verbindungsinformationen</td></tr>
+        <tr><td>nslookup</td><td>nslookup</td><td>DNS-Abfrage</td></tr>
+        <tr><td>ping host</td><td>ping host</td><td>Erreichbarkeit testen (ICMP)</td></tr>
+        <tr><td>route print</td><td>route</td><td>Forwardingtabelle anzeigen</td></tr>
+        <tr><td>tracert host</td><td>traceroute host</td><td>Weg zum Ziel verfolgen</td></tr>
+        <tr><td>telnet host</td><td>telnet host</td><td>Terminalverbindung öffnen</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Systematische Fehlersuche mit ping</h4>
+    <p>Eine bewährte Reihenfolge grenzt Fehler stufenweise ein:</p>
+    <ol>
+      <li><strong>Loopback</strong> (127.0.0.1/localhost) – ist IP lokal korrekt installiert?</li>
+      <li><strong>eigene IP-Adresse</strong> – Problem mit Netzkartentreiber oder Routingtabelle?</li>
+      <li><strong>Standardgateway</strong> – Netzadapter, Gateway-Konfiguration oder Gateway selbst gestört?</li>
+      <li><strong>entfernter Host</strong> (per IP, dann per Name) – testet gleichzeitig die Namensauflösung</li>
+    </ol>
+    <p>Schlägt ein Schritt fehl, kann der Host trotzdem so konfiguriert sein, dass er auf Ping bewusst nicht reagiert – ein negatives Ergebnis ist also kein zweifelsfreier Beweis für Nichterreichbarkeit.</p>
+
+    <div class="box">
+      <span class="lbl">Netzanalyse mit Wireshark</span>
+      <p>Ein Mitschnitt macht die Theorie sichtbar: <strong>ARP</strong>-Request/Reply beim ersten Kontakt im Segment, <strong>DNS</strong>-Query/Response bei der Namensauflösung, den <strong>3-Wege-Handshake</strong> beim TCP-Verbindungsaufbau (Statistiken → Flow Graph) oder den Klartext-Datenstrom einer <strong>Telnet</strong>-Sitzung (Folgen → TCP-Stream).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang I · ITI24-XX02-K08 · 100 Punkte</p>
+      <h2>Einsendeaufgabe Typ A</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="box warn">
+      <span class="lbl">Hinweis zur Nutzung</span>
+      <p>Die Lösungen unten sind meine eigenen Rechen- und Argumentationswege zum Abgleich, nicht der offizielle Lösungsschlüssel. Formuliere für die Abgabe in eigenen Worten und rechne die Zahlen selbst nach – kleine Rundungsabweichungen sind normal.</p>
+    </div>
+
+    <!-- Aufgabe 1 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">1</span><span class="task-t">IPv4-Adressierung: Netz, Hosts, Broadcast, CIDR</span><span class="task-p">10 Pkt.</span></div>
+      <div class="task-q">
+        <p>Ein Host A hat die Adresse 123.160.17.27 und die Netzmaske 255.255.240.0.</p>
+        <ol type="a">
+          <li>Wie lautet die Netzadresse?</li>
+          <li>Wie viele Hosts sind in dem Netz adressierbar?</li>
+          <li>Wie lautet die Broadcast-Adresse in diesem Netz?</li>
+          <li>Geben Sie die IP-Adresse des Hosts in CIDR-Darstellung an.</li>
+          <li>Ein anderer Host möchte mit Host A kommunizieren und benötigt die MAC-Adresse. Welches Protokoll wird verwendet?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Die Netzmaske 255.255.240.0 wirkt nur im 3. Byte teilweise. UND-Verknüpfung von Adresse und Maske in diesem Byte:</p>
+        <div class="step">17  = 0001 0001
+240 = 1111 0000
+UND = 0001 0000 = 16</div>
+        <div class="res">a) Netzadresse: 123.160.16.0</div>
+        <p><strong>b)</strong> 255.255.240.0 entspricht /20 (8+8+4 Einsen). Hostbits = 32 − 20 = 12:</p>
+        <div class="step">2¹² − 2 = 4096 − 2 = 4094</div>
+        <div class="res">b) 4094 adressierbare Hosts</div>
+        <p><strong>c)</strong> Broadcastadresse = Netzadresse ODER invertierte Netzmaske. Im 3. Byte invertiert: 0000 1111 = 15:</p>
+        <div class="step">16   = 0001 0000
+15   = 0000 1111
+ODER = 0001 1111 = 31</div>
+        <div class="res">c) Broadcastadresse: 123.160.31.255</div>
+        <p><strong>d)</strong> CIDR-Darstellung: IP-Adresse des Hosts mit der Anzahl Netzbits als Suffix.</p>
+        <div class="res">d) 123.160.17.27/20</div>
+        <p><strong>e)</strong> Für die Zuordnung IP-Adresse → MAC-Adresse innerhalb des Netzes ist das <strong>ARP</strong> (Address Resolution Protocol) zuständig.</p>
+        <div class="res">e) ARP (Address Resolution Protocol)</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 2 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">2</span><span class="task-t">IPv6: Interface Identifier, NDP und Autokonfiguration</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q">
+        <p>Gegeben sei ein Host B in einem IPv6-Netz mit der MAC-Adresse 00-11-22-33-44-55.</p>
+        <ol type="a">
+          <li>Wie lautet der auf Basis dieser MAC-Adresse gebildete Interface Identifier von Host B?</li>
+          <li>Wie lautet die verbindungslokale Adresse von Host B?</li>
+          <li>Ein anderer Host möchte mit Host B kommunizieren und benötigt die MAC-Adresse. Welches Protokoll wird verwendet und welche Adresse wird zur Ansprache von Host B genutzt?</li>
+          <li>Host B möchte per IPv6 ins Internet gehen und fordert vom Router eine entsprechende Präfixinformation an. Welche Adresse verwendet der Host, um den Router anzusprechen?</li>
+          <li>Der Host bekommt vom Router das Präfix 2001:0ABC::/64. Wie lautet die IP-Adresse des Hosts?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Modifiziertes EUI-64: FFFE zwischen 3. und 4. Byte einfügen, dann das U/L-Bit (7. Bit von links im 1. Byte) invertieren:</p>
+        <div class="step">MAC:                 00-11-22-33-44-55
++ FFFE eingefügt:   00-11-22-FF-FE-33-44-55
+U/L-Bit invertiert: 00 → 02</div>
+        <div class="res">a) Interface Identifier: 0211:22FF:FE33:4455</div>
+        <p><strong>b)</strong> Verbindungslokales Präfix FE80::/10 plus Interface Identifier aus a):</p>
+        <div class="res">b) FE80::211:22FF:FE33:4455</div>
+        <p><strong>c)</strong> Für IPv6 übernimmt <strong>NDP</strong> (Neighbor Discovery Protocol) die Adressauflösung: Der anfragende Host sendet eine Neighbor Solicitation an die Solicited-Node-Multicast-Adresse von Host B, gebildet aus dem Präfix FF02:0:0:0:0:1:FF00::/104 und den letzten 24 Bit der Interface ID (33:44:55):</p>
+        <div class="res">c) NDP; Solicited-Node-Multicast-Adresse FF02::1:FF33:4455</div>
+        <p><strong>d)</strong> Um Router im Segment zu finden, sendet der Host eine Router Solicitation an die All-Router-Multicast-Adresse:</p>
+        <div class="res">d) FF02::2</div>
+        <p><strong>e)</strong> Präfix 2001:0ABC::/64 (= 2001:0ABC:0000:0000::/64) plus Interface Identifier aus a):</p>
+        <div class="res">e) 2001:ABC::211:22FF:FE33:4455</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 3 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">3</span><span class="task-t">ARP-Cache und Routingtabellen im Beispielnetz</span><span class="task-p">30 Pkt.</span></div>
+      <div class="task-q">
+        <p>Gegeben ist die in der Abbildung dargestellte Netzstruktur. Für die einzelnen Netzkarten sind IP-Adressen sowie symbolische MAC-Adressen (MAC<sub>x</sub>) angegeben. Für ein Netz ist beispielhaft die Netzadresse sowie die zugehörige Netzmaske gegeben. Die Router haben jeweils die Schnittstellen E0, E1 und S0. <em>(Abb. H.1)</em></p>
+        <ol type="a">
+          <li>Erstellen Sie für den Router A die ARP-Tabellen (ARP-Cache-Einträge).</li>
+          <li>Erstellen Sie für jeden Router die Routingtabelle (Forwardingtabelle), wobei jeweils die Netzadresse, die Anzahl der Hops und die Schnittstelle zu erfassen sind.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Diese Aufgabe bezieht sich auf eine konkrete Netzskizze (Abb. H.1) mit eingezeichneten IP-/MAC-Adressen aus dem gedruckten Heft. Die genauen Adressen sind daraus zu übernehmen; hier folgt die <strong>Methode</strong>, mit der sich beide Tabellen aus jeder Netzskizze dieses Typs ableiten lassen.</p>
+        <p><strong>a) ARP-Cache Router A:</strong> Ein Router trägt in seinem ARP-Cache die IP-Adresse-zu-MAC-Adresse-Zuordnung jedes Hosts bzw. Nachbarn ein, der <strong>direkt</strong> an eine seiner LAN-Schnittstellen (E0, E1) angeschlossen ist – so viele Einträge, wie dort Hosts/Router hängen. Die S0-Schnittstelle (seriell/WAN) hat i. d. R. keinen ARP-Eintrag, da Punkt-zu-Punkt-Strecken ohne Broadcast-Adressauflösung auskommen.</p>
+        <div class="step">Schema je Eintrag: IP-Adresse (Nachbar an E0/E1)  →  MACx
+für jeden direkt angeschlossenen Host/Router – nicht für entfernte Netze</div>
+        <p><strong>b) Routingtabelle je Router:</strong> Für jedes Zielnetz werden Netzadresse, Hop-Zahl und ausgehende Schnittstelle eingetragen:</p>
+        <div class="step">direkt angeschlossenes Netz (an E0/E1/S0) → 0 Hops, eigene Schnittstelle
+entferntes Netz (über einen Nachbar-Router) → 1 Hop je durchquertem Router,
+                                                Schnittstelle = die zum Next Hop führende (meist S0)</div>
+        <p>Für die Router B und C wird identisch verfahren, ausgehend von deren eigenen E0-/E1-/S0-Anschlüssen. Bei mehreren möglichen Wegen zählt die geringste Anzahl Hops.</p>
+        <div class="res">Methode: ARP-Cache = Nachbarn an E0/E1; Routingtabelle = Netzadresse | Hops | Schnittstelle, direkt verbunden = 0 Hops, sonst zählen die durchquerten Router. Konkrete Adressen/MACs siehe Abb. H.1 im Heft.</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 4 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">4</span><span class="task-t">Distanz-Vektor-Algorithmus: Routingtabelle für Router B</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q">
+        <p>Die Router A, B, C, D und E sind wie folgt vernetzt und arbeiten mit einem Distanz-Vektor-Algorithmus. <em>(Abb. H.2)</em> Die Distanz von B nach A ist 2, von B nach C ist 5 und von B nach D ist 2. Nach einem Austausch der Distanzvektoren liegt im Router B die folgende Tabelle vor:</p>
+        <div class="tw"><table class="mono">
+          <thead><tr><th>nach</th><th>von A</th><th>von C</th><th>von D</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>–</td><td>1</td><td>4</td></tr>
+            <tr><td>B</td><td>2</td><td>5</td><td>2</td></tr>
+            <tr><td>C</td><td>1</td><td>–</td><td>3</td></tr>
+            <tr><td>D</td><td>4</td><td>3</td><td>–</td></tr>
+            <tr><td>E</td><td>5</td><td>4</td><td>3</td></tr>
+          </tbody>
+        </table></div>
+        <ol type="a">
+          <li>Ergänzen Sie die resultierende Routingtabelle im Router B (nach | Metrik/Distanz | Next Hop).</li>
+          <li>Beschriften Sie die Kanten des Graphen mit den entsprechenden Distanzen (Kosten).</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Bellman-Ford je Ziel y: d_B(y) = Minimum über die Nachbarn A, C, D aus c(B,Nachbar) + d_Nachbar(y):</p>
+        <div class="step">nach A: min(2+0, 5+1, 2+4) = min(2, 6, 6) = 2  über A
+nach C: min(2+1, 5+0, 2+3) = min(3, 5, 5) = 3  über A
+nach D: min(2+4, 5+3, 2+0) = min(6, 8, 2) = 2  über D
+nach E: min(2+5, 5+4, 2+3) = min(7, 9, 5) = 5  über D</div>
+        <div class="res">a) nach A: 2 (über A) · nach C: 3 (über A) · nach D: 2 (über D) · nach E: 5 (über D)</div>
+        <p><strong>b)</strong> Direkt gegeben sind die Kosten der an B angrenzenden Kanten. Die übrigen Kantenkosten lassen sich ableiten, indem man annimmt, dass jeder kleinste gemeldete Distanzwert einer direkten Kante entspricht:</p>
+        <div class="step">B–A = 2   B–C = 5   B–D = 2   (direkt gegeben)
+A–C = 1   C–D = 3   D–E = 3   (aus den Distanzvektoren abgeleitet)</div>
+        <p>Die genaue Zuordnung dieser Kanten im Graphen richtet sich nach der Abbildung H.2 im gedruckten Heft.</p>
+        <div class="res">b) B-A=2, B-C=5, B-D=2, A-C=1, C-D=3, D-E=3 (Kantenverlauf gemäss Abb. H.2)</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 5 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">5</span><span class="task-t">Wireshark-Mitschnitt: DNS-Anfrage analysieren</span><span class="task-p">30 Pkt.</span></div>
+      <div class="task-q">
+        <p>Mit Wireshark wurden folgende Datenpakete aufgezeichnet. <em>(Abb. H.3)</em></p>
+        <ol type="a">
+          <li>Ermitteln Sie, welche Protokolle zum Einsatz kommen und ordnen Sie die Protokolle in das OSI-Schichtenmodell ein. Geben Sie jeweils eine Hauptaufgabe des Protokolls an.</li>
+          <li>Wie lauten die Quell- und die Ziel-MAC-Adressen?</li>
+          <li>Wie lauten die Sockets vom Sender und Empfänger?</li>
+          <li>Wie lautet die Portnummer der Serveranwendung und welche Bedeutung hat sie?</li>
+          <li>Wozu dient dieses Datenpaket? Welche Antwort wird erwartet?</li>
+          <li>Weshalb wird als Transportprotokoll UDP genutzt?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Vier Protokolle sind beteiligt, jedes einer anderen OSI-Schicht zugeordnet:</p>
+        <div class="tw"><table>
+          <thead><tr><th>Protokoll</th><th>OSI-Schicht</th><th>Hauptaufgabe</th></tr></thead>
+          <tbody>
+            <tr><td>Ethernet</td><td>2 – Sicherung</td><td>Rahmenbildung und MAC-Zustellung im lokalen Netz</td></tr>
+            <tr><td>IP</td><td>3 – Vermittlung</td><td>logische Adressierung und Routing zum Zielnetz</td></tr>
+            <tr><td>UDP</td><td>4 – Transport</td><td>verbindungslose Zustellung an den richtigen Port</td></tr>
+            <tr><td>DNS</td><td>7 – Anwendung</td><td>Auflösung Domainname ↔ IP-Adresse</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>b)</strong> und <strong>c)</strong> Quell-/Ziel-MAC-Adressen sowie die Sockets (IP-Adresse + Port) von Sender und Empfänger sind direkt der Paketaufzeichnung in Abb. H.3 im gedruckten Heft zu entnehmen.</p>
+        <p><strong>d)</strong> Der Zielport der Anfrage ist der Serverport <strong>53</strong> – der Well-known Port des DNS-Dienstes.</p>
+        <div class="res">d) Port 53 = DNS</div>
+        <p><strong>e)</strong> Es handelt sich um eine <strong>DNS-Anfrage</strong> (Query) zur Auflösung eines Domainnamens. Erwartet wird eine <strong>DNS-Antwort</strong> (Response) mit dem passenden Resource Record (z. B. Typ A/AAAA) – oder eine Fehlermeldung, falls der Name nicht auflösbar ist.</p>
+        <p><strong>f)</strong> DNS-Anfragen sind kurz und passen in ein einzelnes Paket; ein TCP-Verbindungsaufbau wäre unnötiger Overhead. UDP liefert die Antwort schneller und mit geringerer Latenz; bleibt die Antwort aus, wiederholt die Anwendung (der Resolver) die Anfrage einfach erneut – eine gesicherte Übertragung auf Transportebene ist dafür nicht nötig.</p>
+        <div class="res">a) Ethernet/IP/UDP/DNS = Schicht 2/3/4/7 · d) Port 53 (DNS) · e) DNS-Query, erwartet DNS-Response · f) UDP: geringer Overhead, kein Verbindungsaufbau nötig</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck vor der Abgabe">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kurzkontrolle</p>
+      <h2>Schnellcheck vor der Abgabe</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="tw"><table>
+      <thead><tr><th>Aufgabe</th><th>Prüfe</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Netzmaske in Bits umrechnen (/20); Netzadresse = IP UND Maske; Broadcast = Netzadresse ODER invertierte Maske; Hosts = 2ⁿ−2; MAC-Auflösung im Netz = ARP</td></tr>
+        <tr><td><strong>2</strong></td><td>EUI-64: FFFE einfügen + U/L-Bit invertieren; Link-Local = FE80::/10 + IID; Adressauflösung bei IPv6 = NDP über Solicited-Node-Multicast; Router finden = FF02::2; globale Adresse = Präfix + IID</td></tr>
+        <tr><td><strong>3</strong></td><td>ARP-Cache nur für direkt angeschlossene Nachbarn (E0/E1); Routingtabelle je Netz mit Hops und Schnittstelle, direkt verbunden = 0 Hops</td></tr>
+        <tr><td><strong>4</strong></td><td>Bellman-Ford: d(y) = Minimum über alle Nachbarn aus eigenen Kosten + gemeldeter Distanz; Next Hop = Nachbar mit dem Minimum</td></tr>
+        <tr><td><strong>5</strong></td><td>Ethernet/IP/UDP/DNS den OSI-Schichten 2/3/4/7 zuordnen; Serverport 53 = DNS; Query vs. Response; UDP wegen geringem Overhead ohne Verbindungsaufbau</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ ABKÜRZUNGEN ══════════════ -->
+<section class="sec" id="abk" data-num="C" data-title="Abkürzungsverzeichnis">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">C</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang C</p>
+      <h2>Abkürzungsverzeichnis</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>ACK</dt><dd>Acknowledgement</dd></div>
+      <div class="abbr-row"><dt>APIPA</dt><dd>Automatic Private IP Addressing</dd></div>
+      <div class="abbr-row"><dt>ARP</dt><dd>Address Resolution Protocol</dd></div>
+      <div class="abbr-row"><dt>AS</dt><dd>Autonomes System</dd></div>
+      <div class="abbr-row"><dt>ATM</dt><dd>Asynchronous Transfer Mode</dd></div>
+      <div class="abbr-row"><dt>BGP</dt><dd>Border Gateway Protocol</dd></div>
+      <div class="abbr-row"><dt>CIDR</dt><dd>Classless Interdomain Routing</dd></div>
+      <div class="abbr-row"><dt>CIX</dt><dd>Commercial Internet Exchange Point</dd></div>
+      <div class="abbr-row"><dt>DAD</dt><dd>Duplicate Address Detection</dd></div>
+      <div class="abbr-row"><dt>DDoS</dt><dd>Distributed Denial of Service</dd></div>
+      <div class="abbr-row"><dt>DENIC</dt><dd>Deutsches Network Information Center</dd></div>
+      <div class="abbr-row"><dt>DFN</dt><dd>Deutsches Forschungsnetz</dd></div>
+      <div class="abbr-row"><dt>DHCP</dt><dd>Dynamic Host Configuration Protocol</dd></div>
+      <div class="abbr-row"><dt>DNS</dt><dd>Domain Name System</dd></div>
+      <div class="abbr-row"><dt>DV</dt><dd>Distanz-Vektor</dd></div>
+      <div class="abbr-row"><dt>DVRMP</dt><dd>Distance Vector Routing Multicast Protocol</dd></div>
+      <div class="abbr-row"><dt>EGP</dt><dd>Exterior Gateway Protocol</dd></div>
+      <div class="abbr-row"><dt>EUI</dt><dd>Extended Unique Identifier</dd></div>
+      <div class="abbr-row"><dt>FTP</dt><dd>File Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>HTTP</dt><dd>Hypertext Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>HTTPS</dt><dd>Hypertext Transfer Protocol Secure</dd></div>
+      <div class="abbr-row"><dt>IANA</dt><dd>Internet Assigned Numbers Authority</dd></div>
+      <div class="abbr-row"><dt>ICANN</dt><dd>Internet Corporation for Assigned Names and Numbers</dd></div>
+      <div class="abbr-row"><dt>ICMP</dt><dd>Internet Control Message Protocol</dd></div>
+      <div class="abbr-row"><dt>IGMP</dt><dd>Internet Group Management Protocol</dd></div>
+      <div class="abbr-row"><dt>IGRP</dt><dd>Interior Gateway Routing Protocol</dd></div>
+      <div class="abbr-row"><dt>IP</dt><dd>Internet Protocol</dd></div>
+      <div class="abbr-row"><dt>IPSec</dt><dd>Internet Protocol Security</dd></div>
+      <div class="abbr-row"><dt>ISATAP</dt><dd>Intra-Site Automatic Tunnel Addressing Protocol</dd></div>
+      <div class="abbr-row"><dt>IS-IS</dt><dd>Intermediate System to Intermediate System Protocol</dd></div>
+      <div class="abbr-row"><dt>ISO</dt><dd>International Organisation for Standardisation</dd></div>
+      <div class="abbr-row"><dt>LSA</dt><dd>Link-State-Algorithmus</dd></div>
+      <div class="abbr-row"><dt>LSB</dt><dd>Least Significant Bit</dd></div>
+      <div class="abbr-row"><dt>MAC</dt><dd>Medium Access Control</dd></div>
+      <div class="abbr-row"><dt>MTU</dt><dd>Maximum Transmission Unit</dd></div>
+      <div class="abbr-row"><dt>NAT</dt><dd>Network Address Translation</dd></div>
+      <div class="abbr-row"><dt>NDP</dt><dd>Neighbor Detection Protocol</dd></div>
+      <div class="abbr-row"><dt>NUD</dt><dd>Neighbor Unreachability Detection</dd></div>
+      <div class="abbr-row"><dt>OSI</dt><dd>Open System Interconnection</dd></div>
+      <div class="abbr-row"><dt>OSPF</dt><dd>Open Shortest Path First</dd></div>
+      <div class="abbr-row"><dt>PHB</dt><dd>Per Hop Behavior</dd></div>
+      <div class="abbr-row"><dt>POP</dt><dd>Post Office Protocol</dd></div>
+      <div class="abbr-row"><dt>QoS</dt><dd>Quality of Service</dd></div>
+      <div class="abbr-row"><dt>RARP</dt><dd>Reverse ARP</dd></div>
+      <div class="abbr-row"><dt>RIP</dt><dd>Routing Information Protocol</dd></div>
+      <div class="abbr-row"><dt>RIPE NCC</dt><dd>Réseaux IP Européens Network Coordination Centre</dd></div>
+      <div class="abbr-row"><dt>RIR</dt><dd>Regional Internet Registry</dd></div>
+      <div class="abbr-row"><dt>RPF</dt><dd>Reverse Path Forwarding</dd></div>
+      <div class="abbr-row"><dt>RTO</dt><dd>Retransmission Timeout</dd></div>
+      <div class="abbr-row"><dt>RTT</dt><dd>Round Trip Time</dd></div>
+      <div class="abbr-row"><dt>SLAAC</dt><dd>Stateless Address Autoconfiguration</dd></div>
+      <div class="abbr-row"><dt>SMB</dt><dd>Server Message Block</dd></div>
+      <div class="abbr-row"><dt>SMTP</dt><dd>Simple Mail Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>SPF</dt><dd>Shortest Path First</dd></div>
+      <div class="abbr-row"><dt>TCB</dt><dd>Transmission Control Blocks</dd></div>
+      <div class="abbr-row"><dt>TCP</dt><dd>Transmission Control Protocol</dd></div>
+      <div class="abbr-row"><dt>TLD</dt><dd>Top Level Domain</dd></div>
+      <div class="abbr-row"><dt>TLS</dt><dd>Transport Layer Security</dd></div>
+      <div class="abbr-row"><dt>TTL</dt><dd>Time to Live</dd></div>
+      <div class="abbr-row"><dt>UDP</dt><dd>User Datagram Protocol</dd></div>
+      <div class="abbr-row"><dt>VC</dt><dd>Virtual Circuit</dd></div>
+      <div class="abbr-row"><dt>VLSM</dt><dd>Variable Length Subnet Mask</dd></div>
+      <div class="abbr-row"><dt>VoIP</dt><dd>Voice over IP</dd></div>
+    </dl></div>
+
+    <h4>Wichtige Portnummern (Auswahl)</h4>
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>21</dt><dd>FTP (Dateitransfer)</dd></div>
+      <div class="abbr-row"><dt>23</dt><dd>Telnet</dd></div>
+      <div class="abbr-row"><dt>25</dt><dd>SMTP</dd></div>
+      <div class="abbr-row"><dt>53</dt><dd>DNS</dd></div>
+      <div class="abbr-row"><dt>67 / 68</dt><dd>DHCP Server / Client</dd></div>
+      <div class="abbr-row"><dt>80</dt><dd>HTTP</dd></div>
+      <div class="abbr-row"><dt>110</dt><dd>POP3</dd></div>
+      <div class="abbr-row"><dt>115</dt><dd>SFTP (Simple File Transfer Protocol)</dd></div>
+      <div class="abbr-row"><dt>123</dt><dd>NTP (Network Time Protocol)</dd></div>
+      <div class="abbr-row"><dt>161</dt><dd>SNMP</dd></div>
+      <div class="abbr-row"><dt>443</dt><dd>HTTPS</dd></div>
+      <div class="abbr-row"><dt>521</dt><dd>RIPng</dd></div>
+      <div class="abbr-row"><dt>546 / 547</dt><dd>DHCPv6 Client / Server</dd></div>
+    </dl></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft ITI24 · TCP/IP-Protokollfamilie · Druck-Code 0124K08 · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "iti24:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll("#ea details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

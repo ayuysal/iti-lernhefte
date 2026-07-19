@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITI21 – Grundlagen moderner Computernetze</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("iti21:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">ITI21 <span>· 1022K03</span></div>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Grundlagen moderner Computernetze</h1>
+      <p class="sub">Kapitelzusammenfassung, Abkürzungsverzeichnis und Einsendeaufgabe Typ A mit Lösungswegen.</p>
+      <div class="meta">
+        <span>ITI21 · 1022K03</span>
+        <span>6 Kapitel · 105 Seiten</span>
+        <span>Einsendeaufgabe: 100 Pkt.</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Einführung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Einführung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Motivationskapitel. Informations- und Kommunikationstechnologien (IuK / IKT) durchdringen Arbeit, Verwaltung, Handel und Privatleben. Die drei Kernfunktionen sind Verarbeitung, Speicherung und Übertragung von Information.</p>
+
+    <h4>Kernpunkte</h4>
+    <ul>
+      <li><strong>Abhängigkeit als Kehrseite.</strong> Ein Strom- oder Netzausfall legt gekoppelte Systeme flächendeckend lahm (Fallbeispiel Lübeck 2018: Ampeln, Kassensysteme, Telefonanlagen). IT-Sicherheit ist deshalb kein Nachgedanke.</li>
+      <li><strong>Weizenbaum-Kritik.</strong> Die „Informationsgesellschaft“ sei eine Illusion – Computer liefern Zeichen, nicht Information; erst die Interpretation im Kopf macht daraus Information. Die wichtigsten Fähigkeiten bleiben kritisches Denken und echtes Zuhören. Weizenbaum war selbst am ARPAnet beteiligt.</li>
+      <li><strong>Netz oder Netzwerk?</strong> „Netzwerk“ ist ein Anglizismus aus einer Fehlübersetzung von <em>network</em>. Fachlich heisst es Netz – vgl. Eisenbahnnetz, nicht Eisenbahnnetzwerk. Das Heft verwendet durchgängig „Netz“; synonyme Nutzung ist zulässig.</li>
+    </ul>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle</span>
+      <p>Der Netz/Netzwerk-Punkt taucht gern als Kurzfrage auf. Antwort: Übersetzungsfehler, kein sachlicher Unterschied. Feine Abgrenzung nur im Einzelfall – Netzkabel = Strom, Netzwerkkabel = Computernetz.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Internet – das Netz der Netze">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Internet – das Netz der Netze</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box def">
+      <span class="lbl">Definition</span>
+      <p>Das Internet ist ein <strong>dezentral organisiertes globales Computernetz</strong> aus vielen miteinander verbundenen Teilnetzen. Die Datenübertragung stützt sich auf die TCP/IP-Protokollfamilie bzw. kompatible Protokolle.</p>
+    </div>
+    <p>Die FNC-Definition von 1995 nennt drei Merkmale: weltweit eindeutiger IP-Adressraum, TCP/IP-basierte Kommunikation, Bereitstellung höherwertiger Dienste.</p>
+
+    <h4>Elemente des Internets</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Element</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Host / Endsystem</strong></td><td>Gerät am „Rand“ des Netzes – PC, Server, Smartphone, Sensor, Fahrzeug, Verkehrsanlage</td></tr>
+        <tr><td><strong>Link</strong></td><td>Kommunikationsverbindung, leitergebunden oder leiterungebunden, unterschiedliche Raten</td></tr>
+        <tr><td><strong>Netzkomponenten</strong></td><td>Switches, Router – Strukturierung, Kopplung der Teilnetze, Wegfindung</td></tr>
+        <tr><td><strong>Route / Pfad</strong></td><td>Weg eines Pakets vom Sender zum Empfänger über Links und Komponenten</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ISP-Hierarchie</h4>
+    <p><strong>Tier-1</strong> = Internet-Backbone: kauft keinen Transit ein, betreibt nur kostenneutrale <em>Peerings</em> mit anderen autonomen Systemen. <strong>Tier-2 / Tier-3</strong> stellen den Endkundenzugang (Zugangsnetz) bereit. Austauschknoten heissen <em>Internet Exchange Points</em>, bei kommerziellen Anbietern <strong>CIX</strong> – der weltweit grösste ist der DE-CIX in Frankfurt am Main.</p>
+
+    <h4>Organisation</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Organisation</th><th>Zuständigkeit</th></tr></thead>
+      <tbody>
+        <tr><td>ISOC</td><td>Dachorganisation, gegründet 1992 auf der INET-Konferenz in Kōbe; NGO für Pflege und Weiterentwicklung der Infrastruktur</td></tr>
+        <tr><td>IETF</td><td>Entwickelt die herstellerunabhängigen Standards. Keine Mitglieder, nur <em>Teilnehmer</em>. Ergebnisse erscheinen als <strong>RFCs</strong> (Quasi-Standards)</td></tr>
+        <tr><td>IANA / ICANN</td><td>Adressvergabe; verteilt IP-Adressblöcke an regionale Vergabestellen</td></tr>
+        <tr><td>RIR</td><td>Regionale Vergabestellen – für Europa <strong>RIPE NCC</strong></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box">
+      <span class="lbl">Anwendung · Dienst · Protokoll</span>
+      <p><strong>Anwendung</strong> = was der Nutzer bedient (Online-Shop). <strong>Dienst</strong> = technische Untersetzung (WWW). <strong>Protokoll</strong> = Regelwerk, das den Dienst realisiert (HTTP/HTTPS). DNS ist ein Dienst, der im Hintergrund Domainnamen in IP-Adressen auflöst.</p>
+    </div>
+
+    <h4>Geschichte in Stichworten</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Jahr</th><th>Ereignis</th></tr></thead>
+      <tbody>
+        <tr><td>1969</td><td>ARPAnet geht in Betrieb (4 Knoten), erste RFCs erscheinen</td></tr>
+        <tr><td>1972</td><td>Wachstum auf ca. 15 Knoten</td></tr>
+        <tr><td>1977</td><td>Demonstration: Zusammenschluss ARPAnet + Satnet + Funknetz</td></tr>
+        <tr><td>01.01.1983</td><td>Umstellung von NCP auf <strong>TCP/IP</strong> (Cerf und Kahn)</td></tr>
+        <tr><td>1990er</td><td>ARPAnet endet, Kommerzialisierung; Durchbruch über HTTP und WWW</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Netzneutralität</h4>
+    <p>Gleichberechtigte Übertragung unabhängig von Sender, Empfänger und Inhalt. Spannungsfeld: Dienste haben real unterschiedliche Anforderungen an Rate und Verzögerung, ISPs möchten „Überholspuren“ monetarisieren. Rechtsrahmen in der EU: Verordnung 2015/2120 über den Zugang zum offenen Internet.</p>
+
+    <h4>Sicherheit</h4>
+    <ul>
+      <li><strong>DoS</strong> – Host oder Infrastruktur wird für den eigentlichen Nutzer unverfügbar; Flutung mit Paketen oder halboffene Verbindungen, die Ressourcen binden</li>
+      <li><strong>DDoS</strong> – viele Hosts in einem <em>Botnet</em> unter Regie des Angreifers</li>
+      <li><strong>Sniffing</strong> – Analysewerkzeuge wie Wireshark zeichnen fremden Verkehr mit. Sniffer sind <em>passiv</em>, verändern nichts und sind dadurch schwer zu entdecken</li>
+      <li><strong>Identitätsvortäuschung</strong>, Social Engineering, physische Ausfälle, menschliche Fehlhandlungen</li>
+    </ul>
+    <p>Die Kette ist so stark wie ihr schwächstes Glied – Netzkomponenten, Endsysteme <em>und</em> Nutzer gehören ins Sicherheitskonzept.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Einordnung, Ziele und Anforderungen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Einordnung, Ziele und Anforderungen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box def">
+      <span class="lbl">Definition Computernetz</span>
+      <p>Verbund von <strong>zwei oder mehr autonomen Computern</strong> und anderen Systemen (Hosts, z. B. Drucker oder Router), der die Kommunikation dieser Systeme und den gemeinsamen Zugriff auf Ressourcen und Dienste ermöglicht.</p>
+    </div>
+
+    <h4>Abgrenzungen – der Prüfungskern des Kapitels</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Begriff</th><th>Merkmal</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Terminalnetz</strong></td><td><em>Kein</em> Computernetz – ein Terminal hat keine eigene Speicher- und Verarbeitungskapazität („dummes Terminal“)</td></tr>
+        <tr><td><strong>Verteiltes System</strong></td><td>Erscheint dem Nutzer als <em>ein einziges</em> kohärentes System; setzt per Software auf einem Computernetz auf. Das Netz ist das Transportsystem. Beispiel: WWW</td></tr>
+        <tr><td><strong>Multiprozessorsystem</strong></td><td>Verteilte <em>Prozessoren</em> statt verteilter Computer, räumlich konzentriert, ein Betriebssystem, sehr geringe Latenz</td></tr>
+        <tr><td><strong>Computernetz</strong></td><td>Autonome Computer, grössere Latenz</td></tr>
+      </tbody>
+    </table></div>
+    <p>Kopplungsarten bei Multiprozessorsystemen: <strong>eng</strong> (gemeinsamer interner Speicher), <strong>nah</strong> (NUMA, Hochleistungsbus), <strong>lose</strong> (NORMA, Nachrichtenaustausch), sowie HPC-Cluster und Workstation-Cluster.</p>
+    <p><strong>Intranet:</strong> unternehmensinternes Netz, unabhängig vom öffentlichen Netz nutzbar, basiert ebenfalls auf TCP/IP.</p>
+
+    <h4>Die Verbundeffekte</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Verbund</th><th>Inhalt</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Kommunikationsverbund</strong></td><td>rechnergestützte Mensch-Mensch-Kommunikation, z. B. E-Mail</td></tr>
+        <tr><td><strong>Ressourcenverbund</strong></td><td>Nutzung nichtlokaler Geräte und Software (Speicher, Peripherie, entfernte Software)</td></tr>
+        <tr><td><strong>Informationsverbund</strong></td><td>Verbreitung von Information, digitale Bibliotheken, WWW</td></tr>
+        <tr><td><strong>Datenverbund</strong></td><td>Zugriff auf entfernte Datenbestände (Datenbanken)</td></tr>
+        <tr><td><strong>Leistungsverbund</strong></td><td>mehrere Rechner lösen gemeinsam eine Aufgabe</td></tr>
+        <tr><td><strong>Lastverbund</strong></td><td>Verlagerung von Aufgaben aus Überlastungsgründen</td></tr>
+        <tr><td><strong>Verfügbarkeitsverbund</strong></td><td>Übernahme der Aufgaben bei Ausfall eines Rechners</td></tr>
+        <tr><td><strong>Funktionsverbund</strong></td><td>Spezialaufgaben auf Spezialrechnern → Grundlage für Client/Server</td></tr>
+        <tr><td><strong>Steuerungs-/Wartungsverbund</strong></td><td>Steuerung, Überwachung, Wartung über das Netz</td></tr>
+      </tbody>
+    </table></div>
+    <p>In der Praxis wirken meist mehrere gleichzeitig, je nach Anwendungsfall dominiert einer.</p>
+
+    <h4>Anforderungen – nach Perspektive getrennt</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Perspektive</th><th>Erwartungen</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nutzer</strong></td><td>hohe Übertragungsgeschwindigkeit, Echtzeitfähigkeit auch für grosse Datenmengen, Zuverlässigkeit und Qualität, kurze Antwortzeit, Sicherheit der Informationen</td></tr>
+        <tr><td><strong>Administrator</strong></td><td>stabiler zuverlässiger Betrieb, einfaches Management von Komponenten, Ressourcen und Benutzern</td></tr>
+        <tr><td><strong>Betreiber</strong></td><td>Anschaffungs- und Betriebskosten, Zukunftssicherheit des Netzes</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Achtung</span>
+      <p>Aufgabe 1c der Einsendeaufgabe fragt genau nach der <strong>Nutzerperspektive</strong> – nicht mit den Betreiber- oder Administratoranforderungen vermischen.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">Definition Netzdienst</span>
+      <p>Stellt Anwendern oder teilnehmenden Geräten einen Service zur Kommunikation oder gemeinsamen Ressourcennutzung bereit. Aus Anwendersicht eine in sich geschlossene Funktionskomponente, technisch über ein oder mehrere Netzprotokolle realisiert. <em>Webservices</em> basieren zwar auf Netzen, sind aber keine Netzdienste in diesem Sinne.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Bausteine und Klassifikationen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4</p>
+      <h2>Grundlegende Bausteine und Klassifikationen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Die drei elementaren Bausteine</h4>
+    <ol>
+      <li><strong>Hosts</strong> (Netzknoten / Endsysteme) mit Netzinterface zum Anschluss ans Netz</li>
+      <li><strong>Link</strong> zwischen den Knoten über ein Übertragungsmedium – abstrakt auch Übertragungskanal</li>
+      <li><strong>Protokolle</strong> zur Regelung der Datenkommunikation</li>
+    </ol>
+    <p>Davon abzugrenzen sind <em>Netzkomponenten</em>: <strong>passiv</strong> (Kabel, Datendose, Patchfeld – fest installierte Infrastruktur) gegenüber <strong>aktiv</strong> (Switch, Router, Firewall – eigene Stromversorgung, Hard- und Software).</p>
+
+    <h4>Klassifikationsmerkmale</h4>
+    <p>Administration · räumliche Ausdehnung · Topologie · Vermittlungsprinzip · Übertragungsmedium · Übertragungsbandbreite. Ergänzend: Anzahl der Kommunikationsteilnehmer und Übertragungsart.</p>
+
+    <h4>Administration: P2P gegen Client-Server</h4>
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Peer-to-Peer</th><th>Client-Server</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Rollen</strong></td><td>alle Hosts gleichberechtigt, jeder administriert seine eigenen Betriebsmittel, selbstorganisiert (SON)</td><td>Server stellt Ressourcen und Dienste bereit, Clients sind Leistungsnehmer; Server übernimmt zentrale Verwaltung</td></tr>
+        <tr><td><strong>Vorteile</strong></td><td>bessere Skalierbarkeit, preiswerte Implementierung, Selbstorganisation, dezentrale Koordination, höhere Fehlertoleranz</td><td>zentrale Datensicherung, fachkundige Administration, keine Mehrfachspeicherung, einfache Zugriffskontrolle</td></tr>
+        <tr><td><strong>Nachteile</strong></td><td>Sicherheitsprobleme mangels Administrator, keine zentrale Datensicherung</td><td>teurer, Server ist Single Point of Failure (Gegenmittel: redundante Server, Cluster)</td></tr>
+        <tr><td><strong>Anwendungen</strong></td><td>BitTorrent, Gnutella, Blockchain/Bitcoin</td><td>WWW (Browser–Webserver), Mail-, File-, Print-, Datenbankserver</td></tr>
+      </tbody>
+    </table></div>
+    <p>Zwischenformen: <strong>hybride Netze</strong> (mit Verzeichnisserver) und <strong>Super-Peer-Lösungen</strong>, bei denen leistungsfähige Peers Server- und Verwaltungsaufgaben übernehmen.</p>
+
+    <h4>Räumliche Ausdehnung</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Typ</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>PAN</td><td>Personal Area Network – geringe Ausdehnung, Vernetzung persönlicher Geräte</td></tr>
+        <tr><td>LAN</td><td>Local Area Network – wenige Kilometer, betrieben von Unternehmen, Organisation oder privat</td></tr>
+        <tr><td>MAN</td><td>Metropolitan Area Network – Stadtnetze, Ballungsgebiete</td></tr>
+        <tr><td>WAN</td><td>Wide Area Network – Weitverkehrsnetze über grosse geografische Gebiete</td></tr>
+        <tr><td>GAN</td><td>Global Area Network – ergibt sich aus der <strong>Kopplung mehrerer WANs</strong>. Das Internet ist ein GAN</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Topologien</h4>
+    <p>Bus, Ring, Stern, Baum, vermascht (voll oder teilvermascht). Basis fast aller Topologien ist die <strong>Punkt-zu-Punkt-Topologie</strong> – <em>Ausnahme Bus</em>, denn dort teilen sich alle ein gemeinsames Medium, also ein <strong>Broadcastnetz</strong>.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Topologie</th><th>Charakteristik</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Bus</strong></td><td>alle Hosts an einer gemeinsamen Leitung; Ausfall des Busses = Netzausfall</td></tr>
+        <tr><td><strong>Ring</strong></td><td>benachbarte Hosts gekoppelt, bis sich ein Ring schliesst</td></tr>
+        <tr><td><strong>Stern</strong></td><td>zentraler Verteiler zu allen Hosts – Single Point of Failure</td></tr>
+        <tr><td><strong>Baum</strong></td><td>basiert auf Stern, bildet hierarchische Strukturen ab</td></tr>
+        <tr><td><strong>Vermascht</strong></td><td>hohe Fehlertoleranz durch Alternativwege, aber sehr hoher Verkabelungsaufwand</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Beurteilungskriterien:</strong> Verhalten bei Erweiterung/Reduktion der Knoten, Reaktion auf Ausfall von Knoten oder Kante, Verkabelungsaufwand, <strong>Durchmesser</strong> (maximale direkte Entfernung zwischen zwei Knoten in <em>Hops</em>, als Mass für maximale Transferzeiten).</p>
+    <div class="box">
+      <span class="lbl">Physisch ≠ logisch</span>
+      <p>Ein Sternverteiler, der eine eingehende Nachricht an alle angeschlossenen Knoten weiterleitet, ist physisch ein Stern, aufgrund des Datenflusses aber logisch ein Bus.</p>
+    </div>
+
+    <h4>Übertragungsmedium und Bandbreite</h4>
+    <p><strong>Leitergebunden</strong> (Kupfer, Glasfaser) gegenüber <strong>leiterungebunden</strong> (Zellularfunk, Satellitenfunk, WLAN).</p>
+    <p><strong>Basisband:</strong> Übertragung direkt im ursprünglichen Frequenzbereich, dominiert in lokalen Netzen; hohe Raten über spezielle Codierverfahren. <strong>Breitband:</strong> Aufmodulation auf einen oder mehrere hochfrequente Träger. Umgangssprachlich meint „Breitband“ heute nur noch „schnell“ – ITU-Schwelle 2048 kbit/s, in den USA 25 Mbit/s im Downstream. Darunter: Schmalband. <strong>NB-IoT</strong> / Schmalbandnetze sind Maschinennetze für geringe Datenmengen im Internet der Dinge.</p>
+
+    <h4>Vermittlung</h4>
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Leitungsvermittlung</th><th>Paketvermittlung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Prinzip</strong></td><td>Aufbau einer physikalischen Verbindung; Ressourcen auf dem Weg werden für die Dauer der Sitzung exklusiv reserviert</td><td>Nachricht wird in Pakete zerlegt, jedes mit Sender- und Zieladresse versehen und einzeln geroutet; beim Empfänger wieder zusammengesetzt</td></tr>
+        <tr><td><strong>Verbindung</strong></td><td>dediziert</td><td>virtuell</td></tr>
+        <tr><td><strong>Vorteil</strong></td><td>garantierte Bandbreite, geringe Latenz, nach dem Verbindungsaufbau kein weiterer Adressbedarf</td><td>bessere Leitungsauslastung, Fehlertoleranz durch Alternativwege</td></tr>
+        <tr><td><strong>Nachteil</strong></td><td>schlechte Auslastung (auch Schweigen bindet Ressourcen), fehlerempfindlich</td><td>keine Bandbreitengarantie, Sequenznummern nötig, höherer Overhead, Pakete können sich überholen</td></tr>
+        <tr><td><strong>Beispiel</strong></td><td>klassisches analoges Telefonnetz</td><td>Internet</td></tr>
+      </tbody>
+    </table></div>
+    <p>Dazwischen liegt die <strong>Nachrichtenvermittlung</strong>: adressierte Nachrichten laufen über Zwischenknoten nach dem <em>Store-and-Forward</em>-Prinzip, ohne Ressourcenreservierung. Die Paketvermittlung ist ihr Spezialfall. Die Wegfindung im vermaschten Netz heisst <strong>Routing</strong>; nachvollziehen lässt sie sich mit <code>traceroute</code> bzw. <code>tracert</code>.</p>
+
+    <div class="box def">
+      <span class="lbl">Zwei Definitionen</span>
+      <p><strong>Broadcastnetz:</strong> hat nur einen Übertragungskanal, der von allen angeschlossenen Hosts gemeinsam genutzt wird; jede gesendete Nachricht wird zwangsweise von allen empfangen.</p>
+      <p><strong>Vermitteltes Netz:</strong> ermöglicht gezielten Verbindungsaufbau zwischen zwei Hosts; die übrigen Hosts sind von dieser Kommunikation ausgeschlossen.</p>
+    </div>
+
+    <h4>Anzahl der Kommunikationsteilnehmer</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Art</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>Unicast</td><td>Einem Sender ist genau ein Empfänger zugeordnet (Punkt-zu-Punkt)</td></tr>
+        <tr><td>Anycast</td><td>Gruppe mit gemeinsamer Adresse; angesprochen wird der über die kürzeste Route erreichbare Host</td></tr>
+        <tr><td>Multicast</td><td>eine ausgewählte Gruppe ist das Ziel</td></tr>
+        <tr><td>Broadcast</td><td>die Sendung wird allen erreichbaren Hosts zugestellt</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Übertragungsart</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Art</th><th>Informationsfluss</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td>Simplex</td><td>nur eine Richtung, keine Rückmeldung</td><td>Rundfunk, Fernsehen</td></tr>
+        <tr><td>Halbduplex</td><td>beide Richtungen, aber nicht gleichzeitig</td><td>Wechselsprechanlage, CB-Funk, einzelne Glasfaser</td></tr>
+        <tr><td>Vollduplex</td><td>gleichzeitig in beide Richtungen</td><td>moderne Ethernet-Verbindung</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 5 ══════════════ -->
+<section class="sec" id="k5" data-num="5" data-title="Kenngrößen in Netzen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">5</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 5 · rechenlastig</p>
+      <h2>Kenngrössen in Netzen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Serielle Übertragung</h4>
+    <p>Bits werden nacheinander über eine Leitung übertragen; computerintern läuft die Übertragung parallel entsprechend der Busbreite, also ist eine Wandlung nötig. Synchronität ist zwingend, weil bei der Datenkommunikation kein gemeinsamer Takt existiert – schon kleine Taktabweichungen führen zur Fehlinterpretation der empfangenen Bits.</p>
+    <ul>
+      <li><strong>Asynchron:</strong> Neusynchronisation zu jedem Zeichen. Startbit (log. 0) → 7 oder 8 Datenbits → optional Paritätsbit → 1 oder 2 Stoppbits (log. 1). Hoher Overhead, deshalb langsamer.</li>
+      <li><strong>Synchron:</strong> Präambel zur Bitsynchronisation, Frame-Begrenzung durch ein Flag. Das HDLC-Flag lautet <code>01111110</code>; damit diese Kombination nicht in den Nutzdaten auftaucht, fügt der Sender nach fünf 1-Bits eine 0 ein – <strong>Bitstopfen / Bit Stuffing</strong>. Der Empfänger entfernt sie wieder. Unterarten: zeichensynchron (Bytegrenzen bleiben erhalten) und bitsynchron (reiner Bitstrom).</li>
+    </ul>
+    <div class="box def">
+      <span class="lbl">Definition Overhead</span>
+      <p>Alle Daten, die keine Nutzdaten darstellen, sondern der Steuerung oder Fehlererkennung dienen.</p>
+    </div>
+
+    <h4>Formelsammlung</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Grösse</th><th>Formel</th><th>Anmerkung</th></tr></thead>
+      <tbody>
+        <tr><td>Übertragungsrate</td><td>b = D / t</td><td>Formelzeichen b, Einheit bit/s</td></tr>
+        <tr><td>Übertragungsdauer</td><td>t<sub>Ü</sub> = D / b</td><td>reine Sendezeit der Datenmenge</td></tr>
+        <tr><td>Bitdauer</td><td>t<sub>bit</sub> = 1 / b</td><td>Dauer eines einzelnen Bits</td></tr>
+        <tr><td>Signalausbreitungszeit</td><td>t<sub>a</sub> = d / v</td><td>d = Entfernung, v = Ausbreitungsgeschwindigkeit</td></tr>
+        <tr><td>Latenz vollständig</td><td>t<sub>L</sub> = t<sub>v</sub> + t<sub>w</sub> + t<sub>Ü</sub> + t<sub>a</sub></td><td>Verarbeitung, Warten, Übertragung, Ausbreitung</td></tr>
+        <tr><td>Latenz in Aufgaben</td><td>t ≈ t<sub>Ü</sub> + t<sub>a</sub></td><td>t<sub>v</sub> und t<sub>w</sub> hängen von der Netzlast ab und entfallen</td></tr>
+        <tr><td>Volumen eines Kanals</td><td>V = t<sub>L</sub> · b</td><td>Bits, die unterwegs sein können</td></tr>
+        <tr><td>Länge eines Bits</td><td>ℓ = v · t<sub>bit</sub></td><td>räumliche Ausdehnung im Medium</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Die drei Einheitenfallen</span>
+      <p><strong>1 · Basis 10, nicht 2.</strong> Bei Übertragungsraten gilt 1 k = 1000. Also 100 Mbit/s = 100 000 000 bit/s.</p>
+      <p><strong>2 · Byte ≠ Bit.</strong> Datenmengen kommen in MB/GB, Raten in Mbit/s – immer mit 8 multiplizieren. 2 MB = 16 000 000 bit.</p>
+      <p><strong>3 · MB ≠ MiB.</strong> 1 MiB = 1 048 576 Byte, 1 MB = 1 000 000 Byte. Rund 5 % Unterschied; das Heft rechnet beide Varianten vor. Nur wenn ausdrücklich „MiB“ dasteht, mit 1024er-Potenzen rechnen (ISO 80000).</p>
+    </div>
+
+    <div class="box">
+      <span class="lbl">Ausbreitungsgeschwindigkeit</span>
+      <p>Im Kabel (Twisted Pair, Glasfaser) ca. <strong>⅔ der Lichtgeschwindigkeit ≈ 200 000 km/s</strong>. In Luft und Vakuum die volle Lichtgeschwindigkeit <strong>≈ 300 000 km/s</strong>. Kein Signal ist schneller als das Licht.</p>
+    </div>
+
+    <h4>Die einzelnen Kenngrössen</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Kenngrösse</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Übertragungsrate b</strong></td><td>digitale Datenmenge pro Zeiteinheit, die erfolgreich über einen Kanal geht; steht für die Übertragungskapazität. <em>Nicht</em> identisch mit <strong>Bandbreite</strong> (= nutzbarer Frequenzbereich eines Mediums), auch wenn die Begriffe oft vermischt werden</td></tr>
+        <tr><td><strong>Latenz</strong></td><td>Zeit zwischen dem Absenden und dem Empfang einer Übertragungseinheit. Vier Komponenten: Verarbeitungszeit, Wartezeit, Übertragungsverzögerung, Ausbreitungsverzögerung</td></tr>
+        <tr><td><strong>Antwortzeit</strong></td><td>Zeit zwischen Anfrage und Antwort, auch RTT / RTD / RTDT. Messwerkzeug: <code>ping</code></td></tr>
+        <tr><td><strong>Jitter</strong></td><td>Schwankung der Latenz bzw. Antwortzeit. Ursachen: Staus in Komponenten, Überlast, Routenwechsel, unregelmässig sendender Sender. Folge: Ruckeln im Video, Lücken bei VoIP; verspätete Pakete gelten als verloren. Gegenmassnahme: <strong>Jitter-Buffer</strong></td></tr>
+        <tr><td><strong>Paketverlustrate</strong></td><td>prozentualer Anteil der Pakete, die mangels Kapazität (volle Warteschlange) verworfen werden. Abzugrenzen von der <strong>Fehlerrate</strong> = Mass für fehlerhaft angekommene Pakete</td></tr>
+        <tr><td><strong>Volumen eines Kanals</strong></td><td>Anzahl Bits, die der Sender losschicken kann, bevor das erste Bit beim Empfänger ankommt</td></tr>
+        <tr><td><strong>Durchsatz</strong></td><td>tatsächliche Ende-zu-Ende-Rate. Zählt <strong>nur Nutzdaten (Payload)</strong>, nicht den Overhead. Momentane und durchschnittliche Rate unterscheiden</td></tr>
+        <tr><td><strong>Dienstgüte / QoS</strong></td><td>Sammelbegriff für Übertragungsrate, Latenz, Jitter, Durchsatz, Paketverlustrate, Verbindungsabbrüche, Falschverbindungen. Priorisierung über Dienstklassen nach IEEE 802.1Q (Prioritäten 0–7, wobei 0 für nicht zugeordnete Frames reserviert ist). Wirkt nur, wenn im <em>gesamten</em> Netz implementiert</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Latenz-Referenzwerte (ITU-T G.114, Sprachkommunikation)</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Latenz</th><th>Wirkung</th></tr></thead>
+      <tbody>
+        <tr><td>&lt; 50 ms</td><td>keine Verzögerung wahrnehmbar</td></tr>
+        <tr><td>≤ 150 ms</td><td>Kommunikation gut / gute Sprachqualität</td></tr>
+        <tr><td>≤ 250 ms</td><td>teilweise Störungen</td></tr>
+        <tr><td>&lt; 400 ms</td><td>noch akzeptabel</td></tr>
+        <tr><td>&gt; 600 ms</td><td>keine Kommunikation möglich</td></tr>
+      </tbody>
+    </table></div>
+    <p>Die Paketverlustrate sollte dabei unter 5 % bleiben.</p>
+
+    <h4>Anforderungsprofil nach Anwendung</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Anwendung</th><th>Entscheidend</th><th>Nachrangig</th></tr></thead>
+      <tbody>
+        <tr><td>Filetransfer, Backup grosser Datenmengen</td><td><strong>Übertragungsrate</strong></td><td>Latenz (100 ms fallen bei 20 s Übertragung nicht ins Gewicht)</td></tr>
+        <tr><td>Sprachübertragung, Echtzeit-Gaming, Tastendruck</td><td><strong>Latenz</strong></td><td>Übertragungsrate</td></tr>
+        <tr><td>Videoübertragung, Streaming</td><td><strong>Jitter</strong> und Latenz</td><td>–</td></tr>
+        <tr><td>WWW-Seite laden gegenüber lesen</td><td colspan="2">Anforderung schwankt im zeitlichen Verlauf derselben Anwendung</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Typische Übertragungsraten</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Anwendung</th><th>Rate</th></tr></thead>
+      <tbody>
+        <tr><td>Sprache (Telefon)</td><td>64 kbit/s</td></tr>
+        <tr><td>Audio, gute Qualität</td><td>1–2 Mbit/s (44,1 kHz · 16 bit · 2 Kanäle = 1411 kbit/s)</td></tr>
+        <tr><td>Audio komprimiert (MP3)</td><td>64–320 kbit/s, üblich 128–256 kbit/s</td></tr>
+        <tr><td>Video unkomprimiert</td><td>1–2 Gbit/s</td></tr>
+        <tr><td>Video komprimiert</td><td>2–10 Mbit/s</td></tr>
+        <tr><td>Streaming HD</td><td>ca. 5 Mbit/s</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 6 ══════════════ -->
+<section class="sec" id="k6" data-num="6" data-title="Schichtenmodelle und Protokolle">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">6</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 6</p>
+      <h2>Schichtenmodelle und Protokolle</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Grundidee: „Teile und herrsche“. Der komplexe Kommunikationsvorgang wird in Teilaufgaben zerlegt und hierarchisch in Schichten angeordnet.</p>
+
+    <div class="box def">
+      <span class="lbl">Zwei Definitionen</span>
+      <p><strong>Kommunikationsprotokoll:</strong> Menge von Regeln, nach denen Kommunikationspartner Verbindungen auf- und abbauen und Nachrichten austauschen. Ein Protokoll verbindet <strong>horizontal</strong> zwei Instanzen derselben Schicht.</p>
+      <p><strong>Dienstzugangspunkt (SAP):</strong> der Punkt, an dem eine Schicht der unmittelbar darüberliegenden Schicht ihren Dienst zur Verfügung stellt – die <strong>vertikale</strong> Verbindung.</p>
+    </div>
+
+    <div class="box">
+      <span class="lbl">Merksatz</span>
+      <p>Die Kommunikation <em>scheint</em> horizontal zu laufen, real durchläuft die Nachricht vertikal alle darunterliegenden Schichten. Der Dienstnutzer ist die höhere Schicht, der Dienstanbieter die niedrigere.</p>
+    </div>
+
+    <p><strong>Dienstprimitive</strong> regeln die vertikale Verständigung: <code>REQ</code> (Request) → <code>IND</code> (Indication) → <code>RESP</code> (Response) → <code>CONF</code> (Confirmation). Beispiel HTTP-Get: Request beim Client, Indication beim Server, Response zurück, Confirmation beim Client.</p>
+
+    <h4>Vor- und Nachteile der Schichtenarchitektur</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Dafür</th><th>Dagegen</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <ul style="margin:0;padding-left:1.1rem">
+              <li>Unabhängigkeit der Schichten – nur die Dienste an den Schnittstellen zählen</li>
+              <li>Flexibilität – Implementierung austauschbar, solange die Schnittstelle bleibt</li>
+              <li>Trennung: jede Schicht in der am besten geeigneten Form realisierbar</li>
+              <li>vereinfachte Standardisierung</li>
+              <li>einfachere Wartung und Implementierung</li>
+            </ul>
+          </td>
+          <td>
+            <ul style="margin:0;padding-left:1.1rem">
+              <li>grosser Overhead und Verwaltungsaufwand durch Steuerungsinformationen in jeder Schicht</li>
+              <li>schlechteres Leistungsverhalten als eine monolithische Realisierung</li>
+              <li>Funktionalität kann sich über Schichten hinweg duplizieren, z. B. Fehlererkennung</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <h4>Das OSI-Modell (ISO 7498-1)</h4>
+    <p>Ein <strong>Referenzmodell</strong>, kein Implementierungsstandard – ein konzeptioneller Rahmen und ein einheitliches Vokabular. Oft als zu kompliziert und ineffizient kritisiert, aber unschlagbar zum Verstehen des Zusammenspiels.</p>
+    <div class="tw"><table class="layer">
+      <thead><tr><th>#</th><th>Schicht</th><th>Aufgabe</th><th>Dateneinheit</th></tr></thead>
+      <tbody>
+        <tr><td>7</td><td><strong>Anwendungsschicht</strong><br>Application Layer</td><td>Schnittstelle zum Benutzer, Bereitstellung der Anwendungsdienste</td><td><strong>Nachricht / Daten</strong></td></tr>
+        <tr><td>6</td><td><strong>Darstellungsschicht</strong><br>Presentation Layer</td><td>Datenaustausch zwischen Systemen mit unterschiedlicher Transfersyntax; Codierung, Kompression, Verschlüsselung</td><td>–</td></tr>
+        <tr><td>5</td><td><strong>Sitzungsschicht</strong><br>Session Layer</td><td>Sitzungen zwischen Benutzern einrichten, Dialogsteuerung, Synchronisation</td><td>–</td></tr>
+        <tr><td>4</td><td><strong>Transportschicht</strong><br>Transport Layer</td><td>Aufbau, Überwachung und Abbau logischer Ende-zu-Ende-Verbindungen; Einteilung der Daten in transportgeeignete Pakete</td><td><strong>Segment</strong></td></tr>
+        <tr><td>3</td><td><strong>Netzwerk-/Vermittlungsschicht</strong><br>Network Layer</td><td>Vermittlung von Datenwegen (Routing) und Durchleitung durch das vermaschte Netz anhand von Adressen</td><td><strong>Paket / Datagramm</strong></td></tr>
+        <tr><td>2</td><td><strong>Datenverbindungs-/Sicherungsschicht</strong><br>Data Link Layer</td><td>Sicherung der Bitübertragung durch Fehlererkennung und -korrektur, Flusskontrolle, in LANs Zugriffskontrolle (MAC)</td><td><strong>Frame / Rahmen</strong></td></tr>
+        <tr><td>1</td><td><strong>Physikalische Schicht</strong><br>Physical Layer</td><td>ungesicherte Übertragung binärer Information; elektrische (Pegel, Signalverläufe) und mechanische Eigenschaften (Stecker, Kabel)</td><td>Bits / Signale</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>Schichten <strong>1–4 sind transportorientiert</strong>, Schichten <strong>5–7 anwendungsorientiert</strong></li>
+      <li>Eselsbrücke von 7 nach 1: <strong>A</strong>ll <strong>P</strong>eople <strong>S</strong>eem <strong>T</strong>o <strong>N</strong>eed <strong>D</strong>ata <strong>P</strong>rocessing</li>
+      <li>Nicht alle Schichten müssen implementiert sein, wenn die Funktionalität nicht gebraucht wird</li>
+      <li><strong>Zwischensysteme:</strong> Switch = Schichten 1–2, Router = Schichten 1–3. Die Anwendungsschicht existiert nur in den Endsystemen</li>
+      <li>Schicht 2 ist die einzige, die neben dem Header auch einen <strong>Trailer</strong> anfügt (Fehlererkennung)</li>
+    </ul>
+
+    <h4>Paketierung, Kapselung, Entkapselung</h4>
+    <p>Die Daten der obersten Schicht werden in Dateneinheiten zerlegt (<strong>Paketierung</strong>, auch Fragmentierung). Jede Schicht packt Daten samt Header der darüberliegenden Schicht in ihr eigenes Datenfeld und fügt ihren eigenen Header hinzu – das ist die <strong>Kapselung</strong>. Beim Empfänger läuft das rückwärts als <strong>Entkapselung</strong>.</p>
+    <p>Der allgemeine Begriff für Nutzdaten plus Header einer Schicht ist <strong>PDU</strong> (Protocol Data Unit); jede Schicht hat ihre eigene. Die <strong>MTU</strong> (Maximum Transmission Unit) ist die grösste in einer Schicht übertragbare PDU – grössere Einheiten müssen fragmentiert werden.</p>
+
+    <h4>TCP/IP- bzw. DoD-Modell</h4>
+    <p>Vier Schichten. War im praktischen Betrieb bereits vor OSI (entstand im ARPAnet), hat aber keine festen Spezifikationen. Die Zusammenfassung der oberen drei OSI-Schichten bildet die Praxis gut ab, weil viele Anwendungsprotokolle deren Aufgaben ohnehin integrieren.</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>DoD-Schicht</th><th>entspricht OSI</th></tr></thead>
+      <tbody>
+        <tr><td>Prozess/Anwendung <em>(Process Layer)</em></td><td>7 + 6 + 5</td></tr>
+        <tr><td>Host-to-Host</td><td>4</td></tr>
+        <tr><td>Internet</td><td>3</td></tr>
+        <tr><td>Netzwerkzugang <em>(Network Access)</em></td><td>2 + 1</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Protokolleinordnung</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>OSI-Schicht</th><th>Protokolle</th></tr></thead>
+      <tbody>
+        <tr><td>7 Anwendung</td><td>HTTP, HTTPS, Telnet, DNS, FTP, SMTP, POP</td></tr>
+        <tr><td>4 Transport</td><td>TCP, UDP</td></tr>
+        <tr><td>3 Vermittlung</td><td>IP, ICMP</td></tr>
+        <tr><td>2 Sicherung</td><td>Ethernet <em>(umfasst auch Anforderungen der Schicht 1)</em></td></tr>
+      </tbody>
+    </table></div>
+    <p>Zur TCP/IP-Familie gehören rund 500 Protokolle; namensgebend sind die beiden meistgenutzten. Die Zuordnung der Segmente zu Anwendungsprozessen erfolgt über <strong>Portnummern</strong>.</p>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang I · ITI21-XX01-K03 · 100 Punkte</p>
+      <h2>Einsendeaufgabe Typ A</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="box warn">
+      <span class="lbl">Hinweis zur Nutzung</span>
+      <p>Die Lösungen unten sind meine eigenen Rechen- und Argumentationswege zum Abgleich, nicht der offizielle Lösungsschlüssel – der Anhang des Studienhefts enthält nur Lösungen zu den Selbstüberprüfungsaufgaben. Formuliere für die Abgabe in eigenen Worten und rechne die Zahlen selbst nach.</p>
+    </div>
+
+    <!-- Aufgabe 1 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">1</span><span class="task-t">Computernetz, Ziele, Anforderungen</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Definieren Sie den Begriff Computernetz und geben Sie die elementaren Bausteine eines Computernetzes an.</li>
+          <li>Welche Ziele werden beim Einsatz von Computernetzen verfolgt?</li>
+          <li>Welche Anforderungen haben Nutzer an ein Computernetz?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Ein Computernetz ist ein Verbund von zwei oder mehr autonomen Computern und anderen Systemen (Hosts, z. B. Drucker oder Router), der die Kommunikation dieser Systeme und den gemeinsamen Zugriff auf Ressourcen und Dienste ermöglicht.</p>
+        <p>Elementare Bausteine – <em>genau diese drei</em>:</p>
+        <ol><li>Netzknoten (Hosts, Endsysteme) mit Netzinterface</li><li>Verbindung (Link) über ein Übertragungsmedium, abstrakt Übertragungskanal</li><li>Protokolle zur Regelung der Datenkommunikation zwischen den Knoten</li></ol>
+        <p><strong>b)</strong> Über die Verbundeffekte argumentieren: Kommunikations-, Ressourcen-, Informations-, Daten-, Leistungs-, Last-, Verfügbarkeits-, Funktions- sowie Steuerungs-/Wartungsverbund. Meist wirken mehrere gleichzeitig, einer dominiert. Ausgangspunkt: Information fällt oft nicht dort an, wo sie gebraucht wird, muss gleichzeitig an mehreren Orten aktuell verfügbar sein, und spezialisierte Ressourcen lohnen sich nur bei gemeinsamer Nutzung.</p>
+        <p><strong>c)</strong> Nur die <em>Nutzer</em>sicht: hohe Übertragungsgeschwindigkeit, Übertragung grosser Datenmengen auch in Echtzeit, Zuverlässigkeit und hohe Übertragungsqualität, kurze Antwortzeit, Sicherheit der übertragenen Informationen. Zusammengefasst: Kapazitäts-, Dienstgüte- und Qualitätsanforderungen.</p>
+        <div class="res">Falle: Kosten und Zukunftssicherheit gehören zum Betreiber, einfaches Management zum Administrator – hier nicht nennen.</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 2 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">2</span><span class="task-t">Netztypen, Vermittlung, Zuordnung</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Nennen Sie den wesentlichen Unterschied zwischen Client-Server-Netz und P2P-Netz und geben Sie jeweils 2 auf diesen Netzen basierende Anwendungen an.</li>
+          <li>Wie unterscheiden sich Leitungs- und Paketvermittlung? Nennen Sie für jede Vermittlungsart einen Vorteil.</li>
+          <li>Ordnen Sie die Begriffe Unicast, Simplex, Broadcast, Latenz, GAN den passenden Aussagen zu.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Der wesentliche Unterschied liegt in der <em>Administration</em> bzw. Rollenverteilung: Im P2P-Netz sind alle Hosts gleichberechtigt, die Ressourcen sind verteilt und jeder Nutzer administriert seine eigenen Betriebsmittel (selbstorganisiert). Im Client-Server-Netz übernimmt ein dedizierter Rechner die Serverrolle, stellt Ressourcen und Dienste bereit und führt die zentrale Verwaltung durch; die Clients sind Leistungsnehmer.</p>
+        <p>Anwendungen P2P: BitTorrent, Gnutella (auch: Bitcoin/Blockchain).<br>Anwendungen Client-Server: WWW mit Browser und Webserver, E-Mail über Mailserver (auch: File-, Print-, Datenbankserver).</p>
+        <p><strong>b)</strong> Leitungsvermittlung baut eine unmittelbare physikalische Verbindung auf und reserviert die Ressourcen auf dem gesamten Weg exklusiv für die Dauer der Sitzung. Paketvermittlung zerlegt die Nachricht in Pakete, adressiert jedes einzeln und vermittelt sie unabhängig durch das Netz; die Verbindung ist nur virtuell.</p>
+        <p>Vorteil Leitungsvermittlung: garantierte Bandbreite und geringe Latenz (alternativ: kein Adressbedarf nach dem Verbindungsaufbau).<br>Vorteil Paketvermittlung: bessere Auslastung der Leitungen (alternativ: Fehlertoleranz durch Alternativwege).</p>
+        <p><strong>c)</strong> Zuordnung:</p>
+        <div class="step">Latenz    → Zeit zwischen Absenden und Empfang einer Übertragungseinheit
+GAN       → Netz, das sich aus der Kopplung mehrerer WANs ergibt
+Unicast   → Einem Sender ist genau ein Empfänger zugeordnet
+Simplex   → Ermöglicht einen Informationsfluss in nur eine Richtung
+Broadcast → Die Sendung wird allen erreichbaren Hosts zugestellt</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 3 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">3</span><span class="task-t">Übertragungsdauer einer Grafik</span><span class="task-p">10 Pkt.</span></div>
+      <div class="task-q">
+        <p>Eine Grafik ist 2 MB gross. Wie lange dauert die Übertragung in folgenden Netzen?</p>
+        <ol type="a"><li>Mobilfunknetz mit 100 Mbit/s</li><li>WLAN mit 300 Mbit/s</li><li>Ethernet mit 1 Gbit/s</li></ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Erst die Datenmenge in Bit umrechnen. Angabe ist „MB“, also dezimal, Basis 10:</p>
+        <div class="step">D = 2 MB = 2 · 10⁶ Byte · 8 = 16 · 10⁶ bit = 16 000 000 bit
+
+Formel:  t = D / b</div>
+        <p><strong>a)</strong> b = 100 Mbit/s = 100 · 10⁶ bit/s</p>
+        <div class="step">t = 16 · 10⁶ bit / 100 · 10⁶ bit/s = 0,16 s</div>
+        <p><strong>b)</strong> b = 300 Mbit/s = 300 · 10⁶ bit/s</p>
+        <div class="step">t = 16 · 10⁶ / 300 · 10⁶ = 0,0533 s ≈ 53,3 ms</div>
+        <p><strong>c)</strong> b = 1 Gbit/s = 1 · 10⁹ bit/s</p>
+        <div class="step">t = 16 · 10⁶ / 1 · 10⁹ = 0,016 s = 16 ms</div>
+        <div class="res">a) 0,16 s · b) ≈ 53,3 ms · c) 16 ms</div>
+        <p>Wäre statt MB ausdrücklich MiB angegeben, ergäbe sich D = 16 777 216 bit und damit a) ≈ 0,168 s.</p>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 4 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">4</span><span class="task-t">Satellitenübertragung Berlin–Tokio</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <p>Ein geostationärer Satellit befindet sich ca. 36 000 km über der Erdoberfläche. Die Signale breiten sich in der Luft mit Lichtgeschwindigkeit aus.</p>
+        <ol type="a">
+          <li>Wie lange braucht ein Bit bei einer satellitenbasierten Übertragung zwischen Berlin und Tokio?</li>
+          <li>Wie viele Bits können gleichzeitig unterwegs sein bei einer Übertragungsrate von 100 Mbit/s?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Entscheidend: der Weg geht <em>hinauf zum Satelliten und wieder hinunter</em> – also die doppelte Höhe. Und da sich das Signal in der Luft ausbreitet, gilt die volle Lichtgeschwindigkeit, nicht die ⅔ aus den Kabelaufgaben.</p>
+        <div class="step">d = 2 · 36 000 km = 72 000 km
+v = c ≈ 300 000 km/s
+
+t_a = d / v = 72 000 km / 300 000 km/s = 0,24 s = 240 ms</div>
+        <div class="res">a) 0,24 s bzw. 240 ms</div>
+        <p>Einordnung: 240 ms liegt laut ITU-T G.114 im Bereich „teilweise Störungen“ – Satellitentelefonie klingt deshalb typischerweise verzögert.</p>
+        <p><strong>b)</strong> Das ist das Volumen des Kanals: wie viele Bits kann der Sender losschicken, bevor das erste Bit ankommt?</p>
+        <div class="step">V = t_a · b = 0,24 s · 100 · 10⁶ bit/s
+V = 24 · 10⁶ bit = 24 000 000 bit = 24 Mbit</div>
+        <div class="res">b) 24 Mbit, also 24 000 000 Bits gleichzeitig unterwegs</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 5 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">5</span><span class="task-t">Kabelverbindung, Videoübertragung, Bitlänge</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <p>Direkte Kabelverbindung zwischen 2 Hosts (Entfernung 1000 km), Ausbreitungsgeschwindigkeit im Kabel 2/3 der Lichtgeschwindigkeit. Ein Video von 2 GB soll übertragen werden, Übertragungsrate 1 Gbit/s.</p>
+        <ol type="a">
+          <li>Nach welcher Zeit ist das komplette Video beim Empfänger angekommen?</li>
+          <li>Wie lang ist ein Bit?</li>
+          <li>Welche Kenngrössen spielen bei der Übertragung grosser Datenmengen und bei Echtzeitanforderungen eine Rolle?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Gesamtzeit = Übertragungsverzögerung + Signalausbreitungszeit. Verarbeitungs- und Wartezeit bleiben unberücksichtigt.</p>
+        <div class="step">D = 2 GB = 2 · 10⁹ Byte · 8 = 16 · 10⁹ bit
+b = 1 Gbit/s = 1 · 10⁹ bit/s
+v = ⅔ · 300 000 km/s = 200 000 km/s
+
+t_Ü = D / b = 16 · 10⁹ / 1 · 10⁹        = 16 s
+t_a = d / v = 1000 km / 200 000 km/s   = 0,005 s = 5 ms
+
+t_ges = t_Ü + t_a = 16 s + 0,005 s = 16,005 s</div>
+        <div class="res">a) 16,005 s – die Ausbreitungszeit ist hier praktisch vernachlässigbar</div>
+        <p><strong>b)</strong> Erst die Dauer eines Bits, dann die Strecke, die es in dieser Zeit im Medium zurücklegt.</p>
+        <div class="step">t_bit = 1 / b = 1 / 10⁹ s = 1 ns
+
+ℓ = v · t_bit = 200 000 km/s · 10⁻⁹ s
+  = 200 000 000 m/s · 10⁻⁹ s
+  = 0,2 m</div>
+        <div class="res">b) 0,2 m, also 20 cm pro Bit</div>
+        <p>Anschauung: Auf den 1000 km Kabel liegen damit gleichzeitig 1 000 000 m / 0,2 m = 5 000 000 Bits.</p>
+        <p><strong>c)</strong></p>
+        <ul>
+          <li><strong>Grosse Datenmengen:</strong> entscheidend ist die <strong>Übertragungsrate</strong> bzw. der Durchsatz. Die Latenz fällt kaum ins Gewicht – bei 16 s Übertragung spielen wenige Millisekunden keine Rolle.</li>
+          <li><strong>Echtzeitanforderungen:</strong> entscheidend sind <strong>Latenz</strong> und <strong>Jitter</strong>, ergänzt um die Paketverlustrate. Zu spät eintreffende Pakete gelten als verloren; Latenzschwankungen führen zu Ruckeln im Video und Lücken bei VoIP. Gegenmassnahmen: Jitter-Buffer und QoS-Priorisierung.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 6 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">6</span><span class="task-t">Schichtprotokolle und OSI-Modell</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Nennen Sie drei Gründe, die für die Verwendung von Schichtprotokollen sprechen. Geben Sie einen Nachteil an.</li>
+          <li>Erklären Sie kurz die Aufgaben der einzelnen Schichten des OSI-Modells.</li>
+          <li>Ordnen Sie die Protokolle UDP, ICMP, Telnet, HTTPS, DNS, IP, Ethernet den OSI-Schichten zu.</li>
+          <li>Ordnen Sie die Dateneinheiten Frame, Segment, Paket, Datagramm, Nachricht den OSI-Schichten zu.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Drei Gründe (drei aus dieser Liste genügen):</p>
+        <ol>
+          <li><strong>Unabhängigkeit der Schichten</strong> – für die Zusammenarbeit zählen nur die Dienste an den Schnittstellen, nicht die interne Realisierung.</li>
+          <li><strong>Flexibilität</strong> – die Implementierung einer Schicht kann geändert oder ausgetauscht werden, solange die Schnittstellen unverändert bleiben.</li>
+          <li><strong>Vereinfachte Standardisierung</strong> sowie einfachere Wartung und Implementierung, da jede Teilaufgabe für sich begrenzt ist.</li>
+        </ol>
+        <p><em>Nachteil:</em> grosser Overhead und Verwaltungsaufwand, weil jede Schicht eigene Steuerungsinformationen hinzufügt. Das Leistungsverhalten ist dadurch schlechter als bei einer monolithischen Realisierung. (Alternativ: Funktionalität wie Fehlererkennung wird in mehreren Schichten dupliziert.)</p>
+
+        <p><strong>b)</strong> Von unten nach oben:</p>
+        <div class="step">1 Bitübertragungsschicht  ungesicherte Übertragung binärer Information;
+                          elektrische und mechanische Eigenschaften
+                          des Mediums (Pegel, Signalverläufe, Stecker)
+
+2 Sicherungsschicht       Sicherung der Bitübertragung durch Fehler-
+                          erkennung/-korrektur, Flusskontrolle,
+                          in LANs Zugriffskontrolle (MAC)
+
+3 Vermittlungsschicht     Routing und Durchleitung der Pakete durch
+                          das vermaschte Netz anhand von Adressen
+
+4 Transportschicht        Aufbau, Überwachung, Abbau logischer
+                          Ende-zu-Ende-Verbindungen; Einteilung der
+                          Daten in transportgeeignete Pakete
+
+5 Sitzungsschicht         Einrichten von Sitzungen zwischen Benutzern
+                          unterschiedlicher Rechner, Dialogsteuerung,
+                          Synchronisation
+
+6 Darstellungsschicht     Austausch zwischen Systemen mit unter-
+                          schiedlicher Transfersyntax; Codierung,
+                          Datenkompression, Verschlüsselung
+
+7 Anwendungsschicht       Schnittstelle zum Benutzer, Bereitstellung
+                          der Anwendungsdienste</div>
+        <p>Ergänzend erwähnen: Schichten 1–4 transportorientiert, 5–7 anwendungsorientiert.</p>
+
+        <p><strong>c)</strong> Protokolle:</p>
+        <div class="step">Schicht 7  Anwendungsschicht    Telnet, HTTPS, DNS
+Schicht 4  Transportschicht     UDP
+Schicht 3  Vermittlungsschicht  IP, ICMP
+Schicht 2  Sicherungsschicht    Ethernet</div>
+        <div class="res">Stolperstelle: ICMP gehört zu Schicht 3, nicht zu Schicht 4 – es ist Bestandteil der Vermittlungsschicht, auch wenn es sich wie ein Diagnosewerkzeug anfühlt. Ethernet deckt praktisch auch Anforderungen der Schicht 1 mit ab.</div>
+
+        <p><strong>d)</strong> Dateneinheiten:</p>
+        <div class="step">Nachricht   → Schicht 7  Anwendungsschicht
+Segment     → Schicht 4  Transportschicht
+Paket       → Schicht 3  Vermittlungsschicht
+Datagramm   → Schicht 3  Vermittlungsschicht
+Frame       → Schicht 2  Sicherungsschicht</div>
+        <p>Paket und Datagramm bezeichnen beide die PDU der Schicht 3. Der allgemeine Oberbegriff ist PDU (Protocol Data Unit); Schicht 2 fügt als einzige zusätzlich einen Trailer an.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck vor der Abgabe">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kurzkontrolle</p>
+      <h2>Schnellcheck vor der Abgabe</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="tw"><table>
+      <thead><tr><th>Aufgabe</th><th>Prüfe</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Definition wörtlich sitzen; genau <em>drei</em> Bausteine; Verbundeffekte benennen; nur die Nutzerperspektive</td></tr>
+        <tr><td><strong>2</strong></td><td>Unterschied liegt in der Administration; je 2 konkrete Anwendungen; je 1 Vorteil pro Vermittlungsart; Zuordnungstabelle vollständig</td></tr>
+        <tr><td><strong>3</strong></td><td>MB → bit mit Faktor 8 und Basis 10; t = D / b</td></tr>
+        <tr><td><strong>4</strong></td><td>Weg = 2 × 36 000 km, hoch <em>und</em> runter; v = c in Luft, nicht ⅔ c; danach Volumen = t · b</td></tr>
+        <tr><td><strong>5</strong></td><td>t = D/b + d/v; Bitlänge = v · t<sub>bit</sub>; Kenngrössen nach Anwendungstyp begründen</td></tr>
+        <tr><td><strong>6</strong></td><td>3 Vorteile + 1 Nachteil; alle 7 Schichten; ICMP auf Schicht 3; Paket und Datagramm beide Schicht 3</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ ABKÜRZUNGEN ══════════════ -->
+<section class="sec" id="abk" data-num="C" data-title="Abkürzungsverzeichnis">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">C</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang C</p>
+      <h2>Abkürzungsverzeichnis</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>API</dt><dd>Application Programming Interface</dd></div>
+      <div class="abbr-row"><dt>ARPA</dt><dd>Advanced Research Projects Agency</dd></div>
+      <div class="abbr-row"><dt>BMVI</dt><dd>Bundesministerium für Verkehr und digitale Infrastruktur</dd></div>
+      <div class="abbr-row"><dt>CIX</dt><dd>Commercial Internet Exchange</dd></div>
+      <div class="abbr-row"><dt>DNS</dt><dd>Domain Name Service</dd></div>
+      <div class="abbr-row"><dt>DoD</dt><dd>Department of Defense</dd></div>
+      <div class="abbr-row"><dt>DSL</dt><dd>Digital Subscriber Line</dd></div>
+      <div class="abbr-row"><dt>EU</dt><dd>Europäische Union</dd></div>
+      <div class="abbr-row"><dt>FNC</dt><dd>Federal Network Council</dd></div>
+      <div class="abbr-row"><dt>FTP</dt><dd>File Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>GAN</dt><dd>Global Area Network</dd></div>
+      <div class="abbr-row"><dt>GSM</dt><dd>Global System for Mobile Communication</dd></div>
+      <div class="abbr-row"><dt>HD</dt><dd>High Density</dd></div>
+      <div class="abbr-row"><dt>HPC</dt><dd>High Performance Computing</dd></div>
+      <div class="abbr-row"><dt>HTTP</dt><dd>Hypertext Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>HTTPS</dt><dd>Hypertext Transfer Protocol Secure</dd></div>
+      <div class="abbr-row"><dt>IANA</dt><dd>Internet Assigned Numbers Authority</dd></div>
+      <div class="abbr-row"><dt>ICANN</dt><dd>Internet Corporation for Assigned Names and Numbers</dd></div>
+      <div class="abbr-row"><dt>IEEE</dt><dd>Institute of Electrical and Electronics Engineers</dd></div>
+      <div class="abbr-row"><dt>IETF</dt><dd>Internet Engineering Task Force</dd></div>
+      <div class="abbr-row"><dt>IKT</dt><dd>Informations- und Kommunikationstechnologie</dd></div>
+      <div class="abbr-row"><dt>IP</dt><dd>Internet Protocol</dd></div>
+      <div class="abbr-row"><dt>IoT</dt><dd>Internet of Things</dd></div>
+      <div class="abbr-row"><dt>ITU</dt><dd>International Telecommunication Union</dd></div>
+      <div class="abbr-row"><dt>ISO</dt><dd>International Organization for Standardization</dd></div>
+      <div class="abbr-row"><dt>ISOC</dt><dd>Internet Society</dd></div>
+      <div class="abbr-row"><dt>ISP</dt><dd>Internet Service Provider</dd></div>
+      <div class="abbr-row"><dt>IuK</dt><dd>Informations- und Kommunikationstechnologie</dd></div>
+      <div class="abbr-row"><dt>LAN</dt><dd>Local Area Network</dd></div>
+      <div class="abbr-row"><dt>LSB</dt><dd>Least Significant Bit</dd></div>
+      <div class="abbr-row"><dt>LTE</dt><dd>Long Term Evolution</dd></div>
+      <div class="abbr-row"><dt>MAC</dt><dd>Medium Access Control</dd></div>
+      <div class="abbr-row"><dt>MAN</dt><dd>Metropolitan Area Network</dd></div>
+      <div class="abbr-row"><dt>MSB</dt><dd>Most Significant Bit</dd></div>
+      <div class="abbr-row"><dt>MTU</dt><dd>Maximum Transmission Unit</dd></div>
+      <div class="abbr-row"><dt>NB</dt><dd>Narrow Band</dd></div>
+      <div class="abbr-row"><dt>NCP</dt><dd>Network Control Protocol</dd></div>
+      <div class="abbr-row"><dt>NORMA</dt><dd>No Remote Memory Access</dd></div>
+      <div class="abbr-row"><dt>NUMA</dt><dd>Non Uniform Memory Access</dd></div>
+      <div class="abbr-row"><dt>OSI</dt><dd>Open Systems Interconnection</dd></div>
+      <div class="abbr-row"><dt>P2P</dt><dd>Peer to Peer</dd></div>
+      <div class="abbr-row"><dt>PAN</dt><dd>Personal Area Network</dd></div>
+      <div class="abbr-row"><dt>PC</dt><dd>Personalcomputer</dd></div>
+      <div class="abbr-row"><dt>PDU</dt><dd>Protocol Data Unit</dd></div>
+      <div class="abbr-row"><dt>RFC</dt><dd>Request for Comments</dd></div>
+      <div class="abbr-row"><dt>RIPE</dt><dd>Réseaux IP Européens Network Coordination Centre</dd></div>
+      <div class="abbr-row"><dt>RIR</dt><dd>Regional Internet Registry</dd></div>
+      <div class="abbr-row"><dt>RTT</dt><dd>Round Trip Time</dd></div>
+      <div class="abbr-row"><dt>RTDT</dt><dd>Round Trip Delay Time</dd></div>
+      <div class="abbr-row"><dt>SON</dt><dd>Self-Organized Network</dd></div>
+      <div class="abbr-row"><dt>TCP</dt><dd>Transmission Control Protocol</dd></div>
+      <div class="abbr-row"><dt>UC</dt><dd>Unified Communication</dd></div>
+      <div class="abbr-row"><dt>USB</dt><dd>Universal Serial Bus</dd></div>
+      <div class="abbr-row"><dt>VPN</dt><dd>Virtual Private Network</dd></div>
+      <div class="abbr-row"><dt>WAN</dt><dd>Wide Area Network</dd></div>
+      <div class="abbr-row"><dt>WDM</dt><dd>Wave Division Multiplex</dd></div>
+      <div class="abbr-row"><dt>WLAN</dt><dd>Wireless Local Area Network</dd></div>
+      <div class="abbr-row"><dt>WWW</dt><dd>World Wide Web</dd></div>
+    </dl></div>
+
+    <h4>Weitere Kürzel aus dem Text</h4>
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>DDoS</dt><dd>Distributed Denial of Service</dd></div>
+      <div class="abbr-row"><dt>DoS</dt><dd>Denial of Service</dd></div>
+      <div class="abbr-row"><dt>HDLC</dt><dd>High Data Level Link Control</dd></div>
+      <div class="abbr-row"><dt>ICMP</dt><dd>Internet Control Message Protocol</dd></div>
+      <div class="abbr-row"><dt>NB-IoT</dt><dd>Narrowband Internet of Things</dd></div>
+      <div class="abbr-row"><dt>POP</dt><dd>Post Office Protocol</dd></div>
+      <div class="abbr-row"><dt>QoS</dt><dd>Quality of Service</dd></div>
+      <div class="abbr-row"><dt>SAP</dt><dd>Service Access Point</dd></div>
+      <div class="abbr-row"><dt>SMTP</dt><dd>Simple Mail Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>SNA</dt><dd>Systems Network Architecture</dd></div>
+      <div class="abbr-row"><dt>UDP</dt><dd>User Datagram Protocol</dd></div>
+      <div class="abbr-row"><dt>VoIP</dt><dd>Voice over IP</dd></div>
+    </dl></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft ITI21 · Grundlagen moderner Computernetze · Druck-Code 1022K03 · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "iti21:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll("#ea details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

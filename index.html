@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITI-Lernhefte · Informationstechnologie</title>
+<style>
+:root{
+  --paper:#EFF2F0; --paper-raised:#F9FBFA; --paper-sunk:#E4E9E6;
+  --ink:#17201D; --ink-soft:#5A6663; --ink-faint:#8A9490;
+  --rule:#CBD4D0; --rule-soft:#DDE4E1;
+  --accent:#0E5F63; --accent-soft:#D5E6E5;
+  --mark:#8E2436; --mark-soft:#F0DEE1; --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614; --paper-raised:#1B211E; --paper-sunk:#0C100E;
+  --ink:#E3EAE7; --ink-soft:#9FADA8; --ink-faint:#6F7C78;
+  --rule:#2C3733; --rule-soft:#222B28;
+  --accent:#54C3C6; --accent-soft:#123033;
+  --mark:#E38294; --mark-soft:#33191F; --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1080px;margin:0 auto;padding:.55rem 1.1rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{font-size:.72rem;font-weight:650;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink-soft);border:1px solid var(--rule);border-radius:2px;padding:.38rem .6rem;line-height:1;transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .4s ease}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.1rem}
+.hero{padding:3rem 0 1.6rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .8rem}
+.hero h1{font-size:2.5rem;line-height:1.08;margin:0 0 .6rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:52ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.2rem;display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center}
+.hero .bigbar{margin-top:1.1rem;height:8px;background:var(--paper-sunk);border-radius:5px;overflow:hidden;border:1px solid var(--rule)}
+.hero .bigbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--mark));transition:width .5s ease}
+
+/* Cloud-Sync-Leiste */
+.sync{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-family:var(--font-ui);font-size:.76rem;color:var(--ink-soft);background:var(--paper-raised);border:1px solid var(--rule);border-radius:3px;padding:.6rem .85rem;margin:1.4rem 0 0}
+.sync .cloud{font-size:.95rem}
+.sync input{font-family:var(--font-ui);font-size:.76rem;padding:.32rem .5rem;border:1px solid var(--rule);border-radius:2px;background:var(--paper);color:var(--ink);min-width:12rem}
+.sync .msg{color:var(--accent);font-weight:650}
+.sync .muted{color:var(--ink-faint)}
+
+/* Karten */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:1.6rem 0 3rem}
+.card{position:relative;display:flex;flex-direction:column;background:var(--paper-raised);border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.15rem 1.15rem;text-decoration:none;color:inherit;transition:.16s;overflow:hidden}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
+.card .num{position:absolute;top:.4rem;right:.7rem;font-family:var(--font-mono);font-size:2.7rem;font-weight:800;color:var(--paper-sunk);line-height:1;z-index:0}
+html[data-theme="dark"] .card .num{color:#232b28}
+.card .kicker{position:relative;z-index:1;font-family:var(--font-ui);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .35rem}
+.card h2{position:relative;z-index:1;font-size:1.16rem;line-height:1.25;margin:0 0 .3rem;font-weight:600}
+.card .code{position:relative;z-index:1;font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);margin:0 0 .9rem}
+.card .foot{position:relative;z-index:1;margin-top:auto}
+.card .pbar{height:6px;background:var(--paper-sunk);border-radius:4px;overflow:hidden;border:1px solid var(--rule-soft)}
+.card .pbar i{display:block;height:100%;width:0;background:var(--mark);transition:width .45s ease}
+.card .pmeta{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem;font-family:var(--font-ui);font-size:.7rem;color:var(--ink-faint)}
+.card .pmeta .go{color:var(--accent);font-weight:700}
+.card.done{border-color:var(--accent)}
+.card.done .pbar i{background:var(--accent)}
+.card .badge{display:inline-block;font-family:var(--font-ui);font-size:.6rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:.1rem .3rem;margin-left:.4rem;vertical-align:.1em}
+
+footer{border-top:1px solid var(--rule);padding:1.6rem 0 3rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+footer a{color:var(--accent)}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("itihub:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">ITI · Lernhefte <span>· WBH</span></div>
+    <div class="spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 Abschnitte</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Studienhefte · Wilhelm Büchner Hochschule</p>
+    <h1>ITI-Lernhefte</h1>
+    <p class="sub">Kompakte Lese-Zusammenfassungen mit Einsendeaufgaben und Lösungswegen für die sechs Studienhefte der Informationstechnologie (ITI21–ITI26). Fortschritt wird gespeichert – lokal und optional geräteübergreifend.</p>
+    <div class="meta">
+      <span id="metaCount">6 Hefte</span>
+      <span id="metaPct">0 % gelesen</span>
+    </div>
+    <div class="bigbar"><i id="bigFill"></i></div>
+  </div>
+
+  <div class="sync" id="syncBar">
+    <span class="cloud">☁</span>
+    <span id="syncState" class="muted">Cloud-Sync wird geprüft …</span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    ITI-Lernhefte · eigene Zusammenfassungen zu den WBH-Studienheften ITI21–ITI26 · Informationstechnologie.<br>
+    Fortschritt lokal im Browser (localStorage) und – wenn eingerichtet – geräteübergreifend über Supabase gespeichert.
+  </footer>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var HEFTE = [
+    {id:"iti21", num:"21", code:"1022K03", file:"ITI21_Lernheft.html", topic:"Computernetze",       title:"Grundlagen moderner Computernetze",           total:9},
+    {id:"iti22", num:"22", code:"0825K07", file:"ITI22_Lernheft.html", topic:"Informationstheorie",  title:"Informationstheorie &amp; Informationsübertragung", total:8},
+    {id:"iti23", num:"23", code:"1022K04", file:"ITI23_Lernheft.html", topic:"Bitübertragung",       title:"Bitübertragung &amp; Netzzugang",             total:9},
+    {id:"iti24", num:"24", code:"0124K08", file:"ITI24_Lernheft.html", topic:"TCP/IP",               title:"TCP/IP-Protokollfamilie",                     total:10},
+    {id:"iti25", num:"25", code:"1123K06", file:"ITI25_Lernheft.html", topic:"Internetworking",      title:"Internetworking &amp; Netzdesign",            total:9},
+    {id:"iti26", num:"26", code:"0723K05", file:"ITI26_Lernheft.html", topic:"Netzmanagement",       title:"Anwendungsdienste &amp; Netzmanagement",      total:7}
+  ];
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get:function(k){ try{ if(window.localStorage) return Promise.resolve(localStorage.getItem(k)); }catch(e){} return Promise.resolve(mem[k]||null); },
+    set:function(k,v){ mem[k]=v; try{ if(window.localStorage) localStorage.setItem(k,v); }catch(e){} return Promise.resolve(); }
+  };
+  var HKEY = "itihub:state";
+  var hub = { theme:"light", base:19, font:"serif" };
+
+  var FONTS = {
+    serif:'"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:'Georgia,"Times New Roman",Times,serif',
+    sans:'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist:'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var grid = document.getElementById("grid");
+  var railFill = document.getElementById("railFill");
+  var bigFill = document.getElementById("bigFill");
+  var ptxt = document.getElementById("ptxt");
+  var metaPct = document.getElementById("metaPct");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* Karten aufbauen */
+  HEFTE.forEach(function(h){
+    var a = document.createElement("a");
+    a.className = "card"; a.href = h.file; a.id = "card-"+h.id;
+    a.innerHTML =
+      '<span class="num">'+h.num+'</span>'+
+      '<p class="kicker">ITI'+h.num+' · '+h.topic+'</p>'+
+      '<h2>'+h.title+'</h2>'+
+      '<p class="code">'+h.code+'</p>'+
+      '<div class="foot">'+
+        '<div class="pbar"><i id="pb-'+h.id+'"></i></div>'+
+        '<div class="pmeta"><span id="pm-'+h.id+'">0 / '+h.total+' gelesen</span><span class="go">Öffnen →</span></div>'+
+      '</div>';
+    grid.appendChild(a);
+  });
+
+  function saveHub(){ store.set(HKEY, JSON.stringify(hub)); }
+
+  function applyChrome(){
+    document.documentElement.dataset.theme = hub.theme;
+    themeBtn.textContent = hub.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", hub.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[hub.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== hub.font) fontSel.value = hub.font;
+  }
+
+  function renderProgress(){
+    var doneTotal = 0, allTotal = 0;
+    var pending = HEFTE.length;
+    HEFTE.forEach(function(h){
+      allTotal += h.total;
+      store.get(h.id + ":state").then(function(raw){
+        var done = 0;
+        if(raw){ try{ var p = JSON.parse(raw); if(Array.isArray(p.read)) done = Math.min(p.read.length, h.total); }catch(e){} }
+        doneTotal += done;
+        var pct = h.total ? Math.round(done/h.total*100) : 0;
+        var bar = document.getElementById("pb-"+h.id);
+        var meta = document.getElementById("pm-"+h.id);
+        var card = document.getElementById("card-"+h.id);
+        if(bar) bar.style.width = pct + "%";
+        if(meta) meta.textContent = done + " / " + h.total + " gelesen";
+        if(card) card.classList.toggle("done", done >= h.total && h.total > 0);
+        if(--pending === 0){
+          var gp = allTotal ? Math.round(doneTotal/allTotal*100) : 0;
+          railFill.style.width = gp + "%";
+          bigFill.style.width = gp + "%";
+          ptxt.textContent = doneTotal + " / " + allTotal + " Abschnitte";
+          metaPct.textContent = gp + " % gelesen";
+        }
+      });
+    });
+  }
+
+  /* ---------- Cloud-Sync-Leiste ---------- */
+  var syncState = document.getElementById("syncState");
+  function renderSync(){
+    if(!window.ITISync || !window.ITISync.isConfigured || !window.ITISync.isConfigured()){
+      syncState.className = "muted";
+      syncState.innerHTML = 'Cloud-Sync inaktiv – trage deine Supabase-Daten in <code>assets/config.js</code> ein, dann ist der Fortschritt geräteübergreifend.';
+      return;
+    }
+    var u = window.ITISync.getUser && window.ITISync.getUser();
+    if(u){
+      syncState.className = "";
+      syncState.innerHTML = 'Angemeldet als <strong>'+u.email+'</strong> · Fortschritt wird geräteübergreifend synchronisiert. ';
+      var out = document.createElement("button");
+      out.className = "btn"; out.textContent = "Abmelden";
+      out.onclick = function(){ window.ITISync.signOut(); };
+      syncState.appendChild(out);
+    } else {
+      syncState.className = "";
+      syncState.innerHTML = 'Für geräteübergreifenden Sync anmelden: ';
+      var inp = document.createElement("input");
+      inp.type = "email"; inp.placeholder = "deine@email.de"; inp.autocomplete = "email";
+      var go = document.createElement("button");
+      go.className = "btn"; go.textContent = "Magic-Link senden";
+      go.onclick = function(){
+        if(!inp.value || inp.value.indexOf("@")<0){ inp.focus(); return; }
+        go.disabled = true; go.textContent = "…";
+        window.ITISync.signIn(inp.value).then(function(){
+          syncState.innerHTML = '<span class="msg">Link gesendet – bitte prüfe deine E-Mails und klicke den Anmeldelink.</span>';
+        }).catch(function(){
+          go.disabled = false; go.textContent = "Magic-Link senden";
+          syncState.appendChild(document.createTextNode(" (Fehler – Konfiguration prüfen)"));
+        });
+      };
+      syncState.appendChild(inp); syncState.appendChild(document.createTextNode(" "));
+      syncState.appendChild(go);
+    }
+  }
+
+  /* ---------- Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){ hub.theme = hub.theme==="dark"?"light":"dark"; applyChrome(); saveHub(); });
+  fontSel.addEventListener("change", function(){ if(FONTS[this.value]) hub.font=this.value; applyChrome(); saveHub(); });
+  document.getElementById("fsPlus").addEventListener("click", function(){ hub.base=Math.min(26,hub.base+1); applyChrome(); saveHub(); });
+  document.getElementById("fsMinus").addEventListener("click", function(){ hub.base=Math.max(15,hub.base-1); applyChrome(); saveHub(); });
+
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){ renderSync(); renderProgress(); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(HKEY);
+    if(raw){ try{ var p = JSON.parse(raw);
+      if(p.theme==="dark"||p.theme==="light") hub.theme=p.theme;
+      if(typeof p.base==="number"&&p.base>=15&&p.base<=26) hub.base=p.base;
+      if(p.font&&FONTS[p.font]) hub.font=p.font;
+    }catch(e){} }
+    else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){ hub.theme="dark"; }
+    applyChrome();
+    renderProgress();
+    renderSync();
+  })();
+})();
+</script>
+</body>
+</html>

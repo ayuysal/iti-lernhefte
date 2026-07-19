@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITI22 – Informationstheorie &amp; Informationsübertragung</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("iti22:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">ITI22 <span>· 0825K07</span></div>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Informationstheorie &amp; Informationsübertragung</h1>
+      <p class="sub">Informationstheoretische und physikalisch-technische Grundlagen: Entropie, gestörte Kanäle, Signale, Kanalkapazität und Codierung – mit Einsendeaufgabe Typ A und Lösungswegen.</p>
+      <div class="meta">
+        <span>ITI22 · 0825K07</span>
+        <span>5 Kapitel · 118 Seiten</span>
+        <span>Einsendeaufgabe: 100 Pkt.</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Grundlagen Informationstheorie">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1 · rechenlastig</p>
+      <h2>Grundlagen der Informationstheorie</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die von Claude E. Shannon begründete Informationstheorie liefert das mathematische Fundament der gesamten digitalen Welt – Bits und Bytes haben hier ihren Ursprung. Kerngedanke: <strong>Information ist beseitigte Ungewissheit</strong>.</p>
+
+    <div class="box def">
+      <span class="lbl">Informationsbegriff nach Shannon</span>
+      <p>Zugrunde liegt nicht der <em>semantische</em> (inhaltliche), sondern der <strong>statistische</strong> Aspekt: Information misst, wie viel Ungewissheit über das nächste Zeichen einer Quelle beseitigt wird. Ein sicheres Ereignis (P = 1) trägt <em>keine</em> Information, ein seltenes viel.</p>
+    </div>
+
+    <h4>Informationsgehalt, Entropie, Entscheidungsgehalt</h4>
+    <p>Der <strong>Informationsgehalt</strong> I(x) eines einzelnen Zeichens hängt allein von seiner Auftrittswahrscheinlichkeit ab. Die <strong>Entropie</strong> H ist der mittlere Informationsgehalt über alle Zeichen – die zentrale Kenngröße. Einheit ist das <strong>bit</strong>, die kleinste Informationseinheit.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Grösse</th><th>Formel</th><th>Anmerkung</th></tr></thead>
+      <tbody>
+        <tr><td>Informationsgehalt</td><td>I(x) = ld(1/P(x)) = −ld P(x)</td><td>je unwahrscheinlicher, desto grösser; in bit</td></tr>
+        <tr><td>Entropie</td><td>H = −Σ P(xᵢ)·ld P(xᵢ)</td><td>mittlerer Informationsgehalt der Quelle</td></tr>
+        <tr><td>Entscheidungsgehalt</td><td>H₀ = ld m</td><td>m = Anzahl (gleichwahrscheinlicher) Zustände</td></tr>
+        <tr><td>Quellenredundanz</td><td>R_Q = H₀ − H</td><td>relative Redundanz r = R_Q / H₀</td></tr>
+      </tbody>
+    </table></div>
+    <p><em>ld</em> steht für den <strong>Logarithmus dualis</strong> (log₂). Die Entropie wird <strong>maximal</strong>, wenn alle Zeichen gleichwahrscheinlich sind – dann gilt H = H₀ = ld m.</p>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle</span>
+      <p><strong>Entscheidungsgehalt ≠ Entropie.</strong> H₀ = ld m ist die <em>obere Schranke</em> (Gleichverteilung, „Wahrscheinlichkeiten unbekannt“). Die tatsächliche Entropie H liegt bei ungleichen Wahrscheinlichkeiten stets <em>darunter</em>; die Differenz ist die Quellenredundanz. Zur <em>Codierung</em> eines Zeichens braucht man ⌈H₀⌉ = ⌈ld m⌉ Bits.</p>
+    </div>
+
+    <h4>Information – Daten – Nachricht – Signal</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Information</strong></td><td>beseitigte Ungewissheit – abstrakt, an Bedeutung gebunden</td></tr>
+        <tr><td><strong>Zeichen / Alphabet</strong></td><td>Elemente eines Zeichenvorrats; Elementarvorrat = (Zeichenvorrat)^Wortlänge</td></tr>
+        <tr><td><strong>Nachricht</strong></td><td>Folge von Zeichen, die Information trägt</td></tr>
+        <tr><td><strong>Daten</strong></td><td>maschinell verarbeitbare Darstellung von Nachrichten</td></tr>
+        <tr><td><strong>Signal</strong></td><td>physikalische Repräsentation zur Übertragung</td></tr>
+      </tbody>
+    </table></div>
+    <p>Aus Zeichenvorrat und Wortlänge lässt sich der <strong>Elementarvorrat</strong> berechnen: bei m Zeichen und n Stellen ergeben sich mⁿ Kombinationen (z. B. 4-stellige PIN aus Ziffern 1–9: 9⁴ = 6561 Möglichkeiten).</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Informationsübertragung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2 · rechenlastig</p>
+      <h2>Grundlagen der Informationsübertragung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box def">
+      <span class="lbl">Grundmodell nach Shannon</span>
+      <p><strong>Quelle → Sender (Coder) → Kanal → Empfänger (Decoder) → Senke.</strong> Auf dem Kanal wirkt eine <strong>Störquelle</strong>. Das Modell ist die gemeinsame Grundlage aller folgenden Kapitel.</p>
+    </div>
+
+    <h4>Modellierung von Informationsquellen</h4>
+    <ul>
+      <li><strong>Quelle ohne Gedächtnis</strong> – aufeinanderfolgende Zeichen sind statistisch unabhängig.</li>
+      <li><strong>Quelle mit Gedächtnis (Markow-Quelle)</strong> – das nächste Zeichen hängt von vorangehenden ab; gerechnet wird mit <strong>Übergangswahrscheinlichkeiten</strong>.</li>
+      <li><strong>Stationäre Quelle</strong> – die statistischen Eigenschaften ändern sich zeitlich nicht.</li>
+      <li><strong>Verbundquelle</strong> – mehrere Quellen zusammengefasst; man rechnet mit <strong>Verbundwahrscheinlichkeiten</strong>.</li>
+    </ul>
+
+    <h4>Entropien bei der Übertragung über einen gestörten Kanal</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Grösse</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>H(X)</strong></td><td>Entropie am Kanaleingang (Sender)</td></tr>
+        <tr><td><strong>H(Y)</strong></td><td>Entropie am Kanalausgang (Empfänger)</td></tr>
+        <tr><td><strong>H(X,Y)</strong> – Verbundentropie</td><td>gesamte Unsicherheit von Ein- und Ausgang zusammen</td></tr>
+        <tr><td><strong>H(X;Y)</strong> – Transinformation</td><td>tatsächlich übertragene Information: H(X) − H(X|Y) = H(Y) − H(Y|X)</td></tr>
+        <tr><td><strong>H(X|Y)</strong> – Äquivokation</td><td>Rückschlussunsicherheit: was am Eingang trotz Empfang unklar bleibt (Verlust)</td></tr>
+        <tr><td><strong>H(Y|X)</strong> – Irrelevanz</td><td>durch die Störung hinzugefügte, nutzlose Unsicherheit</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box">
+      <span class="lbl">Symmetrisch gestörter Binärkanal</span>
+      <p>Beide Symbole werden mit gleicher <strong>Bitfehlerwahrscheinlichkeit p</strong> verfälscht. Dann hängt die Irrelevanz nur von p ab: <strong>H(Y|X) = H(p) = −p·ld p − (1−p)·ld(1−p)</strong>. Die Transinformation wird <strong>maximal bei gleichverteiltem Eingang</strong> P(x₁) = P(x₂) = 0,5 – dieser Maximalwert ist die <strong>Kanalkapazität C = 1 − H(p)</strong>.</p>
+    </div>
+    <p>Der <strong>Informationsfluss</strong> setzt die Transinformation ins Verhältnis zur Zeit und bildet die Brücke zur Kanalkapazität in Kapitel 4.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Signale und Signalübertragung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Signale und Signalübertragung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Signalklassifikation</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Kriterium</th><th>Ausprägungen</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Wertebereich</strong></td><td>analog (wertkontinuierlich) ↔ digital (wertdiskret)</td></tr>
+        <tr><td><strong>Zeitbereich</strong></td><td>zeitkontinuierlich ↔ zeitdiskret</td></tr>
+        <tr><td><strong>Determiniertheit</strong></td><td>deterministisch ↔ stochastisch</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box def">
+      <span class="lbl">Digitalisierung analoger Signale</span>
+      <p>Drei Schritte: <strong>Abtastung</strong> (zeitliche Diskretisierung) → <strong>Quantisierung</strong> (Diskretisierung des Wertebereichs in Stufen) → <strong>Codierung</strong> (Zuordnung von Bitmustern). Abtastung und Quantisierung nicht verwechseln.</p>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Abtasttheorem (Nyquist/Shannon)</span>
+      <p>Ein Signal mit Grenzfrequenz f_G ist eindeutig rekonstruierbar, wenn die Abtastfrequenz <strong>f_A ≥ 2·f_G</strong> beträgt. Beispiel: f_G = 100 kHz ⇒ f_A ≥ 200 kHz.</p>
+    </div>
+
+    <h4>Zeit- und Frequenzbereich, Fourier</h4>
+    <p>Jedes periodische Signal lässt sich als <strong>Fourier-Reihe</strong> aus Sinus-/Kosinusschwingungen darstellen. Die <strong>Grundfrequenz</strong> ist f₁ = 1/T₀; dazu kommen Oberschwingungen (Harmonische). Das <strong>Tastverhältnis</strong> einer Rechteckimpulsfolge ist D = τ/T₀ (Impulsdauer zu Periode).</p>
+
+    <div class="box">
+      <span class="lbl">Grenzfrequenz &amp; Bandbreite</span>
+      <p>Es genügt, alle Frequenzen bis zur <strong>Grenzfrequenz</strong> zu übertragen, um das Signal ausreichend zu rekonstruieren. Bei einer Rechteckimpulsfolge liegt die erste Nullstelle der si-Hüllkurve bei <strong>1/τ</strong>. <strong>Schmale Impulse ⇒ grosse Bandbreite:</strong> Halbiert man die Impulsdauer τ, verdoppelt sich die nötige Bandbreite.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Übertragungskapazität von Kanälen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4 · rechenlastig</p>
+      <h2>Übertragungskapazität von Kanälen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box def">
+      <span class="lbl">Kanalkapazität</span>
+      <p>Die <strong>Kanalkapazität C</strong> ist die theoretisch maximal fehlerfrei übertragbare Bitrate eines Kanals. Sie hängt ab von <strong>Bandbreite B</strong>, der <strong>Dynamik</strong> (Anzahl unterscheidbarer Amplitudenstufen bzw. Signal-Rausch-Abstand) und der <strong>Zeit</strong>.</p>
+    </div>
+
+    <h4>Die zwei Grundformeln</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Fall</th><th>Formel</th><th>Anmerkung</th></tr></thead>
+      <tbody>
+        <tr><td>Idealer Kanal (störungsfrei)</td><td>C = 2·B·ld(m)</td><td>Nyquist; m = Anzahl Amplitudenstufen</td></tr>
+        <tr><td>Gestörter Kanal</td><td>C = B·ld(1 + S/N)</td><td>Shannon-Hartley; S/N linear</td></tr>
+        <tr><td>SNR in Dezibel</td><td>(S/N)_dB = 10·log₁₀(S/N)</td><td>30 dB ⇔ S/N = 1000</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Rechenfalle SNR</span>
+      <p>In der Shannon-Formel steht das <strong>lineare</strong> Verhältnis S/N, nicht der dB-Wert. Umrechnung: S/N = 10^((S/N)_dB / 10). Beispiel: 30 dB → 10³ = 1000.</p>
+    </div>
+
+    <h4>Nachrichtenquader &amp; Kanalfenster</h4>
+    <p>Die drei Faktoren <strong>Bandbreite, Dynamik und Zeit</strong> sind gegeneinander <em>austauschbar</em>: Ein Signal (Nachrichtenquader) passt durch einen Kanal (Kanalfenster), wenn es sich in dessen Grenzen einpassen lässt – z. B. mehr Zeit statt mehr Bandbreite.</p>
+
+    <h4>Übertragungsverfahren</h4>
+    <p><strong>Basisband:</strong> direkte Übertragung im ursprünglichen Frequenzbereich. <strong>Breitband:</strong> Aufmodulation auf Träger. Mehrere Signale teilen sich ein Medium über <strong>Multiplexverfahren</strong>:</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Verfahren</th><th>Teilung nach</th></tr></thead>
+      <tbody>
+        <tr><td>SDM – Raummultiplex</td><td>Raum (getrennte Leitungen/Antennen)</td></tr>
+        <tr><td>FDM – Frequenzmultiplex</td><td>Frequenz (getrennte Bänder)</td></tr>
+        <tr><td>TDM – Zeitmultiplex</td><td>Zeit (getrennte Zeitschlitze)</td></tr>
+        <tr><td>CDM – Codemultiplex</td><td>Code (orthogonale Spreizcodes)</td></tr>
+        <tr><td>WDM – Wellenlängenmultiplex</td><td>Wellenlänge (Glasfaser, „FDM des Lichts“)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 5 ══════════════ -->
+<section class="sec" id="k5" data-num="5" data-title="Einführung in die Codierung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">5</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 5</p>
+      <h2>Einführung in die Codierung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Drei Codierungsarten mit ganz unterschiedlichen Zielen – die Zuordnung ist der Prüfungskern des Kapitels.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Codierung</th><th>Ziel</th><th>Verfahren / Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Quellencodierung</strong></td><td>Redundanz <em>verringern</em>, komprimieren (möglichst wenige Bits)</td><td>Huffman, Lauflängencodierung (RLE), Lempel-Ziv; verlustbehaftet: MP3, JPEG</td></tr>
+        <tr><td><strong>Kanalcodierung</strong></td><td>Redundanz <em>gezielt hinzufügen</em> zur Fehlererkennung/-korrektur</td><td>Paritätscode, Hamming-Code, zyklische Codes (CRC)</td></tr>
+        <tr><td><strong>Leitungscodierung</strong></td><td>Signal an das <em>Medium anpassen</em></td><td>NRZ, RZ, Manchester, MLT-3, 4B/5B, 8B/10B</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Quellencodierung</h4>
+    <p>Ziel ist die Annäherung der mittleren Codewortlänge L an die Entropie H. <strong>Verlustfrei</strong> (umkehrbar, z. B. ZIP, RLE) gegenüber <strong>verlustbehaftet</strong> (nicht umkehrbar, z. B. MP3). Codes mit <strong>variabler Wortlänge</strong> geben häufigen Zeichen kurze, seltenen lange Codewörter (Präfix-/Optimalcode) und schlagen bei ungleichen Häufigkeiten (z. B. deutscher Text) jeden Blockcode fester Länge.</p>
+
+    <div class="box def">
+      <span class="lbl">Kanalcodierung – Hamming-Distanz</span>
+      <p>Die <strong>Hamming-Distanz d_min</strong> ist die kleinste Anzahl unterschiedlicher Bitstellen zwischen zwei Codewörtern. Daraus folgen direkt die Schutzeigenschaften:</p>
+      <p class="formula">Fehlererkennung von e Fehlern:  d_min ≥ e + 1</p>
+      <p class="formula">Fehlerkorrektur von t Fehlern:  d_min ≥ 2·t + 1</p>
+    </div>
+    <p>Beispiele: <strong>Paritätsbit</strong> (d_min = 2, erkennt 1 Fehler), <strong>(7,4)-Hamming-Code</strong> (d_min = 3, korrigiert 1 Fehler), <strong>zyklische Codes/CRC</strong> mit Generatorpolynom für Blockfehler.</p>
+
+    <div class="box">
+      <span class="lbl">Leitungscodierung</span>
+      <p>Ziele: <strong>Gleichstromfreiheit</strong>, <strong>Taktrückgewinnung</strong> (Synchronisation) und schmales Spektrum. Voraussetzung für die Taktrückgewinnung sind <strong>ausreichend häufige Pegelwechsel</strong> – lange Folgen ohne Flanke lassen den Empfängertakt „weglaufen“. Der <strong>Manchestercode</strong> garantiert je Bit einen Pegelwechsel, braucht dafür aber die <strong>doppelte Bandbreite</strong> (Bezeichnung 1B/2B).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang I · ITI22-XX02-K07 · 100 Punkte</p>
+      <h2>Einsendeaufgabe Typ A</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="box warn">
+      <span class="lbl">Hinweis zur Nutzung</span>
+      <p>Die Lösungen unten sind meine eigenen Rechen- und Argumentationswege zum Abgleich, nicht der offizielle Lösungsschlüssel. Formuliere für die Abgabe in eigenen Worten und rechne die Zahlen selbst nach – kleine Rundungsabweichungen sind normal.</p>
+    </div>
+
+    <!-- Aufgabe 1 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">1</span><span class="task-t">Entropie eines Rasterbildes</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <p>Ein fiktives Rasterbild besteht aus 10⁶ Bildpunkten mit folgender Wahrscheinlichkeitsverteilung der Helligkeitswerte H₁…H₈: <code>30 %, 20 %, 15 %, 10 %, 10 %, 5 %, 5 %, 5 %</code>.</p>
+        <ol type="a">
+          <li>Entropie eines Bildpunktes?</li>
+          <li>Entropie des gesamten Bildes?</li>
+          <li>Unter welchen Bedingungen wird die Entropie maximal?</li>
+          <li>Entropie pro Bildpunkt und des Bildes, wenn die Wahrscheinlichkeiten unbekannt wären?</li>
+          <li>Wie viele Bits sind zur Codierung eines Bildpunktes nötig?</li>
+          <li>Redundanz pro Bildpunkt?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Entropie H = −Σ P(xᵢ)·ld P(xᵢ). Beiträge P·(−ld P):</p>
+        <div class="step">0,30 · 1,737 = 0,521      0,10 · 3,322 = 0,332
+0,20 · 2,322 = 0,464      0,05 · 4,322 = 0,216  (×3)
+0,15 · 2,737 = 0,411
+
+H = 0,521+0,464+0,411+0,332+0,332+0,216+0,216+0,216
+H ≈ 2,709 bit/Bildpunkt</div>
+        <div class="res">a) H ≈ 2,71 bit pro Bildpunkt</div>
+        <p><strong>b)</strong> Entropie des Bildes = H · Anzahl Bildpunkte:</p>
+        <div class="step">H_Bild = 2,709 bit · 10⁶ = 2,709 · 10⁶ bit ≈ 2,71 Mbit</div>
+        <p><strong>c)</strong> Maximal bei <strong>Gleichverteilung</strong> aller 8 Helligkeitswerte (je P = 1/8). Dann H = H₀ = ld 8 = <strong>3 bit</strong>.</p>
+        <p><strong>d)</strong> Bei unbekannten Wahrscheinlichkeiten rechnet man mit dem <strong>Entscheidungsgehalt</strong> H₀ = ld 8 = 3 bit/Bildpunkt, Bild = 3 · 10⁶ bit = 3 Mbit.</p>
+        <p><strong>e)</strong> 8 Helligkeitswerte ⇒ ld 8 = <strong>3 Bit</strong> pro Bildpunkt (feste Wortlänge).</p>
+        <p><strong>f)</strong> Quellenredundanz R_Q = H₀ − H = 3 − 2,709 = <strong>0,291 bit</strong> pro Bildpunkt.</p>
+        <div class="res">a) 2,71 bit · b) 2,71 Mbit · c) Gleichverteilung → 3 bit · d) 3 bit / 3 Mbit · e) 3 Bit · f) 0,29 bit</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 2 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">2</span><span class="task-t">Symmetrisch gestörter Binärkanal</span><span class="task-p">25 Pkt.</span></div>
+      <div class="task-q">
+        <p>Bitfehlerwahrscheinlichkeit p = 0,1. Am Kanaleingang tritt die „1“ mit P(x₁) = 0,66 auf.</p>
+        <ol type="a">
+          <li>Berechnen Sie H(X) und H(Y).</li>
+          <li>Berechnen Sie H(X,Y) und H(Y|X).</li>
+          <li>Berechnen Sie die Transinformation H(X;Y).</li>
+          <li>Vergleichen Sie mit dem Fall P(x₁) = P(x₂).</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> P(x₁) = 0,66, P(x₂) = 0,34:</p>
+        <div class="step">H(X) = −(0,66·ld 0,66 + 0,34·ld 0,34)
+     = 0,66·0,599 + 0,34·1,556 ≈ 0,925 bit
+
+Ausgang: P(y₁) = P(x₁)(1−p) + P(x₂)·p = 0,66·0,9 + 0,34·0,1 = 0,628
+         P(y₂) = 0,372
+H(Y) = −(0,628·ld 0,628 + 0,372·ld 0,372) ≈ 0,952 bit</div>
+        <p><strong>b)</strong> Beim symmetrischen Kanal hängt die Irrelevanz nur von p ab:</p>
+        <div class="step">H(Y|X) = H(p) = −(0,1·ld 0,1 + 0,9·ld 0,9) ≈ 0,469 bit
+H(X,Y) = H(X) + H(Y|X) = 0,925 + 0,469 = 1,394 bit</div>
+        <p><strong>c)</strong> Transinformation:</p>
+        <div class="step">H(X;Y) = H(Y) − H(Y|X) = 0,952 − 0,469 ≈ 0,483 bit</div>
+        <p><strong>d)</strong> Bei P(x₁) = P(x₂) = 0,5 ist H(Y) = 1 bit, H(Y|X) = 0,469 bit:</p>
+        <div class="step">H(X;Y) = 1 − 0,469 = 0,531 bit</div>
+        <div class="res">Gleichverteilung liefert die höhere Transinformation (0,531 &gt; 0,483) – das ist die Kanalkapazität C = 1 − H(p).</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 3 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">3</span><span class="task-t">Rechteckimpulsfolge, Spektrum, Bandbreite</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q">
+        <p>Eine Rechteckimpulsfolge hat die Periodendauer T₀ = 1 μs und das Tastverhältnis D = ¼.</p>
+        <ol type="a">
+          <li>Bei welcher Frequenz erscheint die erste Spektrallinie?</li>
+          <li>Welche Bandbreite muss der Kanal für eine eindeutige Rekonstruktion haben? Begründung.</li>
+          <li>Auswirkung einer Halbierung der Impulsdauer?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Erste Spektrallinie = Grundfrequenz f₁ = 1/T₀:</p>
+        <div class="step">f₁ = 1 / (1·10⁻⁶ s) = 1·10⁶ Hz = 1 MHz</div>
+        <p><strong>b)</strong> Die Impulsdauer ist τ = D·T₀ = ¼·1 μs = 0,25 μs. Die erste Nullstelle der si-Hüllkurve (Ende des ersten Spektrallappens mit den wesentlichen Linien) liegt bei 1/τ:</p>
+        <div class="step">B = 1/τ = 1 / (0,25·10⁻⁶ s) = 4·10⁶ Hz = 4 MHz</div>
+        <p>Bis dorthin liegen die tragenden Spektrallinien (bei 1, 2, 3 MHz) – der Kanal muss also mindestens 4 MHz durchlassen.</p>
+        <p><strong>c)</strong> Halbierung der Impulsdauer (τ → 0,125 μs, D = ⅛) verschiebt die Nullstelle auf 1/τ = 8 MHz:</p>
+        <div class="res">Die nötige Bandbreite verdoppelt sich auf 8 MHz – schmale Impulse brauchen breite Kanäle.</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 4 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">4</span><span class="task-t">Kanalkapazität und SNR</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Analoges Signal, Grenzfrequenz 1000 Hz, 256 Amplitudenstufen, Übertragung über digitalen Kanal – wie gross muss die Kanalkapazität mindestens sein?</li>
+          <li>Bitrate 1 Gbit/s über einen Kanal mit 100 MHz Bandbreite – welcher SNR ist mindestens nötig?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Abtasttheorem: f_A ≥ 2·f_G = 2000 Hz. Pro Abtastwert ld 256 = 8 Bit:</p>
+        <div class="step">C = f_A · ld m = 2000 · 8 = 16 000 bit/s = 16 kbit/s</div>
+        <div class="res">a) mindestens 16 kbit/s</div>
+        <p><strong>b)</strong> Shannon-Hartley nach S/N auflösen:</p>
+        <div class="step">C = B · ld(1 + S/N)
+1·10⁹ = 100·10⁶ · ld(1 + S/N)
+ld(1 + S/N) = 10  ⇒  1 + S/N = 2¹⁰ = 1024
+S/N = 1023  ≈  10·log₁₀(1023) ≈ 30,1 dB</div>
+        <div class="res">b) S/N ≥ 1023 (linear), also ca. 30 dB</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 5 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">5</span><span class="task-t">Codierung: Zuordnung, Ziele, Hamming, Symbolrate</span><span class="task-p">25 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Ordnen Sie MP3, CRC-Verfahren und 8B/10B-Code den Codierungen im Modell der Informationsübertragung zu.</li>
+          <li>Charakterisieren Sie kurz die Ziele von Quellen-, Kanal- und Leitungscodierung.</li>
+          <li>Weshalb ist ein Blockcode fester Stellenanzahl für deutschen Text hinsichtlich Kanalkapazität weniger geeignet als ein Code variabler Wortlänge?</li>
+          <li>Welche Hamming-Distanz muss ein Code aufweisen, wenn bis zu 5-fach-Fehler erkannt werden sollen?</li>
+          <li>Weshalb sollten Leitungscodes mit vielen Pegelwechseln eingesetzt werden?</li>
+          <li>Symbolrate, wenn pro Symbol 6 Bit codiert werden und 120 Mbit/s erreicht werden sollen?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Zuordnung:</p>
+        <div class="step">MP3     → Quellencodierung   (verlustbehaftete Kompression)
+CRC     → Kanalcodierung     (Fehlererkennung)
+8B/10B  → Leitungscodierung  (Anpassung ans Medium)</div>
+        <p><strong>b)</strong> <strong>Quellencodierung</strong> = Redundanz verringern / komprimieren. <strong>Kanalcodierung</strong> = gezielt Redundanz hinzufügen zum Schutz gegen Störungen (Fehlererkennung/-korrektur). <strong>Leitungscodierung</strong> = Signal an das Übertragungsmedium anpassen (Gleichstromfreiheit, Taktrückgewinnung).</p>
+        <p><strong>c)</strong> Deutscher Text hat sehr ungleiche Zeichenhäufigkeiten (e häufig, q/x selten). Ein Blockcode gibt jedem Zeichen gleich viele Bits und verschenkt diese Statistik; die mittlere Codewortlänge bleibt = ld N. Ein Code variabler Länge (Huffman) gibt häufigen Zeichen kurze Codewörter, senkt die mittlere Codewortlänge Richtung Entropie und braucht dadurch <strong>weniger Kanalkapazität</strong>.</p>
+        <p><strong>d)</strong> Fehlererkennung von e = 5 Fehlern verlangt d_min ≥ e + 1:</p>
+        <div class="step">d_min = 5 + 1 = 6</div>
+        <p><strong>e)</strong> Viele Pegelwechsel liefern häufige Flanken → sichere <strong>Taktrückgewinnung</strong> und Synchronisation beim Empfänger; lange pegelkonstante Folgen würden den Takt verlieren und einen Gleichanteil erzeugen.</p>
+        <p><strong>f)</strong> Symbolrate = Bitrate / Bits pro Symbol:</p>
+        <div class="step">v_s = 120·10⁶ bit/s / 6 bit = 20·10⁶ Symbole/s = 20 MBaud</div>
+        <div class="res">d) d_min = 6 · f) 20 MBaud</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck vor der Abgabe">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kurzkontrolle</p>
+      <h2>Schnellcheck vor der Abgabe</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="tw"><table>
+      <thead><tr><th>Aufgabe</th><th>Prüfe</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>H = −Σ P·ld P; Bild = H · 10⁶; Maximum bei Gleichverteilung; unbekannt → H₀ = ld 8 = 3 bit; Redundanz = H₀ − H</td></tr>
+        <tr><td><strong>2</strong></td><td>P(y) über Übergangswahrscheinlichkeiten; H(Y|X) = H(p) nur von p; H(X;Y) = H(Y) − H(Y|X); Maximum bei Gleichverteilung = Kanalkapazität</td></tr>
+        <tr><td><strong>3</strong></td><td>f₁ = 1/T₀; τ = D·T₀; B = 1/τ; halbe Impulsdauer → doppelte Bandbreite</td></tr>
+        <tr><td><strong>4</strong></td><td>f_A = 2·f_G und ld m Bits/Abtastwert; Shannon nach S/N auflösen; dB ⇄ linear nicht vergessen</td></tr>
+        <tr><td><strong>5</strong></td><td>MP3/CRC/8B10B → Quellen-/Kanal-/Leitungscodierung; Erkennung d_min = e+1; Symbolrate = Bitrate / Bit-pro-Symbol</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ ABKÜRZUNGEN ══════════════ -->
+<section class="sec" id="abk" data-num="C" data-title="Abkürzungsverzeichnis">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">C</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang C</p>
+      <h2>Abkürzungs- und Formelverzeichnis</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>A/D</dt><dd>Analog/Digital</dd></div>
+      <div class="abbr-row"><dt>ASCII</dt><dd>American Standard Code for Information Interchange</dd></div>
+      <div class="abbr-row"><dt>AWGN</dt><dd>Additive White Gaussian Noise</dd></div>
+      <div class="abbr-row"><dt>BER</dt><dd>Bit Error Rate</dd></div>
+      <div class="abbr-row"><dt>CDM</dt><dd>Code Division Multiplex</dd></div>
+      <div class="abbr-row"><dt>CRC</dt><dd>Cyclic Redundancy Check</dd></div>
+      <div class="abbr-row"><dt>dB</dt><dd>Dezibel</dd></div>
+      <div class="abbr-row"><dt>DSL</dt><dd>Digital Subscriber Line</dd></div>
+      <div class="abbr-row"><dt>EAN</dt><dd>European Article Number</dd></div>
+      <div class="abbr-row"><dt>FDM</dt><dd>Frequency Division Multiplex</dd></div>
+      <div class="abbr-row"><dt>FEC</dt><dd>Forward Error Correction</dd></div>
+      <div class="abbr-row"><dt>ld</dt><dd>Logarithmus dualis (log₂)</dd></div>
+      <div class="abbr-row"><dt>LZ</dt><dd>Lempel Ziv</dd></div>
+      <div class="abbr-row"><dt>MLT</dt><dd>Multilevel Transmission Encoding</dd></div>
+      <div class="abbr-row"><dt>NRZ</dt><dd>Non Return to Zero</dd></div>
+      <div class="abbr-row"><dt>NRZI</dt><dd>Non Return to Zero Invers</dd></div>
+      <div class="abbr-row"><dt>PAM</dt><dd>Pulse Amplitude Modulation</dd></div>
+      <div class="abbr-row"><dt>QR</dt><dd>Quick Response</dd></div>
+      <div class="abbr-row"><dt>RLE</dt><dd>Run Length Encoding</dd></div>
+      <div class="abbr-row"><dt>RZ</dt><dd>Return to Zero</dd></div>
+      <div class="abbr-row"><dt>SDM</dt><dd>Space Division Multiplex</dd></div>
+      <div class="abbr-row"><dt>SNR</dt><dd>Signal Noise Ratio (Signal-Rausch-Abstand)</dd></div>
+      <div class="abbr-row"><dt>TDM</dt><dd>Time Division Multiplex</dd></div>
+      <div class="abbr-row"><dt>VDSL</dt><dd>Very High Speed Digital Subscriber Line</dd></div>
+      <div class="abbr-row"><dt>WDM</dt><dd>Wavelength Division Multiplex</dd></div>
+    </dl></div>
+
+    <h4>Formelzeichen (Auswahl)</h4>
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>b</dt><dd>Übertragungsrate, Bitrate</dd></div>
+      <div class="abbr-row"><dt>B</dt><dd>Bandbreite</dd></div>
+      <div class="abbr-row"><dt>C</dt><dd>Kanalkapazität</dd></div>
+      <div class="abbr-row"><dt>D</dt><dd>Tastverhältnis (τ/T₀)</dd></div>
+      <div class="abbr-row"><dt>d_min</dt><dd>Hamming-Distanz</dd></div>
+      <div class="abbr-row"><dt>f_G</dt><dd>Grenzfrequenz</dd></div>
+      <div class="abbr-row"><dt>f_A</dt><dd>Abtastfrequenz</dd></div>
+      <div class="abbr-row"><dt>H</dt><dd>Entropie (mittlerer Informationsgehalt)</dd></div>
+      <div class="abbr-row"><dt>H₀</dt><dd>Entscheidungsgehalt (ld m)</dd></div>
+      <div class="abbr-row"><dt>H(X,Y)</dt><dd>Verbundentropie</dd></div>
+      <div class="abbr-row"><dt>H(X;Y)</dt><dd>Transinformation</dd></div>
+      <div class="abbr-row"><dt>H(X|Y)</dt><dd>Äquivokation</dd></div>
+      <div class="abbr-row"><dt>H(Y|X)</dt><dd>Irrelevanz</dd></div>
+      <div class="abbr-row"><dt>I(x)</dt><dd>Informationsgehalt eines Zeichens x</dd></div>
+      <div class="abbr-row"><dt>L</dt><dd>mittlere Codewortlänge</dd></div>
+      <div class="abbr-row"><dt>R_C</dt><dd>Coderate</dd></div>
+      <div class="abbr-row"><dt>R_Q</dt><dd>Quellenredundanz</dd></div>
+      <div class="abbr-row"><dt>v_s</dt><dd>Symbolrate</dd></div>
+    </dl></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft ITI22 · Informationstheoretische und physikalisch-technische Grundlagen und Informationsübertragung · Druck-Code 0825K07 · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "iti22:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll("#ea details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

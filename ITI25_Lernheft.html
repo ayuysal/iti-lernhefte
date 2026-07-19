@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITI25 – Internetworking &amp; Netzdesign</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("iti25:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">ITI25 <span>· 1123K06</span></div>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Internetworking &amp; Netzdesign</h1>
+      <p class="sub">Netzkomponenten von Repeater bis Firewall, Subnetting und VLSM, VLANs mit Tagging nach 802.1Q, strukturierte Verkabelung und Netzdesign nach BSI-Grundschutz sowie Zugangsnetze der „letzten Meile" – mit Einsendeaufgabe Typ A und Lösungswegen.</p>
+      <div class="meta">
+        <span>ITI25 · 1123K06</span>
+        <span>6 Kapitel · 113 Seiten</span>
+        <span>Einsendeaufgabe: 100 Pkt.</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Überblick Internetworking">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Überblick Internetworking</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Bevor Netzkomponenten und Adressierung im Detail folgen, klärt dieses Kapitel die Grundbegriffe: Internetworking als Zusammenschaltung heterogener Netze, Segmentierung als Mittel gegen Überlastung und das hierarchische Internetworking-Modell als Bauplan für Unternehmensnetze.</p>
+
+    <div class="box def">
+      <span class="lbl">Internetworking (Def. 1.1)</span>
+      <p>Internetworking bezeichnet die Zusammenschaltung einer beliebigen Anzahl unterschiedlicher, auch heterogener Netze. Das <strong>Internet</strong> („Netz der Netze") ist das bekannteste Beispiel, aber beide Begriffe sind nicht gleichzusetzen: Internetworking findet auch rein lokal statt. Das Internet gliedert sich in <strong>autonome Systeme (AS)</strong> unter jeweils einheitlicher Verwaltung eines <strong>Internet Service Providers (ISP)</strong>; die Netze der ISPs sind über <strong>Internet Exchange Points (IXP)</strong> verbunden.</p>
+    </div>
+
+    <h4>Segmentierung</h4>
+    <p>Wächst die Zahl der Hosts in einem gemeinsamen Übertragungsmedium, drohen Kollisionen und Netzüberlastung. Segmentierung teilt ein grösseres Netz in beherrschbare Teile – vergleichbar mit dem Bau einer zusätzlichen Fahrspur oder einer Umgehungsstrasse im Strassenverkehr.</p>
+
+    <div class="box def">
+      <span class="lbl">Segmentierung &amp; Segment (Def. 1.2 / 1.3)</span>
+      <p><strong>Segmentierung</strong> bezeichnet die Aufteilung eines grösseren Netzes in mehrere physische oder logische Segmente – auf der physikalischen Schicht, der Datenverbindungsschicht oder der Netzwerkschicht. Ein <strong>Segment</strong> ist ein Teil eines grösseren Netzes, das physisch oder virtuell vom Rest des Netzes getrennt ist.</p>
+    </div>
+
+    <p>Auf der physikalischen Schicht verbindet ein <strong>Repeater</strong> Segmente, ohne sie zu trennen. Auf der Datenverbindungsschicht trennen <strong>Bridges/Switches</strong> Segmente. In der Netzwerkschicht ist ein Segment ein Netz oder Subnetz, das über <strong>Router</strong> mit anderen Netzen verbunden wird. Gezielte Isolation leisten <strong>Firewalls</strong>. Zusätzlich zur physischen Segmentierung ist eine <strong>logische</strong> Segmentierung mittels <strong>VLAN</strong> möglich (Kapitel 4).</p>
+
+    <div class="box">
+      <span class="lbl">Vorteile von Segmentierung und Netzhierarchien</span>
+      <p>übersichtliche Strukturierung des Netzes · Beschränkung von Kollisions- und Broadcast-Domänen · bessere Auslastung der Bandbreite · Fehlerauswirkung im Allgemeinen nur lokal · Überwindung netzspezifischer Beschränkungen (geografische Ausdehnung, max. Anzahl Netzanschlüsse) · Erhöhung der Sicherheit · globale Bereitstellung von Netzdiensten, Daten, Ressourcen</p>
+    </div>
+
+    <h4>Hierarchisches Internetworking-Modell</h4>
+    <p>Man unterscheidet <strong>flache</strong> Designmodelle (vollständige Vermaschung) von <strong>hierarchischen</strong> Modellen. Weitverkehrsnetze, aber auch Unternehmensnetze sind meist hierarchisch aufgebaut – das entspricht in der Regel auch der Unternehmensstruktur und bringt Vorteile hinsichtlich Skalierbarkeit, Redundanz, Leistungsfähigkeit, Sicherheit und Administrierbarkeit. Das hierarchische Internetworking-Modell unterteilt Unternehmensnetze in drei Schichten:</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Schicht</th><th>Aufgabe</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Kernschicht</strong> (Core Layer)</td><td>hoch performant und redundant ausgelegt – das Rückgrat des Netzes</td></tr>
+        <tr><td><strong>Verteilungsschicht</strong> (Distribution Layer)</td><td>verteilt die Datenpakete im Netz, typischerweise mittels Router</td></tr>
+        <tr><td><strong>Zugriffsschicht</strong> (Access Layer)</td><td>bindet die Hosts an das Netz an</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Für die Realisierung dieser Schichten werden leistungsfähige Netzkomponenten benötigt: Repeater, Hubs, Bridges, Switches, Router und Gateways sowie – zunehmend wichtig – Firewalls. Diese Komponenten sind Gegenstand von Kapitel 2.</p>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle: Netz, Subnetz und Segment</span>
+      <p>Ein <strong>Subnetz</strong> ist ein identifizierbarer Teil eines Netzes, in dem sich alle Hosts <em>ohne</em> Router direkt erreichen; alle Subnetze eines Netzes sind über eine gemeinsame Adresse aus dem Internet erreichbar (Kapitel 3). Der Begriff <strong>Segment</strong> ist schichtabhängig zu verstehen (Schicht 1/2: Kollisionsbereich, Schicht 3: Netz/Subnetz) – „Segment" und „Subnetz" sind also nicht in jeder Schicht dasselbe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Netzkomponenten">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Netzkomponenten</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Von Repeater bis Firewall: Dieses Kapitel ordnet alle aktiven Netzkomponenten den OSI-Schichten zu, zeigt ihre Wirkung auf Kollisions- und Broadcast-Domänen und beleuchtet Switch, Router und Spanning Tree im Detail.</p>
+
+    <p><strong>Passive Komponenten</strong> (Kabel, Datendosen, Patchfelder) benötigen keine eigene Stromversorgung. <strong>Aktive Komponenten</strong> (Repeater, Hub, Bridge, Switch, Router, Gateway, Firewall) benötigen Strom und mehr oder weniger komplexe Hard- und Software.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Schicht</th><th>Komponente</th></tr></thead>
+      <tbody>
+        <tr><td>3 · Netzwerkschicht</td><td>Router, Layer-3-Switch</td></tr>
+        <tr><td>2 · Datenverbindungsschicht</td><td>Switch, Bridge</td></tr>
+        <tr><td>1 · Physikalische Schicht</td><td>Hub, Repeater</td></tr>
+        <tr><td>schichtübergreifend</td><td>Gateway, Firewall</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box def">
+      <span class="lbl">Kernbegriffe (Def. 2.8 / 2.9)</span>
+      <p><strong>Kollisionsdomäne:</strong> Bereich eines Netzes, in dem sich Kollisionen der übertragenen Daten ereignen können. <strong>Broadcast-Domäne:</strong> Bereich eines Netzes, in dem sich ein Broadcast (Nachricht an alle angeschlossenen Hosts) ausbreiten kann.</p>
+    </div>
+
+    <h4>Repeater und Hub</h4>
+    <p>Ein <strong>Repeater</strong> verstärkt Signale und überträgt sie weiter, um Dämpfung über der Entfernung auszugleichen; er arbeitet auf Schicht 1 und ist für das Netz vollkommen transparent. Bei 10Base-Ethernet begrenzt die <strong>5-4-3-Regel</strong> die Kaskadierung: 5 Segmente über 4 Repeater, davon nur 3 mit aktiven Hosts. Glasfaser-Repeater verstärken auf Seekabeln das Licht alle 50–80 km; WLAN-Repeater halbieren die Übertragungsrate, ausser bei getrennten Frequenzen für Access-Point- und Host-Verbindung. Ein <strong>Hub</strong> ist ein Multiport-Repeater: Alle Ports bilden eine <em>gemeinsame</em> Kollisionsdomäne, sodass sich alle angeschlossenen Hosts die Bandbreite teilen – gegenüber einem Bus bringt der Hub keine Bandbreitensteigerung.</p>
+
+    <h4>Bridge</h4>
+    <p>Eine <strong>Bridge</strong> verbindet zwei Segmente auf der Datenverbindungsschicht. Sie liest jedes Frame vollständig ein (<strong>Store-and-Forward</strong>), wertet Sender- und Empfängeradresse aus und verwaltet eine <strong>MAC-Adressentabelle</strong> mit Port-Zuordnung. Lernprozess: Ist die Quelladresse unbekannt, wird sie mit dem Empfangsport eingetragen; ist sie bekannt, wird nur der Aging-Timer aktualisiert. Liegt die Zieladresse im selben Segment, wird das Frame verworfen; liegt sie im anderen Segment, wird es dorthin weitergeleitet; ist die Zieladresse unbekannt oder ein Broadcast/Multicast, flutet die Bridge das Frame an alle Ports ausser dem Empfangsport.</p>
+
+    <div class="box def">
+      <span class="lbl">Wichtig: Bridge/Switch trennen nur Kollisionsdomänen</span>
+      <p>Jedes Segment an einer Bridge oder einem Switch bildet eine <strong>eigene Kollisionsdomäne</strong> – bei Mikrosegmentierung (nur ein Host je Port) sogar der einzelne Host allein. Alle Ports bleiben jedoch in <strong>derselben Broadcast-Domäne</strong>. Erst ein Router (oder ein VLAN) trennt zusätzlich Broadcast-Domänen.</p>
+    </div>
+
+    <h4>Switch – Arbeitsweise, Lernprozess, Mikrosegmentierung</h4>
+    <p>Ein <strong>Switch</strong> ist funktional eine ASIC-basierte Multiport-Bridge mit sehr schnellem internen Verbindungsnetz. <strong>Mikrosegmentierung</strong> (Def. 2.10) bedeutet, dass jedem Port nur ein Host zugeordnet ist – dieser erhält die volle dedizierte Bandbreite ohne Shared Medium. Der Lernprozess entspricht dem der Bridge: Die MAC-Adressentabelle (auch Source Address Table/SAT bzw. bei Cisco Content Addressable Memory Table/CAM) speichert Quell-MAC und Port; bei unbekannter Zieladresse, Broadcast oder Multicast wird geflutet, bei Quellport = Zielport wird verworfen.</p>
+
+    <div class="box">
+      <span class="lbl">Interne Bandbreite (Backplane / Switch-Fabric)</span>
+      <p class="formula">Interne Bandbreite ≥ Anzahl Ports · Bandbreite pro Port · 2 (Vollduplex)</p>
+      <p>Beispiel: Ein Switch mit 8 Fast-Ethernet-Ports (100 Mbit/s) benötigt intern mindestens 8 · 100 · 2 = 1600 Mbit/s = 1,6 Gbit/s, damit alle Ports gleichzeitig mit voller Linkgeschwindigkeit senden und empfangen können.</p>
+    </div>
+
+    <h4>Switching-Verfahren</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Verfahren</th><th>Arbeitsweise</th><th>Eigenschaft</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cut-Through</strong> (Fast Forward)</td><td>Weiterleitung sofort nach Erhalt der Zieladresse</td><td>minimale Latenz, keine Fehlerprüfung, nur gleiche Portgeschwindigkeit</td></tr>
+        <tr><td><strong>Store-and-Forward</strong></td><td>komplettes Frame puffern, prüfen, dann weiterleiten</td><td>fehlerhafte Frames werden aussortiert; höhere Latenz (Cisco-Standard); einzig geeignet für asymmetrisches Switching</td></tr>
+        <tr><td><strong>Fragment-Free</strong></td><td>nur die ersten 64 Byte werden geprüft</td><td>Kompromiss, in der Praxis selten genutzt</td></tr>
+        <tr><td><strong>Adaptives Switching</strong></td><td>Cut-Through, bei Fehlerhäufung Wechsel zu Store-and-Forward</td><td>kombiniert beide Verfahren dynamisch</td></tr>
+      </tbody>
+    </table></div>
+    <p>Bei den <strong>Switch-Architekturen</strong> unterscheidet man Shared-Memory-Switching (gemeinsamer Speicher), Bus-Switching (interner, gepufferter Bus) und Matrix-Switching (Crossbar mit direkter Schaltung zwischen Ein- und Ausgangsport).</p>
+
+    <h4>Switch unter Sicherheitsaspekten</h4>
+    <div class="box warn">
+      <span class="lbl">Angriffe auf Switches</span>
+      <p><strong>MAC-Flooding:</strong> Der Switch wird mit gefälschten MAC-Adressen überflutet, bis die Adresstabelle voll ist; er schaltet dann in den <strong>Fail-open-Modus</strong> und verhält sich wie ein Hub – der Angreifer kann den gesamten Verkehr mitschneiden (Sniffing). <strong>MAC-Spoofing/Port-Stealing:</strong> Der Angreifer sendet Frames mit gefälschter Quell-MAC (der des Opfers), sodass der Switch den falschen Port einträgt. Gegenmassnahme: <strong>Port Security</strong> – eine Whitelist erlaubter MAC-Adressen je Port; bei unbekannter Adresse wird der Port administrativ gesperrt.</p>
+    </div>
+
+    <h4>Bandbreitenerhöhung – Link Aggregation</h4>
+    <p>Mehrere physische Links werden zu einer <strong>Link Aggregation Group (LAG)</strong> bzw. einem logischen Trunk gebündelt (Portbündelung), Standard <strong>IEEE 802.1AX</strong> (früher 802.3ad) mit dem Protokoll <strong>LACP</strong>. Ziele: höherer Durchsatz, Lastausgleich, Redundanz. Voraussetzung sind Vollduplex-Verbindungen gleicher Übertragungsrate. Herstellerspezifische Bezeichnungen: Etherchannel (Cisco), Teaming (Windows), Bonding (Linux). Da die Reihenfolge der Frames einer Datenverbindung nicht vertauscht werden darf, läuft eine einzelne Datenverbindung stets nur über einen Link – die Erhöhung wirkt auf die Summe aller Verbindungen, nicht auf eine einzelne.</p>
+
+    <h4>Spanning Tree Protocol</h4>
+    <p>Redundante Switch-Verbindungen erhöhen die Ausfallsicherheit, schaffen aber die Gefahr endlos kreisender Frames (Loops). Das <strong>Spanning Tree Protocol (STP, IEEE 802.1d)</strong> überführt eine vermaschte Topologie in einen schleifenfreien logischen Baum. Switches tauschen dazu <strong>BPDUs</strong> (Bridge Protocol Data Units) an die Multicast-Adresse 01:80:C2:00:00:00 aus. Der Switch mit der niedrigsten <strong>Bridge-ID</strong> (Priorität + MAC-Adresse) wird <strong>Root-Bridge</strong>. Jeder andere Switch bestimmt seinen <strong>Root-Port</strong> (günstigste Pfadkosten zur Root), pro Segment wird zusätzlich ein <strong>designierter Port</strong> bestimmt – alle übrigen Ports gehen in den Zustand Blocking.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Portzustand</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Forwarding</strong></td><td>Root-Port und designierte Ports leiten Frames weiter</td></tr>
+        <tr><td><strong>Blocking</strong> (Standby)</td><td>redundanter Port, leitet nicht weiter, übernimmt bei Ausfall der primären Verbindung</td></tr>
+        <tr><td>Listening / Learning</td><td>nur beim klassischen STP: je 15 s Übergangsphase vor dem Wechsel nach Forwarding</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsfalle: STP-Konvergenz</span>
+      <p>Klassisches STP braucht durch die Listening-/Learning-Phasen 30 Sekunden oder mehr für eine Neuberechnung – ein beliebtes Ziel für Denial-of-Service-Angriffe mit gefälschten BPDUs. <strong>RSTP</strong> (Rapid Spanning Tree, IEEE 802.1w) reduziert die Konvergenzzeit auf wenige Sekunden. <strong>MSTP</strong> (Multiple Spanning Tree, IEEE 802.1s) erlaubt mehrere unabhängige Spannbäume für unterschiedliche VLANs.</p>
+    </div>
+
+    <h4>Layer-3- und Layer-4-Switches</h4>
+    <p>Ein <strong>Layer-3-Switch</strong> behandelt das erste Paket einer Verbindung wie ein Router (Auswertung der Ziel-IP-Adresse), alle Folgepakete werden dann auf Schicht 2 anhand der Ziel-MAC-Adresse weitergeleitet – dadurch höherer Durchsatz als ein klassischer Router und meist deutlich mehr Ports. <strong>Layer-4-Switches</strong> (Multi-Layer-Switches) werten zusätzlich die Portnummer aus und können Pakete anwendungsspezifisch (HTTP, FTP, …) weiterleiten.</p>
+
+    <h4>Router</h4>
+    <p>Ein <strong>Router</strong> verbindet Netze auf Schicht 3 und vermittelt IP-Pakete anhand von Routing-Protokollen. Die Metrik bestimmt den Next Hop – RIP nutzt die Hopanzahl, OSPF nutzt Kosten auf Basis der Bandbreite. Das Ergebnis der Routenberechnung liegt in der <strong>Forwarding-Tabelle</strong> (umgangssprachlich oft „Routing-Tabelle" genannt). Aufgaben eines Routers: Auswertung der logischen Adressen, Bestimmung der optimalen Route, Speicherung/Aktualisierung der Routeninformation, Einhaltung der Route; zusätzlich oft Paketfilterung und NAT. Jedes Router-Interface bildet eine <strong>eigene Kollisions- und Broadcast-Domäne</strong>.</p>
+
+    <div class="box">
+      <span class="lbl">Heimrouter = Multifunktionsgerät</span>
+      <p>Ein Heimrouter (z. B. Fritz!Box, Speedport) vereint Modem, Switch, Access Point, NAT-Router, Firewall, DHCP- und DNS-Server sowie eine Web-Administrationsoberfläche. Streng genommen ist er „kein richtiger" Router, da kein Routing-Protokoll läuft. Die <strong>NAT-Funktion</strong> ersetzt private Absenderadresse und Port durch die öffentliche Adresse und einen eigenen Port (Eintrag in einer Tabelle); unangeforderte Pakete aus dem Internet werden verworfen, ausser bei konfigurierter <strong>Portweiterleitung</strong> – diese stellt ein Sicherheitsrisiko dar und sollte nur begrenzt eingesetzt werden.</p>
+    </div>
+
+    <h4>Switch und Router im Vergleich</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Merkmal</th><th>Switch (Schicht 2)</th><th>Router</th></tr></thead>
+      <tbody>
+        <tr><td>Wegewahl</td><td>MAC-Adresse</td><td>logische Adresse (IP)</td></tr>
+        <tr><td>Protokolltransparenz</td><td>ja</td><td>nein, protokoll- bzw. multiprotokollabhängig</td></tr>
+        <tr><td>Broadcastunterdrückung</td><td>nein</td><td>ja</td></tr>
+        <tr><td>Fragmentierung/Reassemblierung</td><td>nein</td><td>ja (IPv4)</td></tr>
+        <tr><td>redundante Wege</td><td>nein (STP blockt)</td><td>ja, Wegewahl anhand der Metrik</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Gateway und Firewall</h4>
+    <p>Ein <strong>Gateway</strong> ist eine Schnittstelle zwischen zwei <em>inkompatiblen</em> Netzarchitekturen; es umfasst alle Schichten der verbundenen Netze und „übersetzt" Formate, Adressierung und Protokolle (z. B. SMS ↔ E-Mail). Der Default-Router wird umgangssprachlich als „Standard-Gateway" bezeichnet. Eine <strong>Firewall</strong> trennt Netze unterschiedlicher Sicherheitsanforderungen und arbeitet als Paketfilter (Router) oder als Application Level Gateway (ALG/Proxy). Eine mehrstufige Architektur aus Paketfilter–ALG–Paketfilter (<strong>P-A-P-Modell</strong>, „Multiple Screened Subnet") wird vom BSI empfohlen. <strong>UTM</strong>-Geräte bündeln Firewall, Antivirus, Spamfilter und Angriffserkennung in einer Einheit.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Subnetze">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3 · rechenlastig</p>
+      <h2>Subnetze</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Subnetting verschiebt die Netz/Host-Grenze einer IP-Adresse nach Bedarf. Dieses Kapitel liefert das komplette Rechenwerkzeug: von der gleichmässigen Aufteilung über VLSM bis zu CIDR-Routenaggregation und IPv6-Subnetzen – die EA-Aufgabe 2 baut direkt darauf auf.</p>
+
+    <div class="box def">
+      <span class="lbl">Subnetz (Def. 3.1)</span>
+      <p>Ein Subnetz ist ein identifizierbarer Teil eines Netzes, in dem sich alle Hosts direkt ohne Vermittlung von Routern erreichen können. Die Zugehörigkeit regelt die <strong>Subnetzmaske</strong>; alle Subnetze eines Netzes bleiben über die gemeinsame Netzadresse aus dem Internet erreichbar.</p>
+    </div>
+
+    <h4>Vorteile und Grundprinzip</h4>
+    <p>Vorteile der Unterteilung: Übersichtlichkeit, Lasttrennung, Begrenzung von Broadcast-Domänen, Entlastung der Internet-Router (die nur nach Netzpräfix routen und keine Subnetz-Einträge benötigen) sowie eigenständige Verwaltung durch den Netzadministrator. Beim Subnetting wird die Netz/Host-Grenze auf Bitebene nach rechts verschoben: Bits werden vom Hostteil „geliehen". Bei <strong>n</strong> geliehenen Bits entstehen 2ⁿ Subnetze.</p>
+
+    <p>Die Netzadresse zu einer IP-Adresse ergibt sich aus <strong>IP-Adresse AND Subnetzmaske</strong>, die Broadcast-Adresse aus <strong>IP-Adresse OR invertierte Subnetzmaske</strong>. Beispiel: 195.37.163.128 AND 255.255.255.128 = 195.37.163.128 (Subnetzadresse); dieselbe IP AND 255.255.255.0 ergäbe dagegen 195.37.163.0 (dann wäre .128 eine Hostadresse). Beim Routing werden Ziel- und Quelladresse jeweils mit der Subnetzmaske UND-verknüpft: Sind beide Netz-IDs gleich, bleibt das Paket im Subnetz, sonst wird es geroutet.</p>
+
+    <h4>Subnetzberechnung (RFC 1878)</h4>
+    <div class="box">
+      <span class="lbl">Grundformeln</span>
+      <p class="formula">Anzahl Subnetze = 2ⁿ  (n = Anzahl geliehener Netzbits)</p>
+      <p class="formula">Hosts je Subnetz = 2ʰ − 2  (h = verbleibende Hostbits; −2 für Netz- und Broadcast-Adresse)</p>
+    </div>
+
+    <p><strong>Beispiel 3.4:</strong> Ein Class-C-Netz 195.37.163.0 soll in 8 Subnetze geteilt werden: 2³ = 8 ⇒ 3 Bits fürs Subnetz ⇒ Maske 255.255.255.224 (/27); es bleiben 5 Hostbits ⇒ 2⁵ − 2 = 30 nutzbare Hosts je Subnetz.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Netzadresse</th><th>1. Host</th><th>letzter Host</th><th>Broadcast</th></tr></thead>
+      <tbody>
+        <tr><td>195.37.163.0</td><td>195.37.163.1</td><td>195.37.163.30</td><td>195.37.163.31</td></tr>
+        <tr><td>195.37.163.32</td><td>195.37.163.33</td><td>195.37.163.62</td><td>195.37.163.63</td></tr>
+        <tr><td>195.37.163.64</td><td>195.37.163.65</td><td>195.37.163.94</td><td>195.37.163.95</td></tr>
+        <tr><td>195.37.163.96</td><td>195.37.163.97</td><td>195.37.163.126</td><td>195.37.163.127</td></tr>
+        <tr><td>195.37.163.128</td><td>195.37.163.129</td><td>195.37.163.158</td><td>195.37.163.159</td></tr>
+        <tr><td>195.37.163.160</td><td>195.37.163.161</td><td>195.37.163.190</td><td>195.37.163.191</td></tr>
+        <tr><td>195.37.163.192</td><td>195.37.163.193</td><td>195.37.163.222</td><td>195.37.163.223</td></tr>
+        <tr><td>195.37.163.224</td><td>195.37.163.225</td><td>195.37.163.254</td><td>195.37.163.255</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Subnetze mit variabler Länge (VLSM)</h4>
+    <p>Werden unterschiedlich grosse Subnetze benötigt, führt eine gleichmässige Teilung entweder zu Verschwendung oder zu Engpässen. <strong>VLSM</strong> (Variable Length Subnet Mask) teilt zuerst grob mit einer kurzen Maske und unterteilt dann eine Hälfte erneut mit einer längeren Maske. Voraussetzung: Das Routingprotokoll muss die erweiterten Präfixinformationen verarbeiten können (bei RIPv1 z. B. nicht möglich).</p>
+
+    <div class="box def">
+      <span class="lbl">VLSM-Vorgehen (Beispiel 3.6)</span>
+      <p>Netz 195.37.2.0/24 soll in Subnetz A (50 Hosts), B (50 Hosts) und C (100 Hosts) aufgeteilt werden – grösster Bedarf zuerst zuteilen, der Rest wird weiter unterteilt:</p>
+      <div class="step">195.37.2.0/25    Subnetz C: .1 – .126, Broadcast .127  (126 Hosts)
+195.37.2.128/26  Subnetz A: .129 – .190, Broadcast .191 (62 Hosts)
+195.37.2.192/26  Subnetz B: .193 – .254, Broadcast .255 (62 Hosts)</div>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Prüfungsschema: Subnetzplanung in 4 Schritten</span>
+      <p>1. Anzahl benötigter Subnetze auf die nächste Zweierpotenz aufrunden. 2. Zukunftssicherheit prüfen, ggf. weiter aufrunden. 3. Hostbedarf des <em>grössten</em> Subnetzes ebenfalls auf die nächste Zweierpotenz aufrunden (z. B. 50 Hosts → 2⁶ = 64). 4. Prüfen, ob der verfügbare Adressraum ausreicht, dann Maske und Aufteilung festlegen.</p>
+    </div>
+
+    <h4>Supernetting und CIDR</h4>
+    <p>Supernetting (RFC 1338) fasst mehrere Netze mit gemeinsamem Adressanteil zu einem grösseren Netz zusammen (<strong>Routenaggregation</strong>) – 1993 durch <strong>CIDR</strong> (Classless Interdomain Routing, RFC 1519) abgelöst, das die feste Zuordnung zu Netzklassen (A/B/C) aufhebt. Die Netzzugehörigkeit wird nur noch über die Netzmaske (CIDR-Suffix) bestimmt, wodurch Adressraum bedarfsgerecht und ohne Verschwendung vergeben werden kann.</p>
+    <p><strong>Beispiel 3.9:</strong> Die Kundennetze 212.0.64.0/22, 212.0.68.0/22 und 212.0.72.0/22 stimmen in den ersten 20 Bit überein, sodass sie im Internet-Router mit einem einzigen Eintrag 212.0.64.0/20 erreichbar sind.</p>
+
+    <h4>IPv6-Subnetze</h4>
+    <p>Eine IPv6-Adresse besteht aus 64 Bit Netzpräfix und 64 Bit Interface Identifier – eine Subnetzmaske entfällt. Vom ISP wird meist ein Global Routing Prefix von /48 oder /56 vergeben, sodass 16 bzw. 8 Bit für eigene Subnetze zur Verfügung stehen. Das Vorgehen entspricht VLSM bei IPv4, nur werden die Bits aus dem Subnetzteil (64 − n) statt aus dem Hostteil entnommen.</p>
+
+    <p><strong>Beispiel 3.11:</strong> Präfix 2a00:1234:5678:1200::/56, 8 Subnetze gewünscht ⇒ 2³ = 8 ⇒ 3 Bits ⇒ Präfixlänge /59:</p>
+    <div class="step">2a00:1234:5678:1200::/59   2a00:1234:5678:1220::/59   2a00:1234:5678:1240::/59   2a00:1234:5678:1260::/59
+2a00:1234:5678:1280::/59   2a00:1234:5678:12A0::/59   2a00:1234:5678:12C0::/59   2a00:1234:5678:12E0::/59</div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="VLAN">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4</p>
+      <h2>VLAN</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Grosse geswitchte Netze funktionieren technisch reibungslos, werden aber schnell unübersichtlich und unsicher. VLANs teilen ein physisches Netz logisch in mehrere Broadcast-Domänen – unabhängig von der Verkabelung und über mehrere Switches hinweg.</p>
+
+    <div class="box def">
+      <span class="lbl">VLAN (Def. 4.1)</span>
+      <p>Ein Virtual Local Area Network ist ein logisches Teilnetz innerhalb eines gesamten physischen Netzes. Es kann sich über mehrere Switches hinweg ausdehnen. Jedes VLAN bildet eine <strong>eigene Broadcast-Domäne</strong>; Kommunikation zwischen VLANs ist nur über einen <strong>Router</strong> möglich (Inter-VLAN-Routing).</p>
+    </div>
+
+    <p>Vorteile: logische statt physische Strukturierung · erhöhte Sicherheit (Hosts bleiben „unter sich", kein Ausspähen fremder MAC-Adressen) · grössere Flexibilität (Umzüge/Projektwechsel ohne Neuverkabelung) · bessere Performance durch getrennte Broadcast-Domänen. Voraussetzung sind Managed Switches mit VLAN-Funktion. Das Standard-VLAN jedes Switches ist VLAN1 („Management-VLAN"); ihm sind zunächst alle Ports zugeordnet.</p>
+
+    <h4>VLAN-Typen</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Typ</th><th>Zuordnung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Port-basiert</strong> (statisch)</td><td>feste Zuordnung Switchport → VLAN, durch den Administrator festgelegt</td></tr>
+        <tr><td><strong>dynamisch</strong></td><td>Zuordnung nach MAC-/IP-Adresse aus einer Managementdatenbank; entlastet den Administrator, gilt aber als sicherheitskritisch</td></tr>
+        <tr><td><strong>nach IEEE 802.1Q</strong></td><td>VLAN-Information steckt im Frame selbst (Tag), nicht fest an den Switchport gebunden – flexibler, ein Port kann mehreren VLAN-IDs zugeordnet werden</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Trunk und Tagging nach 802.1Q</h4>
+    <div class="box def">
+      <span class="lbl">Trunk (Def. 4.2)</span>
+      <p>In einer geswitchten VLAN-Umgebung ist ein Trunk eine Punkt-zu-Punkt-Leitung, die Daten mehrerer VLANs überträgt. Ein Trunkport pro Switch genügt für die gesamte Inter-Switch-Kommunikation, statt eines dedizierten physischen Links je VLAN.</p>
+    </div>
+    <p>IEEE 802.1Q erweitert das Ethernet-Frame um 4 Byte: 2 Byte TPID (feste Kennung 0x8100), 3 Bit Priorität, 1 Bit CFI und <strong>12 Bit VLAN-ID</strong> – damit sind maximal 4094 nutzbare VLANs möglich (IDs 0 und 4095 sind reserviert). Der letzte Switch vor dem Zielhost entfernt den Tag wieder, falls dessen Netzkarte kein Tagging beherrscht.</p>
+
+    <h4>Inter-VLAN-Routing</h4>
+    <p>Switches leiten Verkehr grundsätzlich <em>nicht</em> zwischen VLANs weiter – dafür ist immer ein Router oder Layer-3-Switch nötig. Statt eines eigenen physischen Router-Interfaces je VLAN wird meist ein Trunk zum Router genutzt und dessen Interface logisch in mehrere Sub-Interfaces unterteilt: <strong>Router-on-a-Stick</strong>.</p>
+
+    <div class="box warn">
+      <span class="lbl">Angriffe auf VLANs: VLAN-Hopping</span>
+      <p><strong>Switch-Spoofing:</strong> Der Angreifer gibt sich als Switch aus und versieht eigene Pakete mit einem gültigen 802.1Q-Tag des Zielnetzes (nur möglich, wenn der Switchport z. B. im Autotrunking-Modus steht). <strong>Double-Tagging:</strong> Der Angreifer verpackt zwei VLAN-Tags; der erste Switch entfernt seinen eigenen (äusseren) Tag, der zweite Tag bringt das Paket beim nächsten Switch ins fremde VLAN – funktioniert nur, wenn das Opfer mindestens einen Switch entfernt vom Angreifer angeschlossen ist.</p>
+    </div>
+
+    <h4>Abgrenzung: VPN</h4>
+    <div class="box def">
+      <span class="lbl">VPN (Def. 4.3)</span>
+      <p>Ein virtuelles privates Netz wird als privates logisches Teilnetz innerhalb eines öffentlichen Netzes gebildet.</p>
+    </div>
+    <p>Im Unterschied zum lokal begrenzten VLAN spannt ein VPN einen verschlüsselten, authentifizierten Tunnel über ein öffentliches Netz (meist das Internet) auf – etwa zur Anbindung von Filialen, Homeoffice-Mitarbeitenden oder zur Fernsteuerung eines Smart Homes über zwei gekoppelte Heimrouter.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 5 ══════════════ -->
+<section class="sec" id="k5" data-num="5" data-title="Planung und Design von Netzen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">5</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 5</p>
+      <h2>Planung und Design von Netzen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Netzplanung verbindet alle bisherigen Kapitel zu einem praktischen Vorgehen: Anforderungen ermitteln, strukturiert verkabeln, Komponenten und Adressen planen – und Sicherheit von Anfang an mitdenken, wie es der BSI-Baustein NET.1.1 fordert. Dieses Kapitel liefert die Grundlage für EA-Aufgabe 3.</p>
+
+    <h4>Anforderungen</h4>
+    <p>Klassische Anforderungen: Leistungsfähigkeit, Skalierbarkeit, Robustheit, Fehlertoleranz, Redundanz, Sicherheit, Überwachbarkeit, einfache Administration. Hinzu kommen aktuell Dienstintegration/<strong>Netz-Konvergenz</strong> (Daten, Sprache, Video in einem Netz), Mobilität, Virtualisierung und Dienstgüte. Konvergente Netze sollten für die <em>Spitzenlast</em>, nicht für die Durchschnittslast ausgelegt werden.</p>
+
+    <div class="box warn">
+      <span class="lbl">Investitionshorizont</span>
+      <p>Ein Netz wird in der Regel für mindestens <strong>10 Jahre</strong> installiert, Endgeräte dagegen oft schon nach 4 Jahren abgeschrieben – deshalb immer mit Kapazitätsreserven und zukunftssicher planen.</p>
+    </div>
+
+    <h4>Vorgehensweise</h4>
+    <p>1. Bedarfsermittlung / IST-Zustand erfassen · 2. Auswahl geeigneter Übertragungstechnologien · 3. Projektierung der Gebäudeverkabelung und Positionierung der WLAN-Access-Points · 4. Auswahl aktiver Komponenten · 5. Planung der Adressen · 6. Einhaltung von Kosten- und Zeitrahmen. Die Orientierung am hierarchischen Internetworking-Modell (Core/Distribution/Access, Kapitel 1) korrespondiert gut mit der strukturierten Verkabelung.</p>
+
+    <h4>Strukturierte Verkabelung</h4>
+    <p>Standardisiert nach <strong>DIN EN 50173</strong> (orientiert an ISO/IEC 11801) – auch universelle Gebäudeverkabelung (UGV) genannt: ein anwendungsneutraler, zukunftssicherer Aufbauplan, der dieselbe Verkabelung für Daten und Telefonie erlaubt. Die Hierarchie gliedert sich in drei Bereiche mit vorgegebenen maximalen Kabellängen:</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Bereich</th><th>Verbindet</th><th>Medium</th><th>Max. Länge</th></tr></thead>
+      <tbody>
+        <tr><td>Primärbereich (Geländeverkabelung)</td><td>Gebäude untereinander</td><td>Glasfaser</td><td>1500 m</td></tr>
+        <tr><td>Sekundärbereich (Steigbereich)</td><td>Etagen im Gebäude</td><td>Glasfaser oder Kupfer</td><td>500 m</td></tr>
+        <tr><td>Tertiärbereich (Etagenverkabelung)</td><td>Etagenverteiler → Datendose</td><td>Twisted-Pair oder Glasfaser</td><td>90 m + 2×5 m Patchkabel = 100 m</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Bottom-Up-Planung: Bedarf, Patchfeld, aktive Komponenten</h4>
+    <p>Ausgehend vom Tertiärbereich: Bedarf je Arbeitsplatz (Anzahl Anschlüsse, Kabeltyp) ermitteln – die Anzahl der Patchfelder im Etagenverteiler richtet sich danach. Im Horizontalbereich ist Kupferverkabelung ab Cat.6 üblich; Glasfaser bietet höhere Bandbreite, grössere Reichweite, EMV-Unempfindlichkeit und mehr Abhörsicherheit. Bei aktiven Komponenten empfiehlt sich die Fokussierung auf einen Hersteller (einfacheres Management), redundante Auslegung, eine unterbrechungsfreie Stromversorgung und ausreichende Klimatisierung der Verteilerräume.</p>
+
+    <h4>WLAN-Planung</h4>
+    <p>Professionelle Planung beginnt mit einer Simulation anhand des Gebäudegrundrisses, gefolgt von praktischen Tests; alternativ eine Ortsbegehung mit Mess-Access-Point (<strong>WLAN-Site-Survey</strong>), deren Ergebnis eine <strong>WLAN-Heatmap</strong> ist. Aktueller Standard: 802.11ax (Wi-Fi 6).</p>
+
+    <h4>Planung eines TCP/IP-Netzes</h4>
+    <p>Ein IPv4-Netz wird durch Netzadresse und Netzmaske definiert; bei IPv6 erhält der Kunde vom ISP ein Präfix. Zu berücksichtigende Faktoren: IPv4/IPv6/beides, Anzahl Hosts, Systeme mit mehreren IP-Adressen, DHCP-Einsatz, private Adressen. IPv4-Subnetze mit Suffix /24 lassen sich direkt in IPv6-Subnetz-IDs übernehmen, z. B. 192.0.6.0/24 → 2001:abcd:1234:6::/64. Als Namens-/Verzeichnisdienst dienen NIS, DNS oder LDAP. Router sollten nur eingesetzt werden, wenn Last, Sicherheit oder Topologie es erfordern – nicht „um des Routings willen".</p>
+
+    <h4>Netzdesign nach IT-Grundschutz des BSI (Baustein NET.1.1)</h4>
+    <div class="box def">
+      <span class="lbl">Sicherheitszonen (Basisanforderung)</span>
+      <p>Das Gesamtnetz muss mindestens <strong>physisch</strong> in die Sicherheitszonen <strong>internes Netz</strong>, <strong>demilitarisierte Zone (DMZ)</strong> und <strong>Aussenanbindung</strong> getrennt werden. Weitere Basisanforderungen: Client-Server-Segmentierung, Endgeräte-Segmentierung im internen Netz, Sicherheitsrichtlinie und Anforderungsspezifikation für das Netz, Dokumentation, Grundabsicherung des Internetzugangs.</p>
+    </div>
+    <p>Der konkrete Baustein <strong>NET.1.1.A13 „Netzplanung"</strong> verlangt u. a. die Berücksichtigung von: Anbindung an Internet/Standortnetz/Extranet · Topologie des Gesamtnetzes sowie der Zonen und Segmente · Dimensionierung und Redundanz der Komponenten und Übertragungsstrecken · genutzte Protokolle inkl. IPv4-/IPv6-Subnetze je Endgerätegruppe · Administration und Überwachung (NET.1.2). Es wird nach Basisanforderungen, Standardanforderungen und Anforderungen bei erhöhtem Schutzbedarf unterschieden; die Netzplanung ist regelmässig zu überprüfen.</p>
+
+    <h4>Fallbeispiele</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Szenario</th><th>Typische Lösung</th></tr></thead>
+      <tbody>
+        <tr><td>Privater Bereich</td><td>Heimrouter (Modem + Switch + AP + NAT + Firewall + DHCP + DNS); Drucker statisch, übrige Hosts per DHCP; WLAN-Verschlüsselung, Default-Passwörter ändern</td></tr>
+        <tr><td>Kleinfirma / Büro</td><td>strukturierte Verkabelung, je Etage ein Switch, VLANs zur Segmentierung, Sicherheits-Gateway mit DMZ für öffentlich erreichbare Server</td></tr>
+        <tr><td>Mittlere / grosse Firma</td><td>vollständige 3-Bereichs-Verkabelung, BSI-Standardanforderungen oder erhöhter Schutzbedarf, Planung durch Spezialisten</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 6 ══════════════ -->
+<section class="sec" id="k6" data-num="6" data-title="Netzarchitektur und Zugangsnetze">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">6</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 6</p>
+      <h2>Netzarchitektur und Zugangsnetze</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Der Blick weitet sich vom LAN zum WAN: Aus Sicht eines Netzbetreibers gliedert sich die Infrastruktur in Kernnetz, Zugangsnetz und Kundennetz. Den grössten Prüfungsfokus verdient die „letzte Meile" – die Zugangstechniken zum Endkunden.</p>
+
+    <p>Analog zum hierarchischen Internetworking-Modell (Core/Distribution/Access, Kapitel 1) gliedert sich die Betreibersicht in drei Schichten:</p>
+    <div class="tw"><table>
+      <thead><tr><th>Schicht</th><th>Verantwortung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Kernnetz</strong> (Core Network)</td><td>Betreiber; breitbandige Glasfaservernetzung, Flächendeckung, grosse Entfernungen</td></tr>
+        <tr><td><strong>Zugangsnetz</strong> (Access Network)</td><td>Betreiber; Übergang zu den Kunden – die „letzte Meile"</td></tr>
+        <tr><td><strong>Kundennetz</strong> (Customer Network)</td><td>Kunde; eigenverantwortlich betrieben (Kapitel 5)</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Früher hatte jede Kommunikationsform ihr eigenes Kernnetz (IP, ATM, SDH). Die heutige IP-basierte Konvergenzplattform heisst <strong>Next Generation Network (NGN)</strong> und überträgt Daten, Sprache und Video einheitlich über IP – dafür sind zusätzliches Qualitäts- und Kapazitätsmanagement (QoS) nötig, da IP selbst keine garantierte Verbindungsqualität bietet.</p>
+
+    <div class="box warn">
+      <span class="lbl">Konvergenz-Risiko</span>
+      <p>Bei einem rein IP-basierten Anschluss (z. B. All-IP-Telefonie) gibt es keinen zweiten, unabhängigen Kommunikationsweg mehr: Fällt der Internetzugang aus, fällt auch die Telefonie aus.</p>
+    </div>
+
+    <h4>Zugangsnetze – die „letzte Meile"</h4>
+    <p>Nach ITU-T G.982 besteht ein Zugangsnetz aus dem optischen Zugangsnetz (Anbindung ans Kernnetz) und der Anbindung an den Endkunden (meist über Kupferkabel). Man unterscheidet drei Technikgruppen:</p>
+    <div class="tw"><table>
+      <thead><tr><th>Gruppe</th><th>Beispiele</th></tr></thead>
+      <tbody>
+        <tr><td>drahtgebunden</td><td>analoger Telefonanschluss, ISDN, xDSL, Powerline, Kabelmodem</td></tr>
+        <tr><td>optisch</td><td>Passive Optical Network (PON), 10GPON</td></tr>
+        <tr><td>drahtlos</td><td>Richtfunk, WiMAX, LTE, Wireless Local Loop, 5G</td></tr>
+      </tbody>
+    </table></div>
+    <p>Der Zugang ist meist <strong>unsymmetrisch</strong> (Downstream &gt; Upstream). Nach Zielgruppe unterscheidet man Heimzugang, Firmenzugang und drahtlosen Zugang.</p>
+
+    <h4>Heimzugang: xDSL und FTTH</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Technik</th><th>Downloadrate</th><th>Anmerkung</th></tr></thead>
+      <tbody>
+        <tr><td>ADSL</td><td>bis 16 Mbit/s</td><td>reine Kupferleitung</td></tr>
+        <tr><td>VDSL2 + Vectoring</td><td>bis 100 Mbit/s</td><td>kompensiert Übersprechen; DSLAM per Glasfaser angebunden (Fiber to the Curb)</td></tr>
+        <tr><td>Supervectoring (ITU-T G.993.2)</td><td>bis 250 Mbit/s</td><td>Weiterentwicklung von Vectoring</td></tr>
+        <tr><td>Line-Bonding (ITU-T G.998.2)</td><td>bis 500 Mbit/s</td><td>Bündelung mehrerer Leitungen</td></tr>
+        <tr><td>G.Fast</td><td>bis 1 Gbit/s</td><td>nur bei kurzen Leitungslängen (≤ 250 m)</td></tr>
+        <tr><td>FTTH / FTTB</td><td>bis 1 Gbit/s</td><td>Glasfaser bis zur Wohnung/zum Gebäude</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Kabelnetz (DOCSIS)</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Standard</th><th>Download</th><th>Upload</th></tr></thead>
+      <tbody>
+        <tr><td>DOCSIS 3.0</td><td>bis 1 Gbit/s</td><td>–</td></tr>
+        <tr><td>DOCSIS 3.1</td><td>bis 10 Gbit/s</td><td>bis 1 Gbit/s</td></tr>
+        <tr><td>DOCSIS 4.0</td><td>bis 10 Gbit/s</td><td>bis 6 Gbit/s</td></tr>
+      </tbody>
+    </table></div>
+    <p>Das ursprünglich reine TV-Verteilnetz aus Koaxialkabel wurde um einen Rückkanal erweitert und mit Glasfaser ergänzt, um auch Internet und Telefonie anzubieten.</p>
+
+    <h4>Drahtloser Zugang</h4>
+    <p><strong>LTE</strong> (4G) dient in unversorgten Gebieten als DSL-Ersatz und für mobile Nutzung; praktisch werden bis zu 500 Mbit/s erreicht (durch Frequenzbündelung theoretisch bis 1 Gbit/s). LTE Advanced wird als 4.5G eingeordnet. <strong>5G</strong> verspricht bis zu 10 Gbit/s, sehr kurze Latenzzeiten und geringen Energieverbrauch. Wichtig: Die aktiven Nutzer einer Funkzelle teilen sich stets das Medium.</p>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang I · ITI25-XX02-K06 · 100 Punkte</p>
+      <h2>Einsendeaufgabe Typ A</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="box warn">
+      <span class="lbl">Hinweis zur Nutzung</span>
+      <p>Die Lösungen unten sind meine eigenen Rechen- und Argumentationswege zum Abgleich, nicht der offizielle Lösungsschlüssel. Formuliere für die Abgabe in eigenen Worten und rechne die Zahlen selbst nach – kleine Rundungsabweichungen sind normal.</p>
+    </div>
+
+    <!-- Aufgabe 1 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">1</span><span class="task-t">Segmentierung, Domänen und VLANs</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <ol type="a">
+          <li>Welche Vorteile bieten Segmentierung und hierarchische Strukturierung von Netzen?</li>
+          <li>Stellen Sie dar, mit welchen Komponenten Segmentierungen auf den unterschiedlichen Schichten vorgenommen werden können und welchen Einfluss die Segmentierung auf Kollisions- und Broadcast-Domänen hat.</li>
+          <li>Ordnen Sie VLANs in den Kontext der Segmentierung ein.</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Vorteile von Segmentierung und hierarchischer Strukturierung: übersichtliche Strukturierung des Netzes; Beschränkung von Kollisions- und Broadcast-Domänen; bessere Bandbreitenauslastung; Fehlerauswirkungen bleiben meist lokal begrenzt; erhöhte Sicherheit; sowie – speziell durch die hierarchische Gliederung in Core-/Distribution-/Access-Layer – bessere Skalierbarkeit, Redundanz und Administrierbarkeit.</p>
+        <p><strong>b)</strong> Die Wirkung auf Kollisions- und Broadcast-Domänen hängt strikt von der Schicht der eingesetzten Komponente ab:</p>
+        <div class="tw"><table>
+          <thead><tr><th>Schicht</th><th>Komponente</th><th>Kollisionsdomäne</th><th>Broadcast-Domäne</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Repeater / Hub</td><td>trennt nicht – eine gemeinsame Domäne</td><td>trennt nicht – eine gemeinsame Domäne</td></tr>
+            <tr><td>2</td><td>Bridge / Switch</td><td>trennt – je Segment/Port eine eigene</td><td>trennt nicht – eine gemeinsame Domäne</td></tr>
+            <tr><td>3</td><td>Router / Layer-3-Switch</td><td>trennt – je Segment eigene</td><td>trennt – je Segment eigene</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>c)</strong> VLANs realisieren eine <em>logische</em> Segmentierung auf Schicht 2, ohne dass eine physische Neuverkabelung nötig ist: Jedes VLAN bildet eine eigene Broadcast-Domäne, auch über mehrere Switches hinweg (Tagging nach 802.1Q). Damit erreichen VLANs auf logischer Ebene dieselbe Trennung von Broadcast-Domänen wie sonst nur ein Router – Kommunikation zwischen zwei VLANs bleibt aber weiterhin nur über einen Router möglich (Inter-VLAN-Routing).</p>
+        <div class="res">a) übersichtlich, weniger Kollisionen/Broadcasts, bessere Bandbreite, lokale Fehler, mehr Sicherheit, skalierbar · b) Schicht 1 trennt nichts, Schicht 2 nur Kollisionsdomänen, Schicht 3 beides · c) VLAN = logische Schicht-2-Segmentierung, je VLAN eine Broadcast-Domäne, Inter-VLAN nur per Router</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 2 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">2</span><span class="task-t">Subnetzplanung Hochschulstandort (VLSM)</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q">
+        <p>In einer Hochschule wird intern mit privaten Adressen gearbeitet. Für einen Standort wird die Netzadresse <code>172.24.0.0/16</code> vorgesehen. Für die am Standort angesiedelten Fakultäten und Verwaltungseinheiten sollen Subnetze geplant werden. Am Standort befinden sich 2 grössere Fakultäten A und B, die jeweils 1000 Hostadressen benötigen, und 2 kleinere Fakultäten C und D, die jeweils 300 Hostadressen benötigen. Ausserdem sollen 2 Verwaltungseinheiten X und Y mit jeweils 60 Hostadressen ausgestattet sein.</p>
+        <ol type="a">
+          <li>Entwerfen Sie einen Plan für die Subnetze und geben Sie jeweils die Subnetzadresse/Maske, die Adresse des ersten Hosts, die Adresse des letzten Hosts und die Broadcast-Adresse an. Geben Sie ausserdem in Ihrem Subnetzplan die Anzahl der Hosts für jedes Subnetz an.</li>
+          <li>Welche Subnetzmaske müsste genutzt werden, wenn das Netz in 6 gleich grosse Subnetze aufgeteilt werden sollte?</li>
+          <li>Wie viele Hosts wären dann pro Subnetz adressierbar?</li>
+        </ol>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> VLSM-Plan – grösster Bedarf zuerst zuteilen: 1000 Hosts benötigen 10 Hostbits (2¹⁰−2 = 1022 ≥ 1000) ⇒ /22; 300 Hosts benötigen 9 Hostbits (2⁹−2 = 510 ≥ 300) ⇒ /23; 60 Hosts benötigen 6 Hostbits (2⁶−2 = 62 ≥ 60) ⇒ /26.</p>
+        <div class="tw"><table class="mono">
+          <thead><tr><th>Bereich</th><th>Bedarf</th><th>Subnetz/Maske</th><th>1. Host</th><th>letzter Host</th><th>Broadcast</th><th>Hosts</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>1000</td><td>172.24.0.0/22 (255.255.252.0)</td><td>172.24.0.1</td><td>172.24.3.254</td><td>172.24.3.255</td><td>1022</td></tr>
+            <tr><td>B</td><td>1000</td><td>172.24.4.0/22</td><td>172.24.4.1</td><td>172.24.7.254</td><td>172.24.7.255</td><td>1022</td></tr>
+            <tr><td>C</td><td>300</td><td>172.24.8.0/23 (255.255.254.0)</td><td>172.24.8.1</td><td>172.24.9.254</td><td>172.24.9.255</td><td>510</td></tr>
+            <tr><td>D</td><td>300</td><td>172.24.10.0/23</td><td>172.24.10.1</td><td>172.24.11.254</td><td>172.24.11.255</td><td>510</td></tr>
+            <tr><td>X</td><td>60</td><td>172.24.12.0/26 (255.255.255.192)</td><td>172.24.12.1</td><td>172.24.12.62</td><td>172.24.12.63</td><td>62</td></tr>
+            <tr><td>Y</td><td>60</td><td>172.24.12.64/26</td><td>172.24.12.65</td><td>172.24.12.126</td><td>172.24.12.127</td><td>62</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>b)</strong> Für 6 gleich grosse Subnetze werden zusätzliche Netzbits gebraucht, bei denen 2ⁿ ≥ 6 gilt: 2² = 4 reicht nicht, 2³ = 8 reicht ⇒ 3 zusätzliche Netzbits:</p>
+        <div class="step">/16 + 3 Bit = /19  →  Maske 255.255.224.0</div>
+        <p><strong>c)</strong> Bei /19 verbleiben 32 − 19 = 13 Hostbits:</p>
+        <div class="step">2¹³ − 2 = 8190 Hosts pro Subnetz</div>
+        <div class="res">a) A/B je /22 (1022 Hosts), C/D je /23 (510 Hosts), X/Y je /26 (62 Hosts) · b) /19 = 255.255.224.0 · c) 8190 Hosts/Subnetz</div>
+      </div></details>
+    </div>
+
+    <!-- Aufgabe 3 -->
+    <div class="task">
+      <div class="task-h"><span class="task-n">3</span><span class="task-t">Netzdesign Firma InnoNET</span><span class="task-p">60 Pkt.</span></div>
+      <div class="task-q">
+        <p>Die Firma InnoNET entwickelt innovative Hard- und Softwarelösungen. Aufgrund der Expansion des Unternehmens steht ein Umzug in ein neues Gebäude bevor. In Etage A sind Unternehmensleitung, Buchhaltung, Marketing und Personalverwaltung unterzubringen. In Etage B sollen Hardwareentwicklung, Softwareentwicklung, Produktion und Lager untergebracht werden. Der neue Standort soll mit einem Internetanschluss versorgt werden, und die Wunschdomäne lautet <code>innonet.de</code>. Die Anzahl der anzuschliessenden Hosts wird auch zukünftig 120 nicht überschreiten.</p>
+        <p>Entwickeln Sie ein geeignetes Netzdesign und beschreiben Sie Ihre Vorgehensweise. Gehen Sie dabei insbesondere auf die folgenden Punkte ein:</p>
+        <ol type="1">
+          <li>Bedarfsermittlung anhand der Aufgabenstellung</li>
+          <li>Auswahl geeigneter Übertragungstechnologien</li>
+          <li>Projektierung der Gebäudeverkabelung und der Positionierung von WLAN-Access-Points</li>
+          <li>Auswahl aktiver Komponenten</li>
+          <li>Planung der Adressen und Namen</li>
+        </ol>
+        <p>Bei der Planung sind folgende Punkte zu berücksichtigen:</p>
+        <ul>
+          <li>Es ist von IPv4-Adressen auszugehen.</li>
+          <li>Alle Mitarbeiter sollen auf das Internet zugreifen können und per E-Mail kommunizieren können.</li>
+          <li>Die Marketingabteilung betreibt einen Webserver, um Kunden Informationen zur Verfügung zu stellen.</li>
+          <li>Alle Abteilungen sind auf einen stabilen Netzbetrieb angewiesen.</li>
+          <li>Die Hardwareabteilung ist experimentierfreudig mit diversen Netzkomponenten, sodass noch ein separates Netz für Tests existiert.</li>
+          <li>Im Lager sollen kabellose Barcodescanner zum Einsatz kommen.</li>
+          <li>Die Entwicklungsabteilungen stellen Treiber und Patches für Kunden per FTP zur Verfügung.</li>
+          <li>Alle Hosts sollen regelmässig auf einem Backup-Server gesichert werden. Backup-Server und E-Mail-Server befinden sich in Etage B.</li>
+        </ul>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Es gibt mehrere gültige Designs – die folgende Modelllösung orientiert sich an der fünfstufigen Vorgehensweise aus Kapitel 5 und arbeitet die acht Rahmenbedingungen der Aufgabenstellung Punkt für Punkt ein.</p>
+
+        <div class="box def">
+          <span class="lbl">1. Bedarfsermittlung</span>
+          <p>Maximal 120 Hosts (zukunftssicher planen), verteilt auf 2 Etagen: Etage A – Leitung, Buchhaltung, Marketing, Personal; Etage B – Hardwareentwicklung, Softwareentwicklung, Produktion, Lager. Erforderlich: Internetzugang und E-Mail für alle Mitarbeiter, ein extern erreichbarer Webserver der Marketingabteilung (⇒ DMZ), ein separates, isoliertes Testnetz für die Hardwareabteilung, kabellose Barcodescanner im Lager (⇒ WLAN), ein FTP-Server der Entwicklung für Kunden, ein Backup-Server und ein E-Mail-Server in Etage B sowie ein insgesamt stabiler, also redundant ausgelegter Netzbetrieb.</p>
+        </div>
+
+        <div class="box">
+          <span class="lbl">2. Übertragungstechnologien</span>
+          <p>Strukturierte Verkabelung nach DIN EN 50173 / ISO IEC 11801: Tertiärverkabelung in Kupfer ab Cat.6/6A (bis 10 Gbit/s) zu den Arbeitsplätzen, im Vertikal-/Steigbereich zwischen den Etagen Glasfaser. Ergänzend WLAN nach 802.11 (5 GHz) für die Barcodescanner im Lager.</p>
+        </div>
+
+        <div class="box">
+          <span class="lbl">3. Gebäudeverkabelung und WLAN-Access-Points</span>
+          <p>Je Etage ein Etagenverteiler mit Patchfeld und Datendosen an den Arbeitsplätzen, verbunden über einen Gebäudeverteiler. Im Lager mindestens ein zentral verwalteter WLAN-Access-Point, dessen Position/Anzahl sich an der Ausleuchtung des Lagerbereichs orientiert (WLAN-Site-Survey).</p>
+        </div>
+
+        <div class="box">
+          <span class="lbl">4. Aktive Komponenten</span>
+          <p>Ein Router mit NAT und Firewall als Internet-Gateway; ein Layer-3-Switch als Core für das Inter-VLAN-Routing; managed Etagen-Switches mit 802.1Q-Unterstützung; eine DMZ für den Webserver; ein WLAN-Controller mit Access Point(s) für das Lager; die Server (E-Mail- und Backup-Server in Etage B, Webserver in der DMZ). Je Abteilung ein eigenes VLAN, das Testnetz der Hardwareabteilung als zusätzliches, isoliertes VLAN.</p>
+        </div>
+
+        <div class="box">
+          <span class="lbl">5. Adressen und Namen</span>
+          <p>Private IPv4-Adressen (z. B. aus 10.0.0.0/8 oder 192.168.0.0/16), pro VLAN/Abteilung ein eigenes Subnetz. DHCP für die Clients, statische Adressen für Server und Drucker. Ein interner DNS-Server, Wunschdomäne <code>innonet.de</code>; NAT übersetzt nach aussen. DMZ und Testnetz werden durch Firewall-Regeln strikt vom internen Netz getrennt.</p>
+        </div>
+
+        <div class="res">Es gibt mehrere gültige Designs; entscheidend sind Segmentierung (VLANs), eine DMZ für den Webserver, die Isolierung des Testnetzes und eine saubere Adress-/Namensplanung.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck vor der Abgabe">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kurzkontrolle</p>
+      <h2>Schnellcheck vor der Abgabe</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="tw"><table>
+      <thead><tr><th>Aufgabe</th><th>Prüfe</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Schicht 1 (Repeater/Hub) trennt weder Kollisions- noch Broadcast-Domänen; Schicht 2 (Bridge/Switch) trennt nur Kollisionsdomänen; Schicht 3 (Router) trennt beides; VLAN = logische Schicht-2-Segmentierung mit eigener Broadcast-Domäne je VLAN, Inter-VLAN nur per Router</td></tr>
+        <tr><td><strong>2</strong></td><td>VLSM: grössten Bedarf zuerst zuteilen; Hostbits so wählen, dass 2ʰ−2 ≥ Bedarf; für n gleich grosse Subnetze so viele Netzbits addieren, dass 2ⁿ ≥ n; Präfixlänge ⇄ Maske sauber umrechnen (/19 = 255.255.224.0)</td></tr>
+        <tr><td><strong>3</strong></td><td>alle 5 Gliederungspunkte abarbeiten (Bedarf, Übertragungstechnologie, Verkabelung/WLAN, aktive Komponenten, Adressen/Namen); DMZ für den Webserver, eigenes VLAN je Abteilung, isoliertes Testnetz, NAT und interner DNS nicht vergessen</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ ABKÜRZUNGEN ══════════════ -->
+<section class="sec" id="abk" data-num="C" data-title="Abkürzungsverzeichnis">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">C</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Anhang C</p>
+      <h2>Abkürzungsverzeichnis</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="abbr-grid"><dl>
+      <div class="abbr-row"><dt>ALG</dt><dd>Application Level Gateway</dd></div>
+      <div class="abbr-row"><dt>AP</dt><dd>Access Point</dd></div>
+      <div class="abbr-row"><dt>AS</dt><dd>autonomes System</dd></div>
+      <div class="abbr-row"><dt>ATM</dt><dd>Asynchronous Transfer Mode</dd></div>
+      <div class="abbr-row"><dt>BID</dt><dd>Bridge ID</dd></div>
+      <div class="abbr-row"><dt>BPDU</dt><dd>Bridge Protocol Data Unit</dd></div>
+      <div class="abbr-row"><dt>BSI</dt><dd>Bundesamt für Sicherheit in der Informationstechnik</dd></div>
+      <div class="abbr-row"><dt>CAM</dt><dd>Content Addressable Memory Table</dd></div>
+      <div class="abbr-row"><dt>CIDR</dt><dd>Classless Interdomain Routing</dd></div>
+      <div class="abbr-row"><dt>CIX</dt><dd>Commercial Internet Exchange Point</dd></div>
+      <div class="abbr-row"><dt>CPU</dt><dd>Central Processing Unit</dd></div>
+      <div class="abbr-row"><dt>DFN</dt><dd>Deutsches Forschungsnetz</dd></div>
+      <div class="abbr-row"><dt>DMZ</dt><dd>demilitarisierte Zone</dd></div>
+      <div class="abbr-row"><dt>DNS</dt><dd>Domain Name System</dd></div>
+      <div class="abbr-row"><dt>DOCSIS</dt><dd>Data Over Cable Service Interface Specification</dd></div>
+      <div class="abbr-row"><dt>DSL</dt><dd>Digital Subscriber Line</dd></div>
+      <div class="abbr-row"><dt>EIA</dt><dd>Electronic Industries Alliance</dd></div>
+      <div class="abbr-row"><dt>FTP</dt><dd>File Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>FTTB</dt><dd>Fiber to the Building</dd></div>
+      <div class="abbr-row"><dt>FTTC</dt><dd>Fiber to the Curb</dd></div>
+      <div class="abbr-row"><dt>FTTD</dt><dd>Fiber to the Desk</dd></div>
+      <div class="abbr-row"><dt>HTTP</dt><dd>Hypertext Transfer Protocol</dd></div>
+      <div class="abbr-row"><dt>ID</dt><dd>Identifier</dd></div>
+      <div class="abbr-row"><dt>IP</dt><dd>Internet Protocol</dd></div>
+      <div class="abbr-row"><dt>ISDN</dt><dd>Integrated Service Digital Network</dd></div>
+      <div class="abbr-row"><dt>ISP</dt><dd>Internet Service Provider</dd></div>
+      <div class="abbr-row"><dt>IXP</dt><dd>Internet Exchange Point</dd></div>
+      <div class="abbr-row"><dt>KMU</dt><dd>Kleine und mittlere Unternehmen</dd></div>
+      <div class="abbr-row"><dt>LACP</dt><dd>Link Aggregation Control Protocol</dd></div>
+      <div class="abbr-row"><dt>LAG</dt><dd>Link Aggregation Group</dd></div>
+      <div class="abbr-row"><dt>LAN</dt><dd>Local Area Network</dd></div>
+      <div class="abbr-row"><dt>LDAP</dt><dd>Lightweight Directory Access Protocol</dd></div>
+      <div class="abbr-row"><dt>LLC</dt><dd>Logical Link Control</dd></div>
+      <div class="abbr-row"><dt>LTE</dt><dd>Long Term Evolution</dd></div>
+      <div class="abbr-row"><dt>MAC</dt><dd>Medium Access Control</dd></div>
+      <div class="abbr-row"><dt>Mpps</dt><dd>Millions of Packets per Second</dd></div>
+      <div class="abbr-row"><dt>MSTP</dt><dd>Multiple Spanning Tree Protocol</dd></div>
+      <div class="abbr-row"><dt>MVRP</dt><dd>Multiple VLAN Registration Protocol</dd></div>
+      <div class="abbr-row"><dt>NAS</dt><dd>Network Attached Storage</dd></div>
+      <div class="abbr-row"><dt>NAT</dt><dd>Network Address Translation</dd></div>
+      <div class="abbr-row"><dt>NIS</dt><dd>Network Information System</dd></div>
+      <div class="abbr-row"><dt>OSI</dt><dd>Open System Interconnection</dd></div>
+      <div class="abbr-row"><dt>PAgP</dt><dd>Port Aggregation Protocol</dd></div>
+      <div class="abbr-row"><dt>PON</dt><dd>passives optisches Netz</dd></div>
+      <div class="abbr-row"><dt>QoS</dt><dd>Quality of Service</dd></div>
+      <div class="abbr-row"><dt>QSFP</dt><dd>Quad Small Form Factor Pluggable</dd></div>
+      <div class="abbr-row"><dt>RFC</dt><dd>Request for Comments</dd></div>
+      <div class="abbr-row"><dt>RSTP</dt><dd>Rapid Spanning Tree Protocol</dd></div>
+      <div class="abbr-row"><dt>SAT</dt><dd>Source Address Table</dd></div>
+      <div class="abbr-row"><dt>SDH</dt><dd>Synchronous Digital Hierarchy</dd></div>
+      <div class="abbr-row"><dt>SFP</dt><dd>Small Form Factor Pluggable</dd></div>
+      <div class="abbr-row"><dt>STP</dt><dd>Spanning Tree Protocol</dd></div>
+      <div class="abbr-row"><dt>TCP</dt><dd>Transmission Control Protocol</dd></div>
+      <div class="abbr-row"><dt>TIA</dt><dd>Telecommunications Industry Association</dd></div>
+      <div class="abbr-row"><dt>UDP</dt><dd>User Datagram Protocol</dd></div>
+      <div class="abbr-row"><dt>UGV</dt><dd>universelle Gebäudeverkabelung</dd></div>
+      <div class="abbr-row"><dt>USB</dt><dd>Universal Serial Bus</dd></div>
+      <div class="abbr-row"><dt>UTM</dt><dd>Unified Threat Management</dd></div>
+      <div class="abbr-row"><dt>VDSL</dt><dd>Very High Speed DSL</dd></div>
+      <div class="abbr-row"><dt>VLAN</dt><dd>Virtual Local Area Network</dd></div>
+      <div class="abbr-row"><dt>VLSM</dt><dd>Variable Length Subnet Mask</dd></div>
+      <div class="abbr-row"><dt>VoIP</dt><dd>Voice over IP</dd></div>
+      <div class="abbr-row"><dt>VoWLAN</dt><dd>Voice over WLAN</dd></div>
+      <div class="abbr-row"><dt>VPN</dt><dd>Virtual Private Network</dd></div>
+    </dl></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft ITI25 · Internetworking und Netzdesign · Druck-Code 1123K06 · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "iti25:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll("#ea details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
