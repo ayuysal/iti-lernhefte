@@ -11,6 +11,6 @@
    (der Zugriff wird über Row Level Security in supabase/schema.sql geschützt).
    ========================================================================= */
 window.ITI_CONFIG = {
-  supabaseUrl: "",   // z. B. "https://xxxxxxxxxxxx.supabase.co"
-  supabaseKey: ""    // anon public key (eyJhbGciOi...)
+  supabaseUrl: "https://pbftfcdnvhkaynwmyfdh.supabase.co",
+  supabaseKey: "sb_publishable_6-TFhNN4dH_PAqjKua_Qzg_Vj2AqCVS"  // öffentlicher Client-Key (RLS schützt die Daten)
 };
