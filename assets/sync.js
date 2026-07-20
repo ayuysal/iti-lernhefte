@@ -141,7 +141,30 @@
         return sb.auth.signInWithOtp({
           email: email,
           options: { emailRedirectTo: location.href.split("#")[0] }
-        });
+        }).then(function (r) { if (r.error) throw r.error; return r; });
+      });
+    },
+    signInPassword: function (email, password) {
+      return sbReady.then(function () {
+        if (!sb) throw new Error("Supabase nicht konfiguriert");
+        return sb.auth.signInWithPassword({ email: email, password: password })
+          .then(function (r) { if (r.error) throw r.error; return r; });
+      });
+    },
+    signUpPassword: function (email, password) {
+      return sbReady.then(function () {
+        if (!sb) throw new Error("Supabase nicht konfiguriert");
+        return sb.auth.signUp({
+          email: email, password: password,
+          options: { emailRedirectTo: location.href.split("#")[0] }
+        }).then(function (r) { if (r.error) throw r.error; return r; });
+      });
+    },
+    setPassword: function (password) {
+      return sbReady.then(function () {
+        if (!sb) throw new Error("Supabase nicht konfiguriert");
+        return sb.auth.updateUser({ password: password })
+          .then(function (r) { if (r.error) throw r.error; return r; });
       });
     },
     signOut: function () {

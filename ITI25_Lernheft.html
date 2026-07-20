@@ -75,6 +75,8 @@ button{font-family:var(--font-ui);cursor:pointer}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .btn.icon{min-width:2.1rem;text-align:center}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.heftnav{display:flex;align-items:center;gap:.3rem}
 select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
 
 /* Fortschrittsschiene */
@@ -252,6 +254,11 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 <div class="topbar">
   <div class="topbar-in">
     <div class="brand">ITI25 <span>· 1123K06</span></div>
+    <nav class="heftnav">
+      <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+      <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
+      <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
+    </nav>
     <div class="topbar-spacer"></div>
     <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
     <div class="ctl">
@@ -1008,6 +1015,7 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
 <script src="assets/config.js"></script>
 <script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
 <script>
 (function(){
   "use strict";
@@ -1044,6 +1052,16 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   var jumpBtn = document.getElementById("jumpBtn");
   var themeBtn = document.getElementById("themeBtn");
   var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Heft-Navigation (vor / zurück) ---------- */
+  (function(){
+    var files = ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"];
+    var cur = location.pathname.split("/").pop();
+    var idx = files.indexOf(cur);
+    var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
+    if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
+    if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
+  })();
 
   /* ---------- Inhaltsverzeichnis aufbauen ---------- */
   secs.forEach(function(s){
