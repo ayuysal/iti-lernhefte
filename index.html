@@ -61,8 +61,12 @@ select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
 .sync .msg{color:var(--accent);font-weight:650}
 .sync .muted{color:var(--ink-faint)}
 
-/* Karten */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:1.6rem 0 3rem}
+/* Fach-Gruppen + Karten */
+#groups{margin-bottom:2rem}
+.grouphead{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin:2.2rem 0 .2rem;padding-bottom:.45rem;border-bottom:1px solid var(--rule)}
+.grouphead h2{font-size:1.18rem;font-weight:600;margin:0;letter-spacing:-.01em}
+.grouphead span{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:.9rem 0 1.4rem}
 .card{position:relative;display:flex;flex-direction:column;background:var(--paper-raised);border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.15rem 1.15rem;text-decoration:none;color:inherit;transition:.16s;overflow:hidden}
 .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
 .card .num{position:absolute;top:.4rem;right:.7rem;font-family:var(--font-mono);font-size:2.7rem;font-weight:800;color:var(--paper-sunk);line-height:1;z-index:0}
@@ -88,7 +92,7 @@ footer a{color:var(--accent)}
 
 <div class="topbar">
   <div class="topbar-in">
-    <div class="brand">ITI · Lernhefte <span>· WBH</span></div>
+    <div class="brand">WBH · Lernhefte <span>· ITI + TGI</span></div>
     <div class="spacer"></div>
     <span class="progress-txt" id="ptxt">0 / 0 Abschnitte</span>
     <div class="ctl">
@@ -110,10 +114,10 @@ footer a{color:var(--accent)}
 <div class="wrap">
   <div class="hero">
     <p class="eyebrow">Studienhefte · Wilhelm Büchner Hochschule</p>
-    <h1>ITI-Lernhefte</h1>
-    <p class="sub">Kompakte Lese-Zusammenfassungen mit Einsendeaufgaben und Lösungswegen für die sechs Studienhefte der Informationstechnologie (ITI21–ITI26). Fortschritt wird gespeichert – lokal und optional geräteübergreifend.</p>
+    <h1>WBH-Lernhefte</h1>
+    <p class="sub">Kompakte Lese-Zusammenfassungen mit Aufgaben und Lösungswegen für zwei Fächer: Informationstechnologie (ITI21–ITI26) und Theoretische Grundlagen der Informatik (GDI01, TGI01, TGI02, TGI06, TGI07). Fortschritt wird gespeichert – lokal und optional geräteübergreifend.</p>
     <div class="meta">
-      <span id="metaCount">6 Hefte</span>
+      <span id="metaCount">11 Hefte · 2 Fächer</span>
       <span id="metaPct">0 % gelesen</span>
     </div>
     <div class="bigbar"><i id="bigFill"></i></div>
@@ -121,10 +125,10 @@ footer a{color:var(--accent)}
 
   <!-- Cloud-Sync-Anmeldung: Button + Modal via assets/auth-ui.js (in der Topbar) -->
 
-  <div class="grid" id="grid"></div>
+  <div id="groups"></div>
 
   <footer>
-    ITI-Lernhefte · eigene Zusammenfassungen zu den WBH-Studienheften ITI21–ITI26 · Informationstechnologie.<br>
+    WBH-Lernhefte · eigene Zusammenfassungen zu den Studienheften der Informationstechnologie (ITI21–ITI26) und Theoretischen Grundlagen der Informatik (GDI01–TGI07).<br>
     Fortschritt lokal im Browser (localStorage) und – wenn eingerichtet – geräteübergreifend über Supabase gespeichert.
   </footer>
 </div>
@@ -136,14 +140,24 @@ footer a{color:var(--accent)}
 (function(){
   "use strict";
 
-  var HEFTE = [
-    {id:"iti21", num:"21", code:"1022K03", file:"ITI21_Lernheft.html", topic:"Computernetze",       title:"Grundlagen moderner Computernetze",           total:9},
-    {id:"iti22", num:"22", code:"0825K07", file:"ITI22_Lernheft.html", topic:"Informationstheorie",  title:"Informationstheorie &amp; Informationsübertragung", total:8},
-    {id:"iti23", num:"23", code:"1022K04", file:"ITI23_Lernheft.html", topic:"Bitübertragung",       title:"Bitübertragung &amp; Netzzugang",             total:9},
-    {id:"iti24", num:"24", code:"0124K08", file:"ITI24_Lernheft.html", topic:"TCP/IP",               title:"TCP/IP-Protokollfamilie",                     total:10},
-    {id:"iti25", num:"25", code:"1123K06", file:"ITI25_Lernheft.html", topic:"Internetworking",      title:"Internetworking &amp; Netzdesign",            total:9},
-    {id:"iti26", num:"26", code:"0723K05", file:"ITI26_Lernheft.html", topic:"Netzmanagement",       title:"Anwendungsdienste &amp; Netzmanagement",      total:7}
+  var GROUPS = [
+    { title:"Informationstechnologie", sub:"ITI21 – ITI26 · 6 Hefte", hefte:[
+      {id:"iti21", num:"21", label:"ITI21", code:"1022K03", file:"ITI21_Lernheft.html", topic:"Computernetze",      title:"Grundlagen moderner Computernetze",                total:9},
+      {id:"iti22", num:"22", label:"ITI22", code:"0825K07", file:"ITI22_Lernheft.html", topic:"Informationstheorie", title:"Informationstheorie &amp; Informationsübertragung", total:8},
+      {id:"iti23", num:"23", label:"ITI23", code:"1022K04", file:"ITI23_Lernheft.html", topic:"Bitübertragung",     title:"Bitübertragung &amp; Netzzugang",                  total:9},
+      {id:"iti24", num:"24", label:"ITI24", code:"0124K08", file:"ITI24_Lernheft.html", topic:"TCP/IP",             title:"TCP/IP-Protokollfamilie",                          total:10},
+      {id:"iti25", num:"25", label:"ITI25", code:"1123K06", file:"ITI25_Lernheft.html", topic:"Internetworking",    title:"Internetworking &amp; Netzdesign",                 total:9},
+      {id:"iti26", num:"26", label:"ITI26", code:"0723K05", file:"ITI26_Lernheft.html", topic:"Netzmanagement",     title:"Anwendungsdienste &amp; Netzmanagement",           total:7}
+    ]},
+    { title:"Theoretische Grundlagen der Informatik", sub:"GDI01 · TGI01 · TGI02 · TGI06 · TGI07 · 5 Hefte", hefte:[
+      {id:"gdi01", num:"01", label:"GDI01", code:"Lernleitfaden", file:"GDI01_Lernheft.html", topic:"Grundlagen",       title:"Einführung in die Informatik",                total:8},
+      {id:"tgi01", num:"01", label:"TGI01", code:"Lernleitfaden", file:"TGI01_Lernheft.html", topic:"Datenstrukturen",  title:"Datenstrukturen und Algorithmen",             total:8},
+      {id:"tgi02", num:"02", label:"TGI02", code:"Lernleitfaden", file:"TGI02_Lernheft.html", topic:"Komplexität",      title:"Algorithmen und Komplexität",                 total:9},
+      {id:"tgi06", num:"06", label:"TGI06", code:"Lernleitfaden", file:"TGI06_Lernheft.html", topic:"Formale Sprachen", title:"Formale Sprachen &amp; abstrakte Automaten 1", total:7},
+      {id:"tgi07", num:"07", label:"TGI07", code:"0723K04",      file:"TGI07_Lernheft.html", topic:"Automaten 2",      title:"Formale Sprachen &amp; abstrakte Automaten 2", total:7}
+    ]}
   ];
+  var HEFTE = GROUPS.reduce(function(a,g){ return a.concat(g.hefte); }, []);
 
   /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
   var mem = {};
@@ -162,7 +176,7 @@ footer a{color:var(--accent)}
     cambria:'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
   };
 
-  var grid = document.getElementById("grid");
+  var groupsEl = document.getElementById("groups");
   var railFill = document.getElementById("railFill");
   var bigFill = document.getElementById("bigFill");
   var ptxt = document.getElementById("ptxt");
@@ -170,20 +184,29 @@ footer a{color:var(--accent)}
   var themeBtn = document.getElementById("themeBtn");
   var fontSel = document.getElementById("fontSel");
 
-  /* Karten aufbauen */
-  HEFTE.forEach(function(h){
-    var a = document.createElement("a");
-    a.className = "card"; a.href = h.file; a.id = "card-"+h.id;
-    a.innerHTML =
-      '<span class="num">'+h.num+'</span>'+
-      '<p class="kicker">ITI'+h.num+' · '+h.topic+'</p>'+
-      '<h2>'+h.title+'</h2>'+
-      '<p class="code">'+h.code+'</p>'+
-      '<div class="foot">'+
-        '<div class="pbar"><i id="pb-'+h.id+'"></i></div>'+
-        '<div class="pmeta"><span id="pm-'+h.id+'">0 / '+h.total+' gelesen</span><span class="go">Öffnen →</span></div>'+
-      '</div>';
-    grid.appendChild(a);
+  /* Fach-Gruppen + Karten aufbauen */
+  GROUPS.forEach(function(grp){
+    var head = document.createElement("div");
+    head.className = "grouphead";
+    head.innerHTML = '<h2>'+grp.title+'</h2><span>'+grp.sub+'</span>';
+    groupsEl.appendChild(head);
+    var grid = document.createElement("div");
+    grid.className = "grid";
+    grp.hefte.forEach(function(h){
+      var a = document.createElement("a");
+      a.className = "card"; a.href = h.file; a.id = "card-"+h.id;
+      a.innerHTML =
+        '<span class="num">'+h.num+'</span>'+
+        '<p class="kicker">'+h.label+' · '+h.topic+'</p>'+
+        '<h2>'+h.title+'</h2>'+
+        '<p class="code">'+h.code+'</p>'+
+        '<div class="foot">'+
+          '<div class="pbar"><i id="pb-'+h.id+'"></i></div>'+
+          '<div class="pmeta"><span id="pm-'+h.id+'">0 / '+h.total+' gelesen</span><span class="go">Öffnen →</span></div>'+
+        '</div>';
+      grid.appendChild(a);
+    });
+    groupsEl.appendChild(grid);
   });
 
   function saveHub(){ store.set(HKEY, JSON.stringify(hub)); }

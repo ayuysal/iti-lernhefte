@@ -1167,11 +1167,15 @@ FCS  (CRC-Prüfsumme)         4 Byte</div>
   var themeBtn = document.getElementById("themeBtn");
   var fontSel = document.getElementById("fontSel");
 
-  /* ---------- Heft-Navigation (vor / zurück) ---------- */
+  /* ---------- Heft-Navigation (vor / zurück, innerhalb des Fachs) ---------- */
   (function(){
-    var files = ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"];
+    var groups = [
+      ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"]
+    ];
     var cur = location.pathname.split("/").pop();
-    var idx = files.indexOf(cur);
+    var files = groups[0], idx = -1;
+    for(var g = 0; g < groups.length; g++){ var f = groups[g].indexOf(cur); if(f > -1){ files = groups[g]; idx = f; break; } }
     var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
     if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
     if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
