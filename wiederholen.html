@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiederholen · ITI + TGI Lernhefte</title>
+<style>
+:root{
+  --paper:#EFF2F0;--paper-raised:#F9FBFA;--paper-sunk:#E4E9E6;
+  --ink:#17201D;--ink-soft:#5A6663;--ink-faint:#8A9490;
+  --rule:#CBD4D0;--rule-soft:#DDE4E1;
+  --accent:#0E5F63;--accent-soft:#D5E6E5;--mark:#8E2436;--mark-soft:#F0DEE1;--mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;--base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;--paper-raised:#1B211E;--paper-sunk:#0C100E;
+  --ink:#E3EAE7;--ink-soft:#9FADA8;--ink-faint:#6F7C78;--rule:#2C3733;--rule-soft:#222B28;
+  --accent:#54C3C6;--accent-soft:#123033;--mark:#E38294;--mark-soft:#33191F;--mark-deep:#F0A6B3;--shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1080px;margin:0 auto;padding:.55rem 1.1rem;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{font-size:.72rem;font-weight:650;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink-soft);border:1px solid var(--rule);border-radius:2px;padding:.38rem .6rem;line-height:1;transition:.15s;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+.rail{height:3px;background:var(--rule-soft)}.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s}
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.1rem}
+.hero{padding:2.4rem 0 1.2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .7rem}
+.hero h1{font-size:2.3rem;line-height:1.1;margin:0 0 .5rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:.98rem;color:var(--ink-soft);margin:0;max-width:60ch}
+/* Steuerleiste */
+.revbar{position:sticky;top:3.4rem;z-index:40;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);display:flex;flex-wrap:wrap;gap:.6rem 1.1rem;align-items:center;padding:.8rem 0;margin-bottom:.4rem;border-bottom:1px solid var(--rule-soft);font-family:var(--font-ui)}
+.tabs{display:flex;gap:.25rem;background:var(--paper-sunk);padding:.2rem;border-radius:3px}
+.tab-btn{font-size:.76rem;font-weight:700;border:0;background:transparent;color:var(--ink-soft);border-radius:2px;padding:.4rem .75rem;line-height:1}
+.tab-btn.on{background:var(--paper-raised);color:var(--accent);box-shadow:0 1px 3px var(--shadow)}
+.filters{display:flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--ink-faint)}
+.fbtn{font-size:.72rem;font-weight:650;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink-soft);border-radius:2px;padding:.3rem .55rem;line-height:1}
+.fbtn.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.revtools{display:flex;align-items:center;gap:.6rem;margin-left:auto;font-size:.72rem;color:var(--ink-faint)}
+/* Gruppen + Items */
+.rev-group{margin:1.6rem 0 0}
+.rev-group>h3{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:750;border-bottom:1px solid var(--rule);padding-bottom:.35rem;margin:0 0 .7rem;position:sticky;top:6.6rem;background:var(--paper);z-index:5}
+.rev-item{border:1px solid var(--rule);background:var(--paper-raised);border-radius:3px;padding:.7rem .85rem;margin:.55rem 0;transition:.15s}
+.rev-item.known{border-left:3px solid var(--accent);opacity:.72}
+.rev-head{display:flex;align-items:baseline;justify-content:space-between;gap:.7rem}
+.rev-term{font-family:var(--font-ui);font-weight:700;font-size:.98rem}
+.rev-write{width:100%;font-family:var(--font-body);font-size:.9rem;margin:.5rem 0 .35rem;padding:.45rem .6rem;min-height:2.6rem;resize:vertical;border:1px solid var(--rule);border-radius:2px;background:var(--paper);color:var(--ink)}
+.rev-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.mini{font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.02em;background:var(--paper-sunk);color:var(--ink-soft);border:1px solid var(--rule-soft);border-radius:2px;padding:.28rem .5rem;line-height:1}
+.mini:hover{color:var(--accent);border-color:var(--accent)}
+.known-t{color:var(--ink-faint)}
+.rev-item.known .known-t{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.rev-answer{margin-top:.6rem;padding:.55rem .75rem;border-left:3px solid var(--accent);background:var(--paper-sunk);border-radius:0 2px 2px 0;font-size:.92rem}
+.rev-answer p:first-child{margin-top:0}.rev-answer p:last-child{margin-bottom:0}
+.rev-answer strong{font-weight:700}.rev-answer em{color:var(--ink-soft)}
+.rev-answer code,.rev-answer .formula{font-family:var(--font-mono);font-size:.86em;background:var(--paper);padding:.06em .3em;border-radius:2px}
+/* Tabellen (Abkürzungen + Schnellcheck) */
+.tw{overflow-x:auto;margin:.4rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.5rem .65rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{font-family:var(--font-ui);font-size:.64rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}tbody tr.known{opacity:.6}
+.abbr-k{font-family:var(--font-mono);font-weight:700;color:var(--accent);white-space:nowrap}
+.abbr-in{width:100%;font-family:var(--font-body);font-size:.85rem;padding:.3rem .45rem;border:1px solid var(--rule);border-radius:2px;background:var(--paper);color:var(--ink)}
+.abbr-v{font-weight:600}
+.body h4{font-family:var(--font-ui);font-size:.82rem;font-weight:750;color:var(--accent);margin:1rem 0 .3rem}
+.body .box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.6rem .85rem;margin:.6rem 0;border-radius:0 2px 2px 0}
+.body .box .lbl{font-family:var(--font-ui);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.25rem}
+.body sub,.body sup{font-size:.75em}
+.empty{color:var(--ink-faint);font-style:italic;padding:1.5rem 0}
+footer{border-top:1px solid var(--rule);margin-top:2.5rem;padding:1.4rem 0 3rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint)}
+footer a{color:var(--accent)}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("review:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Wiederholen <span>· ITI + TGI</span></div>
+    <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">–</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option><option value="georgia">Georgia</option><option value="sans">Sans</option><option value="humanist">Verdana</option><option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser">A+</button>
+      <button class="btn" id="themeBtn">◐ Dunkel</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Üben &amp; Wiederholen</p>
+    <h1>Wiederholen</h1>
+    <p class="sub">Alle Definitionen, Abkürzungen und Schnellchecks aus den 11 Heften – gesammelt an einem Ort. Begriff sehen, selbst aufschreiben, einblenden und abgleichen. Dein „gewusst"-Stand wird gespeichert und geräteübergreifend synchronisiert.</p>
+  </div>
+
+  <div class="revbar">
+    <div class="tabs">
+      <button class="tab-btn on" data-tab="defs">Definitionen</button>
+      <button class="tab-btn" data-tab="abbr">Abkürzungen</button>
+      <button class="tab-btn" data-tab="check">Schnellcheck</button>
+    </div>
+    <div class="filters">Fach:
+      <button class="fbtn on" data-fach="alle">Alle</button>
+      <button class="fbtn" data-fach="ITI">ITI</button>
+      <button class="fbtn" data-fach="TGI">TGI</button>
+    </div>
+    <div class="revtools">
+      <button class="mini" id="revealAll">Alle einblenden</button>
+      <span id="revProg"></span>
+    </div>
+  </div>
+
+  <div id="content"></div>
+
+  <footer>
+    Wiederholen-Ansicht · automatisch aus allen Heften zusammengestellt · <a href="index.html">zurück zur Übersicht</a>.
+  </footer>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script src="assets/review-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var DATA = (window.ITI_REVIEW && window.ITI_REVIEW.hefte) ? window.ITI_REVIEW : {hefte:[]};
+
+  var mem = {};
+  var store = window.ITISync || {
+    get:function(k){ try{ if(window.localStorage) return Promise.resolve(localStorage.getItem(k)); }catch(e){} return Promise.resolve(mem[k]||null); },
+    set:function(k,v){ mem[k]=v; try{ if(window.localStorage) localStorage.setItem(k,v); }catch(e){} return Promise.resolve(); }
+  };
+  var KEY = "review:state";
+  var state = { tab:"defs", fach:"alle", theme:"light", base:19, font:"serif", known:{} };
+
+  var FONTS = {
+    serif:'"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:'Georgia,"Times New Roman",Times,serif',
+    sans:'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist:'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var content = document.getElementById("content");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+  var revProg = document.getElementById("revProg");
+  var ptxt = document.getElementById("ptxt");
+  var railFill = document.getElementById("railFill");
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function inFach(h){ return state.fach==="alle" || h.fach===state.fach; }
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+  function defById(id){ var p=id.split("#"); var h=DATA.hefte.filter(function(x){return x.id===p[0];})[0]; return h?h.defs[+p[1]]:null; }
+
+  function counts(){
+    var done=0,total=0;
+    DATA.hefte.forEach(function(h){
+      h.defs.forEach(function(_,i){ total++; if(state.known[h.id+"#"+i]) done++; });
+      h.abbr.forEach(function(_,i){ total++; if(state.known[h.id+"~"+i]) done++; });
+    });
+    return {done:done,total:total};
+  }
+
+  /* ---------- Rendering je Tab ---------- */
+  function renderDefs(){
+    var out="";
+    DATA.hefte.filter(inFach).forEach(function(h){
+      if(!h.defs.length) return;
+      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3>';
+      h.defs.forEach(function(d,i){
+        var id=h.id+"#"+i, k=!!state.known[id];
+        out+='<div class="rev-item'+(k?" known":"")+'" data-id="'+id+'">'
+          +'<div class="rev-head"><span class="rev-term">'+esc(d.term)+'</span>'
+          +'<button class="mini known-t" data-act="known">'+(k?"✓ gewusst":"gewusst?")+'</button></div>'
+          +'<textarea class="rev-write" placeholder="Definition selbst schreiben …"></textarea>'
+          +'<div class="rev-actions"><button class="mini" data-act="reveal">Einblenden</button>'
+          +'<button class="mini" data-act="copy">⧉ Kopieren</button></div>'
+          +'<div class="rev-answer" hidden>'+d.html+'</div></div>';
+      });
+      out+='</div>';
+    });
+    return out || '<p class="empty">Keine Definitionen für dieses Fach.</p>';
+  }
+
+  function renderAbbr(){
+    var out="";
+    DATA.hefte.filter(inFach).forEach(function(h){
+      if(!h.abbr.length) return;
+      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3>'
+        +'<div class="tw"><table><thead><tr><th>Kürzel</th><th>Bedeutung selbst schreiben</th><th style="width:2.5rem"></th><th>Bedeutung</th></tr></thead><tbody>';
+      h.abbr.forEach(function(a,i){
+        var id=h.id+"~"+i, k=!!state.known[id];
+        out+='<tr data-id="'+id+'" class="'+(k?"known":"")+'"><td class="abbr-k">'+esc(a.k)+'</td>'
+          +'<td><input class="abbr-in" placeholder="…"></td>'
+          +'<td><button class="mini" data-act="reveal-abbr" title="Bedeutung einblenden">👁</button></td>'
+          +'<td><span class="abbr-v" hidden>'+esc(a.v)+'</span>'
+          +'<button class="mini known-t" data-act="known" style="margin-left:.3rem">'+(k?"✓":"?")+'</button></td></tr>';
+      });
+      out+='</tbody></table></div></div>';
+    });
+    return out || '<p class="empty">Für dieses Fach sind keine Abkürzungsverzeichnisse hinterlegt.</p>';
+  }
+
+  function renderCheck(){
+    var out="";
+    DATA.hefte.filter(inFach).forEach(function(h){
+      if(!h.check) return;
+      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3><div class="body">'+h.check+'</div></div>';
+    });
+    return out || '<p class="empty">Kein Schnellcheck für dieses Fach.</p>';
+  }
+
+  function applyChrome(){
+    document.documentElement.dataset.theme=state.theme;
+    themeBtn.textContent = state.theme==="dark"?"◑ Hell":"◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base+"px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font]||FONTS.serif);
+    if(fontSel && fontSel.value!==state.font) fontSel.value=state.font;
+  }
+
+  function render(){
+    applyChrome();
+    Array.prototype.forEach.call(document.querySelectorAll(".tab-btn"),function(b){ b.classList.toggle("on", b.dataset.tab===state.tab); });
+    Array.prototype.forEach.call(document.querySelectorAll(".fbtn"),function(b){ b.classList.toggle("on", b.dataset.fach===state.fach); });
+    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="abbr"?renderAbbr():renderCheck();
+    document.getElementById("revealAll").style.display = state.tab==="check"?"none":"";
+    var c=counts(), pct=c.total?Math.round(c.done/c.total*100):0;
+    revProg.textContent = c.done+" / "+c.total+" gewusst";
+    ptxt.textContent = pct+" % gewusst";
+    railFill.style.width = pct+"%";
+  }
+
+  /* ---------- Interaktion ---------- */
+  content.addEventListener("click", function(ev){
+    var b=ev.target.closest("[data-act]"); if(!b) return;
+    var act=b.dataset.act, row=ev.target.closest("[data-id]"), id=row&&row.dataset.id;
+    if(act==="reveal"){ var a=row.querySelector(".rev-answer"); a.hidden=!a.hidden; b.textContent=a.hidden?"Einblenden":"Ausblenden"; }
+    else if(act==="reveal-abbr"){ var v=row.querySelector(".abbr-v"); v.hidden=!v.hidden; }
+    else if(act==="copy"){
+      var d=defById(id); if(!d||!navigator.clipboard) return;
+      navigator.clipboard.writeText(d.term+" — "+d.text).then(function(){ b.textContent="✓ Kopiert"; setTimeout(function(){ b.textContent="⧉ Kopieren"; },1100); });
+    }
+    else if(act==="known"){
+      if(state.known[id]) delete state.known[id]; else state.known[id]=1;
+      row.classList.toggle("known", !!state.known[id]);
+      var t=row.querySelector(".known-t");
+      if(t) t.textContent = state.known[id]? (state.tab==="abbr"?"✓":"✓ gewusst") : (state.tab==="abbr"?"?":"gewusst?");
+      var c=counts(),pct=c.total?Math.round(c.done/c.total*100):0;
+      revProg.textContent=c.done+" / "+c.total+" gewusst"; ptxt.textContent=pct+" % gewusst"; railFill.style.width=pct+"%";
+      save();
+    }
+  });
+
+  document.querySelector(".tabs").addEventListener("click",function(ev){ var b=ev.target.closest(".tab-btn"); if(!b)return; state.tab=b.dataset.tab; save(); render(); });
+  document.querySelector(".filters").addEventListener("click",function(ev){ var b=ev.target.closest(".fbtn"); if(!b)return; state.fach=b.dataset.fach; save(); render(); });
+  document.getElementById("revealAll").addEventListener("click",function(){
+    var ans=content.querySelectorAll(".rev-answer, .abbr-v");
+    var anyHidden=Array.prototype.some.call(ans,function(a){return a.hidden;});
+    Array.prototype.forEach.call(ans,function(a){ a.hidden=!anyHidden; });
+    Array.prototype.forEach.call(content.querySelectorAll('[data-act="reveal"]'),function(b){ b.textContent=anyHidden?"Ausblenden":"Einblenden"; });
+    this.textContent=anyHidden?"Alle ausblenden":"Alle einblenden";
+  });
+
+  themeBtn.addEventListener("click",function(){ state.theme=state.theme==="dark"?"light":"dark"; applyChrome(); save(); });
+  fontSel.addEventListener("change",function(){ if(FONTS[this.value]) state.font=this.value; applyChrome(); save(); });
+  document.getElementById("fsPlus").addEventListener("click",function(){ state.base=Math.min(26,state.base+1); applyChrome(); save(); });
+  document.getElementById("fsMinus").addEventListener("click",function(){ state.base=Math.max(15,state.base-1); applyChrome(); save(); });
+
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){ if(!raw)return; try{ var p=JSON.parse(raw); if(p.known) state.known=p.known; render(); }catch(e){} });
+    });
+  }
+
+  (async function init(){
+    var raw=await store.get(KEY);
+    if(raw){ try{ var p=JSON.parse(raw);
+      if(p.theme==="dark"||p.theme==="light") state.theme=p.theme;
+      if(typeof p.base==="number"&&p.base>=15&&p.base<=26) state.base=p.base;
+      if(p.font&&FONTS[p.font]) state.font=p.font;
+      if(p.known&&typeof p.known==="object") state.known=p.known;
+      if(p.tab) state.tab=p.tab; if(p.fach) state.fach=p.fach;
+    }catch(e){} }
+    else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){ state.theme="dark"; }
+    render();
+  })();
+})();
+</script>
+</body>
+</html>

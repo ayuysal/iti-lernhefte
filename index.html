@@ -53,6 +53,12 @@ select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
 .hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.2rem;display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center}
 .hero .bigbar{margin-top:1.1rem;height:8px;background:var(--paper-sunk);border-radius:5px;overflow:hidden;border:1px solid var(--rule)}
 .hero .bigbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--mark));transition:width .5s ease}
+.reviewcta{display:flex;align-items:center;gap:1rem;margin:1.4rem 0 0;padding:1rem 1.2rem;background:var(--paper-raised);border:1px solid var(--rule);border-left:3px solid var(--mark);border-radius:4px;text-decoration:none;color:inherit;transition:.16s}
+.reviewcta:hover{border-color:var(--accent);border-left-color:var(--accent);box-shadow:0 4px 16px var(--shadow);transform:translateY(-1px)}
+.reviewcta .rc-ic{font-size:1.5rem;color:var(--mark);line-height:1}
+.reviewcta .rc-txt{flex:1 1 auto;font-family:var(--font-ui);font-size:.8rem;color:var(--ink-soft);line-height:1.45}
+.reviewcta .rc-txt strong{color:var(--ink);font-size:.96rem}
+.reviewcta .rc-go{font-family:var(--font-ui);font-weight:700;font-size:.8rem;color:var(--accent);white-space:nowrap}
 
 /* Cloud-Sync-Leiste */
 .sync{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-family:var(--font-ui);font-size:.76rem;color:var(--ink-soft);background:var(--paper-raised);border:1px solid var(--rule);border-radius:3px;padding:.6rem .85rem;margin:1.4rem 0 0}
@@ -122,6 +128,12 @@ footer a{color:var(--accent)}
     </div>
     <div class="bigbar"><i id="bigFill"></i></div>
   </div>
+
+  <a class="reviewcta" href="wiederholen.html">
+    <span class="rc-ic">✎</span>
+    <span class="rc-txt"><strong>Üben &amp; Wiederholen</strong><br>Definitionen, Abkürzungen &amp; Schnellchecks aller Hefte an einem Ort – aufschreiben, einblenden, abhaken</span>
+    <span class="rc-go">Öffnen →</span>
+  </a>
 
   <!-- Cloud-Sync-Anmeldung: Button + Modal via assets/auth-ui.js (in der Topbar) -->
 
