@@ -83,6 +83,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr.known{opacity:.6}
 .body p{margin:.5rem 0}.body ul,.body ol{margin:.5rem 0;padding-left:1.2rem}.body li{margin:.2rem 0}
 .body strong{font-weight:700}.body em{color:var(--ink-soft)}
 .body .formula{font-family:var(--font-mono);font-size:.88rem;background:var(--paper-sunk);padding:.4rem .6rem;border-radius:2px;display:inline-block;margin:.25rem 0}
+.body .step{font-family:var(--font-mono);font-size:.82rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.4rem 0;white-space:pre-wrap;line-height:1.6;overflow-x:auto}
 .body dl{margin:0}
 .body .abbr-grid{columns:2;column-gap:1.6rem;font-size:.84rem;margin:.5rem 0}
 .body .abbr-row{break-inside:avoid;display:flex;gap:.6rem;padding:.24rem 0;border-bottom:1px solid var(--rule-soft)}
@@ -128,6 +129,7 @@ footer a{color:var(--accent)}
       <button class="tab-btn" data-tab="abbr">Abkürzungen</button>
       <button class="tab-btn" data-tab="check">Schnellcheck</button>
       <button class="tab-btn" data-tab="formeln">Formeln</button>
+      <button class="tab-btn" data-tab="referenz">Referenz</button>
     </div>
     <div class="filters">Fach:
       <button class="fbtn on" data-fach="alle">Alle</button>
@@ -151,10 +153,12 @@ footer a{color:var(--accent)}
 <script src="assets/sync.js"></script>
 <script src="assets/auth-ui.js"></script>
 <script src="assets/review-data.js"></script>
+<script src="assets/reference-data.js"></script>
 <script>
 (function(){
   "use strict";
   var DATA = (window.ITI_REVIEW && window.ITI_REVIEW.hefte) ? window.ITI_REVIEW : {hefte:[]};
+  var REF = window.ITI_REFERENCE || {referenz:[], conversions:null};
 
   var mem = {};
   var store = window.ITISync || {
@@ -244,11 +248,19 @@ footer a{color:var(--accent)}
 
   function renderFormeln(){
     var out="";
+    if(REF.conversions){ out+='<div class="rev-group"><h3>'+REF.conversions.title+'</h3><div class="body">'+REF.conversions.html+'</div></div>'; }
     DATA.hefte.filter(inFach).forEach(function(h){
       if(!h.formeln) return;
       out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3><div class="body">'+h.formeln+'</div></div>';
     });
     return out || '<p class="empty">Für dieses Fach ist keine Formel-/Referenzsammlung hinterlegt.</p>';
+  }
+
+  function renderReferenz(){
+    if(!REF.referenz || !REF.referenz.length) return '<p class="empty">Keine Referenz hinterlegt.</p>';
+    return REF.referenz.map(function(r){
+      return '<div class="rev-group"><h3>'+r.title+'</h3><div class="body">'+r.html+'</div></div>';
+    }).join("");
   }
 
   function applyChrome(){
@@ -263,8 +275,8 @@ footer a{color:var(--accent)}
     applyChrome();
     Array.prototype.forEach.call(document.querySelectorAll(".tab-btn"),function(b){ b.classList.toggle("on", b.dataset.tab===state.tab); });
     Array.prototype.forEach.call(document.querySelectorAll(".fbtn"),function(b){ b.classList.toggle("on", b.dataset.fach===state.fach); });
-    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():renderFormeln();
-    document.getElementById("revealAll").style.display = (state.tab==="check"||state.tab==="formeln")?"none":"";
+    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():state.tab==="referenz"?renderReferenz():renderFormeln();
+    document.getElementById("revealAll").style.display = (state.tab==="defs"||state.tab==="abbr")?"":"none";
     var c=counts(), pct=c.total?Math.round(c.done/c.total*100):0;
     revProg.textContent = c.done+" / "+c.total+" gewusst";
     ptxt.textContent = pct+" % gewusst";
