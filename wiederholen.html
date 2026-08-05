@@ -80,6 +80,15 @@ tbody tr:last-child td{border-bottom:0}tbody tr.known{opacity:.6}
 .body .box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.6rem .85rem;margin:.6rem 0;border-radius:0 2px 2px 0}
 .body .box .lbl{font-family:var(--font-ui);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.25rem}
 .body sub,.body sup{font-size:.75em}
+.body p{margin:.5rem 0}.body ul,.body ol{margin:.5rem 0;padding-left:1.2rem}.body li{margin:.2rem 0}
+.body strong{font-weight:700}.body em{color:var(--ink-soft)}
+.body .formula{font-family:var(--font-mono);font-size:.88rem;background:var(--paper-sunk);padding:.4rem .6rem;border-radius:2px;display:inline-block;margin:.25rem 0}
+.body dl{margin:0}
+.body .abbr-grid{columns:2;column-gap:1.6rem;font-size:.84rem;margin:.5rem 0}
+.body .abbr-row{break-inside:avoid;display:flex;gap:.6rem;padding:.24rem 0;border-bottom:1px solid var(--rule-soft)}
+.body .abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.4rem;font-size:.8rem}
+.body .abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+@media(max-width:640px){.body .abbr-grid{columns:1}}
 .empty{color:var(--ink-faint);font-style:italic;padding:1.5rem 0}
 footer{border-top:1px solid var(--rule);margin-top:2.5rem;padding:1.4rem 0 3rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint)}
 footer a{color:var(--accent)}
@@ -118,6 +127,7 @@ footer a{color:var(--accent)}
       <button class="tab-btn on" data-tab="defs">Definitionen</button>
       <button class="tab-btn" data-tab="abbr">Abkürzungen</button>
       <button class="tab-btn" data-tab="check">Schnellcheck</button>
+      <button class="tab-btn" data-tab="formeln">Formeln</button>
     </div>
     <div class="filters">Fach:
       <button class="fbtn on" data-fach="alle">Alle</button>
@@ -232,6 +242,15 @@ footer a{color:var(--accent)}
     return out || '<p class="empty">Kein Schnellcheck für dieses Fach.</p>';
   }
 
+  function renderFormeln(){
+    var out="";
+    DATA.hefte.filter(inFach).forEach(function(h){
+      if(!h.formeln) return;
+      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3><div class="body">'+h.formeln+'</div></div>';
+    });
+    return out || '<p class="empty">Für dieses Fach ist keine Formel-/Referenzsammlung hinterlegt.</p>';
+  }
+
   function applyChrome(){
     document.documentElement.dataset.theme=state.theme;
     themeBtn.textContent = state.theme==="dark"?"◑ Hell":"◐ Dunkel";
@@ -244,8 +263,8 @@ footer a{color:var(--accent)}
     applyChrome();
     Array.prototype.forEach.call(document.querySelectorAll(".tab-btn"),function(b){ b.classList.toggle("on", b.dataset.tab===state.tab); });
     Array.prototype.forEach.call(document.querySelectorAll(".fbtn"),function(b){ b.classList.toggle("on", b.dataset.fach===state.fach); });
-    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="abbr"?renderAbbr():renderCheck();
-    document.getElementById("revealAll").style.display = state.tab==="check"?"none":"";
+    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():renderFormeln();
+    document.getElementById("revealAll").style.display = (state.tab==="check"||state.tab==="formeln")?"none":"";
     var c=counts(), pct=c.total?Math.round(c.done/c.total*100):0;
     revProg.textContent = c.done+" / "+c.total+" gewusst";
     ptxt.textContent = pct+" % gewusst";
