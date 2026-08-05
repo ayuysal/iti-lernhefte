@@ -126,6 +126,7 @@ footer a{color:var(--accent)}
   <div class="revbar">
     <div class="tabs">
       <button class="tab-btn on" data-tab="defs">Definitionen</button>
+      <button class="tab-btn" data-tab="merk">Merklisten</button>
       <button class="tab-btn" data-tab="abbr">Abkürzungen</button>
       <button class="tab-btn" data-tab="check">Schnellcheck</button>
       <button class="tab-btn" data-tab="formeln">Formeln</button>
@@ -194,6 +195,7 @@ footer a{color:var(--accent)}
       h.defs.forEach(function(_,i){ total++; if(state.known[h.id+"#"+i]) done++; });
       h.abbr.forEach(function(_,i){ total++; if(state.known[h.id+"~"+i]) done++; });
     });
+    (REF.merklisten||[]).forEach(function(m){ total++; if(state.known["merk:"+m.id]) done++; });
     return {done:done,total:total};
   }
 
@@ -263,6 +265,23 @@ footer a{color:var(--accent)}
     }).join("");
   }
 
+  function renderMerklisten(){
+    var items = (REF.merklisten||[]).filter(inFach);
+    if(!items.length) return '<p class="empty">Keine Merklisten für dieses Fach.</p>';
+    var out='<div class="rev-group">';
+    items.forEach(function(m){
+      var id="merk:"+m.id, k=!!state.known[id];
+      out+='<div class="rev-item'+(k?" known":"")+'" data-id="'+id+'">'
+        +'<div class="rev-head"><span class="rev-term">'+m.title+'</span>'
+        +'<button class="mini known-t" data-act="known">'+(k?"✓ gewusst":"gewusst?")+'</button></div>'
+        +'<textarea class="rev-write" placeholder="Aufzählung selbst aufschreiben …"></textarea>'
+        +'<div class="rev-actions"><button class="mini" data-act="reveal">Einblenden</button>'
+        +'<button class="mini" data-act="copy">⧉ Kopieren</button></div>'
+        +'<div class="rev-answer" hidden>'+m.html+'</div></div>';
+    });
+    return out+'</div>';
+  }
+
   function applyChrome(){
     document.documentElement.dataset.theme=state.theme;
     themeBtn.textContent = state.theme==="dark"?"◑ Hell":"◐ Dunkel";
@@ -275,8 +294,8 @@ footer a{color:var(--accent)}
     applyChrome();
     Array.prototype.forEach.call(document.querySelectorAll(".tab-btn"),function(b){ b.classList.toggle("on", b.dataset.tab===state.tab); });
     Array.prototype.forEach.call(document.querySelectorAll(".fbtn"),function(b){ b.classList.toggle("on", b.dataset.fach===state.fach); });
-    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():state.tab==="referenz"?renderReferenz():renderFormeln();
-    document.getElementById("revealAll").style.display = (state.tab==="defs"||state.tab==="abbr")?"":"none";
+    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="merk"?renderMerklisten():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():state.tab==="referenz"?renderReferenz():renderFormeln();
+    document.getElementById("revealAll").style.display = (state.tab==="defs"||state.tab==="merk"||state.tab==="abbr")?"":"none";
     var c=counts(), pct=c.total?Math.round(c.done/c.total*100):0;
     revProg.textContent = c.done+" / "+c.total+" gewusst";
     ptxt.textContent = pct+" % gewusst";
@@ -290,8 +309,10 @@ footer a{color:var(--accent)}
     if(act==="reveal"){ var a=row.querySelector(".rev-answer"); a.hidden=!a.hidden; b.textContent=a.hidden?"Einblenden":"Ausblenden"; }
     else if(act==="reveal-abbr"){ var v=row.querySelector(".abbr-v"); v.hidden=!v.hidden; }
     else if(act==="copy"){
-      var d=defById(id); if(!d||!navigator.clipboard) return;
-      navigator.clipboard.writeText(d.term+" — "+d.text).then(function(){ b.textContent="✓ Kopiert"; setTimeout(function(){ b.textContent="⧉ Kopieren"; },1100); });
+      if(!navigator.clipboard) return;
+      var term=row.querySelector(".rev-term"), ans=row.querySelector(".rev-answer");
+      var txt=(term?term.textContent+" — ":"")+(ans?ans.innerText.trim():"");
+      navigator.clipboard.writeText(txt).then(function(){ b.textContent="✓ Kopiert"; setTimeout(function(){ b.textContent="⧉ Kopieren"; },1100); });
     }
     else if(act==="known"){
       if(state.known[id]) delete state.known[id]; else state.known[id]=1;
