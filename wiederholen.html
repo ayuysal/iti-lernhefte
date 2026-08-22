@@ -192,12 +192,13 @@ footer a{color:var(--accent)}
   function defById(id){ var p=id.split("#"); var h=DATA.hefte.filter(function(x){return x.id===p[0];})[0]; return h?h.defs[+p[1]]:null; }
 
   function counts(){
+    /* zaehlt nur, was beim aktuellen Fachfilter auch sichtbar ist */
     var done=0,total=0;
-    DATA.hefte.forEach(function(h){
+    DATA.hefte.filter(inFach).forEach(function(h){
       h.defs.forEach(function(_,i){ total++; if(state.known[h.id+"#"+i]) done++; });
       h.abbr.forEach(function(_,i){ total++; if(state.known[h.id+"~"+i]) done++; });
     });
-    (REF.merklisten||[]).forEach(function(m){ total++; if(state.known["merk:"+m.id]) done++; });
+    (REF.merklisten||[]).filter(inFach).forEach(function(m){ total++; if(state.known["merk:"+m.id]) done++; });
     return {done:done,total:total};
   }
 
@@ -252,7 +253,9 @@ footer a{color:var(--accent)}
 
   function renderFormeln(){
     var out="";
-    if(REF.conversions){ out+='<div class="rev-group"><h3>'+REF.conversions.title+'</h3><div class="body">'+REF.conversions.html+'</div></div>'; }
+    if(REF.conversions && inFach(REF.conversions)){
+      out+='<div class="rev-group"><h3>'+REF.conversions.title+'</h3><div class="body">'+REF.conversions.html+'</div></div>';
+    }
     DATA.hefte.filter(inFach).forEach(function(h){
       if(!h.formeln) return;
       out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3><div class="body">'+h.formeln+'</div></div>';
@@ -261,8 +264,9 @@ footer a{color:var(--accent)}
   }
 
   function renderReferenz(){
-    if(!REF.referenz || !REF.referenz.length) return '<p class="empty">Keine Referenz hinterlegt.</p>';
-    return REF.referenz.map(function(r){
+    var items = (REF.referenz||[]).filter(inFach);
+    if(!items.length) return '<p class="empty">Für dieses Fach ist keine Referenz hinterlegt.</p>';
+    return items.map(function(r){
       return '<div class="rev-group"><h3>'+r.title+'</h3><div class="body">'+r.html+'</div></div>';
     }).join("");
   }

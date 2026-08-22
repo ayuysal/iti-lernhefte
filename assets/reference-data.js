@@ -4,7 +4,7 @@ window.ITI_REFERENCE = {
 
   /* ---------- REFERENZ (Nachschlagen: Ports, OSI, IP) ---------- */
   referenz: [
-    { title: "Portnummern (Auswahl aus ITI24 / ITI26)", html:
+    { fach:"ITI", title: "Portnummern (Auswahl aus ITI24 / ITI26)", html:
       '<div class="tw"><table class="mono"><thead><tr><th>Port</th><th>Dienst / Protokoll</th><th>Transport</th></tr></thead><tbody>'
       + '<tr><td>20 / 21</td><td>FTP (Daten / Steuerung)</td><td>TCP</td></tr>'
       + '<tr><td>22</td><td>SSH</td><td>TCP</td></tr>'
@@ -21,7 +21,7 @@ window.ITI_REFERENCE = {
       + '</tbody></table></div>'
       + '<div class="box"><span class="lbl">Portbereiche &amp; Socket</span><p>Portnummern sind <strong>16 Bit</strong> (0–65535). <strong>0–1023</strong> Well-Known / System Ports · <strong>1024–49151</strong> Registered Ports · <strong>49152–65535</strong> Dynamic / Private Ports. Ein <strong>Socket</strong> = IP-Adresse + Portnummer.</p></div>' },
 
-    { title: "OSI-Schichtenmodell (ITI21)", html:
+    { fach:"ITI", title: "OSI-Schichtenmodell (ITI21)", html:
       '<div class="tw"><table class="mono"><thead><tr><th>#</th><th>Schicht</th><th>Aufgabe</th><th>Dateneinheit</th></tr></thead><tbody>'
       + '<tr><td>7</td><td>Anwendung</td><td>Schnittstelle zum Nutzer, Anwendungsdienste</td><td>Daten / Nachricht</td></tr>'
       + '<tr><td>6</td><td>Darstellung</td><td>Codierung, Kompression, Verschlüsselung</td><td>–</td></tr>'
@@ -33,7 +33,7 @@ window.ITI_REFERENCE = {
       + '</tbody></table></div>'
       + '<div class="box"><span class="lbl">Eselsbrücke (7 → 1)</span><p><strong>A</strong>ll <strong>P</strong>eople <strong>S</strong>eem <strong>T</strong>o <strong>N</strong>eed <strong>D</strong>ata <strong>P</strong>rocessing. 1–4 transportorientiert, 5–7 anwendungsorientiert. Switch = 1–2, Router = 1–3.</p></div>' },
 
-    { title: "IP-Adressklassen &amp; Sonderadressen (ITI24)", html:
+    { fach:"ITI", title: "IP-Adressklassen &amp; Sonderadressen (ITI24)", html:
       '<div class="tw"><table class="mono"><thead><tr><th>Klasse</th><th>1. Oktett</th><th>Präfix</th><th>Netze / Hosts</th></tr></thead><tbody>'
       + '<tr><td>A</td><td>1–126</td><td>0…</td><td>126 / 16.777.214</td></tr>'
       + '<tr><td>B</td><td>128–191</td><td>10…</td><td>16.384 / 65.534</td></tr>'
@@ -45,7 +45,7 @@ window.ITI_REFERENCE = {
   ],
 
   /* ---------- ZAHLENSYSTEME (im Formeln-Tab) ---------- */
-  conversions: { title: "Zahlensysteme &amp; Umrechnungen — mit Beispielen (GDI01)", html:
+  conversions: { fach:"TGI", title: "Zahlensysteme &amp; Umrechnungen — mit Beispielen (GDI01)", html:
       '<h4>Dual → Dezimal</h4><p>Zweierpotenzen der gesetzten Bits (1-Stellen) aufsummieren.</p>'
       + '<div class="step">10110₂ = 1·16 + 0·8 + 1·4 + 1·2 + 0·1 = 22\n11011001₂ = 128 + 64 + 16 + 8 + 1 = 217</div>'
       + '<h4>Dezimal → Dual</h4><p>Fortlaufend durch 2 teilen, die Reste von unten nach oben ablesen.</p>'
