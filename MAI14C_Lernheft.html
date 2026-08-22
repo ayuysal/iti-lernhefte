@@ -436,6 +436,7 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
 </section>
 
+
 <!-- ══════════════ KAPITEL 3 ══════════════ -->
 <section class="sec" id="k3" data-num="3" data-title="Interpolation">
   <div class="sec-head">
@@ -451,48 +452,89 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
+    <p class="lead">Von einer Funktion sind nur einzelne Werte bekannt – aus einer Messreihe oder als Stellvertreter einer bekannten Funktion. Gesucht ist eine Funktion, die an genau diesen Stellen dieselben Werte annimmt.</p>
+
+    <div class="box def">
+      <span class="lbl">Definition 3.1 – das Interpolationsproblem</span>
+      <p>Gegeben sind (n+1) <strong>Stützstellen</strong> x₀ &lt; x₁ &lt; … &lt; x<sub>n</sub> und ebenso viele <strong>Stützwerte</strong> f₀, f₁, …, f<sub>n</sub>. Gesucht ist eine Funktion P(x) mit</p>
+      <p class="formula">P(x<sub>i</sub>) = f<sub>i</sub>&nbsp;&nbsp;für i = 0, 1, …, n</p>
+      <p>Sie heißt <strong>Interpolationsfunktion</strong> oder <strong>Interpolierende</strong>. Dass die Stützstellen der Größe nach sortiert sind, ist nur bequem – wichtig ist allein, dass sie <strong>paarweise verschieden</strong> sind.</p>
+    </div>
+    <p>Der Lösungsweg: Man setzt die Interpolierende als <strong>Linearkombination</strong> von n+1 Ansatzfunktionen Φ<sub>k</sub>(x) an,</p>
+    <p class="formula">P(x) = ∑<sub>k=0</sub><sup>n</sup> c<sub>k</sub>·Φ<sub>k</sub>(x)</p>
+    <p>und bestimmt die Koeffizienten c<sub>k</sub> aus dem linearen Gleichungssystem ∑ c<sub>k</sub>Φ<sub>k</sub>(x<sub>i</sub>) = f<sub>i</sub>. Der ganze Aufwand hängt davon ab, <strong>wie geschickt die Ansatzfunktionen gewählt</strong> sind. Die mit Abstand häufigste Wahl ist die Klasse der Polynome.</p>
+
+    <h4>3.2 Polynominterpolation</h4>
+    <div class="box def">
+      <span class="lbl">Satz 3.1 – Existenz und Eindeutigkeit</span>
+      <p>Zu (n+1) Stützstellen mit beliebigen Stützwerten gibt es <strong>genau ein</strong> Polynom n-ten Grades P<sub>n</sub>(x) mit P<sub>n</sub>(x<sub>i</sub>) = f<sub>i</sub>.</p>
+      <p><em>Warum eindeutig:</em> Gäbe es zwei, so wäre ihre Differenz ein Polynom vom Grad n mit n+1 Nullstellen – unmöglich, denn ein Polynom n-ten Grades hat höchstens n Nullstellen.</p>
+      <p><strong>Folgerung für die Klausur:</strong> Lagrange- und Newton-Verfahren liefern <em>dasselbe</em> Polynom, nur in anderer Darstellung. Sie unterscheiden sich im Rechenaufwand, nicht im Ergebnis.</p>
+    </div>
+    <p>Der naheliegende Ansatz mit den <strong>Monomen</strong> p<sub>k</sub>(x) = x<sup>k</sup> führt auf ein Gleichungssystem mit der Vandermonde-Matrix – lösbar, aber aufwendig und numerisch heikel. Die beiden folgenden Ansätze sind besser.</p>
+
+    <div class="box def">
+      <span class="lbl">3.2.1 Lagrange (Def. 3.2, Sätze 3.2 / 3.3)</span>
+      <p class="formula">L<sub>k</sub>(x) = ∏<sub>i≠k</sub> (x − x<sub>i</sub>)/(x<sub>k</sub> − x<sub>i</sub>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>n</sub>(x) = ∑<sub>k=0</sub><sup>n</sup> f<sub>k</sub>·L<sub>k</sub>(x)</p>
+      <p>Die <strong>Lagrange-Polynome</strong> sind Polynome n-ten Grades (der Nenner ist nur eine Konstante) mit der entscheidenden Eigenschaft</p>
+      <p class="formula">L<sub>k</sub>(x<sub>i</sub>) = 1 für i = k&nbsp;&nbsp;und&nbsp;&nbsp;L<sub>k</sub>(x<sub>i</sub>) = 0 für i ≠ k</p>
+      <p>Damit „schaltet“ jeder Summand genau an seiner Stützstelle den Wert f<sub>k</sub> ein – und die Interpolationsbedingung ist ohne jedes Gleichungssystem erfüllt.</p>
+      <p><em>Beispiel mit x₀ = −2, x₁ = 0, x₂ = 1:</em></p>
+      <p class="formula">L₀(x) = x(x−1)/6&nbsp;&nbsp;·&nbsp;&nbsp;L₁(x) = (x+2)(x−1)/(−2)&nbsp;&nbsp;·&nbsp;&nbsp;L₂(x) = (x+2)x/3</p>
+      <p><strong>Nachteil:</strong> Kommt eine Stützstelle hinzu, muss alles neu gerechnet werden.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">3.2.2 Newton mit dividierten Differenzen (Def. 3.3, Sätze 3.4 / 3.5)</span>
+      <p class="formula">P<sub>n</sub>(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + … + c<sub>n</sub>(x−x₀)···(x−x<sub>n−1</sub>)</p>
+      <p>Die Koeffizienten sind die <strong>dividierten Differenzen</strong> c<sub>k</sub> = f[x₀,…,x<sub>k</sub>], rekursiv berechnet:</p>
+      <p class="formula">f[x<sub>i</sub>] = f<sub>i</sub><br>f[x<sub>i</sub>, x<sub>i+1</sub>] = (f<sub>i+1</sub> − f<sub>i</sub>) / (x<sub>i+1</sub> − x<sub>i</sub>)<br>f[x<sub>i</sub>,…,x<sub>i+m</sub>] = ( f[x<sub>i+1</sub>,…,x<sub>i+m</sub>] − f[x<sub>i</sub>,…,x<sub>i+m−1</sub>] ) / (x<sub>i+m</sub> − x<sub>i</sub>)</p>
+      <p>Im <strong>Differenzenschema</strong> ist c<sub>k</sub> jeweils der oberste Eintrag der k-ten Spalte. Die Argumente sind <strong>vertauschbar</strong>, die Reihenfolge der Stützstellen also gleichgültig.</p>
+      <p><strong>Großer Vorteil:</strong> Eine zusätzliche Stützstelle fügt nur einen weiteren Summanden an – alles Bisherige bleibt gültig.</p>
+    </div>
+
     <div class="box warn">
-      <span class="lbl">Hinweis zu diesem Kapitel</span>
-      <p>Kapitel 3 und 4 fehlen in der vorliegenden Fassung des Studienhefts (die Datei endet nach Kapitel 2). Beide gehören laut Modulbeschreibung zu den <strong>Kernthemen von WMAPS</strong> – „Interpolation mit Polynomen“, „Splinefunktionen“ und „Numerische Lösung von Differenzialgleichungen“. Die folgenden beiden Kapitel sind daher entlang des <strong>Inhaltsverzeichnisses</strong> eigenständig zusammengestellt und ersetzen nicht die Lektüre des vollständigen Hefts.</p>
-    </div>
-    <p class="lead">Aufgabe: Durch n+1 gegebene Stützpunkte soll eine glatte Funktion gelegt werden, die an den Stützstellen <strong>exakt</strong> durch die Werte geht.</p>
-
-    <div class="box def">
-      <span class="lbl">3.2 Polynominterpolation – Existenz und Eindeutigkeit</span>
-      <p>Zu n+1 Stützpunkten (x₀, y₀), …, (x<sub>n</sub>, y<sub>n</sub>) mit <strong>paarweise verschiedenen</strong> x<sub>i</sub> gibt es <strong>genau ein</strong> Polynom vom Grad ≤ n, das alle Punkte trifft. Nur die <em>Darstellungsform</em> unterscheidet sich – das Polynom selbst ist immer dasselbe.</p>
-    </div>
-    <div class="box def">
-      <span class="lbl">3.2.1 Lagrange-Interpolation</span>
-      <p class="formula">P(x) = ∑<sub>i=0</sub><sup>n</sup> y<sub>i</sub> · L<sub>i</sub>(x)&nbsp;&nbsp;&nbsp;mit&nbsp;&nbsp;L<sub>i</sub>(x) = ∏<sub>j≠i</sub> (x − x<sub>j</sub>)/(x<sub>i</sub> − x<sub>j</sub>)</p>
-      <p>Die <strong>Lagrange-Basispolynome</strong> haben die Eigenschaft L<sub>i</sub>(x<sub>i</sub>) = 1 und L<sub>i</sub>(x<sub>j</sub>) = 0 für j ≠ i – deshalb „schaltet“ jeder Summand genau an seiner Stützstelle den Wert y<sub>i</sub> ein.</p>
-      <p><strong>Vorteil:</strong> direkt hinschreibbar, kein Gleichungssystem. <strong>Nachteil:</strong> Kommt ein Stützpunkt hinzu, muss <em>alles</em> neu berechnet werden.</p>
-    </div>
-    <div class="box def">
-      <span class="lbl">3.2.2 Newtonsche Interpolation (dividierte Differenzen)</span>
-      <p class="formula">P(x) = c₀ + c₁(x − x₀) + c₂(x − x₀)(x − x₁) + … + c<sub>n</sub>(x−x₀)…(x−x<sub>n−1</sub>)</p>
-      <p>Die Koeffizienten sind die <strong>dividierten Differenzen</strong>, berechnet im Schema</p>
-      <p class="formula">f[x<sub>i</sub>] = y<sub>i</sub><br>f[x<sub>i</sub>, x<sub>i+1</sub>] = (y<sub>i+1</sub> − y<sub>i</sub>)/(x<sub>i+1</sub> − x<sub>i</sub>)<br>f[x<sub>i</sub>,…,x<sub>i+k</sub>] = ( f[x<sub>i+1</sub>,…,x<sub>i+k</sub>] − f[x<sub>i</sub>,…,x<sub>i+k−1</sub>] ) / (x<sub>i+k</sub> − x<sub>i</sub>)</p>
-      <p>c<sub>k</sub> ist jeweils der <strong>oberste Eintrag</strong> der k-ten Spalte. <strong>Großer Vorteil:</strong> Ein zusätzlicher Stützpunkt fügt nur einen weiteren Summanden hinzu – das Bisherige bleibt gültig.</p>
-    </div>
-    <div class="box def">
-      <span class="lbl">3.2.3 Interpolationsfehler</span>
-      <p class="formula">f(x) − P(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · (x − x₀)(x − x₁)···(x − x<sub>n</sub>)&nbsp;&nbsp;&nbsp;mit ξ im Intervall</p>
-      <p><strong>Runges Phänomen:</strong> Mehr Stützstellen bedeuten <em>nicht</em> automatisch weniger Fehler – bei hohem Grad und äquidistanten Stützstellen schwingt das Polynom an den Rändern immer stärker. Genau deshalb nimmt man in der Praxis <strong>Splines</strong> statt eines Polynoms hohen Grades.</p>
+      <span class="lbl">Satz 3.6 – Interpolationsfehler (Restglied)</span>
+      <p>Ist f (n+1)-mal differenzierbar, so gilt für jedes x ∈ [x₀, x<sub>n</sub>]</p>
+      <p class="formula">f(x) − P<sub>n</sub>(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · (x−x₀)(x−x₁)···(x−x<sub>n</sub>)</p>
+      <p>ξ hängt von x ab und lässt sich nicht explizit angeben – man weiß nur, dass es <strong>zwischen x₀ und x<sub>n</sub></strong> liegt. Für eine Fehlerabschätzung setzt man daher das Maximum von |f<sup>(n+1)</sup>| auf dem Intervall ein.</p>
     </div>
 
+    <h4>3.3 Interpolation mit Splinefunktionen</h4>
+    <p>Bei der Polynominterpolation kann die Interpolierende mit <strong>steigender Zahl von Stützstellen</strong> besonders an den Rändern des Intervalls große <strong>Überschwünge</strong> zeigen. Genau dieses Problem umgehen Splines: Sie sind auf jedem Teilintervall ein Polynom <em>niedrigen</em> Grades.</p>
     <div class="box def">
-      <span class="lbl">3.3 Splinefunktionen</span>
-      <p>Ein <strong>Spline</strong> setzt sich <em>abschnittsweise</em> aus Polynomen niedrigen Grades zusammen, die an den Stützstellen glatt aneinanderpassen.</p>
-      <div class="tw"><table>
-        <thead><tr><th>Typ</th><th>Grad je Abschnitt</th><th>Anschlussbedingungen</th></tr></thead>
-        <tbody>
-          <tr><td><strong>linear</strong></td><td>1 (Geradenstücke)</td><td>nur stetig – Knicke erlaubt</td></tr>
-          <tr><td><strong>quadratisch</strong></td><td>2</td><td>stetig + erste Ableitung stetig</td></tr>
-          <tr><td><strong>kubisch</strong></td><td>3</td><td>stetig + <strong>erste und zweite</strong> Ableitung stetig</td></tr>
-        </tbody>
-      </table></div>
-      <p>Der <strong>kubische Spline</strong> ist der Standardfall: Bei n+1 Stützstellen entstehen n Teilpolynome mit je 4 Koeffizienten, also 4n Unbekannte. Die Bedingungen liefern 4n − 2 Gleichungen; die beiden fehlenden kommen aus der <strong>Randbedingung</strong> – meist s″ = 0 an beiden Enden (<strong>natürlicher Spline</strong>).</p>
-      <p><strong>Vorteil gegenüber der Polynominterpolation:</strong> kein Aufschwingen, lokale Änderungen wirken sich nur lokal aus, und das Ergebnis sieht „natürlich“ aus – daher der Einsatz in CAD und Grafik.</p>
+      <span class="lbl">Definition 3.4 – Spline vom Grad m</span>
+      <p>Eine auf [x₀, x<sub>n</sub>] definierte Funktion s<sub>m</sub>(x) heißt <strong>Spline vom Grad m</strong> zu den Knoten x₀,…,x<sub>n</sub>, wenn sie</p>
+      <p><strong>1)</strong> auf jedem Teilintervall [x<sub>i</sub>, x<sub>i+1</sub>] ein Polynom höchstens m-ten Grades ist – im Allgemeinen <em>nicht</em> überall dasselbe – und<br>
+      <strong>2)</strong> auf dem Gesamtintervall <strong>(m−1)-mal stetig differenzierbar</strong> ist.</p>
+      <p>Ein Spline zweiten Grades besteht also aus Parabelstücken, die in den Knoten einmal stetig differenzierbar zusammengesetzt sind. Die Interpolationsbedingung s(x<sub>i</sub>) = f<sub>i</sub> macht den Spline automatisch stetig.</p>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Splinetyp</th><th>Grad je Stück</th><th>stetig bis</th><th>zusätzlich nötige Angaben</th></tr></thead>
+      <tbody>
+        <tr><td><strong>linear</strong> (S₁)</td><td>1 – Geradenstücke</td><td>Funktionswert</td><td>keine – direkt hinschreibbar</td></tr>
+        <tr><td><strong>quadratisch</strong> (S₂)</td><td>2</td><td>s′</td><td><strong>eine</strong>, z.&nbsp;B. s′(x₀) (Satz 3.7)</td></tr>
+        <tr><td><strong>kubisch</strong> (S₃)</td><td>3</td><td>s′ und s″</td><td><strong>zwei</strong> Randbedingungen (Satz 3.8)</td></tr>
+      </tbody>
+    </table></div>
+    <p>Der <strong>lineare Spline</strong> ist der Polygonzug durch die Punkte. Der <strong>kubische</strong> ist der Standardfall, weil er kleinen Polynomgrad mit schöner Glattheit verbindet. Auf [x<sub>i</sub>, x<sub>i+1</sub>] schreibt man ihn als Taylor-Entwicklung um x<sub>i</sub>:</p>
+    <p class="formula">p<sub>i</sub>(x) = f<sub>i</sub> + f′<sub>i</sub>(x−x<sub>i</sub>) + f″<sub>i</sub>/2 · (x−x<sub>i</sub>)² + f‴<sub>i</sub>/6 · (x−x<sub>i</sub>)³</p>
+    <p>Die f′<sub>i</sub>, f″<sub>i</sub>, f‴<sub>i</sub> sind so zu bestimmen, dass der Spline samt seinen ersten beiden Ableitungen in den Stützstellen stetig ist. Das führt auf ein <strong>lineares Gleichungssystem</strong> mit Tridiagonalgestalt für die f″<sub>i</sub>; die restlichen Größen folgen daraus.</p>
+
+    <div class="box def">
+      <span class="lbl">Definition 3.5 – die drei Standard-Randbedingungen</span>
+      <p><strong>a) natürliche kubische Splinefunktion:</strong>&nbsp; s″(x₀) = 0 und s″(x<sub>n</sub>) = 0<br>
+      <strong>b) periodische kubische Splinefunktion:</strong>&nbsp; s(x₀) = s(x<sub>n</sub>), s′(x₀) = s′(x<sub>n</sub>) und s″(x₀) = s″(x<sub>n</sub>)<br>
+      <strong>c) not-a-knot-Randbedingung:</strong>&nbsp; auch die dritte Ableitung ist in x₁ und x<sub>n−1</sub> stetig</p>
+      <p>Entscheidet man sich für einen dieser Typen, hat man die beiden fehlenden Bedingungen „automatisch“ gefordert. Beim <strong>natürlichen</strong> Spline bedeutet das schlicht f″₀ = 0 und f″<sub>n</sub> = 0 – damit wird das System eindeutig lösbar.</p>
+    </div>
+    <div class="box">
+      <span class="lbl">Rechenrezept natürlicher kubischer Spline (äquidistant, h = 1)</span>
+      <p>Mit M<sub>i</sub> = s″(x<sub>i</sub>), M₀ = M<sub>n</sub> = 0 lautet das System für i = 1,…,n−1</p>
+      <p class="formula">M<sub>i−1</sub> + 4M<sub>i</sub> + M<sub>i+1</sub> = 6·(f<sub>i−1</sub> − 2f<sub>i</sub> + f<sub>i+1</sub>)</p>
+      <p>Bei ungleichen Abständen h<sub>i</sub> = x<sub>i+1</sub> − x<sub>i</sub>:</p>
+      <p class="formula">h<sub>i−1</sub>M<sub>i−1</sub> + 2(h<sub>i−1</sub>+h<sub>i</sub>)M<sub>i</sub> + h<sub>i</sub>M<sub>i+1</sub> = 6·[ (f<sub>i+1</sub>−f<sub>i</sub>)/h<sub>i</sub> − (f<sub>i</sub>−f<sub>i−1</sub>)/h<sub>i−1</sub> ]</p>
+      <p>Danach je Teilintervall: p<sub>i</sub>(x) = f<sub>i</sub> + b<sub>i</sub>(x−x<sub>i</sub>) + (M<sub>i</sub>/2)(x−x<sub>i</sub>)² + ((M<sub>i+1</sub>−M<sub>i</sub>)/(6h<sub>i</sub>))(x−x<sub>i</sub>)³ &nbsp;mit&nbsp; b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>)/h<sub>i</sub> − h<sub>i</sub>(2M<sub>i</sub>+M<sub>i+1</sub>)/6.</p>
     </div>
   </div>
 </section>
@@ -512,37 +554,60 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Für die meisten praktisch vorkommenden Differenzialgleichungen gibt es <strong>keine geschlossene Lösung</strong> – hier setzt die Numerik an.</p>
+    <p class="lead">Für sehr viele praktisch vorkommende Differenzialgleichungen ist <strong>keine geschlossene Lösung</strong> ermittelbar. Dann berechnet die Numerik die Lösung zahlenmäßig – mit hoher Genauigkeit.</p>
 
+    <h4>4.1 Begriffe</h4>
+    <p>Behandelt werden Anfangswertprobleme mit einer Differenzialgleichung erster Ordnung in <strong>expliziter Form</strong>:</p>
+    <p class="formula">y′ = f(x, y),&nbsp;&nbsp;&nbsp;y(x₀) = y₀</p>
+    <p>Die Differenzialgleichung ordnet jedem Punkt der (x,y)-Ebene eine <strong>Richtung</strong> zu – anschaulich ein Richtungsfeld, in das sich die Lösungskurve einpasst.</p>
     <div class="box def">
-      <span class="lbl">4.1 Problemstellung</span>
-      <p>Gegeben ist das <strong>Anfangswertproblem</strong></p>
-      <p class="formula">y′(x) = f(x, y),&nbsp;&nbsp;&nbsp;y(x₀) = y₀</p>
-      <p>Gesucht sind Näherungswerte y₁, y₂, … an den Stellen x₁ = x₀ + h, x₂ = x₀ + 2h, … mit der <strong>Schrittweite h</strong>.</p>
-      <p><strong>Verfahren von Picard und Lindelöf:</strong> Das AWP ist äquivalent zur Integralgleichung y(x) = y₀ + ∫<sub>x₀</sub><sup>x</sup> f(t, y(t))dt. Deren sukzessive Approximation liefert nicht nur ein Näherungsverfahren, sondern zugleich den <strong>Existenz- und Eindeutigkeitsbeweis</strong> (Lipschitz-Bedingung).</p>
+      <span class="lbl">Satz 4.1 – Existenz- und Eindeutigkeitssatz von Picard und Lindelöf</span>
+      <p>Ist f in einer Umgebung von (x₀, y₀) stetig und genügt dort einer <strong>Lipschitz-Bedingung</strong> bezüglich y, so besitzt das Anfangswertproblem dort <strong>genau eine</strong> Lösung.</p>
+      <p>Das zugehörige Verfahren – die sukzessive Approximation über die äquivalente Integralgleichung y(x) = y₀ + ∫<sub>x₀</sub><sup>x</sup> f(t, y(t))dt – liefert den Beweis <em>und</em> ein (theoretisches) Näherungsverfahren.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">4.2.1 Euler-Polygonzug-Verfahren</span>
-      <p class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(x<sub>n</sub>, y<sub>n</sub>)</p>
-      <p><strong>Idee:</strong> An jeder Stelle wird die Lösungskurve durch ihre <strong>Tangente</strong> ersetzt – es entsteht ein Polygonzug. Das einfachste denkbare Verfahren.</p>
-      <p><strong>Fehlerordnung:</strong> lokal O(h²), <strong>global O(h)</strong> – Verfahren <strong>1. Ordnung</strong>. Halbierte Schrittweite bedeutet also nur halbierten Fehler, aber doppelten Aufwand.</p>
+      <span class="lbl">4.2.1 Das Euler-Polygonzug-Verfahren</span>
+      <p><strong>Grundannahme:</strong> Die im Punkt (x<sub>i</sub>, y<sub>i</sub>) berechnete Richtung bleibt über eine Schrittweite h konstant. Damit ergibt sich</p>
+      <p class="formula">x<sub>i+1</sub> = x<sub>i</sub> + h<br>y<sub>i+1</sub> = y<sub>i</sub> + h·f(x<sub>i</sub>, y<sub>i</sub>)</p>
+      <p>Verbindet man die berechneten Punkte durch Geradenstücke, entsteht ein <strong>Polygonzug</strong> – daher der Name (auch Euler-Cauchy-Polygonzug-Verfahren). y<sub>n</sub> ist die Näherung an y(x<sub>n</sub>), ebenso jeder Zwischenwert.</p>
+      <p><strong>Konvergenzordnung O(h)</strong> – halbe Schrittweite, halber Fehler.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">4.2.2 Runge-Kutta-Verfahren – die Grundidee</span>
+      <p>Man behält die Form der Iterationsvorschrift bei, ersetzt aber f durch eine geschicktere Funktion Φ:</p>
+      <p class="formula">y<sub>i+1</sub> = y<sub>i</sub> + h·Φ(x<sub>i</sub>, y<sub>i</sub>, h)</p>
+      <p>Statt höhere Ableitungen von f heranzuziehen (die Taylor-Variante wird schon für p = 2 unhandlich), setzt man Φ nach Runge und Kutta als <strong>gewichtete Summe von Hilfssteigungen</strong> k<sub>r</sub> an und wählt die Gewichte so, dass die Taylor-Entwicklung möglichst weit übereinstimmt.</p>
     </div>
     <div class="box def">
-      <span class="lbl">4.2.2 Runge-Kutta-Verfahren</span>
-      <p>Statt nur der Anfangssteigung wird eine <strong>gewichtete Mittelung mehrerer Steigungen</strong> innerhalb des Schritts verwendet. Das klassische Verfahren <strong>4. Ordnung</strong> (RK4):</p>
-      <p class="formula">k₁ = f(x<sub>n</sub>, y<sub>n</sub>)<br>k₂ = f(x<sub>n</sub> + h/2, y<sub>n</sub> + (h/2)·k₁)<br>k₃ = f(x<sub>n</sub> + h/2, y<sub>n</sub> + (h/2)·k₂)<br>k₄ = f(x<sub>n</sub> + h, y<sub>n</sub> + h·k₃)<br><br>y<sub>n+1</sub> = y<sub>n</sub> + (h/6)·( k₁ + 2k₂ + 2k₃ + k₄ )</p>
-      <p><strong>Globale Fehlerordnung O(h⁴)</strong>: Halbiert man h, sinkt der Fehler auf ein <strong>Sechzehntel</strong>. Preis: vier Funktionsauswertungen pro Schritt – bei gleicher Genauigkeit trotzdem weit günstiger als Euler.</p>
-      <p>Das <strong>Heun-Verfahren</strong> (verbessertes Euler-Verfahren) ist der Zwischenschritt: y<sub>n+1</sub> = y<sub>n</sub> + (h/2)·(k₁ + k₂) mit k₂ = f(x<sub>n</sub>+h, y<sub>n</sub>+h·k₁) – Ordnung 2.</p>
+      <span class="lbl">Die zweistufige Familie – Konvergenzordnung O(h²)</span>
+      <p class="formula">k₁ = f(x, y)<br>k₂ = f( x + h/(2α) , y + h/(2α)·k₁ )<br>Φ = (1−α)·k₁ + α·k₂</p>
+      <p>Für jedes α &gt; 0 entsteht ein Verfahren <strong>zweiter Ordnung</strong> – eine Größenordnung schneller als Euler. Zwei Spezialfälle haben eigene Namen (Def. 4.1):</p>
+      <div class="tw"><table>
+        <thead><tr><th>Wahl</th><th>Name</th><th>Vorschrift</th></tr></thead>
+        <tbody>
+          <tr><td>α = 1</td><td><strong>Mittelpunktverfahren</strong></td><td>y<sub>i+1</sub> = y<sub>i</sub> + h·f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·f(x<sub>i</sub>,y<sub>i</sub>) )</td></tr>
+          <tr><td>α = ¾</td><td><strong>Heun-Verfahren</strong></td><td>y<sub>i+1</sub> = y<sub>i</sub> + h·[ ¼·f(x<sub>i</sub>,y<sub>i</sub>) + ¾·f( x<sub>i</sub> + 2h/3 , y<sub>i</sub> + (2h/3)·f(x<sub>i</sub>,y<sub>i</sub>) ) ]</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Kuriosität mit Prüfungswert:</strong> Für jede Differenzialgleichung der Form f(x,y) = c₁x + c₂y + c₃ liefern <em>alle</em> Verfahren dieser Familie – unabhängig von α – <strong>identische Ergebnisse</strong>. Erst bei nichtlinearen Gleichungen unterscheiden sie sich.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Das klassische Runge-Kutta-Verfahren vierter Ordnung</span>
+      <p>Das bekannteste und gebräuchlichste Verfahren – oft schlicht „<em>das</em> Runge-Kutta-Verfahren“ genannt:</p>
+      <p class="formula">k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>k₂ = f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·k₁ )<br>k₃ = f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·k₂ )<br>k₄ = f( x<sub>i</sub> + h , y<sub>i</sub> + h·k₃ )<br><br>y<sub>i+1</sub> = y<sub>i</sub> + h·( ⅙k₁ + ⅓k₂ + ⅓k₃ + ⅙k₄ )</p>
+      <p>Gleichwertige Schreibweise: y<sub>i+1</sub> = y<sub>i</sub> + (h/6)(k₁ + 2k₂ + 2k₃ + k₄). <strong>Konvergenzordnung O(h⁴)</strong>: Halbierte Schrittweite senkt den Fehler auf ein <strong>Sechzehntel</strong>.</p>
     </div>
     <div class="tw"><table>
-      <thead><tr><th>Verfahren</th><th>Auswertungen je Schritt</th><th>globale Ordnung</th></tr></thead>
+      <thead><tr><th>Verfahren</th><th>Auswertungen je Schritt</th><th>Ordnung</th></tr></thead>
       <tbody>
-        <tr><td>Euler (Polygonzug)</td><td>1</td><td>O(h)</td></tr>
-        <tr><td>Heun (verbessertes Euler)</td><td>2</td><td>O(h²)</td></tr>
+        <tr><td>Euler-Polygonzug</td><td>1</td><td>O(h)</td></tr>
+        <tr><td>Mittelpunkt- / Heun-Verfahren</td><td>2</td><td>O(h²)</td></tr>
         <tr><td>Runge-Kutta klassisch</td><td>4</td><td>O(h⁴)</td></tr>
       </tbody>
     </table></div>
+    <p>Im Beispiel des Hefts liegt der Fehler des klassischen Verfahrens bei Schrittweite h selbst nach vielen Schritten noch in der Größenordnung 10<sup>−5</sup> – während der Euler-Polygonzug bei gleicher Schrittweite deutlich sichtbar danebenliegt.</p>
   </div>
 </section>
 
@@ -609,11 +674,11 @@ c) 56,03/13  =  4,310769…  =  0,43108 · 10^1   (gerundet)</div>
       <div class="task-h"><span class="task-n">Ü.4</span><span class="task-t">Bisektionsverfahren</span><span class="task-p">Kapitel 2</span></div>
       <div class="task-q"><p>Bestimmen Sie mit drei Bisektionsschritten eine Näherung für die Nullstelle von f(x) = x² − 2 im Intervall [1, 2]. Wie groß ist der Fehler höchstens?</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <div class="step">f(1) = −1 &lt; 0,  f(2) = 2 &gt; 0   →  Vorzeichenwechsel ✓
+        <div class="step">f(1) = −1 &lt; 0,  f(2) = 2 > 0   →  Vorzeichenwechsel ✓
 
-Schritt 1: m = 1,5    f(1,5) = 0,25 > 0  →  neues Intervall [1 ; 1,5]
+Schritt 1: m = 1,5    f(1,5) = 0,25 > 0     →  [1 ; 1,5]
 Schritt 2: m = 1,25   f(1,25) = −0,4375 &lt; 0 →  [1,25 ; 1,5]
-Schritt 3: m = 1,375  f(1,375) = −0,1094 &lt; 0 →  [1,375 ; 1,5]
+Schritt 3: m = 1,375  f(1,375) = −0,1094 &lt; 0 → [1,375 ; 1,5]
 
 Näherung: Intervallmitte 1,4375
 Fehlerschranke: (b−a)/2³ = 1/8 = 0,125  bzw. halbe Intervalllänge 0,0625</div>
@@ -642,16 +707,16 @@ x₃ = ½·(1,4142157 + 1,4142114) = 1,4142136</div>
       <div class="task-q"><p>Untersuchen Sie, ob die Iteration x<sub>n+1</sub> = cos(x<sub>n</sub>) auf [0; 1] konvergiert, und führen Sie vier Schritte ab x₀ = 0,5 aus.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
         <div class="step">Prüfung der Kontraktion:  g(x) = cos x,  g'(x) = −sin x
-Auf [0; 1] gilt |g'(x)| = |sin x| ≤ sin(1) = 0,8415 = K < 1   ✓
+Auf [0; 1] gilt |g'(x)| = |sin x| ≤ sin(1) = 0,8415 = K &lt; 1   ✓
 Außerdem bildet g das Intervall in sich ab (cos[0;1] ⊂ [0,54; 1]) ✓
 → nach Banach genau EIN Fixpunkt, Konvergenz von jedem Startwert aus
 
 x₀ = 0,5
-x₁ = cos(0,5)     = 0,877583
-x₂ = cos(0,877583)= 0,639012
-x₃ = cos(0,639012)= 0,802685
-x₄ = cos(0,802685)= 0,694778</div>
-        <div class="res">Die Werte pendeln sich langsam auf den Fixpunkt <strong>x* ≈ 0,739085</strong> ein. Wegen K = 0,84 ist die Konvergenz nur <strong>linear</strong> und entsprechend zäh – ein Argument für das Newton-Verfahren, das hier in drei Schritten fertig wäre.</div>
+x₁ = cos(0,5)      = 0,877583
+x₂ = cos(0,877583) = 0,639012
+x₃ = cos(0,639012) = 0,802685
+x₄ = cos(0,802685) = 0,694778</div>
+        <div class="res">Die Werte pendeln sich auf den Fixpunkt <strong>x* ≈ 0,739085</strong> ein. Wegen K = 0,84 ist die Konvergenz nur <strong>linear</strong> und entsprechend zäh – ein Argument für das Newton-Verfahren, das hier in drei Schritten fertig wäre.</div>
       </div></details>
     </div>
 
@@ -672,59 +737,253 @@ P(x) = 1·L₀ + 3·L₁ + 2·L₂
     </div>
 
     <div class="task">
-      <div class="task-h"><span class="task-n">Ü.8</span><span class="task-t">Newton-Interpolation mit dividierten Differenzen</span><span class="task-p">Kapitel 3</span></div>
-      <div class="task-q"><p>Lösen Sie dieselbe Aufgabe mit dem Newtonschen Schema und vergleichen Sie.</p></div>
+      <div class="task-h"><span class="task-n">Ü.8</span><span class="task-t">Übung 3.5 – Newtonsche Form bei ungleichen Abständen</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q">
+        <p>Von einem funktionalen Zusammenhang sind bekannt:</p>
+        <div class="tw"><table class="mono">
+          <thead><tr><th>k</th><th>0</th><th>1</th><th>2</th><th>3</th></tr></thead>
+          <tbody>
+            <tr><td>x<sub>k</sub></td><td>−2</td><td>0</td><td>1</td><td>4</td></tr>
+            <tr><td>f<sub>k</sub></td><td>0</td><td>1</td><td>0</td><td>2</td></tr>
+          </tbody>
+        </table></div>
+        <p>Bestimmen Sie das Interpolationspolynom dritten Grades.</p>
+      </div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <div class="step">x_i | y_i |  1. Ordnung        |  2. Ordnung
-----+-----+-------------------+---------------------
- 0  |  1  |
-    |     | (3−1)/(1−0) =  2  |
- 1  |  3  |                   | (−1−2)/(2−0) = −1,5
-    |     | (2−3)/(2−1) = −1  |
- 2  |  2  |
+        <p>Differenzenschema aufstellen – die Abstände sind hier <strong>nicht</strong> gleich, also immer durch (x<sub>i+m</sub> − x<sub>i</sub>) teilen:</p>
+        <div class="step">x_k | f_k |   1. Ordnung        |  2. Ordnung          |  3. Ordnung
+----+-----+---------------------+----------------------+-------------
+ −2 |  0  |
+    |     | (1−0)/(0−(−2)) = 1/2|
+  0 |  1  |                     | (−1−1/2)/(1−(−2))
+    |     | (0−1)/(1−0)  = −1   |        = −1/2
+  1 |  0  |                     |                      | (5/12+1/2)/6
+    |     | (2−0)/(4−1)  = 2/3  | (2/3+1)/(4−0) = 5/12 |     = 11/72
+  4 |  2  |
 
-c₀ = 1,  c₁ = 2,  c₂ = −1,5   (jeweils oberster Wert der Spalte)
+c₀ = 0,  c₁ = 1/2,  c₂ = −1/2,  c₃ = 11/72</div>
+        <div class="step">P(x) = 0 + ½(x+2) − ½(x+2)x + (11/72)(x+2)x(x−1)
 
-P(x) = 1 + 2·(x−0) − 1,5·(x−0)(x−1)
-     = 1 + 2x − 1,5x² + 1,5x
-     = −1,5x² + 3,5x + 1</div>
-        <div class="res">Dasselbe Polynom wie in Ü.7 – wie es die Eindeutigkeit verlangt. <strong>Vorteil der Newton-Form:</strong> Käme der Punkt (3, 0) hinzu, würde nur ein weiterer Summand c₃·x(x−1)(x−2) ergänzt; bei Lagrange müsste man komplett neu rechnen.</div>
+ausmultipliziert:
+P(x) = (11x³ − 25x² − 58x)/72 + 1</div>
+        <div class="res">Probe an allen vier Stützstellen: P(−2) = (−88−100+116)/72 + 1 = 0 ✓ · P(0) = 1 ✓ · P(1) = (11−25−58)/72 + 1 = 0 ✓ · P(4) = (704−400−232)/72 + 1 = 2 ✓</div>
       </div></details>
     </div>
 
     <div class="task">
-      <div class="task-h"><span class="task-n">Ü.9</span><span class="task-t">Euler-Verfahren</span><span class="task-p">Kapitel 4</span></div>
-      <div class="task-q"><p>Lösen Sie y′ = y mit y(0) = 1 näherungsweise auf [0; 0,4] mit h = 0,1 und vergleichen Sie mit der exakten Lösung.</p></div>
+      <div class="task-h"><span class="task-n">Ü.9</span><span class="task-t">Natürlicher kubischer Spline</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Legen Sie durch (0,0), (1,1), (2,0) einen natürlichen kubischen Spline.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <div class="step">y_{n+1} = y_n + h·f(x_n, y_n) = y_n + 0,1·y_n = 1,1·y_n
+        <div class="step">h = 1,  natürlich → M₀ = M₂ = 0,  nur M₁ unbekannt
 
-y₀ = 1
-y₁ = 1,1
-y₂ = 1,21
-y₃ = 1,331
-y₄ = 1,4641
+System für i = 1:   M₀ + 4M₁ + M₂ = 6·(f₀ − 2f₁ + f₂)
+                    4M₁ = 6·(0 − 2 + 0) = −12   →   M₁ = −3
 
-exakt: y(x) = e^x  →  y(0,4) = 1,491825</div>
-        <div class="res">Näherung 1,4641 gegen exakt 1,4918 – absoluter Fehler <strong>0,0277</strong> (rund 1,9&nbsp;%). Mit halbierter Schrittweite h = 0,05 halbiert sich der Fehler ungefähr: <strong>Ordnung O(h)</strong>. Das Euler-Verfahren unterschätzt hier systematisch, weil die Lösungskurve konvex ist und die Tangente stets darunter verläuft.</div>
+Teilintervall [0,1]:
+  b₀ = (f₁−f₀)/h − h(2M₀+M₁)/6 = 1 − (0−3)/6 = 1,5
+  s₀(x) = 0 + 1,5x + 0 + (M₁−M₀)/6 · x³ = 1,5x − 0,5x³
+
+Teilintervall [1,2]:
+  b₁ = (f₂−f₁)/h − h(2M₁+M₂)/6 = −1 − (−6)/6 = 0
+  s₁(x) = 1 + 0 − 1,5(x−1)² + (0−(−3))/6 ·(x−1)³
+        = 1 − 1,5(x−1)² + 0,5(x−1)³</div>
+        <div class="res">Proben: s₀(1) = 1,5 − 0,5 = 1 ✓ · s₁(2) = 1 − 1,5 + 0,5 = 0 ✓<br>
+        s₀′(x) = 1,5 − 1,5x² → s₀′(1) = 0, s₁′(1) = 0 ✓ (erste Ableitung stetig)<br>
+        s₀″(x) = −3x → s₀″(1) = −3 = M₁, s₁″(1) = −3 ✓ · s₀″(0) = 0 und s₁″(2) = −3+3·1 = 0 ✓ (natürliche Randbedingung)</div>
       </div></details>
     </div>
 
     <div class="task">
-      <div class="task-h"><span class="task-n">Ü.10</span><span class="task-t">Runge-Kutta im Vergleich</span><span class="task-p">Kapitel 4</span></div>
-      <div class="task-q"><p>Führen Sie für dasselbe Problem einen einzigen RK4-Schritt mit h = 0,4 aus.</p></div>
+      <div class="task-h"><span class="task-n">Ü.10</span><span class="task-t">Euler gegen Runge-Kutta</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Lösen Sie y′ = y mit y(0) = 1 auf [0; 0,4] – einmal mit vier Euler-Schritten (h = 0,1), einmal mit einem einzigen RK4-Schritt (h = 0,4). Vergleichen Sie mit der exakten Lösung e<sup>0,4</sup> = 1,491825.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <div class="step">f(x,y) = y,  x₀ = 0,  y₀ = 1,  h = 0,4
+        <div class="step">EULER (h = 0,1):   y_{i+1} = y_i + 0,1·y_i = 1,1·y_i
+y₀ = 1 → 1,1 → 1,21 → 1,331 → y₄ = 1,4641
+Fehler: 1,491825 − 1,4641 = 0,0277   (≈ 1,9 %)
 
-k₁ = f(0 ; 1)                    = 1
-k₂ = f(0,2 ; 1 + 0,2·1)          = 1,2
-k₃ = f(0,2 ; 1 + 0,2·1,2)        = 1,24
-k₄ = f(0,4 ; 1 + 0,4·1,24)       = 1,496
+RUNGE-KUTTA 4. Ordnung (h = 0,4, ein Schritt):
+k₁ = f(0 ; 1)               = 1
+k₂ = f(0,2 ; 1 + 0,2·1)     = 1,2
+k₃ = f(0,2 ; 1 + 0,2·1,2)   = 1,24
+k₄ = f(0,4 ; 1 + 0,4·1,24)  = 1,496
 
-y₁ = 1 + (0,4/6)·(k₁ + 2k₂ + 2k₃ + k₄)
-   = 1 + 0,0666667·(1 + 2,4 + 2,48 + 1,496)
-   = 1 + 0,0666667·7,376
-   = 1,491733</div>
-        <div class="res">Ein <strong>einziger</strong> RK4-Schritt liefert 1,491733 gegen exakt 1,491825 – Fehler <strong>0,00009</strong>. Vier Euler-Schritte kamen auf 0,0277, also den <strong>300-fachen</strong> Fehler bei gleicher Zahl von Funktionsauswertungen. Das ist der ganze Grund, warum in der Praxis Runge-Kutta läuft und nicht Euler.</div>
+y₁ = 1 + (0,4/6)·(1 + 2·1,2 + 2·1,24 + 1,496)
+   = 1 + 0,0666667 · 7,376 = 1,491733
+Fehler: 0,000092</div>
+        <div class="res">Bei <strong>gleicher Zahl von Funktionsauswertungen</strong> (4) ist der Fehler von RK4 rund <strong>300-mal kleiner</strong>. Das Euler-Verfahren unterschätzt hier systematisch, weil die Lösungskurve konvex ist und die Tangente stets darunter verläuft.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Einsendeaufgabe</p>
+      <h2>Einsendeaufgabe Typ A · MAI14C-XX1-K03</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Drei Aufgaben quer durch die Kapitel 2, 3 und 4. Die Lösungswege sind eigene Rechenwege zum Abgleich – kein offizieller Lösungsschlüssel.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.1</span><span class="task-t">Alle Nullstellen mit Bisektion und Newton</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q">
+        <p>Bestimmen Sie näherungsweise <strong>alle</strong> Nullstellen von</p>
+        <p class="formula">f(x) = 2x³ − 3x² − 12x + 2</p>
+        <p>a) mit dem Bisektionsverfahren, b) mit dem Newton-Verfahren. Führen Sie vier Nachkommastellen mit und benutzen Sie die Genauigkeitsschranke ε = 10<sup>−3</sup>.</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>Schritt 0 – wie viele Nullstellen gibt es und wo?</strong> Erst die Extremstellen bestimmen, dann sieht man die Vorzeichenwechsel:</p>
+        <div class="step">f′(x) = 6x² − 6x − 12 = 6(x−2)(x+1)
+  →  lokales Maximum bei x = −1:  f(−1) = −2 − 3 + 12 + 2 =  9
+  →  lokales Minimum  bei x =  2:  f(2)  = 16 − 12 − 24 + 2 = −18
+
+Da f(−∞) = −∞ und f(+∞) = +∞ und Max > 0 > Min:
+DREI reelle Nullstellen, je eine in
+  (−∞, −1),   (−1, 2),   (2, ∞)
+
+Startintervalle über Vorzeichentest:
+  f(−2) = −2   f(−1) =  9   →  [−2 ; −1]
+  f( 0) =  2   f( 1) = −11  →  [ 0 ;  1]
+  f( 3) = −7   f( 4) =  34  →  [ 3 ;  4]</div>
+        <p><strong>a) Bisektion</strong>, hier für das Intervall [0; 1] durchgerechnet (die anderen beiden laufen genauso):</p>
+        <div class="step">a       b       m       f(m)        neues Intervall
+0,0000  1,0000  0,5000  −4,0000     [0     ; 0,5   ]
+0,0000  0,5000  0,2500  −1,1563     [0     ; 0,25  ]
+0,0000  0,2500  0,1250  −0,4570     [0     ; 0,125 ]
+0,0000  0,1250  0,0625  −0,7402…    ← Achtung: f(0,0625) = 1,2382 > 0
+                                     [0,0625; 0,125 ]
+…
+Nach 10 Schritten ist b − a = 1/2^10 &lt; 10^(−3);
+Ergebnis: x ≈ 0,1611</div>
+        <p>Abbruch, sobald die Intervalllänge (b−a)/2ⁿ unter ε = 10<sup>−3</sup> liegt – bei Startlänge 1 also nach <strong>10 Schritten</strong>.</p>
+        <p><strong>b) Newton</strong> – x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f′(x<sub>n</sub>), je Nullstelle drei bis vier Schritte:</p>
+        <div class="step">Nullstelle 1, Start x₀ = −2:
+  f(−2) = −2,0000   f′(−2) = 24,0000  →  x₁ = −1,9167
+  f(−1,9167) = −0,1043   f′ = 21,5424 →  x₂ = −1,9119
+  f(−1,9119) = −0,0008                →  x₃ = −1,9118  ✓
+
+Nullstelle 2, Start x₀ = 0:
+  f(0) = 2,0000     f′(0) = −12,0000  →  x₁ =  0,1667
+  f(0,1667) = −0,0745   f′ = −12,8335 →  x₂ =  0,1609
+  f(0,1609) = −0,0001                 →  x₃ =  0,1609  ✓
+
+Nullstelle 3, Start x₀ = 3,5:
+  f(3,5) = 9,0000   f′(3,5) = 40,5000 →  x₁ =  3,2778
+  f(3,2778) = 0,8630    f′ = 32,7970  →  x₂ =  3,2515
+  f(3,2515) = 0,0155    f′ = 31,9248  →  x₃ =  3,2510  ✓</div>
+        <div class="res">x₁ ≈ <strong>−1,9118</strong>&nbsp;·&nbsp; x₂ ≈ <strong>0,1609</strong>&nbsp;·&nbsp; x₃ ≈ <strong>3,2510</strong></div>
+        <p><strong>Probe über den Satz von Vieta</strong> – die schnellste Kontrolle für die ganze Aufgabe:</p>
+        <div class="step">Summe der Nullstellen  = −(−3)/2 = 1,5
+  −1,9118 + 0,1609 + 3,2510 = 1,5001  ✓
+
+Produkt der Nullstellen = −2/2 = −1
+  (−1,9118)·(0,1609)·(3,2510) = −1,0001  ✓</div>
+        <p>Und der erwartete Unterschied der Verfahren: Bisektion braucht für ε = 10<sup>−3</sup> zehn Schritte, Newton drei – dafür konvergiert Newton nur bei brauchbarem Startwert.</p>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.2</span><span class="task-t">Interpolationspolynom und natürlicher kubischer Spline</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q">
+        <p>Von einem funktionalen Zusammenhang sind bekannt:</p>
+        <div class="tw"><table class="mono">
+          <thead><tr><th>i</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+          <tbody>
+            <tr><td>x<sub>i</sub></td><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td></tr>
+            <tr><td>f<sub>i</sub></td><td>0</td><td>−1</td><td>0</td><td>1</td><td>0</td></tr>
+          </tbody>
+        </table></div>
+        <p>a) das Interpolationspolynom vierten Grades in newtonscher Form, b) den interpolierenden natürlichen kubischen Spline.</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Differenzenschema, hier mit durchgehend h = 1:</p>
+        <div class="step">x_i | f_i |  1. Ord. |  2. Ord. |  3. Ord. |  4. Ord.
+----+-----+----------+----------+----------+---------
+ −2 |  0  |
+    |     |   −1     |
+ −1 | −1  |          |    1     |
+    |     |    1     |          |  −1/3    |
+  0 |  0  |          |    0     |          |    0
+    |     |    1     |          |  −1/3    |
+  1 |  1  |          |   −1     |
+    |     |   −1     |
+  2 |  0  |
+
+c₀ = 0,  c₁ = −1,  c₂ = 1,  c₃ = −1/3,  c₄ = 0</div>
+        <div class="step">P(x) = 0 − 1·(x+2) + 1·(x+2)(x+1) − (1/3)·(x+2)(x+1)x + 0·(…)
+
+ausmultipliziert:
+  −(x+2) + (x²+3x+2)            = x² + 2x
+  −(1/3)(x³+3x²+2x)             = −x³/3 − x² − 2x/3
+
+P(x) = −x³/3 + 4x/3 = x(4 − x²)/3 = x(2−x)(2+x)/3</div>
+        <div class="res">Bemerkenswert: <strong>c₄ = 0</strong> – das „Polynom vierten Grades“ ist in Wahrheit ein <strong>kubisches</strong> Polynom. Das ist kein Rechenfehler, sondern die Aussage der Daten. Probe: P(−2)=0 ✓ P(−1)=−1 ✓ P(0)=0 ✓ P(1)=1 ✓ P(2)=0 ✓</div>
+        <p><strong>b)</strong> Natürlicher kubischer Spline, h = 1, M<sub>i</sub> = s″(x<sub>i</sub>), M₀ = M₄ = 0:</p>
+        <div class="step">M_{i−1} + 4M_i + M_{i+1} = 6·(f_{i−1} − 2f_i + f_{i+1})
+
+i=1:  4M₁ + M₂        = 6·(0 + 2 + 0) =  12
+i=2:  M₁ + 4M₂ + M₃   = 6·(−1 − 0 + 1) =  0
+i=3:        M₂ + 4M₃  = 6·(0 − 2 + 0) = −12
+
+Lösung:  M₁ = 3,  M₂ = 0,  M₃ = −3
+(Die Daten sind punktsymmetrisch, deshalb M₂ = 0 und M₃ = −M₁.)</div>
+        <p>Je Teilintervall mit b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>) − (2M<sub>i</sub>+M<sub>i+1</sub>)/6:</p>
+        <div class="step">[−2,−1]:  b₀ = −1 − (0+3)/6 = −1,5
+          s₀(x) = −1,5(x+2) + 0,5(x+2)³
+
+[−1, 0]:  b₁ =  1 − (6+0)/6 = 0
+          s₁(x) = −1 + 1,5(x+1)² − 0,5(x+1)³
+
+[ 0, 1]:  b₂ =  1 − (0−3)/6 = 1,5
+          s₂(x) = 1,5x − 0,5x³
+
+[ 1, 2]:  b₃ = −1 − (−6+0)/6 = 0
+          s₃(x) = 1 − 1,5(x−1)² + 0,5(x−1)³</div>
+        <div class="res">Kontrollen: jedes Stück trifft beide Randwerte (s₀(−1) = −1,5+0,5 = −1 ✓, s₃(2) = 1−1,5+0,5 = 0 ✓); s′ passt an den Knoten zusammen (s₁′(0) = 3−1,5 = 1,5 = s₂′(0) ✓); und die natürliche Randbedingung ist erfüllt: s₀″(−2) = M₀ = 0 und s₃″(2) = M₄ = 0 ✓</div>
+        <p>Interessant für den Vergleich: Auf [0,1] ist der Spline s₂(x) = 1,5x − 0,5x³, das Polynom dagegen P(x) = −x³/3 + 4x/3 ≈ 1,333x − 0,333x³ – beide gehen durch dieselben Punkte, verlaufen dazwischen aber unterschiedlich.</p>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.3</span><span class="task-t">Euler-Polygonzug über zehn Schritte</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q">
+        <p>Gegeben sei das Anfangswertproblem</p>
+        <p class="formula">y′(x) = −x·y(x) + e<sup>x</sup>·(x + 1),&nbsp;&nbsp;&nbsp;y(0) = 2</p>
+        <p>Berechnen Sie mit dem Euler-Polygonzug-Verfahren bei Schrittweite h = 0,1 eine Näherung an y(1). Vier Nachkommastellen.</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">f(x, y) = −x·y + e^x·(x+1)
+y_{i+1} = y_i + 0,1 · f(x_i, y_i)          10 Schritte von x = 0 bis x = 1</div>
+        <div class="step">  i   x_i    y_i       e^(x_i)    f(x_i, y_i)   y_{i+1}
+  0  0,0   2,0000    1,000000    1,000000     2,1000
+  1  0,1   2,1000    1,105171    1,005688     2,2006
+  2  0,2   2,2006    1,221403    1,025564     2,3032
+  3  0,3   2,3032    1,349859    1,063857     2,4096
+  4  0,4   2,4096    1,491825    1,124715     2,5221
+  5  0,5   2,5221    1,648721    1,212032     2,6433
+  6  0,6   2,6433    1,822119    1,329410     2,7762
+  7  0,7   2,7762    2,013753    1,480040     2,9242
+  8  0,8   2,9242    2,225541    1,666614     3,0909
+  9  0,9   3,0909    2,459603    1,891436     3,2800
+ 10  1,0   3,2800</div>
+        <div class="res">y(1) ≈ <strong>3,2800</strong></div>
+        <p>Zwei Rechenkontrollen, die sich lohnen:</p>
+        <div class="step">Startschritt:  f(0 ; 2) = −0·2 + e⁰·(0+1) = 1
+               →  y₁ = 2 + 0,1·1 = 2,1        ✓ (unabhängig von y₀!)
+
+Vorzeichen:    Der Term −x·y bremst mit wachsendem x zunehmend,
+               e^x(x+1) treibt an. Bis x = 1 überwiegt der Antrieb,
+               die Näherung wächst monoton.  ✓</div>
+        <p>Zur Einordnung: Das Euler-Verfahren hat nur die Ordnung O(h). Bei h = 0,1 über zehn Schritte liegt der Verfahrensfehler typischerweise in der zweiten Nachkommastelle – die vier mitgeführten Stellen dienen dazu, dass sich <em>Rundungs</em>fehler nicht zusätzlich aufschaukeln, nicht als Genauigkeitsaussage über das Ergebnis.</p>
       </div></details>
     </div>
   </div>
@@ -753,22 +1012,29 @@ y₁ = 1 + (0,4/6)·(k₁ + 2k₂ + 2k₃ + k₄)
       <li>Was passiert bei der Auslöschung – und warum ist sie gefährlich?</li>
       <li>Wie ist eine Gleitpunktzahl aufgebaut, und wie lautet die Normierungsbedingung?</li>
       <li>Was unterscheidet Über- von Unterlauf – und welcher ist tückischer?</li>
-      <li>Was besagt die Maschinengenauigkeit?</li>
       <li>Wie hängen Nullstellen- und Fixpunktproblem zusammen?</li>
       <li>Welche zwei Voraussetzungen braucht Satz 2.1 für die Existenz einer Nullstelle?</li>
       <li>Wann heißt eine Funktion kontrahierend, und wie prüft man das praktisch?</li>
       <li>Was garantiert der Fixpunktsatz von Banach – Existenz, Eindeutigkeit oder beides?</li>
       <li>Wie lautet die Iterationsvorschrift des Newton-Verfahrens, und welche Idee steckt dahinter?</li>
       <li>Vergleichen Sie Bisektion und Newton nach Konvergenzgeschwindigkeit und Sicherheit.</li>
-      <li>Wie groß ist der Fehler nach n Bisektionsschritten?</li>
-      <li>Wie viele Polynome vom Grad ≤ n gehen durch n+1 Stützpunkte?</li>
+      <li>Wie viele Bisektionsschritte braucht man bei Startintervalllänge 1 für ε = 10⁻³?</li>
+      <li>Was besagt Satz 3.1 – wie viele Interpolationspolynome vom Grad ≤ n gibt es?</li>
       <li>Welche Eigenschaft haben die Lagrange-Basispolynome an den Stützstellen?</li>
+      <li>Wie berechnet man dividierte Differenzen, und wo stehen die Koeffizienten im Schema?</li>
       <li>Welchen Vorteil hat die Newton-Form gegenüber der Lagrange-Form?</li>
-      <li>Was ist das Runge-Phänomen, und welche Konsequenz zieht man daraus?</li>
-      <li>Welche Übergangsbedingungen erfüllt ein kubischer Spline?</li>
-      <li>Woher kommen beim natürlichen kubischen Spline die beiden fehlenden Gleichungen?</li>
-      <li>Wie lautet die Vorschrift des Euler-Verfahrens, und welche Fehlerordnung hat es?</li>
-      <li>Wie viele Steigungen mittelt RK4, und welche Ordnung erreicht es damit?</li>
+      <li>Wie lautet die Restglieddarstellung des Interpolationsfehlers – und was weiß man über ξ?</li>
+      <li>Warum benutzt man überhaupt Splines statt eines Polynoms hohen Grades?</li>
+      <li>Definition 3.4: Welche zwei Bedingungen erfüllt ein Spline vom Grad m?</li>
+      <li>Wie viele zusätzliche Angaben braucht der quadratische, wie viele der kubische Spline?</li>
+      <li>Nennen Sie die drei Standard-Randbedingungen aus Definition 3.5.</li>
+      <li>Was bedeutet „natürlich“ beim kubischen Spline konkret für f″?</li>
+      <li>Was besagt der Satz von Picard und Lindelöf?</li>
+      <li>Wie lautet die Vorschrift des Euler-Polygonzug-Verfahrens, und welche Ordnung hat es?</li>
+      <li>Wie ist die zweistufige Runge-Kutta-Familie aufgebaut, und welche Ordnung erreicht sie?</li>
+      <li>Welches α ergibt das Mittelpunkt-, welches das Heun-Verfahren?</li>
+      <li>Für welche Klasse von f liefern alle Verfahren dieser Familie dasselbe Ergebnis?</li>
+      <li>Wie lauten die vier Steigungen und die Gewichte des klassischen Runge-Kutta-Verfahrens?</li>
       <li>Um welchen Faktor sinkt der Fehler bei RK4, wenn h halbiert wird?</li>
     </ul>
   </div>
@@ -802,20 +1068,22 @@ y₁ = 1 + (0,4/6)·(k₁ + 2k₂ + 2k₃ + k₄)
         <tr><td>Wurzel aus a</td><td>x<sub>n+1</sub> = ½(x<sub>n</sub> + a/x<sub>n</sub>)</td><td>quadratisch</td></tr>
       </tbody>
     </table></div>
+    <p class="formula">Schrittzahl der Bisektion für Genauigkeit ε:&nbsp; n ≥ log₂((b−a)/ε)</p>
 
     <h4>Interpolation</h4>
-    <p class="formula">Lagrange:&nbsp; P(x) = ∑ y<sub>i</sub>·L<sub>i</sub>(x),&nbsp;&nbsp;L<sub>i</sub>(x) = ∏<sub>j≠i</sub> (x−x<sub>j</sub>)/(x<sub>i</sub>−x<sub>j</sub>)<br><br>Newton:&nbsp;&nbsp; P(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + …<br>&nbsp;&nbsp;c<sub>k</sub> = dividierte Differenzen (oberster Eintrag der k-ten Spalte)<br><br>Fehler:&nbsp;&nbsp; f(x) − P(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · ∏(x − x<sub>i</sub>)</p>
+    <p class="formula">Lagrange:&nbsp; P(x) = ∑ f<sub>k</sub>·L<sub>k</sub>(x),&nbsp;&nbsp;L<sub>k</sub>(x) = ∏<sub>i≠k</sub> (x−x<sub>i</sub>)/(x<sub>k</sub>−x<sub>i</sub>)<br><br>Newton:&nbsp;&nbsp; P(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + …<br>&nbsp;&nbsp;c<sub>k</sub> = f[x₀,…,x<sub>k</sub>] = oberster Eintrag der k-ten Spalte<br>&nbsp;&nbsp;f[x<sub>i</sub>,…,x<sub>i+m</sub>] = (f[x<sub>i+1</sub>,…,x<sub>i+m</sub>] − f[x<sub>i</sub>,…,x<sub>i+m−1</sub>])/(x<sub>i+m</sub> − x<sub>i</sub>)<br><br>Fehler:&nbsp;&nbsp; f(x) − P<sub>n</sub>(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · ∏(x − x<sub>i</sub>)</p>
     <div class="tw"><table>
-      <thead><tr><th>Spline</th><th>stetig in</th></tr></thead>
+      <thead><tr><th>Spline vom Grad m</th><th>stetig bis</th><th>Zusatzbedingungen</th></tr></thead>
       <tbody>
-        <tr><td>linear</td><td>Funktionswert</td></tr>
-        <tr><td>quadratisch</td><td>Funktionswert, s′</td></tr>
-        <tr><td>kubisch</td><td>Funktionswert, s′, s″ (natürlich: s″ = 0 an den Rändern)</td></tr>
+        <tr><td>linear</td><td>Funktionswert</td><td>keine</td></tr>
+        <tr><td>quadratisch</td><td>s′</td><td>eine (z. B. s′(x₀))</td></tr>
+        <tr><td>kubisch</td><td>s′ und s″</td><td>zwei: natürlich · periodisch · not-a-knot</td></tr>
       </tbody>
     </table></div>
+    <p class="formula">natürlicher kubischer Spline:&nbsp; M₀ = M<sub>n</sub> = 0&nbsp; mit&nbsp; M<sub>i</sub> = s″(x<sub>i</sub>)<br><br>h äquidistant:&nbsp; M<sub>i−1</sub> + 4M<sub>i</sub> + M<sub>i+1</sub> = (6/h²)(f<sub>i−1</sub> − 2f<sub>i</sub> + f<sub>i+1</sub>)<br><br>Teilstück:&nbsp; p<sub>i</sub>(x) = f<sub>i</sub> + b<sub>i</sub>(x−x<sub>i</sub>) + (M<sub>i</sub>/2)(x−x<sub>i</sub>)² + ((M<sub>i+1</sub>−M<sub>i</sub>)/(6h))(x−x<sub>i</sub>)³<br>&nbsp;&nbsp;b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>)/h − h(2M<sub>i</sub>+M<sub>i+1</sub>)/6</p>
 
     <h4>Numerische DGL (y′ = f(x,y), y(x₀) = y₀)</h4>
-    <p class="formula">Euler:&nbsp; y<sub>n+1</sub> = y<sub>n</sub> + h·f(x<sub>n</sub>, y<sub>n</sub>)&nbsp;&nbsp;&nbsp;O(h)<br><br>Heun:&nbsp;&nbsp; y<sub>n+1</sub> = y<sub>n</sub> + (h/2)(k₁ + k₂)&nbsp;&nbsp;&nbsp;O(h²)<br><br>RK4:&nbsp;&nbsp;&nbsp; k₁ = f(x<sub>n</sub>, y<sub>n</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>n</sub>+h/2, y<sub>n</sub>+(h/2)k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₃ = f(x<sub>n</sub>+h/2, y<sub>n</sub>+(h/2)k₂)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₄ = f(x<sub>n</sub>+h, y<sub>n</sub>+h·k₃)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>n+1</sub> = y<sub>n</sub> + (h/6)(k₁ + 2k₂ + 2k₃ + k₄)&nbsp;&nbsp;&nbsp;O(h⁴)</p>
+    <p class="formula">Euler:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h·f(x<sub>i</sub>, y<sub>i</sub>)&nbsp;&nbsp;&nbsp;O(h)<br><br>2-stufig:&nbsp;&nbsp;&nbsp;k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>i</sub> + h/(2α), y<sub>i</sub> + (h/(2α))k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h[(1−α)k₁ + αk₂]&nbsp;&nbsp;&nbsp;O(h²)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;α = 1 → Mittelpunkt,&nbsp; α = ¾ → Heun<br><br>RK4:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>i</sub>+h/2, y<sub>i</sub>+(h/2)k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₃ = f(x<sub>i</sub>+h/2, y<sub>i</sub>+(h/2)k₂)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₄ = f(x<sub>i</sub>+h, y<sub>i</sub>+h·k₃)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h(⅙k₁ + ⅓k₂ + ⅓k₃ + ⅙k₄)&nbsp;&nbsp;&nbsp;O(h⁴)</p>
   </div>
 </section>
 
