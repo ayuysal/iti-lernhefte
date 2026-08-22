@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPI22 – Programmieren in C, Teil 2</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.heftnav{display:flex;align-items:center;gap:.3rem}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0;position:relative}
+.copy-def{position:absolute;top:.4rem;right:.45rem;font-family:var(--font-ui);font-size:.58rem;font-weight:650;letter-spacing:.03em;background:var(--paper-sunk);color:var(--ink-faint);border:1px solid var(--rule-soft);border-radius:2px;padding:.2rem .42rem;line-height:1;cursor:pointer;opacity:0;transition:.15s}
+.box.def:hover .copy-def,.copy-def:focus-visible{opacity:1}
+.copy-def:hover{color:var(--accent);border-color:var(--accent)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("gpi22:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">GPI22 <span>· EP</span></div>
+    <nav class="heftnav">
+      <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+      <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
+      <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
+      <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
+    </nav>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Programmieren in C, Teil 2</h1>
+      <p class="sub">Enums und Flags, das Zeigerkonzept mit Zeigerarithmetik, Funktionen und Array-to-Pointer-Decay, Präprozessor und Makros, Linkage und Speicherklassen, malloc/free samt Memory-Leaks sowie die wichtigsten Bibliotheksfunktionen – mit Übungsaufgaben und Lösungswegen.</p>
+      <div class="meta">
+        <span>Erweiterte Programmierung · GPI22</span>
+        <span>Kapitel 6–12</span>
+        <span>Übungsaufgaben mit Lösungen</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 6 ══════════════ -->
+<section class="sec" id="k6" data-num="6" data-title="Enums und Flags">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">6</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 6</p>
+      <h2>Enums und Flags</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Aufzählungstypen machen Code lesbar und wartbar – und mit Zweierpotenzen lassen sich viele Wahrheitswerte in einer einzigen Variable speichern.</p>
+
+    <div class="box def">
+      <span class="lbl">Das Problem, das Enums lösen</span>
+      <p>Eine Merkmalsausprägung als <strong>Zeichenkette</strong> zu speichern ist flexibel, aber tippfehleranfällig, schlecht übersetzbar und speicherhungrig. Sie als <strong>Zahlencode</strong> zu speichern ist sparsam, erzeugt aber <strong>magic numbers</strong> – im Quelltext sieht man der Zahl ihre Bedeutung nicht an. Enums vereinen beide Vorteile.</p>
+    </div>
+    <p class="formula">enum salutation {<br>&nbsp;&nbsp;SALUTATION_NEUTRAL,<br>&nbsp;&nbsp;SALUTATION_MALE = 5,<br>&nbsp;&nbsp;SALUTATION_FEMALE,&nbsp;&nbsp;// = 6<br>};&nbsp;&nbsp;// Semikolon wie bei struct und union</p>
+    <ul>
+      <li>Nummerierung beginnt bei <strong>0</strong>; nach einer expliziten Zuweisung zählt der Compiler von dort weiter.</li>
+      <li>Schreibweise der Ausprägungen: Großbuchstaben mit Unterstrichen (<strong>screaming snake case</strong>). Ein <strong>Präfix</strong> (<code>SALUTATION_</code>) ist wichtig, weil die Ausprägungen <strong>globale Bezeichner</strong> sind.</li>
+      <li>Das Komma nach der letzten Ausprägung ist optional, aber empfehlenswert – spätere Änderungen werden einfacher.</li>
+      <li>Welchen Typ der Compiler wählt, ist offen; garantiert ist nur, dass er den <strong>gesamten int-Wertebereich</strong> abdecken kann. <strong>Enum-Literale sind aber garantiert vom Typ <code>int</code></strong>.</li>
+      <li>Für die Ausgabe einer Enum-<em>Variable</em> mit <code>printf</code> explizit nach <code>int</code> casten (Portabilität); beim Literal nicht nötig.</li>
+      <li>Die Bezeichner stehen <strong>zur Laufzeit nicht zur Verfügung</strong> – sie sind reine Platzhalter für Ganzzahlen.</li>
+      <li>Häufig zusammen mit <code>switch</code>, oft mit <code>typedef</code> zusammengefasst.</li>
+    </ul>
+
+    <div class="box def">
+      <span class="lbl">6.2 Enum-Flags</span>
+      <p>Weist man den Ausprägungen <strong>Zweierpotenzen</strong> zu, bekommt jedes Merkmal ein eigenes Bit – dann speichert eine einzige Variable jede beliebige Kombination.</p>
+      <p class="formula">typedef enum {<br>&nbsp;&nbsp;INSTRUMENT_VIOLIN&nbsp; = 1 &lt;&lt; 0,&nbsp;&nbsp;// 1&nbsp;&nbsp;= 0b0001<br>&nbsp;&nbsp;INSTRUMENT_VIOLA&nbsp;&nbsp; = 1 &lt;&lt; 1,&nbsp;&nbsp;// 2&nbsp;&nbsp;= 0b0010<br>&nbsp;&nbsp;INSTRUMENT_CELLO&nbsp;&nbsp; = 1 &lt;&lt; 2,&nbsp;&nbsp;// 4&nbsp;&nbsp;= 0b0100<br>&nbsp;&nbsp;INSTRUMENT_BASS&nbsp;&nbsp;&nbsp; = 1 &lt;&lt; 3,&nbsp;&nbsp;// 8&nbsp;&nbsp;= 0b1000<br>} instrument;</p>
+      <p><strong>Setzen</strong> mit bitweisem Oder, <strong>Prüfen</strong> mit bitweisem Und:</p>
+      <p class="formula">instrument x = INSTRUMENT_VIOLIN | INSTRUMENT_CELLO;&nbsp;&nbsp;// 0b0101 = 5<br>if (x &amp; INSTRUMENT_VIOLIN) { … }&nbsp;&nbsp;// Ergebnis ≠ 0 → enthalten</p>
+    </div>
+    <p>Ohne Flags bräuchte man für eine unbekannte Zahl von Merkmalen eine dynamisch wachsende Datenstruktur – komplex und ineffizient. Mit Flags genügt <strong>eine</strong> Variable.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 7 ══════════════ -->
+<section class="sec" id="k7" data-num="7" data-title="Zeigerkonzept">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">7</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 7</p>
+      <h2>Zeigerkonzept</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Ohne Zeiger wäre C für systemnahe Programmierung undenkbar. Alles danach – Funktionen mit Rückgabe über Parameter, Arrays, dynamischer Speicher – baut darauf auf.</p>
+
+    <div class="box def">
+      <span class="lbl">Die zwei Operatoren</span>
+      <p><strong><code>&amp;</code> Adressoperator</strong> („address-of“): liefert einen Zeiger auf die Variable.<br>
+      <strong><code>*</code> Dereferenzierungsoperator</strong>: liefert den Wert, auf den der Zeiger verweist – der Umkehroperator zu <code>&amp;</code>.</p>
+      <p class="formula">int number = 42;<br>int* pointer = &amp;number;&nbsp;&nbsp;// Zeigervariable<br>*pointer = 100;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// schreibt in number<br>printf("%p\n", (void*)pointer);&nbsp;&nbsp;// %p verlangt void*</p>
+      <p>Ist <code>p</code> ein Zeiger auf die Variable <code>v</code>, dann ist <code>*p</code> <strong>wie <code>v</code> selbst</strong> zu verwenden.</p>
+    </div>
+    <ul>
+      <li>Eine Adresse ist eine vorzeichenlose Ganzzahl, üblich in Hex-Schreibweise (<code>0x7ffdb35da97c</code>). Die Zeigergröße hängt von der Plattform ab – auf 64-Bit-Systemen 64 Bit.</li>
+      <li>Der Zeigertyp muss zum Zieltyp passen: <code>int*</code>, <code>double*</code>, <code>char*</code>. <strong><code>void*</code></strong> zeigt auf unspezifizierten Typ – damit ist <strong>keine Zeigerarithmetik</strong> möglich.</li>
+      <li>Das <code>*</code>-Zeichen hat drei Bedeutungen (Deklaration, Dereferenzierung, Multiplikation) – im Zweifel klammern: <code>(*pointer) * 2</code>.</li>
+      <li><code>&amp;pointer</code> liefert einen Zeiger auf den Zeiger, Typ <code>int**</code>. <strong>Mehr als zwei Ebenen vermeiden.</strong></li>
+      <li>Bei Structs/Unions Zugriff über <code>(*pointer).number</code> – wegen der Operatorpriorität sind die Klammern nötig – oder kürzer mit dem <strong>Arrow-Operator</strong> <code>pointer-&gt;number</code>.</li>
+      <li>Zugriff über einen nicht oder fehlerhaft initialisierten Zeiger ist <strong>Undefined Behavior</strong>.</li>
+    </ul>
+
+    <div class="box warn">
+      <span class="lbl">7.2 NULL-Zeiger</span>
+      <p>Der Zeiger mit dem Wert 0 zeigt auf „nichts“. Da in C jede Variable eine von null verschiedene Adresse hat, repräsentiert er eine <strong>ungültige Adresse</strong> und signalisiert, dass eine Zeigeraktion <strong>erfolglos</strong> war. Unverzichtbar außerdem bei verketteten Datenstrukturen: Nur am NULL-Zeiger erkennt ein Algorithmus das <strong>Ende der Kette</strong>.</p>
+    </div>
+
+    <h4>7.3 Zeigerarithmetik</h4>
+    <p>Der Compiler kennt zur Übersetzungszeit die Größe des Zieltyps – deshalb rechnet er in <strong>Elementen, nicht in Bytes</strong>.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Erlaubt</th><th>Wirkung</th></tr></thead>
+      <tbody>
+        <tr><td><code>p + n</code> / <code>p - n</code></td><td>setzt den Zeiger um das n-Fache von <code>sizeof(*p)</code> vor bzw. zurück</td></tr>
+        <tr><td><code>p - q</code></td><td>Anzahl der dazwischenliegenden Objekte; Typ <code>ptrdiff_t</code> (aus <code>&lt;stddef.h&gt;</code>, Ausgabe mit <code>%td</code>) – nur innerhalb desselben Arrays</td></tr>
+        <tr><td><code>p == q</code>, <code>p &lt; q</code> …</td><td>Vergleich; beim Größenvergleich dieselbe Einschränkung</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Nicht erlaubt:</strong> zwei Zeiger addieren · Gleitkommazahlen addieren/subtrahieren · Zeiger multiplizieren oder dividieren.</p>
+    <p class="formula">int numbers[] = { 1, 2, 3, 4 };<br>int* begin = &amp;numbers[0];<br>int* end&nbsp;&nbsp; = &amp;numbers[4];&nbsp;&nbsp;// EIN Element HINTER dem Ende – explizit erlaubt<br>ptrdiff_t n = end - begin;&nbsp;&nbsp;// 4<br>while (begin != end) { printf("%d ", *begin); begin++; }</p>
+    <div class="box">
+      <span class="lbl">Warum Zeiger statt Index?</span>
+      <p><code>numbers[i]</code> ist äquivalent zu <code>*(&amp;numbers[0] + i)</code> – die Addition enthält also zusätzlich eine <strong>Multiplikation</strong> mit <code>sizeof(numbers[0])</code>. Theoretisch ist die Indexvariante damit langsamer. <strong>In der Praxis</strong> gleichen moderne Compiler das aus; sicher wäre man nur durch Analyse des Maschinencodes. Für ältere Compiler auf Spezialplattformen sollte man beide Wege beherrschen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 8 ══════════════ -->
+<section class="sec" id="k8" data-num="8" data-title="Funktionen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">8</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 8</p>
+      <h2>Funktionen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">C kennt nur Funktionen, keine Prozeduren – und nur <strong>eine</strong> Art der Parameterübergabe.</p>
+
+    <p class="formula">rückgabedatentyp funktionsname(parameterliste) {<br>&nbsp;&nbsp;// Deklarationen, Anweisungen<br>&nbsp;&nbsp;// evtl. return funktionswert;<br>}</p>
+    <ul>
+      <li>Funktionen sind <strong>stets global</strong> – keine Definition innerhalb anderer Funktionen; aufrufbar von überall (auch von sich selbst), sobald sie deklariert oder definiert sind.</li>
+      <li>Ohne Parameter: <code>void</code> in die Klammern. Bei einer <strong>Forward-Deklaration</strong> ist das Pflicht – aus einer leeren Liste zieht der Compiler dort <strong>keinerlei Informationen</strong> (bei der Definition sind leere Liste und <code>void</code> gleichbedeutend).</li>
+      <li>Rückgabetyp <code>void</code> = kein Wert; <code>return;</code> darf dann zum vorzeitigen Verlassen dienen. Bei <code>void</code> und bei <code>main</code> darf <code>return</code> ganz entfallen.</li>
+      <li>Lokale Variablen werden beim Verlassen aufgelöst – der Wert ist beim nächsten Aufruf weg. Ausnahme: <code>static</code> (Kapitel 10).</li>
+      <li>Der Parametername in der Deklaration ist optional; der Compiler prüft ihn nicht.</li>
+    </ul>
+
+    <div class="box def">
+      <span class="lbl">C kennt nur call by value</span>
+      <p>Argumente kommen in der Funktion <strong>immer als Kopie</strong> an – Änderungen sind außen unsichtbar. Vorteil: keine unbeabsichtigten Änderungen. Nachteil: nur <em>ein</em> Ergebnis über <code>return</code>.</p>
+      <p>Um von außen Sichtbares zu ändern, übergibt man <strong>Zeiger</strong> – dann wird die <em>Adresse</em> kopiert. Auch das ist streng genommen call by value (der „value“ ist die Adresse); die Bezeichnungen „call by pointer“ oder „call by reference“ sind hier <strong>eigentlich falsch</strong>. So lassen sich auch mehrere Ergebnisse zurückgeben – man spricht von <strong>Out-Parametern</strong>.</p>
+      <p class="formula">void swap(int* a, int* b) {<br>&nbsp;&nbsp;int temp = *a; *a = *b; *b = temp;<br>}<br>swap(&amp;a, &amp;b);</p>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">8.3 Array-to-Pointer-Decay</span>
+      <p>Übergibt man ein Array, wird es <strong>implizit in einen Zeiger umgewandelt</strong> – die Größeninformation ist damit <strong>verloren</strong>. Die Schreibweise <code>void f(int array[])</code> ist erlaubt, aber irreführend: In Wahrheit steht dort <code>int*</code>. Deshalb die Zeigerform schreiben und die <strong>Länge als zweiten Parameter</strong> (<code>size_t</code>) übergeben.</p>
+      <p class="formula">// in main:&nbsp;&nbsp;sizeof(numbers)=32, /sizeof(numbers[0])=4 → count = 8 ✓<br>// in f(int* array): sizeof(array)=8 (der ZEIGER!) → count = 2 ✗</p>
+      <p>Bei Zeichenketten kann man auf die Länge verzichten und die <strong>Null-Terminierung</strong> ausnutzen: <code>while (*string) { … *string++; }</code></p>
+    </div>
+
+    <h4>8.4–8.6 Globale Variablen, Kommandozeile, Rekursion</h4>
+    <p><strong>Globale Variablen</strong> werden außerhalb von Funktionen deklariert und gelten im ganzen Programm – bei großen Programmen drohen Unübersichtlichkeit und ungewollte Änderungen.</p>
+    <p class="formula">int main(int argc, char* argv[]) { … }&nbsp;&nbsp;// ≡ char** argv</p>
+    <ul>
+      <li><code>argc</code> zählt die Argumente <strong>inklusive Programmname</strong>, <code>argv[0]</code> ist der Programmname.</li>
+      <li>Trennung durch Leerzeichen; Argumente <em>mit</em> Leerzeichen in Anführungszeichen setzen.</li>
+      <li>Argumente sind <strong>immer Zeichenketten</strong> – umwandeln mit <code>atoi</code>, <code>atof</code>, <code>atol</code> aus <code>&lt;stdlib.h&gt;</code>.</li>
+      <li>Als Rückgabewerte von <code>main</code> stehen die Makros <code>EXIT_SUCCESS</code> und <code>EXIT_FAILURE</code> bereit.</li>
+    </ul>
+    <p><strong>Rekursion:</strong> Jeder Aufruf legt neue Instanzen der lokalen Variablen auf dem Stack an. Jeder rekursive Algorithmus geht auch iterativ – manche Probleme sind rekursiv aber einfacher zu beschreiben:</p>
+    <p class="formula">int factorial(int n) { return n == 0 ? 1 : n * factorial(n - 1); }</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 9 ══════════════ -->
+<section class="sec" id="k9" data-num="9" data-title="Präprozessor">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">9</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 9</p>
+      <h2>Präprozessor</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Reine Textersetzung vor der Übersetzung – mächtig, aber mit Fallstricken.</p>
+
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Direktive</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>#include &lt;datei&gt;</td><td>Header der <strong>Standardbibliothek</strong></td></tr>
+        <tr><td>#include "datei"</td><td>Datei <strong>relativ zur eigenen Quelldatei</strong></td></tr>
+        <tr><td>#define NAME ersetzung</td><td>symbolische Konstante (object-like macro)</td></tr>
+        <tr><td>#define NAME</td><td>ohne Ersetzung – der Bezeichner wird entfernt, bleibt aber prüfbar</td></tr>
+        <tr><td>#ifdef / #ifndef / #if … #endif</td><td>konditionale Kompilierung</td></tr>
+      </tbody>
+    </table></div>
+    <p>Symbolische Konstanten vermeiden <strong>magic numbers</strong>, verschlechtern die Effizienz nicht und machen spätere Änderungen an <strong>einer zentralen Stelle</strong> möglich. Namenskonvention: <strong>screaming snake case</strong> (<code>BUFFER_SIZE</code>).</p>
+    <p class="formula">#define ARRAY_SIZE 10<br>double values[ARRAY_SIZE];</p>
+    <p><strong>Konditionale Kompilierung</strong> dient typischerweise der Unterscheidung von Debug- und Release-Build: Prüfungen, die im Release aus Effizienzgründen wegfallen sollen, stehen zwischen <code>#ifdef DEBUG</code> und <code>#endif</code>. Ein <code>#ifdef</code>-Block muss <strong>immer</strong> mit <code>#endif</code> enden.</p>
+
+    <div class="box warn">
+      <span class="lbl">9.4 Funktionsähnliche Makros – wie man es nicht macht</span>
+      <p><code>#define MAX(a, b) a &gt; b ? a : b</code> erzwingt <strong>Inlining</strong> und funktioniert typunabhängig. Aber es ist reine Textersetzung:</p>
+      <p class="formula">int n = 10, m = 15;<br>printf("%d\n", MAX(n, m++));<br>// wird zu:&nbsp;&nbsp;n &gt; m++ ? n : m++<br>// Ausgabe 16 statt 15 – und m ist danach 17 statt 16!</p>
+      <p>Ein Teil der Probleme verschwindet durch <strong>Klammern um jeden Parameter</strong>: <code>#define MAX(a,b) (a) &gt; (b) ? (a) : (b)</code>. Trotzdem bleibt MAX das Musterbeispiel dafür, wie man es <em>nicht</em> machen sollte. In vielen Fällen erledigt der Compiler das Inlining ohnehin selbst; <code>inline</code> ist nur ein Hinweis, den er ignorieren darf.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 10 ══════════════ -->
+<section class="sec" id="k10" data-num="10" data-title="Organisation größerer Programme">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">10</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 10</p>
+      <h2>Organisation größerer Programme</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Mehrere Translation Units – und die Frage, was davon nach außen sichtbar ist.</p>
+
+    <div class="box def">
+      <span class="lbl">Linkage</span>
+      <p><strong>internal linkage</strong> – nur innerhalb der eigenen Translation Unit sichtbar; jede weitere gleichnamige Deklaration dort meint <em>dasselbe</em> Objekt.<br>
+      <strong>external linkage</strong> – auch über die Grenzen der Translation Unit hinaus sichtbar, von anderen Programmteilen benutzbar.<br>
+      <strong>keine Linkage</strong> – nur lokal sichtbar; gleichnamige Bezeichner können <em>verschiedene</em> Objekte meinen (z.&nbsp;B. gleichnamige Variablen in verschiedenen Funktionen).</p>
+    </div>
+
+    <div class="tw"><table>
+      <thead><tr><th>Speicherklasse</th><th>Verwendung</th><th>Lebensdauer</th><th>Linkage</th></tr></thead>
+      <tbody>
+        <tr><td>(keine Angabe)</td><td>lokal</td><td>aktueller Block</td><td>keine</td></tr>
+        <tr><td>(keine Angabe)</td><td>global</td><td>gesamte Programmlaufzeit</td><td>external</td></tr>
+        <tr><td><code>auto</code></td><td>lokal</td><td>aktueller Block</td><td>keine</td></tr>
+        <tr><td><code>register</code></td><td>lokal</td><td>aktueller Block</td><td>keine</td></tr>
+        <tr><td><code>static</code></td><td>lokal</td><td><strong>gesamte Programmlaufzeit</strong></td><td>keine</td></tr>
+        <tr><td><code>static</code></td><td>global</td><td>gesamte Programmlaufzeit</td><td><strong>internal</strong></td></tr>
+        <tr><td><code>extern</code></td><td>global (nur Deklaration)</td><td>gesamte Programmlaufzeit</td><td>external</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><code>auto</code> ist bei lokalen Variablen ohnehin der Standard und hat in C++ eine <strong>andere Bedeutung</strong> – nie explizit hinschreiben.</li>
+      <li><code>register</code> ist nur ein Wunsch an den Compiler (Variable im Prozessorregister); der Adressoperator <code>&amp;</code> ist dann verboten. In der Regel nicht verwenden.</li>
+      <li><strong>Initialisierung:</strong> <code>auto</code>/<code>register</code>-Variablen werden <strong>nicht</strong> automatisch initialisiert (das ginge erst zur Laufzeit). Bei <code>static</code>/<code>extern</code> steht der Startwert schon zur Übersetzungszeit fest – ohne Angabe wird <strong>mit null</strong> initialisiert.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 11 ══════════════ -->
+<section class="sec" id="k11" data-num="11" data-title="Manuelle Speicherverwaltung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">11</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 11</p>
+      <h2>Manuelle Speicherverwaltung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Speicher zur Laufzeit anfordern – und ihn zuverlässig wieder zurückgeben.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Stack</th><th>Heap (Free Store)</th></tr></thead>
+      <tbody>
+        <tr><td>Lebensdauer</td><td><strong>auto duration</strong> – bis zum Ende des Blocks</td><td>bis zum <code>free()</code></td></tr>
+        <tr><td>Verwaltung</td><td>nur Verschieben des <strong>Stack-Pointers</strong> (Addition/Subtraktion)</td><td>vom Betriebssystem</td></tr>
+        <tr><td>Geschwindigkeit</td><td>sehr schnell</td><td><strong>um ein Vielfaches langsamer</strong> (Kommunikation mit dem OS)</td></tr>
+        <tr><td>Größe</td><td>bei der Kompilierung festgelegt, typisch <strong>1 MiB</strong></td><td>praktisch nur durch das System begrenzt</td></tr>
+        <tr><td>Fehlerfall</td><td><strong>Stack Overflow</strong> → Absturz oder fehlerhaftes Verhalten</td><td><code>malloc</code> liefert <strong>NULL</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>Variablen mit <strong>static duration</strong> sind dem Compiler nach Anzahl und Größe schon bei der Übersetzung bekannt und werden fester Bestandteil des Programms. Für Variablen mit auto duration muss der Speicher zur Laufzeit verwaltet werden – dafür gibt es den Stack, auf dem pro Funktionsaufruf lokale Variablen und Rücksprungadresse liegen.</p>
+
+    <div class="box def">
+      <span class="lbl">malloc und free (aus &lt;stdlib.h&gt;)</span>
+      <p><code>malloc(size)</code> fordert Speicher an und liefert einen <code>void*</code> darauf – oder <strong>NULL</strong>, wenn es nicht klappt. Der Rückgabewert <strong>muss und sollte nicht gecastet werden</strong>; vor C99 konnte ein expliziter Cast bei vergessenem Header sogar zu Programmfehlern führen.<br>
+      <code>free(p)</code> gibt den Speicher zurück; ein NULL-Pointer ist erlaubt und bewirkt nichts.</p>
+      <p class="formula">int* numbers = malloc(sizeof(*numbers) * count);<br>if (numbers == NULL) { … return EXIT_FAILURE; }<br>…<br>free(numbers);</p>
+    </div>
+    <div class="box warn">
+      <span class="lbl">Die drei Bestandteile jeder Allokation</span>
+      <p><strong>a)</strong> Speicher mit <code>malloc()</code> anfordern · <strong>b)</strong> prüfen, ob der Zeiger <strong>nicht NULL</strong> ist · <strong>c)</strong> nach der Benutzung mit <code>free()</code> freigeben. Zu <strong>jedem</strong> <code>malloc()</code> gehört genau <strong>ein</strong> <code>free()</code>.</p>
+    </div>
+    <p><strong>Memory Leak:</strong> nicht freigegebener Heap-Speicher. Zwar räumt das Betriebssystem nach Programmende auf – aber nicht auf allen Plattformen (etwa ohne Betriebssystem). Fataler ist Speicher, der <strong>nicht mehr referenzierbar</strong> ist: Wer den Anfangszeiger beim Durchlaufen vorwärtssetzt, hat die Anfangsadresse verloren; ein späteres <code>free()</code> auf diesen Zeiger ist <strong>Undefined Behavior</strong>, denn erlaubt sind nur Zeiger auf vorher allokierte Adressen.</p>
+    <p>Ein sinnvolles funktionsähnliches Makro – Anforderung und Prüfung in einem (der Backslash setzt das Makro über mehrere Zeilen fort, das einmalige <code>do…while(0)</code> verhindert Folgeprobleme):</p>
+    <p class="formula">#define ALLOCATE(identifier, count) do { \<br>&nbsp;&nbsp;identifier = malloc(sizeof(*identifier) * (count)); \<br>&nbsp;&nbsp;if (identifier == NULL) { \<br>&nbsp;&nbsp;&nbsp;&nbsp;printf("Speicher konnte nicht reserviert werden!\n"); \<br>&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_FAILURE); \<br>&nbsp;&nbsp;} \<br>} while(0)</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 12 ══════════════ -->
+<section class="sec" id="k12" data-num="12" data-title="C-Standardbibliothek">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">12</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 12</p>
+      <h2>C-Standardbibliothek</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Erprobte Lösungen für immer wiederkehrende Probleme – genau spezifiziert und über Jahrzehnte getestet.</p>
+
+    <h4>Zeichenketten und Speicher – <code>&lt;string.h&gt;</code></h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Funktion</th><th>Aufgabe / Rückgabe</th></tr></thead>
+      <tbody>
+        <tr><td>size_t strlen(const char* str)</td><td>Länge – <strong>ohne</strong> das Nullzeichen</td></tr>
+        <tr><td>int strcmp(const char* lhs, const char* rhs)</td><td>lexikografischer Vergleich: <strong>&lt; 0</strong> lhs kommt vorher, <strong>0</strong> identisch, <strong>&gt; 0</strong> lhs kommt danach</td></tr>
+        <tr><td>char* strcat(char* dest, const char* src)</td><td>hängt src an dest an; liefert dest zurück</td></tr>
+        <tr><td>char* strcpy(char* dest, const char* src)</td><td>kopiert src nach dest; liefert dest zurück</td></tr>
+        <tr><td>void* memset(void* dest, int ch, size_t n)</td><td>füllt n Bytes mit ch (nach <code>unsigned char</code> gewandelt)</td></tr>
+        <tr><td>void* memcpy(void* dest, const void* src, size_t n)</td><td>kopiert n Bytes</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Mathematik – <code>&lt;stdlib.h&gt;</code> und <code>&lt;math.h&gt;</code></h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Funktion</th><th>Aufgabe</th></tr></thead>
+      <tbody>
+        <tr><td>abs / labs / llabs</td><td>Absolutbetrag einer Ganzzahl (<code>&lt;stdlib.h&gt;</code>)</td></tr>
+        <tr><td>pow(x, y)</td><td>Potenz x^y</td></tr>
+        <tr><td>sqrt(x)</td><td>Quadratwurzel</td></tr>
+        <tr><td>round(x)</td><td>kaufmännisch runden</td></tr>
+      </tbody>
+    </table></div>
+    <div class="box warn">
+      <span class="lbl">Nicht vergessen: -lm</span>
+      <p>Nicht alle Linker binden die Mathematik-Bibliothek automatisch ein. Beim GCC gehört das Flag <strong>ans Ende</strong> des Befehls:</p>
+      <p class="formula">gcc -std=c99 -Wall -Wextra -Wconversion -pedantic -o main main.c -lm</p>
+    </div>
+    <p>Bibliotheksfunktionen sind nicht automatisch problemfrei (Stichwort Sicherheitsrisiken bei <code>scanf()</code>) – aber ihre Probleme sind bekannt und gut dokumentiert.</p>
+  </div>
+</section>
+
+<!-- ══════════════ ÜBUNGSAUFGABEN ══════════════ -->
+<section class="sec" id="ue" data-num="Ü" data-title="Übungsaufgaben">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">Ü</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Übung</p>
+      <h2>Übungsaufgaben mit Lösungswegen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">6.1</span><span class="task-t">Eigenschaften der Zahlen 1–100 als Flags</span><span class="task-p">Enums</span></div>
+      <div class="task-q"><p>Bestimmen Sie für alle Zahlen in [1;100]: gerade/ungerade, durch 3 teilbar, durch 5 teilbar. Speichern Sie die Eigenschaften in einem Array aus Flags, lesen Sie dann eine Zahl ein und geben Sie deren Eigenschaften aus.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">typedef enum {
+  PROP_EVEN     = 1 &lt;&lt; 0,     // 1
+  PROP_DIV3     = 1 &lt;&lt; 1,     // 2
+  PROP_DIV5     = 1 &lt;&lt; 2,     // 4
+} number_property;
+
+int main() {
+  number_property props[101];        // Index 1..100
+  for (int n = 1; n &lt;= 100; ++n) {
+    props[n] = 0;
+    if (n % 2 == 0) props[n] |= PROP_EVEN;    // Bit setzen
+    if (n % 3 == 0) props[n] |= PROP_DIV3;
+    if (n % 5 == 0) props[n] |= PROP_DIV5;
+  }
+
+  int x;
+  printf("Zahl (1-100): ");
+  scanf("%d", &amp;x);
+  if (x &lt; 1 || x &gt; 100) return EXIT_FAILURE;   // Grenzen pruefen!
+
+  printf("%d ist %s\n", x, (props[x] &amp; PROP_EVEN) ? "gerade" : "ungerade");
+  if (props[x] &amp; PROP_DIV3) printf("durch 3 teilbar\n");
+  if (props[x] &amp; PROP_DIV5) printf("durch 5 teilbar\n");
+}</div>
+        <div class="res">Kern der Aufgabe: <strong>Zweierpotenzen</strong> als Enum-Werte, Setzen mit <code>|=</code>, Abfragen mit <code>&amp;</code>. Alle drei Eigenschaften stecken so in <em>einer</em> Variable pro Zahl. Array der Größe 101, damit der Index direkt die Zahl ist.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">7.1</span><span class="task-t">Welche Ausgabe erfolgt?</span><span class="task-p">Zeiger</span></div>
+      <div class="task-q">
+        <p class="formula">int i = 7;<br>int* pointer = &amp;i;<br>printf("%d ", *pointer);<br>printf("%d ", *pointer + 2);<br>printf("%d ", *(&amp;i));<br>printf("%d\n", *pointer++);</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">*pointer      → 7   (Wert, auf den der Zeiger zeigt)
+*pointer + 2  → 9   (erst dereferenzieren, dann addieren)
+*(&amp;i)         → 7   (&amp; und * heben sich auf)
+*pointer++    → 7   (Postfix: erst Wert liefern, dann Zeiger weitersetzen)</div>
+        <div class="res">Ausgabe: <strong>7 9 7 7</strong></div>
+        <p>Beim vierten Aufruf bindet <code>++</code> stärker als <code>*</code>, es wird also der <em>Zeiger</em> erhöht – aber als Postfix erst nach der Auswertung. Danach zeigt <code>pointer</code> hinter <code>i</code>; ein weiteres Dereferenzieren wäre Undefined Behavior.</p>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">7.2</span><span class="task-t">Welche Zuweisungen sind definiert?</span><span class="task-p">Zeiger</span></div>
+      <div class="task-q">
+        <p>Gegeben: <code>int i = 3, j = 4; int* p; int* q;</code><br>
+        a) <code>p = &amp;i; q = &amp;j;</code> · b) <code>p = &amp;*&amp;i;</code> · c) <code>*p = (int)j;</code> · d) <code>i = (*&amp;)j;</code><br>
+        Und: „Der um 1 erhöhte Wert von <code>*p</code> soll mit <code>*q</code> summiert werden“ – e) <code>i = (*p)++ + *q;</code> oder f) <code>i = ++(*p) + *q;</code>?</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a) definiert   – Standardfall: Adressen zuweisen
+b) definiert   – &amp;*&amp;i ist gleichwertig zu &amp;i (* und &amp; heben sich auf)
+c) NUR wenn p vorher positioniert wurde – sonst Undefined Behavior
+d) undefiniert – (*&amp;) ist kein gueltiger Cast, reiner Syntaxfehler</div>
+        <p>Zu e) und f): <code>(*p)++</code> ist ein <strong>Postfix</strong>-Inkrement – es liefert den <em>alten</em> Wert und erhöht erst danach. <code>++(*p)</code> als Präfix erhöht zuerst und liefert den <em>neuen</em> Wert.</p>
+        <div class="res">Gefordert ist der <strong>erhöhte</strong> Wert → <strong>f)</strong> <code>i = ++(*p) + *q;</code></div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">8.1</span><span class="task-t">Zeichenkette sortieren</span><span class="task-p">Funktionen · Zeiger</span></div>
+      <div class="task-q"><p>Nehmen Sie eine Zeichenkette aus Kleinbuchstaben von der Kommandozeile entgegen, sortieren Sie sie alphabetisch und geben Sie das Ergebnis aus (<code>qwertzuiop</code> → <code>eiopqrtuwz</code>). Nutzen Sie Funktionen und Zeiger.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;   // strlen
+#include &lt;stdlib.h&gt;   // EXIT_*
+
+void sort_string(char* str, size_t len) {
+  for (size_t i = 0; i &lt; len; ++i)
+    for (size_t j = i + 1; j &lt; len; ++j)
+      if (str[j] &lt; str[i]) {          // char ist ein Ganzzahltyp –
+        char t = str[i];              // der Vergleich nutzt die ASCII-Codes
+        str[i] = str[j];
+        str[j] = t;
+      }
+}
+
+int main(int argc, char** argv) {
+  if (argc != 2) { printf("Genau ein Argument erwarten.\n"); return EXIT_FAILURE; }
+  sort_string(argv[1], strlen(argv[1]));
+  printf("%s\n", argv[1]);
+  return EXIT_SUCCESS;
+}</div>
+        <div class="res">Zwei Punkte: <code>argv[1]</code> ist ein <code>char*</code>, also ändert die Funktion die Zeichenkette <strong>direkt am Original</strong> (call by value auf die Adresse). Und <code>strlen</code> zählt <strong>ohne</strong> Nullzeichen – genau die Zahl der zu sortierenden Zeichen.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">8.2</span><span class="task-t">Fakultät und Binomialkoeffizient</span><span class="task-p">Funktionen</span></div>
+      <div class="task-q"><p>Funktion für n!, damit eine weitere für den Binomialkoeffizienten n über k = n!/((n−k)!·k!). Hauptprogramm gibt für n = 10 und k = 0…n formatiert die Ergebnisse aus.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">long long factorial(int n) {
+  long long f = 1;
+  for (int i = 2; i &lt;= n; ++i) f *= i;
+  return f;
+}
+
+long long binomial(int n, int k) {
+  return factorial(n) / (factorial(n - k) * factorial(k));
+}
+
+int main() {
+  int n = 10;
+  printf("n = %d\nk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ", n);
+  for (int k = 0; k &lt;= n; ++k) printf("%6d", k);
+  printf("\n(n,k) = ");
+  for (int k = 0; k &lt;= n; ++k) printf("%6lld", binomial(n, k));
+  printf("\n");
+}</div>
+        <div class="res">Kontrolle für n = 10: 1 · 10 · 45 · 120 · 210 · 252 · 210 · 120 · 45 · 10 · 1 (symmetrisch – Zeile des Pascalschen Dreiecks). <strong>Achtung Überlauf:</strong> 10! passt noch in <code>int</code>, 13! nicht mehr – deshalb <code>long long</code> (Ausgabe mit <code>%lld</code>). Für große n wäre das Kürzen der Formel deutlich robuster.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">9.1</span><span class="task-t">Kapazität eines Plattenkondensators</span><span class="task-p">#define</span></div>
+      <div class="task-q"><p>C = ε₀ · ε_r · A/d mit ε₀ ≈ 8,854188·10⁻¹² und ε_r ≈ 1,0006 (Luft). Abstand d und Radius r zweier kreisförmiger Platten einlesen (A = π·r²), Kapazität in wissenschaftlicher Schreibweise ausgeben. Konstanten über <code>#define</code>.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">#include &lt;stdio.h&gt;
+
+#define EPSILON_0 8.854188e-12
+#define EPSILON_R 1.0006
+#define PI        3.141592654
+
+int main() {
+  double d, r;
+  printf("Bitte Plattenabstand d in Metern eingeben: ");
+  scanf("%lf", &amp;d);
+  printf("Bitte Radius r in Metern eingeben: ");
+  scanf("%lf", &amp;r);
+
+  double area = PI * r * r;
+  double c = EPSILON_0 * EPSILON_R * area / d;
+  printf("Die Kondensatorkapazitaet betraegt: %.4e F\n", c);
+}</div>
+        <div class="res">Probe mit d = 0.0025 und r = 0.535: A = π·0,535² ≈ 0,89921 m² → C ≈ 8,854188e−12 · 1,0006 · 0,89921 / 0,0025 ≈ <strong>3.1866e-09 F</strong> ✓. Wichtig: <code>%lf</code> beim Einlesen, <strong><code>%e</code></strong> für die wissenschaftliche Ausgabe – und keine magic numbers im Code.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">10.1</span><span class="task-t">Speicherklassen-Tabelle ausfüllen</span><span class="task-p">Linkage</span></div>
+      <div class="task-q">
+        <p>Bestimmen Sie für <code>count</code> (global <code>static int</code> = 3), <code>value</code> (global <code>double</code>), <code>index</code> (<code>extern unsigned</code>), <code>temp</code> (<code>static unsigned</code> in einer while-Schleife) und <code>sum</code> (<code>unsigned</code> in einer for-Schleife) jeweils Storage Duration, Linkage und Anfangswert. Und: Lässt sich der Quelltext übersetzen?</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">Variable  Storage Duration  Linkage    anfaenglicher Wert
+count     static            internal   3
+value     static            external   0.0  (autom. Nullinitialisierung)
+index     static            external   – (nur Deklaration, Definition fehlt)
+temp      static            keine      0u   (explizit gesetzt)
+sum       auto              keine      undefiniert!</div>
+        <p><strong>count:</strong> global + <code>static</code> → internal linkage. <strong>value:</strong> global ohne Angabe → external, und als statische Variable automatisch mit 0 initialisiert. <strong>temp:</strong> lokal + <code>static</code> → lebt die ganze Programmlaufzeit, hat aber <em>keine</em> Linkage; die Initialisierung passiert nur einmal. <strong>sum:</strong> normale lokale Variable → auto duration, <strong>uninitialisiert</strong> – sie wird im Code aber vor dem Lesen beschrieben.</p>
+        <div class="res">b) <strong>Nein.</strong> <code>extern unsigned index;</code> ist nur eine <em>Deklaration</em> – die zugehörige Definition fehlt im Programm. Der Compiler ist zufrieden, aber der <strong>Linker</strong> bricht mit einem „undefined reference“-Fehler ab.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">11.2</span><span class="task-t">Sieb des Eratosthenes</span><span class="task-p">malloc · free</span></div>
+      <div class="task-q"><p>Obergrenze n einlesen, Array mit n+1 Einträgen anlegen, ab k = 2 jeweils alle Vielfachen streichen, dann alle Primzahlen bis n ausgeben.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main() {
+  size_t n;
+  printf("Obergrenze: ");
+  scanf("%zu", &amp;n);
+
+  bool* sieve = malloc(sizeof(*sieve) * (n + 1));     // a) allokieren
+  if (sieve == NULL) return EXIT_FAILURE;             // b) pruefen
+
+  sieve[0] = sieve[1] = false;                        // 0 und 1 sind keine
+  for (size_t i = 2; i &lt;= n; ++i) sieve[i] = true;
+
+  for (size_t k = 2; k &lt;= n; ++k)
+    if (sieve[k])
+      for (size_t m = 2*k; m &lt;= n; m += k) sieve[m] = false;  // streichen
+
+  for (size_t i = 2; i &lt;= n; ++i)
+    if (sieve[i]) printf("%zu ", i);
+  printf("\n");
+
+  free(sieve);                                        // c) freigeben
+  return EXIT_SUCCESS;
+}</div>
+        <div class="res">Die drei Bestandteile jeder Allokation sind hier vollständig: <strong>malloc – NULL-Prüfung – free</strong>. <code>sizeof(*sieve)</code> statt <code>sizeof(bool)</code> zu schreiben ist der robustere Stil: Ändert man den Typ, stimmt die Größe automatisch. Kontrolle für n = 30: 2 3 5 7 11 13 17 19 23 29.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">12.1</span><span class="task-t">Notenspiegel mit Kenngrößen</span><span class="task-p">Standardbibliothek</span></div>
+      <div class="task-q"><p>Notenspiegel einer Klassenarbeit eingeben; das Programm berechnet Teilnehmerzahl, Durchschnittsnote und empirische Varianz.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">int counts[7] = { 0 };          // Index 1..6 = Note
+int total = 0;
+double sum = 0.0;
+
+for (int note = 1; note &lt;= 6; ++note) {
+  printf("Anzahl der Note %d: ", note);
+  scanf("%d", &amp;counts[note]);
+  total += counts[note];
+  sum   += (double)note * counts[note];
+}
+
+double mean = sum / total;
+double var  = 0.0;
+for (int note = 1; note &lt;= 6; ++note)
+  var += counts[note] * pow(note - mean, 2);
+var /= (total - 1);             // empirische Varianz: n-1 im Nenner
+
+printf("Teilnehmer: %d\nDurchschnitt: %.2f\nVarianz: %.4f\n", total, mean, var);</div>
+        <div class="res">Entscheidend ist der Nenner: Die <strong>empirische</strong> Varianz teilt durch <strong>n−1</strong> (nicht durch n). <code>pow()</code> braucht <code>&lt;math.h&gt;</code> und beim GCC das Flag <code>-lm</code>; alternativ genügt <code>(note-mean)*(note-mean)</code>. Und: Vor der Division prüfen, ob <code>total &gt; 1</code> ist.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Einsendeaufgabe</p>
+      <h2>Einsendeaufgabe Typ A</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die Aufgaben 4 und 5 (35 Punkte). Lösungswege sind eigene Ansätze zum Abgleich.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.4</span><span class="task-t">Mitternachtsformel über Kommandozeilenargumente</span><span class="task-p">20 Pkt.</span></div>
+      <div class="task-q"><p>a, b und c als Kommandozeilenargumente entgegennehmen und die Lösungen von ax²+bx+c = 0 ausgeben. Berücksichtigen Sie auch die Fälle mit nur einer bzw. keiner Lösung.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;   // atof, EXIT_*
+#include &lt;math.h&gt;     // sqrt
+
+int main(int argc, char** argv) {
+  if (argc != 4) {                       // Programmname + 3 Werte
+    printf("Aufruf: %s a b c\n", argv[0]);
+    return EXIT_FAILURE;
+  }
+  double a = atof(argv[1]), b = atof(argv[2]), c = atof(argv[3]);
+
+  if (a == 0.0) {                        // keine quadratische Gleichung!
+    if (b == 0.0) { printf("Keine Gleichung in x.\n"); return EXIT_FAILURE; }
+    printf("Linear, x = %.4f\n", -c / b);
+    return EXIT_SUCCESS;
+  }
+
+  double disc = b*b - 4*a*c;             // Diskriminante entscheidet
+  if (disc &lt; 0.0) {
+    printf("Keine reelle Loesung.\n");
+  } else if (disc == 0.0) {
+    printf("Eine Loesung: x = %.4f\n", -b / (2*a));
+  } else {
+    double root = sqrt(disc);
+    printf("x1 = %.4f\nx2 = %.4f\n", (-b + root)/(2*a), (-b - root)/(2*a));
+  }
+  return EXIT_SUCCESS;
+}</div>
+        <div class="res">Punktebringer: <code>argc != 4</code> prüfen (Programmname zählt mit), Umwandlung mit <code>atof</code>, die <strong>drei Fälle der Diskriminante</strong> – und der oft vergessene Sonderfall <strong>a = 0</strong>, bei dem die Formel durch null dividieren würde. Übersetzen mit <code>-lm</code>. Probe: a=1, b=-3, c=2 → D = 1 → x₁ = 2, x₂ = 1.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.5</span><span class="task-t">Mastermind</span><span class="task-p">15 Pkt.</span></div>
+      <div class="task-q"><p>Der zu erratende Farbcode wird vom Programm erzeugt (<code>rand()</code>, Rolle von <code>srand()</code> recherchieren). Farben als einzelne Buchstaben (R für rot usw.).</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+#include &lt;string.h&gt;
+
+#define CODE_LENGTH 4
+#define MAX_TRIES   10
+
+int main() {
+  const char colors[] = "RGBYOV";        // 6 Farben
+  char code[CODE_LENGTH + 1] = { 0 };
+  char guess[64];
+
+  srand((unsigned)time(NULL));           // ohne srand jedes Mal derselbe Code
+  for (int i = 0; i &lt; CODE_LENGTH; ++i)
+    code[i] = colors[rand() % 6];
+
+  for (int t = 1; t &lt;= MAX_TRIES; ++t) {
+    printf("Versuch %d/%d (%d Buchstaben aus %s): ", t, MAX_TRIES,
+           CODE_LENGTH, colors);
+    scanf("%63s", guess);
+
+    int black = 0, white = 0;
+    int used_code[CODE_LENGTH] = {0}, used_guess[CODE_LENGTH] = {0};
+
+    for (int i = 0; i &lt; CODE_LENGTH; ++i)          // 1. Durchgang: schwarz
+      if (guess[i] == code[i]) { black++; used_code[i] = used_guess[i] = 1; }
+
+    for (int i = 0; i &lt; CODE_LENGTH; ++i)          // 2. Durchgang: weiss
+      if (!used_guess[i])
+        for (int j = 0; j &lt; CODE_LENGTH; ++j)
+          if (!used_code[j] &amp;&amp; guess[i] == code[j]) {
+            white++; used_code[j] = 1; break;
+          }
+
+    printf("%d schwarz, %d weiss\n", black, white);
+    if (black == CODE_LENGTH) { printf("Gewonnen in %d Versuchen!\n", t); return 0; }
+  }
+  printf("Verloren. Der Code war: %s\n", code);
+}</div>
+        <div class="res"><strong>Zu srand:</strong> <code>rand()</code> erzeugt <em>Pseudo</em>-Zufallszahlen aus einem Startwert (seed). Ohne <code>srand</code> ist der seed immer 1 – der Code wäre bei jedem Spiel identisch. <code>srand(time(NULL))</code> setzt ihn auf die aktuelle Uhrzeit; <code>srand</code> gehört <strong>genau einmal</strong> an den Programmanfang.</p>
+        <p>Der eigentliche Knackpunkt ist die Auswertung in <strong>zwei Durchgängen</strong>: Erst alle exakten Treffer markieren, dann nur unter den <em>noch nicht verbrauchten</em> Positionen nach Farbtreffern suchen. Wer das in einem Durchgang macht, zählt bei doppelten Farben zu viele weiße Stifte.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Selbstkontrolle</p>
+      <h2>Schnellcheck</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <ul>
+      <li>Welchen Wert bekommt die erste Enum-Ausprägung, welchen die nach <code>= 5</code> folgende?</li>
+      <li>Warum bekommen Enum-Ausprägungen ein Präfix?</li>
+      <li>Welche Werte müssen Sie vergeben, damit ein Enum als Flags taugt – und wie setzt/prüft man ein Flag?</li>
+      <li>Was liefert <code>&amp;</code>, was <code>*</code>?</li>
+      <li>Warum ist mit <code>void*</code> keine Zeigerarithmetik möglich?</li>
+      <li>Wofür braucht man den NULL-Zeiger – zwei Gründe.</li>
+      <li>Wofür steht <code>p-&gt;x</code> ausgeschrieben, und warum sind dort Klammern nötig?</li>
+      <li>Um wie viele Bytes verschiebt <code>p += 5</code> einen <code>double*</code>?</li>
+      <li>Welche drei Zeigeroperationen sind verboten?</li>
+      <li>Welche Art der Parameterübergabe kennt C – und wie ändert man trotzdem Werte von außen?</li>
+      <li>Was ist Array-to-Pointer-Decay, und was liefert <code>sizeof</code> danach?</li>
+      <li>Warum muss man bei Forward-Deklarationen <code>void</code> in die Klammern schreiben?</li>
+      <li>Was zählt <code>argc</code>, was steht in <code>argv[0]</code>?</li>
+      <li>Wann <code>#include &lt;…&gt;</code>, wann <code>#include "…"</code>?</li>
+      <li>Was gibt <code>MAX(n, m++)</code> aus – und warum ist das ein Problem?</li>
+      <li>Was bedeutet internal, external und keine Linkage?</li>
+      <li>Welche Linkage hat eine globale <code>static</code>-Variable, welche eine lokale?</li>
+      <li>Welche Variablen werden automatisch mit null initialisiert?</li>
+      <li>Warum sollte man <code>auto</code> und <code>register</code> nie schreiben?</li>
+      <li>Warum ist Stack-Reservierung so viel schneller als <code>malloc</code>?</li>
+      <li>Wie groß ist der Stack typischerweise – und was passiert bei Überschreitung?</li>
+      <li>Nennen Sie die drei Bestandteile jeder Speicherallokation.</li>
+      <li>Warum sollte man den Rückgabewert von <code>malloc</code> nicht casten?</li>
+      <li>Wann entsteht ein Memory Leak, und warum ist ein „verlorener“ Anfangszeiger noch schlimmer?</li>
+      <li>Was liefert <code>strcmp</code> zurück, wenn die erste Zeichenkette lexikografisch vorne steht?</li>
+      <li>Zählt <code>strlen</code> das Nullzeichen mit?</li>
+      <li>Welches Compiler-Flag braucht <code>&lt;math.h&gt;</code> beim GCC – und wohin gehört es?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ KURZREFERENZ ══════════════ -->
+<section class="sec" id="formeln" data-num="F" data-title="Syntax-Kurzreferenz">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">F</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Referenz</p>
+      <h2>Syntax-Kurzreferenz</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Zeiger</h4>
+    <p class="formula">int&nbsp; x = 42;<br>int* p = &amp;x;&nbsp;&nbsp;&nbsp;&nbsp;// Adresse nehmen<br>*p = 100;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// dereferenzieren (schreibt in x)<br>int** pp = &amp;p;&nbsp;&nbsp;// Zeiger auf Zeiger<br>p-&gt;feld&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// ≡ (*p).feld<br>printf("%p", (void*)p);&nbsp;&nbsp;// Cast noetig bei variadischen Funktionen</p>
+
+    <h4>Enums als Flags</h4>
+    <p class="formula">typedef enum { A = 1&lt;&lt;0, B = 1&lt;&lt;1, C = 1&lt;&lt;2 } flags;<br>flags f = A | C;&nbsp;&nbsp;&nbsp;&nbsp;// setzen<br>if (f &amp; A) { … }&nbsp;&nbsp;&nbsp;&nbsp;// pruefen<br>f &amp;= ~A;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// loeschen</p>
+
+    <h4>Funktionen und Kommandozeile</h4>
+    <p class="formula">void f(void);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Forward-Deklaration: void ist Pflicht<br>void g(int* arr, size_t n);&nbsp;&nbsp;// Array + Laenge<br>void swap(int* a, int* b);&nbsp;&nbsp;&nbsp;// Out-Parameter<br><br>int main(int argc, char** argv) {<br>&nbsp;&nbsp;double x = atof(argv[1]);<br>&nbsp;&nbsp;return EXIT_SUCCESS;&nbsp;&nbsp;// bzw. EXIT_FAILURE<br>}</p>
+
+    <h4>Präprozessor</h4>
+    <p class="formula">#define BUFFER_SIZE 1024<br>#ifdef DEBUG … #endif<br>#ifndef LIST_H<br>#define LIST_H<br>…<br>#endif</p>
+
+    <h4>Dynamischer Speicher</h4>
+    <p class="formula">T* p = malloc(sizeof(*p) * count);&nbsp;&nbsp;// kein Cast<br>if (p == NULL) { … }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// immer pruefen<br>…<br>free(p);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// genau ein free je malloc</p>
+
+    <h4>Bibliotheksfunktionen</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Header</th><th>Funktionen</th></tr></thead>
+      <tbody>
+        <tr><td>&lt;stdio.h&gt;</td><td>printf, scanf</td></tr>
+        <tr><td>&lt;stdlib.h&gt;</td><td>malloc, free, exit, atoi, atof, rand, srand, abs, EXIT_SUCCESS/FAILURE</td></tr>
+        <tr><td>&lt;string.h&gt;</td><td>strlen, strcmp, strcat, strcpy, memset, memcpy</td></tr>
+        <tr><td>&lt;math.h&gt;</td><td>pow, sqrt, round&nbsp;&nbsp;(Linkerflag <code>-lm</code>)</td></tr>
+        <tr><td>&lt;stddef.h&gt;</td><td>size_t, ptrdiff_t</td></tr>
+        <tr><td>&lt;time.h&gt;</td><td>time (als seed für srand)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft GPI22 · Programmieren in C, Teil 2 · Erweiterte Programmierung · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "gpi22:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Heft-Navigation (vor / zurück, innerhalb des Fachs) ---------- */
+  (function(){
+    var groups = [
+      ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"],
+      ["GPI15_Lernheft.html","GPI16_Lernheft.html","GPI21_Lernheft.html","GPI22_Lernheft.html"],
+      ["MAI06_Lernheft.html","MAI09_Lernheft.html","MAI11_Lernheft.html","MAI13_Lernheft.html","MAI14C_Lernheft.html"]
+    ];
+    var base = function(n){ return n.replace(/\.html$/i, "").toLowerCase(); };
+    var cur = base(decodeURIComponent(location.pathname.split("/").pop()));
+    var files = groups[0], idx = -1;
+    for(var g = 0; g < groups.length; g++){
+      for(var i = 0; i < groups[g].length; i++){ if(base(groups[g][i]) === cur){ files = groups[g]; idx = i; break; } }
+      if(idx > -1) break;
+    }
+    var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
+    if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
+    if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
+  })();
+
+  /* ---------- Kopier-Button an jede Definitions-Box ---------- */
+  (function(){
+    if(!navigator.clipboard) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".box.def"), function(box){
+      var txt = box.innerText.trim();
+      var b = document.createElement("button");
+      b.className = "copy-def"; b.type = "button"; b.textContent = "⧉ Kopieren"; b.title = "Definition kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(txt).then(function(){
+          b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = "⧉ Kopieren"; }, 1200);
+        }, function(){ b.textContent = "⚠ Fehler"; });
+      });
+      box.appendChild(b);
+    });
+  })();
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll(".sec details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

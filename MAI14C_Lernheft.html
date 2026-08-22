@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAI14C – Numerische Methoden</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.heftnav{display:flex;align-items:center;gap:.3rem}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0;position:relative}
+.copy-def{position:absolute;top:.4rem;right:.45rem;font-family:var(--font-ui);font-size:.58rem;font-weight:650;letter-spacing:.03em;background:var(--paper-sunk);color:var(--ink-faint);border:1px solid var(--rule-soft);border-radius:2px;padding:.2rem .42rem;line-height:1;cursor:pointer;opacity:0;transition:.15s}
+.box.def:hover .copy-def,.copy-def:focus-visible{opacity:1}
+.copy-def:hover{color:var(--accent);border-color:var(--accent)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("mai14c:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">MAI14C <span>· WMAPS</span></div>
+    <nav class="heftnav">
+      <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+      <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
+      <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
+      <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
+    </nav>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Numerische Methoden</h1>
+      <p class="sub">Fehleranalyse und Maschinenzahlen, Nullstellen und Fixpunkte über Bisektion, Banach und Newton, Polynom- und Spline-Interpolation sowie die numerische Lösung von Differenzialgleichungen mit Euler und Runge-Kutta – mit Übungsaufgaben und Lösungswegen.</p>
+      <div class="meta">
+        <span>WMAPS · MAI14C · 1118K03</span>
+        <span>4 Kapitel</span>
+        <span>Übungsaufgaben mit Lösungen</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Fehleranalyse und Maschinenzahlen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Fehleranalyse und Maschinenzahlen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Das Spezifikum der Numerik: Fehler treten immer auf – die Kunst ist, sie abzuschätzen.</p>
+
+    <div class="box def">
+      <span class="lbl">1.1.1 Die drei Fehlerarten</span>
+      <p><strong>Eingabedatenfehler</strong> – ungenau abgelesene Messwerte, Tippfehler. Nicht Aufgabe der Mathematik.<br>
+      <strong>Verfahrensfehler</strong> – ein Rechner beherrscht nur die Grundrechenarten und nur endlich viele Schritte. Wurzeln, Logarithmen, trigonometrische Funktionen und selbst π und e müssen <strong>angenähert</strong> werden.<br>
+      <strong>Rundungsfehler</strong> – entstehen beim Abschneiden auf die darstellbare Stellenzahl.</p>
+      <p>Der Fokus der Numerik liegt auf der <strong>Minimierung der Verfahrensfehler</strong>.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Definition 1.1 – absoluter und relativer Fehler</span>
+      <p class="formula">absoluter Fehler:&nbsp;&nbsp;Δx = |x̃ − x|<br>relativer Fehler:&nbsp;&nbsp;δx = |x̃ − x| / |x|&nbsp;&nbsp;&nbsp;(für x ≠ 0)</p>
+      <p><strong>Warum beide?</strong> Ein absoluter Fehler von 1 ist bei x = 100 harmlos (δ = 1&nbsp;%), bei x = 0,01 katastrophal. Der relative Fehler misst die <em>Güte der Annäherung</em>, der absolute nur den Abstand.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">1.1.2 Fehlerfortpflanzung (Satz 1.1)</span>
+      <p>Werden fehlerbehaftete Größen weiterverrechnet, schaukeln sich Fehler auf. Für z = f(x, y) gilt näherungsweise (über die Taylor-Entwicklung erster Ordnung):</p>
+      <p class="formula">Δz ≈ | ∂f/∂x | · Δx + | ∂f/∂y | · Δy</p>
+      <p>Dabei ist die <strong>partielle Ableitung</strong> ∂f/∂x die gewöhnliche Ableitung nach x, wobei y als Konstante behandelt wird (Def. 1.2).</p>
+      <p>Faustregeln, die daraus folgen:</p>
+      <ul>
+        <li><strong>Addition/Subtraktion:</strong> die <em>absoluten</em> Fehler addieren sich.</li>
+        <li><strong>Multiplikation/Division:</strong> die <em>relativen</em> Fehler addieren sich.</li>
+        <li><strong>Auslöschung:</strong> Subtrahiert man zwei fast gleich große Zahlen, bleibt der absolute Fehler gleich, während das Ergebnis winzig wird – der <strong>relative Fehler explodiert</strong>. Solche Differenzen möglichst durch Umformung vermeiden.</li>
+      </ul>
+    </div>
+
+    <h4>1.2 Maschinenzahlen</h4>
+    <div class="box def">
+      <span class="lbl">Definition 1.3 – Gleitpunktdarstellung</span>
+      <p class="formula">y = sign · a · 10<sup>e</sup>&nbsp;&nbsp;&nbsp;mit&nbsp;&nbsp;0,1 ≤ a &lt; 1</p>
+      <p><strong>sign</strong> = Vorzeichen, <strong>a</strong> = Mantisse mit fest vorgegebener Ziffernzahl m (der <em>Mantissenlänge</em>), <strong>e</strong> = ganzzahliger Exponent in einem Bereich e<sub>min</sub> ≤ e ≤ e<sub>max</sub> (häufig |e| ≤ 99). Einzige Ausnahme von der Normierung ist die Null.</p>
+      <div class="tw"><table class="mono">
+        <thead><tr><th>reelle Zahl</th><th>Maschinenzahl (5-stellige Mantisse)</th></tr></thead>
+        <tbody>
+          <tr><td>0,00321</td><td>0,32100 · 10<sup>−2</sup></td></tr>
+          <tr><td>10,0</td><td>0,10000 · 10<sup>2</sup></td></tr>
+          <tr><td>−200,22</td><td>−0,20022 · 10<sup>3</sup></td></tr>
+          <tr><td>0,0</td><td>0,00000 · 10<sup>0</sup></td></tr>
+        </tbody>
+      </table></div>
+      <p>Die einfachere <strong>Festkommadarstellung</strong> mit fester Nachkommastellenzahl findet man noch in Taschenrechnern.</p>
+    </div>
+    <div class="box warn">
+      <span class="lbl">1.2.2 Unterlauf und Überlauf</span>
+      <p><strong>Überlauf (overflow):</strong> Das Ergebnis ist betragsmäßig zu groß – der Exponent überschreitet e<sub>max</sub>. Das Programm bricht ab oder liefert „inf“.<br>
+      <strong>Unterlauf (underflow):</strong> Das Ergebnis ist zu klein – der Exponent unterschreitet e<sub>min</sub>. Es wird stillschweigend zu <strong>0</strong>, was gefährlicher ist: Anschließende Divisionen führen zu sinnlosen Ergebnissen.</p>
+    </div>
+    <p><strong>1.2.3 Rundung (Def. 1.4):</strong> Beim Runden auf m Mantissenstellen entscheidet die (m+1)-te Ziffer: &lt; 5 abrunden, ≥ 5 aufrunden. Der dabei entstehende <strong>relative Rundungsfehler</strong> ist durch die <strong>Maschinengenauigkeit</strong> beschränkt – bei m-stelliger Dezimalmantisse gilt δ ≤ ½ · 10<sup>1−m</sup>. Sie ist die kleinste Größe, um die sich zwei Maschinenzahlen unterscheiden können, und damit die prinzipielle Genauigkeitsgrenze jeder Rechnung.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Nullstellen und Fixpunkte">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Nullstellen und Fixpunkte</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Eines der Grundprobleme der Numerik – gelöst durch drei Iterationsverfahren: Banach, Bisektion und Newton.</p>
+
+    <div class="box def">
+      <span class="lbl">Nullstelle und Fixpunkt (Def. 2.1 / 2.2)</span>
+      <p><strong>Nullstelle:</strong> x* mit f(x*) = 0. &nbsp;&nbsp;<strong>Fixpunkt:</strong> x* mit g(x*) = x*.</p>
+      <p>Beide Probleme lassen sich <strong>ineinander überführen</strong>: Aus f(x) = 0 wird durch Umstellen g(x) = x (z.&nbsp;B. g(x) = x + f(x) oder g(x) = x − f(x)/f′(x)). Deshalb genügen Fixpunktverfahren, um Nullstellen zu berechnen.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Satz 2.1 – Existenz einer Nullstelle</span>
+      <p>Ist f auf [a, b] <strong>stetig</strong> und gilt <strong>f(a)·f(b) &lt; 0</strong> (also verschiedene Vorzeichen und beide ≠ 0), so hat f im Innern des Intervalls <strong>mindestens eine</strong> Nullstelle.</p>
+      <p>Das ist ein Spezialfall des <strong>Zwischenwertsatzes</strong>. Die Stetigkeit ist unverzichtbar: f(x) = 1/x wechselt zwischen −1 und 1 das Vorzeichen, hat dort aber keine Nullstelle.</p>
+    </div>
+
+    <h4>2.2 Fixpunktsatz von Banach</h4>
+    <div class="box def">
+      <span class="lbl">Kontrahierende Funktion (Def. 2.5) und Satz 2.3</span>
+      <p>g: I → I heißt <strong>kontrahierend</strong>, wenn es ein K mit 0 ≤ K &lt; 1 gibt, sodass für alle x, y ∈ I gilt:</p>
+      <p class="formula">| g(x) − g(y) | ≤ K · | x − y |</p>
+      <p>Die Bildpunkte liegen also stets <em>näher beieinander</em> als die Urbilder – daher „zusammenziehend“.</p>
+      <p><strong>Fixpunktsatz von Banach:</strong> Eine kontrahierende Selbstabbildung eines abgeschlossenen Intervalls besitzt <strong>genau einen</strong> Fixpunkt x*, und die Iteration</p>
+      <p class="formula">x<sub>n+1</sub> = g(x<sub>n</sub>)</p>
+      <p>konvergiert von <strong>jedem</strong> Startwert aus gegen ihn. Praktisches Prüfkriterium: <strong>|g′(x)| ≤ K &lt; 1</strong> auf dem ganzen Intervall.</p>
+      <p><strong>Fehlerabschätzung:</strong> |x<sub>n</sub> − x*| ≤ K<sup>n</sup>/(1−K) · |x₁ − x₀| (a priori) bzw. ≤ K/(1−K) · |x<sub>n</sub> − x<sub>n−1</sub>| (a posteriori) – damit lässt sich die nötige Schrittzahl <em>vorab</em> bestimmen.</p>
+    </div>
+
+    <h4>2.3 Bisektions- und Newton-Verfahren</h4>
+    <div class="box def">
+      <span class="lbl">Bisektionsverfahren (Intervallhalbierung)</span>
+      <p><strong>Voraussetzung:</strong> f stetig auf [a, b] mit f(a)·f(b) &lt; 0.</p>
+      <p class="formula">1.&nbsp; m = (a + b)/2 berechnen<br>2.&nbsp; f(m) = 0?&nbsp;→ fertig<br>3.&nbsp; f(a)·f(m) &lt; 0?&nbsp;→ neues Intervall [a, m], sonst [m, b]<br>4.&nbsp; wiederholen, bis b − a &lt; ε</p>
+      <p><strong>Vorteil:</strong> konvergiert <em>immer</em>, und der Fehler ist exakt bekannt: nach n Schritten höchstens (b−a)/2ⁿ. <strong>Nachteil:</strong> nur <strong>lineare</strong> Konvergenz – pro Schritt ein Bit Genauigkeit, also rund 3,3 Schritte je Dezimalstelle.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Newton-Verfahren</span>
+      <p class="formula">x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>) / f′(x<sub>n</sub>)</p>
+      <p><strong>Idee:</strong> Die Funktion wird im Punkt x<sub>n</sub> durch ihre <strong>Tangente</strong> ersetzt; deren Nullstelle ist die neue Näherung. Deshalb auch „Tangentenverfahren“.</p>
+      <p><strong>Vorteil:</strong> <strong>quadratische</strong> Konvergenz – die Zahl der korrekten Stellen verdoppelt sich pro Schritt. <strong>Nachteile:</strong> f′ muss berechenbar und ≠ 0 sein, und die Konvergenz ist nur <strong>lokal</strong> – bei schlechtem Startwert kann das Verfahren divergieren oder wegspringen.</p>
+      <p><em>Klassisches Beispiel – Wurzelziehen:</em> f(x) = x² − a liefert die babylonische Formel</p>
+      <p class="formula">x<sub>n+1</sub> = ½·( x<sub>n</sub> + a/x<sub>n</sub> )</p>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Verfahren</th><th>Voraussetzung</th><th>Konvergenz</th><th>Sicherheit</th></tr></thead>
+      <tbody>
+        <tr><td>Bisektion</td><td>Vorzeichenwechsel</td><td>linear</td><td>garantiert</td></tr>
+        <tr><td>Banach</td><td>|g′| ≤ K &lt; 1</td><td>linear (Faktor K)</td><td>garantiert im Intervall</td></tr>
+        <tr><td>Newton</td><td>f′ ≠ 0, guter Startwert</td><td><strong>quadratisch</strong></td><td>nur lokal</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Praxis:</strong> Erst mit ein paar Bisektionsschritten einen guten Startwert einkreisen, dann mit Newton schnell auf die gewünschte Genauigkeit gehen.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Interpolation">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Interpolation</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <div class="box warn">
+      <span class="lbl">Hinweis zu diesem Kapitel</span>
+      <p>Kapitel 3 und 4 fehlen in der vorliegenden Fassung des Studienhefts (die Datei endet nach Kapitel 2). Beide gehören laut Modulbeschreibung zu den <strong>Kernthemen von WMAPS</strong> – „Interpolation mit Polynomen“, „Splinefunktionen“ und „Numerische Lösung von Differenzialgleichungen“. Die folgenden beiden Kapitel sind daher entlang des <strong>Inhaltsverzeichnisses</strong> eigenständig zusammengestellt und ersetzen nicht die Lektüre des vollständigen Hefts.</p>
+    </div>
+    <p class="lead">Aufgabe: Durch n+1 gegebene Stützpunkte soll eine glatte Funktion gelegt werden, die an den Stützstellen <strong>exakt</strong> durch die Werte geht.</p>
+
+    <div class="box def">
+      <span class="lbl">3.2 Polynominterpolation – Existenz und Eindeutigkeit</span>
+      <p>Zu n+1 Stützpunkten (x₀, y₀), …, (x<sub>n</sub>, y<sub>n</sub>) mit <strong>paarweise verschiedenen</strong> x<sub>i</sub> gibt es <strong>genau ein</strong> Polynom vom Grad ≤ n, das alle Punkte trifft. Nur die <em>Darstellungsform</em> unterscheidet sich – das Polynom selbst ist immer dasselbe.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">3.2.1 Lagrange-Interpolation</span>
+      <p class="formula">P(x) = ∑<sub>i=0</sub><sup>n</sup> y<sub>i</sub> · L<sub>i</sub>(x)&nbsp;&nbsp;&nbsp;mit&nbsp;&nbsp;L<sub>i</sub>(x) = ∏<sub>j≠i</sub> (x − x<sub>j</sub>)/(x<sub>i</sub> − x<sub>j</sub>)</p>
+      <p>Die <strong>Lagrange-Basispolynome</strong> haben die Eigenschaft L<sub>i</sub>(x<sub>i</sub>) = 1 und L<sub>i</sub>(x<sub>j</sub>) = 0 für j ≠ i – deshalb „schaltet“ jeder Summand genau an seiner Stützstelle den Wert y<sub>i</sub> ein.</p>
+      <p><strong>Vorteil:</strong> direkt hinschreibbar, kein Gleichungssystem. <strong>Nachteil:</strong> Kommt ein Stützpunkt hinzu, muss <em>alles</em> neu berechnet werden.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">3.2.2 Newtonsche Interpolation (dividierte Differenzen)</span>
+      <p class="formula">P(x) = c₀ + c₁(x − x₀) + c₂(x − x₀)(x − x₁) + … + c<sub>n</sub>(x−x₀)…(x−x<sub>n−1</sub>)</p>
+      <p>Die Koeffizienten sind die <strong>dividierten Differenzen</strong>, berechnet im Schema</p>
+      <p class="formula">f[x<sub>i</sub>] = y<sub>i</sub><br>f[x<sub>i</sub>, x<sub>i+1</sub>] = (y<sub>i+1</sub> − y<sub>i</sub>)/(x<sub>i+1</sub> − x<sub>i</sub>)<br>f[x<sub>i</sub>,…,x<sub>i+k</sub>] = ( f[x<sub>i+1</sub>,…,x<sub>i+k</sub>] − f[x<sub>i</sub>,…,x<sub>i+k−1</sub>] ) / (x<sub>i+k</sub> − x<sub>i</sub>)</p>
+      <p>c<sub>k</sub> ist jeweils der <strong>oberste Eintrag</strong> der k-ten Spalte. <strong>Großer Vorteil:</strong> Ein zusätzlicher Stützpunkt fügt nur einen weiteren Summanden hinzu – das Bisherige bleibt gültig.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">3.2.3 Interpolationsfehler</span>
+      <p class="formula">f(x) − P(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · (x − x₀)(x − x₁)···(x − x<sub>n</sub>)&nbsp;&nbsp;&nbsp;mit ξ im Intervall</p>
+      <p><strong>Runges Phänomen:</strong> Mehr Stützstellen bedeuten <em>nicht</em> automatisch weniger Fehler – bei hohem Grad und äquidistanten Stützstellen schwingt das Polynom an den Rändern immer stärker. Genau deshalb nimmt man in der Praxis <strong>Splines</strong> statt eines Polynoms hohen Grades.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">3.3 Splinefunktionen</span>
+      <p>Ein <strong>Spline</strong> setzt sich <em>abschnittsweise</em> aus Polynomen niedrigen Grades zusammen, die an den Stützstellen glatt aneinanderpassen.</p>
+      <div class="tw"><table>
+        <thead><tr><th>Typ</th><th>Grad je Abschnitt</th><th>Anschlussbedingungen</th></tr></thead>
+        <tbody>
+          <tr><td><strong>linear</strong></td><td>1 (Geradenstücke)</td><td>nur stetig – Knicke erlaubt</td></tr>
+          <tr><td><strong>quadratisch</strong></td><td>2</td><td>stetig + erste Ableitung stetig</td></tr>
+          <tr><td><strong>kubisch</strong></td><td>3</td><td>stetig + <strong>erste und zweite</strong> Ableitung stetig</td></tr>
+        </tbody>
+      </table></div>
+      <p>Der <strong>kubische Spline</strong> ist der Standardfall: Bei n+1 Stützstellen entstehen n Teilpolynome mit je 4 Koeffizienten, also 4n Unbekannte. Die Bedingungen liefern 4n − 2 Gleichungen; die beiden fehlenden kommen aus der <strong>Randbedingung</strong> – meist s″ = 0 an beiden Enden (<strong>natürlicher Spline</strong>).</p>
+      <p><strong>Vorteil gegenüber der Polynominterpolation:</strong> kein Aufschwingen, lokale Änderungen wirken sich nur lokal aus, und das Ergebnis sieht „natürlich“ aus – daher der Einsatz in CAD und Grafik.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Numerische Lösung von Differenzialgleichungen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4</p>
+      <h2>Numerische Lösung von Differenzialgleichungen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Für die meisten praktisch vorkommenden Differenzialgleichungen gibt es <strong>keine geschlossene Lösung</strong> – hier setzt die Numerik an.</p>
+
+    <div class="box def">
+      <span class="lbl">4.1 Problemstellung</span>
+      <p>Gegeben ist das <strong>Anfangswertproblem</strong></p>
+      <p class="formula">y′(x) = f(x, y),&nbsp;&nbsp;&nbsp;y(x₀) = y₀</p>
+      <p>Gesucht sind Näherungswerte y₁, y₂, … an den Stellen x₁ = x₀ + h, x₂ = x₀ + 2h, … mit der <strong>Schrittweite h</strong>.</p>
+      <p><strong>Verfahren von Picard und Lindelöf:</strong> Das AWP ist äquivalent zur Integralgleichung y(x) = y₀ + ∫<sub>x₀</sub><sup>x</sup> f(t, y(t))dt. Deren sukzessive Approximation liefert nicht nur ein Näherungsverfahren, sondern zugleich den <strong>Existenz- und Eindeutigkeitsbeweis</strong> (Lipschitz-Bedingung).</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">4.2.1 Euler-Polygonzug-Verfahren</span>
+      <p class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(x<sub>n</sub>, y<sub>n</sub>)</p>
+      <p><strong>Idee:</strong> An jeder Stelle wird die Lösungskurve durch ihre <strong>Tangente</strong> ersetzt – es entsteht ein Polygonzug. Das einfachste denkbare Verfahren.</p>
+      <p><strong>Fehlerordnung:</strong> lokal O(h²), <strong>global O(h)</strong> – Verfahren <strong>1. Ordnung</strong>. Halbierte Schrittweite bedeutet also nur halbierten Fehler, aber doppelten Aufwand.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">4.2.2 Runge-Kutta-Verfahren</span>
+      <p>Statt nur der Anfangssteigung wird eine <strong>gewichtete Mittelung mehrerer Steigungen</strong> innerhalb des Schritts verwendet. Das klassische Verfahren <strong>4. Ordnung</strong> (RK4):</p>
+      <p class="formula">k₁ = f(x<sub>n</sub>, y<sub>n</sub>)<br>k₂ = f(x<sub>n</sub> + h/2, y<sub>n</sub> + (h/2)·k₁)<br>k₃ = f(x<sub>n</sub> + h/2, y<sub>n</sub> + (h/2)·k₂)<br>k₄ = f(x<sub>n</sub> + h, y<sub>n</sub> + h·k₃)<br><br>y<sub>n+1</sub> = y<sub>n</sub> + (h/6)·( k₁ + 2k₂ + 2k₃ + k₄ )</p>
+      <p><strong>Globale Fehlerordnung O(h⁴)</strong>: Halbiert man h, sinkt der Fehler auf ein <strong>Sechzehntel</strong>. Preis: vier Funktionsauswertungen pro Schritt – bei gleicher Genauigkeit trotzdem weit günstiger als Euler.</p>
+      <p>Das <strong>Heun-Verfahren</strong> (verbessertes Euler-Verfahren) ist der Zwischenschritt: y<sub>n+1</sub> = y<sub>n</sub> + (h/2)·(k₁ + k₂) mit k₂ = f(x<sub>n</sub>+h, y<sub>n</sub>+h·k₁) – Ordnung 2.</p>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Verfahren</th><th>Auswertungen je Schritt</th><th>globale Ordnung</th></tr></thead>
+      <tbody>
+        <tr><td>Euler (Polygonzug)</td><td>1</td><td>O(h)</td></tr>
+        <tr><td>Heun (verbessertes Euler)</td><td>2</td><td>O(h²)</td></tr>
+        <tr><td>Runge-Kutta klassisch</td><td>4</td><td>O(h⁴)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════ ÜBUNGSAUFGABEN ══════════════ -->
+<section class="sec" id="ue" data-num="Ü" data-title="Übungsaufgaben">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">Ü</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Übung</p>
+      <h2>Übungsaufgaben mit Lösungswegen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.1</span><span class="task-t">Absoluter und relativer Fehler</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Der exakte Wert ist x = 100, die Näherung x̃ = 101. In einem zweiten Fall ist x = 0,01 und x̃ = 1,01. Vergleichen Sie absoluten und relativen Fehler.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">Fall 1:  Δx = |101 − 100| = 1
+         δx = 1/100 = 0,01 = 1 %
+
+Fall 2:  Δx = |1,01 − 0,01| = 1
+         δx = 1/0,01 = 100 = 10 000 %</div>
+        <div class="res">Der <strong>absolute</strong> Fehler ist identisch, der <strong>relative</strong> um den Faktor 10 000 größer. Genau deshalb bewertet man die Güte einer Näherung immer über den relativen Fehler.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.2</span><span class="task-t">Fehlerfortpflanzung bei einem Produkt</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Eine Rechteckfläche wird aus a = 5,0 cm ± 0,1 cm und b = 3,0 cm ± 0,05 cm bestimmt. Wie groß ist der maximale absolute und relative Fehler der Fläche?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">f(a,b) = a·b        ∂f/∂a = b = 3,0     ∂f/∂b = a = 5,0
+
+ΔF ≈ |∂f/∂a|·Δa + |∂f/∂b|·Δb
+   = 3,0 · 0,1 + 5,0 · 0,05
+   = 0,30 + 0,25 = 0,55 cm²
+
+F = 15,0 cm²   →   δF = 0,55/15,0 = 0,0367 = 3,67 %
+
+Gegenprobe über die Faustregel (relative Fehler addieren sich):
+δa = 0,1/5,0 = 2 %,  δb = 0,05/3,0 = 1,67 %  →  Summe 3,67 %  ✓</div>
+        <div class="res">F = 15,0 cm² ± 0,55 cm², also rund <strong>3,7&nbsp;% relativer Fehler</strong>. Beide Wege führen zum selben Ergebnis – ein guter Selbsttest.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.3</span><span class="task-t">Gleitpunktdarstellung</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Stellen Sie als Maschinenzahl mit fünfstelliger Mantisse (Normierung 0,1 ≤ a &lt; 1) dar: a) 0,00321 · b) −200,22 · c) 56,03/13</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a) 0,00321   =  0,32100 · 10^(−2)
+b) −200,22   = −0,20022 · 10^3
+c) 56,03/13  =  4,310769…  =  0,43108 · 10^1   (gerundet)</div>
+        <div class="res">Merkregel: Das Komma so verschieben, dass <strong>die erste Ziffer nach dem Komma ungleich null</strong> ist, und die Verschiebung im Exponenten ausgleichen. Bei c) entsteht durch das Runden auf fünf Stellen ein relativer Fehler von rund 4·10<sup>−6</sup>.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.4</span><span class="task-t">Bisektionsverfahren</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Bestimmen Sie mit drei Bisektionsschritten eine Näherung für die Nullstelle von f(x) = x² − 2 im Intervall [1, 2]. Wie groß ist der Fehler höchstens?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">f(1) = −1 &lt; 0,  f(2) = 2 &gt; 0   →  Vorzeichenwechsel ✓
+
+Schritt 1: m = 1,5    f(1,5) = 0,25 > 0  →  neues Intervall [1 ; 1,5]
+Schritt 2: m = 1,25   f(1,25) = −0,4375 &lt; 0 →  [1,25 ; 1,5]
+Schritt 3: m = 1,375  f(1,375) = −0,1094 &lt; 0 →  [1,375 ; 1,5]
+
+Näherung: Intervallmitte 1,4375
+Fehlerschranke: (b−a)/2³ = 1/8 = 0,125  bzw. halbe Intervalllänge 0,0625</div>
+        <div class="res">Näherung <strong>1,4375</strong> für √2 = 1,41421… – der tatsächliche Fehler beträgt 0,023 und liegt damit unter der Schranke ✓. Für jede weitere Dezimalstelle braucht man rund 3,3 zusätzliche Schritte.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.5</span><span class="task-t">Newton-Verfahren</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Berechnen Sie √2 mit dem Newton-Verfahren, Startwert x₀ = 1,5, drei Schritte. Vergleichen Sie mit Ü.4.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">f(x) = x² − 2,  f'(x) = 2x
+
+x_{n+1} = x_n − (x_n² − 2)/(2x_n) = ½·( x_n + 2/x_n )
+
+x₀ = 1,5
+x₁ = ½·(1,5 + 1,3333333) = 1,4166667
+x₂ = ½·(1,4166667 + 1,4117647) = 1,4142157
+x₃ = ½·(1,4142157 + 1,4142114) = 1,4142136</div>
+        <div class="res">Nach drei Schritten <strong>1,4142136</strong> – exakt ist 1,41421356…, also <strong>acht</strong> korrekte Stellen. Die Bisektion lieferte nach drei Schritten eine. Man sieht die <strong>quadratische Konvergenz</strong>: die Zahl der korrekten Stellen verdoppelt sich (1 → 3 → 6 → 8).</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.6</span><span class="task-t">Fixpunktiteration und Banach</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Untersuchen Sie, ob die Iteration x<sub>n+1</sub> = cos(x<sub>n</sub>) auf [0; 1] konvergiert, und führen Sie vier Schritte ab x₀ = 0,5 aus.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">Prüfung der Kontraktion:  g(x) = cos x,  g'(x) = −sin x
+Auf [0; 1] gilt |g'(x)| = |sin x| ≤ sin(1) = 0,8415 = K < 1   ✓
+Außerdem bildet g das Intervall in sich ab (cos[0;1] ⊂ [0,54; 1]) ✓
+→ nach Banach genau EIN Fixpunkt, Konvergenz von jedem Startwert aus
+
+x₀ = 0,5
+x₁ = cos(0,5)     = 0,877583
+x₂ = cos(0,877583)= 0,639012
+x₃ = cos(0,639012)= 0,802685
+x₄ = cos(0,802685)= 0,694778</div>
+        <div class="res">Die Werte pendeln sich langsam auf den Fixpunkt <strong>x* ≈ 0,739085</strong> ein. Wegen K = 0,84 ist die Konvergenz nur <strong>linear</strong> und entsprechend zäh – ein Argument für das Newton-Verfahren, das hier in drei Schritten fertig wäre.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.7</span><span class="task-t">Lagrange-Interpolation</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie das Interpolationspolynom durch (0, 1), (1, 3) und (2, 2).</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">L₀(x) = (x−1)(x−2)/((0−1)(0−2)) = (x−1)(x−2)/2
+L₁(x) = (x−0)(x−2)/((1−0)(1−2)) = −x(x−2)
+L₂(x) = (x−0)(x−1)/((2−0)(2−1)) = x(x−1)/2
+
+P(x) = 1·L₀ + 3·L₁ + 2·L₂
+     = (x²−3x+2)/2 − 3(x²−2x) + (x²−x)
+     = 0,5x² − 1,5x + 1 − 3x² + 6x + x² − x
+     = −1,5x² + 3,5x + 1</div>
+        <div class="res">P(x) = <strong>−1,5x² + 3,5x + 1</strong><br>Probe: P(0) = 1 ✓ · P(1) = −1,5+3,5+1 = 3 ✓ · P(2) = −6+7+1 = 2 ✓</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.8</span><span class="task-t">Newton-Interpolation mit dividierten Differenzen</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Lösen Sie dieselbe Aufgabe mit dem Newtonschen Schema und vergleichen Sie.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">x_i | y_i |  1. Ordnung        |  2. Ordnung
+----+-----+-------------------+---------------------
+ 0  |  1  |
+    |     | (3−1)/(1−0) =  2  |
+ 1  |  3  |                   | (−1−2)/(2−0) = −1,5
+    |     | (2−3)/(2−1) = −1  |
+ 2  |  2  |
+
+c₀ = 1,  c₁ = 2,  c₂ = −1,5   (jeweils oberster Wert der Spalte)
+
+P(x) = 1 + 2·(x−0) − 1,5·(x−0)(x−1)
+     = 1 + 2x − 1,5x² + 1,5x
+     = −1,5x² + 3,5x + 1</div>
+        <div class="res">Dasselbe Polynom wie in Ü.7 – wie es die Eindeutigkeit verlangt. <strong>Vorteil der Newton-Form:</strong> Käme der Punkt (3, 0) hinzu, würde nur ein weiterer Summand c₃·x(x−1)(x−2) ergänzt; bei Lagrange müsste man komplett neu rechnen.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.9</span><span class="task-t">Euler-Verfahren</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Lösen Sie y′ = y mit y(0) = 1 näherungsweise auf [0; 0,4] mit h = 0,1 und vergleichen Sie mit der exakten Lösung.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">y_{n+1} = y_n + h·f(x_n, y_n) = y_n + 0,1·y_n = 1,1·y_n
+
+y₀ = 1
+y₁ = 1,1
+y₂ = 1,21
+y₃ = 1,331
+y₄ = 1,4641
+
+exakt: y(x) = e^x  →  y(0,4) = 1,491825</div>
+        <div class="res">Näherung 1,4641 gegen exakt 1,4918 – absoluter Fehler <strong>0,0277</strong> (rund 1,9&nbsp;%). Mit halbierter Schrittweite h = 0,05 halbiert sich der Fehler ungefähr: <strong>Ordnung O(h)</strong>. Das Euler-Verfahren unterschätzt hier systematisch, weil die Lösungskurve konvex ist und die Tangente stets darunter verläuft.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.10</span><span class="task-t">Runge-Kutta im Vergleich</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Führen Sie für dasselbe Problem einen einzigen RK4-Schritt mit h = 0,4 aus.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">f(x,y) = y,  x₀ = 0,  y₀ = 1,  h = 0,4
+
+k₁ = f(0 ; 1)                    = 1
+k₂ = f(0,2 ; 1 + 0,2·1)          = 1,2
+k₃ = f(0,2 ; 1 + 0,2·1,2)        = 1,24
+k₄ = f(0,4 ; 1 + 0,4·1,24)       = 1,496
+
+y₁ = 1 + (0,4/6)·(k₁ + 2k₂ + 2k₃ + k₄)
+   = 1 + 0,0666667·(1 + 2,4 + 2,48 + 1,496)
+   = 1 + 0,0666667·7,376
+   = 1,491733</div>
+        <div class="res">Ein <strong>einziger</strong> RK4-Schritt liefert 1,491733 gegen exakt 1,491825 – Fehler <strong>0,00009</strong>. Vier Euler-Schritte kamen auf 0,0277, also den <strong>300-fachen</strong> Fehler bei gleicher Zahl von Funktionsauswertungen. Das ist der ganze Grund, warum in der Praxis Runge-Kutta läuft und nicht Euler.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Selbstkontrolle</p>
+      <h2>Schnellcheck</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <ul>
+      <li>Nennen Sie die drei Fehlerarten der Numerik.</li>
+      <li>Wie sind absoluter und relativer Fehler definiert – und wann sagt welcher mehr?</li>
+      <li>Wie lautet die Formel der Fehlerfortpflanzung für f(x, y)?</li>
+      <li>Welche Fehler addieren sich bei Addition, welche bei Multiplikation?</li>
+      <li>Was passiert bei der Auslöschung – und warum ist sie gefährlich?</li>
+      <li>Wie ist eine Gleitpunktzahl aufgebaut, und wie lautet die Normierungsbedingung?</li>
+      <li>Was unterscheidet Über- von Unterlauf – und welcher ist tückischer?</li>
+      <li>Was besagt die Maschinengenauigkeit?</li>
+      <li>Wie hängen Nullstellen- und Fixpunktproblem zusammen?</li>
+      <li>Welche zwei Voraussetzungen braucht Satz 2.1 für die Existenz einer Nullstelle?</li>
+      <li>Wann heißt eine Funktion kontrahierend, und wie prüft man das praktisch?</li>
+      <li>Was garantiert der Fixpunktsatz von Banach – Existenz, Eindeutigkeit oder beides?</li>
+      <li>Wie lautet die Iterationsvorschrift des Newton-Verfahrens, und welche Idee steckt dahinter?</li>
+      <li>Vergleichen Sie Bisektion und Newton nach Konvergenzgeschwindigkeit und Sicherheit.</li>
+      <li>Wie groß ist der Fehler nach n Bisektionsschritten?</li>
+      <li>Wie viele Polynome vom Grad ≤ n gehen durch n+1 Stützpunkte?</li>
+      <li>Welche Eigenschaft haben die Lagrange-Basispolynome an den Stützstellen?</li>
+      <li>Welchen Vorteil hat die Newton-Form gegenüber der Lagrange-Form?</li>
+      <li>Was ist das Runge-Phänomen, und welche Konsequenz zieht man daraus?</li>
+      <li>Welche Übergangsbedingungen erfüllt ein kubischer Spline?</li>
+      <li>Woher kommen beim natürlichen kubischen Spline die beiden fehlenden Gleichungen?</li>
+      <li>Wie lautet die Vorschrift des Euler-Verfahrens, und welche Fehlerordnung hat es?</li>
+      <li>Wie viele Steigungen mittelt RK4, und welche Ordnung erreicht es damit?</li>
+      <li>Um welchen Faktor sinkt der Fehler bei RK4, wenn h halbiert wird?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ FORMELSAMMLUNG ══════════════ -->
+<section class="sec" id="formeln" data-num="F" data-title="Formeln & Kurzreferenz">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">F</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Referenz</p>
+      <h2>Formeln &amp; Kurzreferenz</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Fehler</h4>
+    <p class="formula">Δx = |x̃ − x|&nbsp;&nbsp;·&nbsp;&nbsp;δx = |x̃ − x| / |x|<br>Δz ≈ |∂f/∂x|·Δx + |∂f/∂y|·Δy<br><br>Addition → absolute Fehler addieren<br>Multiplikation → relative Fehler addieren<br>Gleitpunkt: y = sign · a · 10<sup>e</sup> mit 0,1 ≤ a &lt; 1</p>
+
+    <h4>Nullstellen und Fixpunkte</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Verfahren</th><th>Vorschrift</th><th>Ordnung</th></tr></thead>
+      <tbody>
+        <tr><td>Bisektion</td><td>m = (a+b)/2, Teilintervall mit Vorzeichenwechsel</td><td>linear, Fehler ≤ (b−a)/2ⁿ</td></tr>
+        <tr><td>Banach</td><td>x<sub>n+1</sub> = g(x<sub>n</sub>), |g′| ≤ K &lt; 1</td><td>linear</td></tr>
+        <tr><td>Newton</td><td>x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f′(x<sub>n</sub>)</td><td>quadratisch</td></tr>
+        <tr><td>Wurzel aus a</td><td>x<sub>n+1</sub> = ½(x<sub>n</sub> + a/x<sub>n</sub>)</td><td>quadratisch</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Interpolation</h4>
+    <p class="formula">Lagrange:&nbsp; P(x) = ∑ y<sub>i</sub>·L<sub>i</sub>(x),&nbsp;&nbsp;L<sub>i</sub>(x) = ∏<sub>j≠i</sub> (x−x<sub>j</sub>)/(x<sub>i</sub>−x<sub>j</sub>)<br><br>Newton:&nbsp;&nbsp; P(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + …<br>&nbsp;&nbsp;c<sub>k</sub> = dividierte Differenzen (oberster Eintrag der k-ten Spalte)<br><br>Fehler:&nbsp;&nbsp; f(x) − P(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · ∏(x − x<sub>i</sub>)</p>
+    <div class="tw"><table>
+      <thead><tr><th>Spline</th><th>stetig in</th></tr></thead>
+      <tbody>
+        <tr><td>linear</td><td>Funktionswert</td></tr>
+        <tr><td>quadratisch</td><td>Funktionswert, s′</td></tr>
+        <tr><td>kubisch</td><td>Funktionswert, s′, s″ (natürlich: s″ = 0 an den Rändern)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Numerische DGL (y′ = f(x,y), y(x₀) = y₀)</h4>
+    <p class="formula">Euler:&nbsp; y<sub>n+1</sub> = y<sub>n</sub> + h·f(x<sub>n</sub>, y<sub>n</sub>)&nbsp;&nbsp;&nbsp;O(h)<br><br>Heun:&nbsp;&nbsp; y<sub>n+1</sub> = y<sub>n</sub> + (h/2)(k₁ + k₂)&nbsp;&nbsp;&nbsp;O(h²)<br><br>RK4:&nbsp;&nbsp;&nbsp; k₁ = f(x<sub>n</sub>, y<sub>n</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>n</sub>+h/2, y<sub>n</sub>+(h/2)k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₃ = f(x<sub>n</sub>+h/2, y<sub>n</sub>+(h/2)k₂)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₄ = f(x<sub>n</sub>+h, y<sub>n</sub>+h·k₃)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>n+1</sub> = y<sub>n</sub> + (h/6)(k₁ + 2k₂ + 2k₃ + k₄)&nbsp;&nbsp;&nbsp;O(h⁴)</p>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft MAI14C · Numerische Methoden · Weiterführende Mathematik · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "mai14c:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Heft-Navigation (vor / zurück, innerhalb des Fachs) ---------- */
+  (function(){
+    var groups = [
+      ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"],
+      ["GPI15_Lernheft.html","GPI16_Lernheft.html","GPI21_Lernheft.html","GPI22_Lernheft.html"],
+      ["MAI06_Lernheft.html","MAI09_Lernheft.html","MAI11_Lernheft.html","MAI13_Lernheft.html","MAI14C_Lernheft.html"]
+    ];
+    var base = function(n){ return n.replace(/\.html$/i, "").toLowerCase(); };
+    var cur = base(decodeURIComponent(location.pathname.split("/").pop()));
+    var files = groups[0], idx = -1;
+    for(var g = 0; g < groups.length; g++){
+      for(var i = 0; i < groups[g].length; i++){ if(base(groups[g][i]) === cur){ files = groups[g]; idx = i; break; } }
+      if(idx > -1) break;
+    }
+    var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
+    if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
+    if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
+  })();
+
+  /* ---------- Kopier-Button an jede Definitions-Box ---------- */
+  (function(){
+    if(!navigator.clipboard) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".box.def"), function(box){
+      var txt = box.innerText.trim();
+      var b = document.createElement("button");
+      b.className = "copy-def"; b.type = "button"; b.textContent = "⧉ Kopieren"; b.title = "Definition kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(txt).then(function(){
+          b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = "⧉ Kopieren"; }, 1200);
+        }, function(){ b.textContent = "⚠ Fehler"; });
+      });
+      box.appendChild(b);
+    });
+  })();
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll(".sec details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1130,11 +1130,17 @@ A–C = 1   C–D = 3   D–E = 3   (aus den Distanzvektoren abgeleitet)</div>
   (function(){
     var groups = [
       ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
-      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"]
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"],
+      ["GPI15_Lernheft.html","GPI16_Lernheft.html","GPI21_Lernheft.html","GPI22_Lernheft.html"],
+      ["MAI06_Lernheft.html","MAI09_Lernheft.html","MAI11_Lernheft.html","MAI13_Lernheft.html","MAI14C_Lernheft.html"]
     ];
-    var cur = location.pathname.split("/").pop();
+    var base = function(n){ return n.replace(/\.html$/i, "").toLowerCase(); };
+    var cur = base(decodeURIComponent(location.pathname.split("/").pop()));
     var files = groups[0], idx = -1;
-    for(var g = 0; g < groups.length; g++){ var f = groups[g].indexOf(cur); if(f > -1){ files = groups[g]; idx = f; break; } }
+    for(var g = 0; g < groups.length; g++){
+      for(var i = 0; i < groups[g].length; i++){ if(base(groups[g][i]) === cur){ files = groups[g]; idx = i; break; } }
+      if(idx > -1) break;
+    }
     var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
     if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
     if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
@@ -1236,7 +1242,7 @@ A–C = 1   C–D = 3   D–E = 3   (aus den Distanzvektoren abgeleitet)</div>
     if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
   });
   document.getElementById("openAll").addEventListener("click", function(){
-    var all = document.querySelectorAll("#ea details");
+    var all = document.querySelectorAll(".sec details");
     var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
     Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
     this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";

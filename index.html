@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITI-Lernhefte · Informationstechnologie</title>
+<title>WBH-Lernhefte · ITI · TGI · Programmierung · Mathematik</title>
 <style>
 :root{
   --paper:#EFF2F0; --paper-raised:#F9FBFA; --paper-sunk:#E4E9E6;
@@ -98,7 +98,7 @@ footer a{color:var(--accent)}
 
 <div class="topbar">
   <div class="topbar-in">
-    <div class="brand">WBH · Lernhefte <span>· ITI + TGI</span></div>
+    <div class="brand">WBH · Lernhefte <span>· ITI · TGI · EP · WMAPS</span></div>
     <div class="spacer"></div>
     <span class="progress-txt" id="ptxt">0 / 0 Abschnitte</span>
     <div class="ctl">
@@ -121,9 +121,9 @@ footer a{color:var(--accent)}
   <div class="hero">
     <p class="eyebrow">Studienhefte · Wilhelm Büchner Hochschule</p>
     <h1>WBH-Lernhefte</h1>
-    <p class="sub">Kompakte Lese-Zusammenfassungen mit Aufgaben und Lösungswegen für zwei Fächer: Informationstechnologie (ITI21–ITI26) und Theoretische Grundlagen der Informatik (GDI01, TGI01, TGI02, TGI06, TGI07). Fortschritt wird gespeichert – lokal und optional geräteübergreifend.</p>
+    <p class="sub">Kompakte Lese-Zusammenfassungen mit Aufgaben und Lösungswegen für vier Fächer: Informationstechnologie (ITI21–ITI26), Theoretische Grundlagen der Informatik (GDI01, TGI01, TGI02, TGI06, TGI07), Erweiterte Programmierung (GPI15, GPI16, GPI21, GPI22) und Weiterführende Mathematik – WMAPS (MAI06, MAI09, MAI11, MAI13, MAI14C). Fortschritt wird gespeichert – lokal und optional geräteübergreifend.</p>
     <div class="meta">
-      <span id="metaCount">11 Hefte · 2 Fächer</span>
+      <span id="metaCount">20 Hefte · 4 Fächer</span>
       <span id="metaPct">0 % gelesen</span>
     </div>
     <div class="bigbar"><i id="bigFill"></i></div>
@@ -167,6 +167,19 @@ footer a{color:var(--accent)}
       {id:"tgi02", num:"02", label:"TGI02", code:"Lernleitfaden", file:"TGI02_Lernheft.html", topic:"Komplexität",      title:"Algorithmen und Komplexität",                 total:9},
       {id:"tgi06", num:"06", label:"TGI06", code:"Lernleitfaden", file:"TGI06_Lernheft.html", topic:"Formale Sprachen", title:"Formale Sprachen &amp; abstrakte Automaten 1", total:7},
       {id:"tgi07", num:"07", label:"TGI07", code:"0723K04",      file:"TGI07_Lernheft.html", topic:"Automaten 2",      title:"Formale Sprachen &amp; abstrakte Automaten 2", total:7}
+    ]},
+    { title:"Erweiterte Programmierung", sub:"GPI15 · GPI16 · GPI21 · GPI22 · 4 Hefte", hefte:[
+      {id:"gpi15", num:"15", label:"GPI15", code:"C++ Teil I",  file:"GPI15_Lernheft.html", topic:"C++ Grundlagen",   title:"Programmieren in C++, Teil I",  total:9},
+      {id:"gpi16", num:"16", label:"GPI16", code:"C++ Teil II", file:"GPI16_Lernheft.html", topic:"C++ Objektorient.", title:"Programmieren in C++, Teil II", total:11},
+      {id:"gpi21", num:"21", label:"GPI21", code:"C Teil 1",    file:"GPI21_Lernheft.html", topic:"C Grundlagen",     title:"Programmieren in C, Teil 1",    total:9},
+      {id:"gpi22", num:"22", label:"GPI22", code:"C Teil 2",    file:"GPI22_Lernheft.html", topic:"C Zeiger &amp; Speicher", title:"Programmieren in C, Teil 2", total:11}
+    ]},
+    { title:"WMAPS · Weiterführende Mathematik", sub:"MAI06 · MAI09 · MAI11 · MAI13 · MAI14C · 5 Hefte", hefte:[
+      {id:"mai06",  num:"06", label:"MAI06",  code:"1124K19", file:"MAI06_Lernheft.html",  topic:"Vektoralgebra",   title:"Vektoralgebra &amp; Analytische Geometrie", total:7},
+      {id:"mai09",  num:"09", label:"MAI09",  code:"WMAPS",   file:"MAI09_Lernheft.html",  topic:"Reihen",          title:"Reihen &amp; Integraltransformation",       total:8},
+      {id:"mai11",  num:"11", label:"MAI11",  code:"0325K13", file:"MAI11_Lernheft.html",  topic:"Stochastik",      title:"Stochastik II",                            total:7},
+      {id:"mai13",  num:"13", label:"MAI13",  code:"WMAPS",   file:"MAI13_Lernheft.html",  topic:"Differenzialgl.", title:"Gewöhnliche Differenzialgleichungen",      total:8},
+      {id:"mai14c", num:"14", label:"MAI14C", code:"1118K03", file:"MAI14C_Lernheft.html", topic:"Numerik",         title:"Numerische Methoden",                      total:7}
     ]}
   ];
   var HEFTE = GROUPS.reduce(function(a,g){ return a.concat(g.hefte); }, []);

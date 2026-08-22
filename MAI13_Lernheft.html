@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TGI06 – Formale Sprachen &amp; abstrakte Automaten 1</title>
+<title>MAI13 – Gewöhnliche Differenzialgleichungen</title>
 <style>
 :root{
   --paper:#EFF2F0;
@@ -250,13 +250,13 @@ summary:hover{background:var(--mark-soft)}
 
 footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
 </style>
-<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("tgi06:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("mai13:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-in">
-    <div class="brand">TGI06 <span>· TGI</span></div>
+    <div class="brand">MAI13 <span>· WMAPS</span></div>
     <nav class="heftnav">
       <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
       <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
@@ -292,10 +292,10 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   <main>
     <div class="hero">
       <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
-      <h1>Formale Sprachen &amp; abstrakte Automaten 1</h1>
-      <p class="sub">Grundbegriffe formaler Sprachen, formale Grammatiken und die Chomsky-Hierarchie, Sprachübersetzer sowie reguläre Sprachen und endliche Automaten (DEA, NEA, reguläre Ausdrücke) – mit Übungsaufgaben und Lösungswegen.</p>
+      <h1>Gewöhnliche Differenzialgleichungen</h1>
+      <p class="sub">Grundbegriffe und Existenzsätze, Trennung der Variablen, Variation der Konstanten und Substitution, lineare DGL mit konstanten Koeffizienten im homogenen und inhomogenen Fall sowie Anwendungen – mit Übungsaufgaben und Lösungswegen.</p>
       <div class="meta">
-        <span>TGI · TGI06</span>
+        <span>WMAPS · MAI13</span>
         <span>4 Kapitel</span>
         <span>Übungsaufgaben mit Lösungen</span>
       </div>
@@ -316,42 +316,39 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Formale Sprachen abstrahieren von natürlichen und Programmiersprachen auf ihr mathematisches Gerüst: Zeichen, Wörter und Mengen von Wörtern. Auf diesem Fundament bauen Grammatiken, Sprachübersetzer und Automaten der folgenden Kapitel auf.</p>
+    <p class="lead">Eine Differenzialgleichung verknüpft eine gesuchte Funktion mit ihren Ableitungen. Gesucht ist keine Zahl, sondern eine <em>Funktion</em>.</p>
 
     <div class="box def">
-      <span class="lbl">Alphabet Σ</span>
-      <p>Ein <strong>Alphabet</strong> Σ ist eine endliche, nichtleere Menge von Zeichen. Beispiele: Σ = {0, 1} (Binäralphabet) oder Σ = {a, b, c}.</p>
+      <span class="lbl">Die Vokabeln, die jede Aufgabe braucht</span>
+      <div class="tw"><table>
+        <tbody>
+          <tr><td><strong>Ordnung</strong></td><td>höchste vorkommende Ableitung</td></tr>
+          <tr><td><strong>gewöhnlich</strong></td><td>nur eine unabhängige Variable (sonst: partiell)</td></tr>
+          <tr><td><strong>linear</strong></td><td>y und alle Ableitungen kommen nur in der 1. Potenz und nicht als Argument von Funktionen vor</td></tr>
+          <tr><td><strong>homogen</strong></td><td>die „rechte Seite“ b(x) ist null</td></tr>
+          <tr><td><strong>inhomogen</strong></td><td>b(x) ≠ 0 – b heißt <strong>Störfunktion</strong> oder Störglied</td></tr>
+          <tr><td><strong>konstante Koeffizienten</strong></td><td>die a<sub>i</sub> sind Zahlen, keine Funktionen von x</td></tr>
+        </tbody>
+      </table></div>
     </div>
+    <p class="formula">allgemeine lineare DGL n-ter Ordnung:<br>y<sup>(n)</sup> + a<sub>n−1</sub>y<sup>(n−1)</sup> + … + a₁y′ + a₀y = b(x)</p>
 
-    <h4>Wort, Wortlänge, Verkettung</h4>
-    <p>Ein <strong>Wort</strong> ist eine endliche Folge von Zeichen aus Σ. Die <strong>Wortlänge</strong> |w| gibt die Anzahl der Zeichen in w an. Das <strong>leere Wort</strong> ε enthält kein einziges Zeichen: |ε| = 0.</p>
-    <div class="tw"><table class="mono">
-      <thead><tr><th>Begriff</th><th>Notation</th><th>Bedeutung</th></tr></thead>
-      <tbody>
-        <tr><td>Wortlänge</td><td>|w|</td><td>Anzahl Zeichen in w</td></tr>
-        <tr><td>Leeres Wort</td><td>ε</td><td>Wort ohne Zeichen, |ε| = 0</td></tr>
-        <tr><td>Verkettung</td><td>u ∘ v = uv</td><td>Hintereinanderschreiben zweier Wörter</td></tr>
-        <tr><td>Potenz</td><td>wⁿ</td><td>w n-mal verkettet</td></tr>
-      </tbody>
-    </table></div>
-
-    <h4>Wortmenge und Sprache</h4>
-    <p>Σ* bezeichnet die Menge <strong>aller</strong> Wörter über Σ, einschliesslich des leeren Worts ε. Lässt man ε weg, erhält man Σ⁺ = Σ* \ {ε}. Eine <strong>Sprache</strong> L ist eine beliebige Teilmenge von Σ* (L ⊆ Σ*) – sie kann endlich sein (z. B. L = {a, ab, abc}) oder unendlich (z. B. L = {aⁿ | n ≥ 0}).</p>
-
-    <div class="box warn">
-      <span class="lbl">Prüfungsfalle</span>
-      <p>Σ* ist – sobald Σ nicht leer ist – selbst immer unendlich gross, aber nicht jede Sprache L ⊆ Σ* muss unendlich sein. Nicht verwechseln: Σ* ist für ein gegebenes Alphabet <em>immer dieselbe</em> Menge aller denkbaren Wörter; eine Sprache L ist eine <em>konkret gewählte</em> Teilmenge davon mit einer bestimmten Bedeutung.</p>
+    <div class="box def">
+      <span class="lbl">Allgemeine, partikuläre und singuläre Lösung</span>
+      <p>Die <strong>allgemeine Lösung</strong> einer DGL n-ter Ordnung enthält <strong>n freie Konstanten</strong> – sie beschreibt eine ganze Kurvenschar. Eine <strong>partikuläre (spezielle) Lösung</strong> entsteht durch Festlegen dieser Konstanten, in der Regel über <strong>Anfangsbedingungen</strong>.</p>
+      <p>Ein <strong>Anfangswertproblem (AWP)</strong> besteht aus der DGL <em>und</em> n Bedingungen an <em>derselben</em> Stelle x₀, z.&nbsp;B. y(0) = 2, y′(0) = 1. (Liegen die Bedingungen an verschiedenen Stellen, spricht man von einem Randwertproblem.)</p>
     </div>
+    <p><strong>Probe:</strong> Eine Lösung lässt sich immer prüfen, indem man sie und ihre Ableitungen in die DGL einsetzt – bei Anfangswertproblemen zusätzlich die Bedingungen kontrollieren. Diese Probe kostet wenig Zeit und sichert Punkte.</p>
   </div>
 </section>
 
 <!-- ══════════════ KAPITEL 2 ══════════════ -->
-<section class="sec" id="k2" data-num="2" data-title="Formale Grammatiken">
+<section class="sec" id="k2" data-num="2" data-title="Differenzialgleichungen erster Ordnung">
   <div class="sec-head">
     <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
     <div class="sec-head-txt">
-      <p class="kicker">Kapitel 2 · prüfungsrelevant</p>
-      <h2>Formale Grammatiken</h2>
+      <p class="kicker">Kapitel 2</p>
+      <h2>Differenzialgleichungen erster Ordnung</h2>
       <div class="sec-tools">
         <button class="tool t-read" data-act="read">Gelesen</button>
         <button class="tool t-band" data-act="band">Leseband hier</button>
@@ -360,57 +357,57 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Eine Grammatik ist die Bauanleitung für eine Sprache: Ausgehend von einem Startsymbol erzeugen Ersetzungsregeln systematisch alle Wörter der Sprache. Wie stark man diese Regeln einschränkt, sortiert Grammatiken – und die Sprachen, die sie erzeugen – in die berühmte <strong>Chomsky-Hierarchie</strong>.</p>
+    <p class="lead">Drei Lösungsverfahren – und die Kunst, der Gleichung anzusehen, welches passt.</p>
+
+    <p><strong>2.1 Existenz und Eindeutigkeit:</strong> Ist f(x, y) in einer Umgebung von (x₀, y₀) stetig, so besitzt y′ = f(x, y) mit y(x₀) = y₀ dort eine <strong>Lösung</strong> (Satz von Peano); ist zusätzlich ∂f/∂y stetig (Lipschitz-Bedingung), so ist sie <strong>eindeutig</strong> (Picard-Lindelöf). Praktisch heißt das: Man darf davon ausgehen, dass die gefundene Lösung <em>die</em> Lösung ist.</p>
 
     <div class="box def">
-      <span class="lbl">Grammatik G = (N, T, P, s)</span>
-      <ul>
-        <li><strong>N</strong> – Nichtterminale (Variablen, Hilfszeichen)</li>
-        <li><strong>T</strong> – Terminale (das Alphabet der erzeugten Sprache)</li>
-        <li><strong>P</strong> – Produktionsregeln (Ersetzungsregeln)</li>
-        <li><strong>s</strong> – Startsymbol, s ∈ N</li>
-      </ul>
+      <span class="lbl">2.2.1 Trennung der Variablen</span>
+      <p><strong>Erkennungsmerkmal:</strong> Die rechte Seite lässt sich als Produkt schreiben, y′ = g(x)·h(y).</p>
+      <p class="formula">dy/dx = g(x)·h(y)<br>&nbsp;&nbsp;⟹&nbsp; ∫ dy/h(y) = ∫ g(x) dx<br>&nbsp;&nbsp;⟹&nbsp; beide Seiten integrieren, <strong>eine</strong> Konstante C, dann nach y auflösen</p>
+      <p><em>Beispiel:</em> y′ = 2x·y → ∫dy/y = ∫2x dx → ln|y| = x² + C → <strong>y = K·e<sup>x²</sup></strong> mit K = ±e<sup>C</sup>.</p>
+      <p><strong>Nicht vergessen:</strong> Beim Teilen durch h(y) geht der Fall h(y) = 0 verloren – die konstanten Lösungen (hier y ≡ 0) separat prüfen.</p>
     </div>
 
-    <h4>Ableitung</h4>
-    <p>Eine <strong>Ableitung</strong> wendet Produktionsregeln wiederholt auf das Startsymbol an, bis nur noch Terminale übrig sind: S ⇒ αAβ ⇒ αγβ (wenn A → γ ∈ P eine Regel ist, wird das Nichtterminal A im Kontext αAβ durch γ ersetzt). Die Menge aller so erzeugbaren Wörter ist die von G erzeugte Sprache:</p>
-    <p class="formula">L(G) = {w ∈ T* | S ⇒* w}</p>
-    <p>(S ⇒* w bedeutet: w ist in null oder mehr Ableitungsschritten aus S erreichbar.)</p>
-
-    <h4>Ableitungsbaum und Mehrdeutigkeit</h4>
-    <p>Der <strong>Ableitungsbaum</strong> stellt eine Ableitung grafisch dar: Die Wurzel trägt das Startsymbol, jeder innere Knoten steht für eine angewandte Regel, und die Blätter ergeben – von links nach rechts gelesen – das abgeleitete Wort aus Terminalen. Eine Grammatik heisst <strong>mehrdeutig</strong>, wenn für mindestens ein Wort ihrer Sprache mehrere verschiedene Ableitungsbäume existieren.</p>
-
-    <h4>Die Chomsky-Hierarchie</h4>
-    <p>Noam Chomsky ordnete Grammatiken nach der Form ihrer Regeln in vier Typen, die zugleich vier Sprachklassen und vier Automatenklassen entsprechen:</p>
-    <div class="tw"><table>
-      <thead><tr><th>Typ</th><th>Name</th><th>Regelform</th><th>Automat</th><th>Beispielsprache</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Typ 0</strong></td><td>Rekursiv aufzählbar</td><td>α → β (keine Einschränkung)</td><td>Turingmaschine</td><td>–</td></tr>
-        <tr><td><strong>Typ 1</strong></td><td>Kontextsensitiv</td><td>|α| ≤ |β| (Längenmonotonie)</td><td>Linear beschränkter Automat</td><td>{aⁿbⁿcⁿ}</td></tr>
-        <tr><td><strong>Typ 2</strong></td><td>Kontextfrei (kfG)</td><td>A → β (links: einzelnes Nichtterminal)</td><td>Kellerautomat</td><td>{aⁿbⁿ}</td></tr>
-        <tr><td><strong>Typ 3</strong></td><td>Regulär</td><td>A → aB oder A → a (rechtslinear)</td><td>Endlicher Automat (DEA/NEA)</td><td>{aⁿ}</td></tr>
-      </tbody>
-    </table></div>
-
-    <div class="box">
-      <span class="lbl">Hierarchie und Merksatz</span>
-      <p>Die vier Typen sind ineinander geschachtelt: <strong>Typ 3 ⊂ Typ 2 ⊂ Typ 1 ⊂ Typ 0</strong>. Merksatz: <em>Jede reguläre Sprache ist kontextfrei, jede kontextfreie ist kontextsensitiv, jede kontextsensitive ist rekursiv aufzählbar.</em> Je kleiner die Typnummer, desto weniger einschränkend die Regelform und desto mächtiger der zugehörige Automat.</p>
+    <div class="box def">
+      <span class="lbl">2.2.2 Variation der Konstanten</span>
+      <p><strong>Für die lineare DGL erster Ordnung</strong> y′ + a(x)·y = b(x):</p>
+      <p><strong>Schritt 1 – homogene Lösung</strong> über Trennung der Variablen:</p>
+      <p class="formula">y<sub>h</sub>(x) = C · e<sup>−∫a(x)dx</sup></p>
+      <p><strong>Schritt 2 – Konstante variieren:</strong> C wird zur Funktion C(x). Der Ansatz y = C(x)·e<sup>−∫a dx</sup> wird eingesetzt; die Terme mit C(x) heben sich weg, übrig bleibt eine direkt integrierbare Gleichung für C′(x):</p>
+      <p class="formula">C′(x) = b(x) · e<sup>∫a(x)dx</sup>&nbsp;&nbsp;⟹&nbsp;&nbsp;C(x) = ∫ b(x)·e<sup>∫a dx</sup> dx + K</p>
+      <p><strong>Schritt 3:</strong> C(x) einsetzen – fertig ist die allgemeine Lösung.</p>
     </div>
 
+    <div class="box def">
+      <span class="lbl">2.2.3 Substitution</span>
+      <p>Passt keines der beiden Verfahren, hilft oft eine Substitution, die die Gleichung auf einen der bekannten Typen zurückführt:</p>
+      <div class="tw"><table class="mono">
+        <thead><tr><th>Typ</th><th>Substitution</th><th>führt auf</th></tr></thead>
+        <tbody>
+          <tr><td>y′ = f(ax + by + c)</td><td>u = ax + by + c</td><td>trennbar</td></tr>
+          <tr><td>y′ = f(y/x)&nbsp;(homogen)</td><td>u = y/x, also y = u·x</td><td>trennbar</td></tr>
+          <tr><td>Bernoulli: y′ + a(x)y = b(x)y<sup>n</sup></td><td>u = y<sup>1−n</sup></td><td>linear</td></tr>
+        </tbody>
+      </table></div>
+      <p>Nach der Substitution stets <strong>zurücksubstituieren</strong> – gesucht ist y(x), nicht u(x).</p>
+    </div>
     <div class="box warn">
-      <span class="lbl">Prüfungsfalle</span>
-      <p><strong>ε-Regeln</strong> (S → ε) sind nur für das Startsymbol erlaubt – und auch dort nur mit einer Sonderregelung, damit die Typklasse nicht verletzt wird. Das <strong>Wortproblem</strong> („Gehört ein gegebenes Wort w zu L(G)?") ist für die Typen 1 bis 3 stets entscheidbar, für Typ 0 im Allgemeinen <strong>nicht</strong>.</p>
+      <span class="lbl">Entscheidungsbaum für Ordnung 1</span>
+      <p>1. Lässt sich y′ = g(x)·h(y) schreiben? → <strong>Trennung der Variablen</strong><br>
+      2. Hat sie die Form y′ + a(x)y = b(x)? → <strong>Variation der Konstanten</strong> (bei b ≡ 0 genügt Trennung)<br>
+      3. Sonst → <strong>Substitution</strong> suchen</p>
     </div>
   </div>
 </section>
 
 <!-- ══════════════ KAPITEL 3 ══════════════ -->
-<section class="sec" id="k3" data-num="3" data-title="Sprachübersetzer">
+<section class="sec" id="k3" data-num="3" data-title="Lineare Differenzialgleichungen">
   <div class="sec-head">
     <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
     <div class="sec-head-txt">
       <p class="kicker">Kapitel 3</p>
-      <h2>Sprachübersetzer</h2>
+      <h2>Lineare Differenzialgleichungen</h2>
       <div class="sec-tools">
         <button class="tool t-read" data-act="read">Gelesen</button>
         <button class="tool t-band" data-act="band">Leseband hier</button>
@@ -419,35 +416,70 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Damit ein in einer formalen Sprache geschriebenes Programm auf einem Rechner läuft, muss es übersetzt werden. Zwei grundsätzliche Übersetzungsstrategien und zwei Übersetzerbausteine prägen dieses Kapitel – und schliessen den Bogen zur Chomsky-Hierarchie aus Kapitel 2.</p>
-
-    <h4>Compiler vs. Interpreter</h4>
-    <div class="tw"><table>
-      <thead><tr><th>Übersetzer</th><th>Arbeitsweise</th><th>Konsequenz</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Compiler</strong></td><td>übersetzt das gesamte Programm vor der Ausführung in Zielcode</td><td>schneller zur Laufzeit, da die Übersetzung nur einmal vorab erfolgt</td></tr>
-        <tr><td><strong>Interpreter</strong></td><td>führt das Programm Zeile für Zeile direkt aus</td><td>langsamer bei Schleifen, da jede Wiederholung erneut interpretiert wird</td></tr>
-      </tbody>
-    </table></div>
+    <p class="lead">Das Herzstück des Hefts – und der Stoff, aus dem die Klausuraufgaben sind.</p>
 
     <div class="box def">
-      <span class="lbl">Scanner und Parser</span>
-      <p>Der <strong>Scanner</strong> (Lexer) erkennt <strong>Tokens</strong> (Schlüsselwörter, Bezeichner, Zahlen) im Quelltext – er basiert auf regulären Ausdrücken bzw. endlichen Automaten. Der <strong>Parser</strong> prüft anschliessend anhand einer Grammatik die syntaktische Korrektheit der Tokenfolge – er basiert auf kontextfreien Grammatiken.</p>
+      <span class="lbl">3.1 Lösungsstruktur (Satz 3.3)</span>
+      <p class="formula"><strong>y = y<sub>h</sub> + y<sub>p</sub></strong></p>
+      <p>Die allgemeine Lösung der <strong>inhomogenen</strong> Gleichung ist die allgemeine Lösung der zugehörigen <strong>homogenen</strong> Gleichung plus <strong>eine einzige</strong> partikuläre Lösung der inhomogenen. Mehr braucht man nicht – deshalb zerfällt jede Aufgabe in genau zwei Teile.</p>
+      <p>Die Lösungen der homogenen Gleichung bilden einen <strong>Vektorraum der Dimension n</strong>: n linear unabhängige Lösungen (ein <strong>Fundamentalsystem</strong>) spannen alle auf.</p>
     </div>
-    <p>Die Zuordnung ist kein Zufall: Tokens wie Bezeichner oder Zahlen lassen sich mit regulären (Typ-3-)Ausdrücken beschreiben, deshalb genügt dem Scanner ein endlicher Automat. Die Schachtelungsstruktur eines Programms (Klammern, Blöcke, verschachtelte Anweisungen) ist dagegen nicht mehr regulär, sondern kontextfrei (Typ 2) – dafür braucht der Parser die stärkere Grammatikklasse.</p>
 
-    <h4>T-Diagramm</h4>
-    <p>Das <strong>T-Diagramm</strong> modelliert Übersetzungsprozesse in drei Feldern: <strong>Quellsprache</strong> (in welcher Sprache das zu übersetzende Programm geschrieben ist) | <strong>Implementierungssprache</strong> (in welcher Sprache der Übersetzer selbst läuft) | <strong>Zielsprache</strong> (in welche Sprache übersetzt wird).</p>
+    <h4>3.2 Homogener Fall mit konstanten Koeffizienten</h4>
+    <div class="box def">
+      <span class="lbl">Charakteristisches Polynom (Def. 3.4, Satz 3.4)</span>
+      <p>Zu y<sup>(n)</sup> + a<sub>n−1</sub>y<sup>(n−1)</sup> + … + a₀y = 0 gehört</p>
+      <p class="formula">p(λ) = λⁿ + a<sub>n−1</sub>λ<sup>n−1</sup> + … + a₁λ + a₀</p>
+      <p>Ist λ₁ eine Nullstelle, so ist <strong>y = e<sup>λ₁x</sup></strong> eine Lösung. Man ersetzt also y<sup>(k)</sup> durch λ<sup>k</sup> und löst eine <em>algebraische</em> Gleichung.</p>
+    </div>
+    <p>Für die Ordnung 2 (λ² + a₁λ + a₀ = 0) gibt es drei Fälle:</p>
+    <div class="tw"><table>
+      <thead><tr><th>Diskriminante</th><th>Nullstellen</th><th>Fundamentalsystem</th></tr></thead>
+      <tbody>
+        <tr><td>D &gt; 0</td><td>zwei reelle λ₁ ≠ λ₂</td><td>y = C₁e<sup>λ₁x</sup> + C₂e<sup>λ₂x</sup></td></tr>
+        <tr><td>D = 0</td><td>doppelte Nullstelle λ</td><td>y = (C₁ + C₂·x)·e<sup>λx</sup></td></tr>
+        <tr><td>D &lt; 0</td><td>λ = α ± βi</td><td>y = e<sup>αx</sup>(C₁·cos βx + C₂·sin βx)</td></tr>
+      </tbody>
+    </table></div>
+    <p>Bei mehrfachen Nullstellen der Vielfachheit k kommen die Faktoren x⁰, x¹, …, x<sup>k−1</sup> vor dem e-Term hinzu.</p>
+
+    <h4>3.3 Inhomogener Fall: Ansatz vom Typ der rechten Seite</h4>
+    <p>Man wählt eine <strong>Ansatzfunktion</strong>, deren Struktur man an b(x) abliest, setzt sie in die DGL ein und bestimmt die Parameter durch <strong>Koeffizientenvergleich</strong>.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Störfunktion b(x)</th><th>Ansatz y<sub>p</sub></th></tr></thead>
+      <tbody>
+        <tr><td>Polynom vom Grad m</td><td>b<sub>m</sub>x<sup>m</sup> + … + b₁x + b₀ (vollständig, auch wenn Glieder fehlen!)</td></tr>
+        <tr><td>A·e<sup>kx</sup></td><td>B·e<sup>kx</sup></td></tr>
+        <tr><td>A·cos(ωx) + B·sin(ωx)</td><td>C·cos(ωx) + D·sin(ωx) — <strong>immer beide Terme</strong></td></tr>
+        <tr><td>Produkt der obigen</td><td>Produkt der Ansätze</td></tr>
+        <tr><td>Summe mehrerer Terme</td><td>je Summand getrennt ansetzen und addieren (Superposition)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="box warn">
+      <span class="lbl">Resonanz – die entscheidende Regel</span>
+      <p>Löst der Ansatz bereits die <strong>homogene</strong> Gleichung (ist also k eine Nullstelle des charakteristischen Polynoms bzw. ±ωi eine solche), so ist der Ansatz mit <strong>x</strong> zu multiplizieren – bei doppelter Nullstelle mit <strong>x²</strong>.</p>
+      <p><em>Beispiel:</em> y″ + 4y′ + 3y = 6e<sup>−x</sup> hat λ = −1, −3. Da e<sup>−x</sup> homogene Lösung ist, lautet der Ansatz <strong>y<sub>p</sub> = A·x·e<sup>−x</sup></strong> statt A·e<sup>−x</sup>. Ohne diesen Faktor führt der Koeffizientenvergleich auf 0 = 6 – ein sicheres Zeichen, dass Resonanz vorliegt.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Ablaufplan für jede Aufgabe</span>
+      <p><strong>1.</strong> Charakteristisches Polynom aufstellen und Nullstellen bestimmen → y<sub>h</sub><br>
+      <strong>2.</strong> Störfunktion ansehen, Ansatz wählen – <strong>Resonanz prüfen!</strong><br>
+      <strong>3.</strong> Ansatz und Ableitungen einsetzen, Koeffizientenvergleich → y<sub>p</sub><br>
+      <strong>4.</strong> y = y<sub>h</sub> + y<sub>p</sub><br>
+      <strong>5.</strong> Erst <em>jetzt</em> die Anfangsbedingungen einsetzen und C₁, C₂ bestimmen<br>
+      <strong>6.</strong> Probe</p>
+      <p><strong>Häufigster Fehler:</strong> die Konstanten schon aus y<sub>h</sub> allein bestimmen. Die Anfangsbedingungen gelten für die <strong>Gesamtlösung</strong>.</p>
+    </div>
   </div>
 </section>
 
 <!-- ══════════════ KAPITEL 4 ══════════════ -->
-<section class="sec" id="k4" data-num="4" data-title="Reguläre Sprachen und endliche Automaten">
+<section class="sec" id="k4" data-num="4" data-title="Anwendungen">
   <div class="sec-head">
     <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
     <div class="sec-head-txt">
-      <p class="kicker">Kapitel 4 · umfangreich</p>
-      <h2>Reguläre Sprachen und endliche Automaten</h2>
+      <p class="kicker">Kapitel 4</p>
+      <h2>Anwendungen</h2>
       <div class="sec-tools">
         <button class="tool t-read" data-act="read">Gelesen</button>
         <button class="tool t-band" data-act="band">Leseband hier</button>
@@ -456,81 +488,31 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Reguläre Sprachen (Typ 3) sind die schwächste, aber praktisch wichtigste Klasse der Chomsky-Hierarchie – sie lassen sich vollständig durch endliche Automaten erkennen und durch reguläre Ausdrücke beschreiben. Dieses Kapitel liefert das Handwerkszeug: DEA und NEA konstruieren, ineinander umwandeln und mit regulären Ausdrücken verbinden.</p>
+    <p class="lead">Zwei Modelle, an denen sich zeigt, wozu der Apparat gut ist.</p>
 
     <div class="box def">
-      <span class="lbl">Deterministischer endlicher Automat (DEA)</span>
-      <p>M = (Q, Σ, δ, q₀, F) mit:</p>
-      <ul>
-        <li><strong>Q</strong> – endliche Zustandsmenge</li>
-        <li><strong>Σ</strong> – Eingabealphabet</li>
-        <li><strong>δ: Q × Σ → Q</strong> – Übergangsfunktion, liefert zu jedem Zustand und Zeichen <strong>genau einen</strong> Folgezustand</li>
-        <li><strong>q₀ ∈ Q</strong> – Startzustand</li>
-        <li><strong>F ⊆ Q</strong> – Menge der Endzustände (akzeptierende Zustände)</li>
-      </ul>
-      <p>Ein Wort w wird akzeptiert, wenn der Automat, beginnend in q₀, w zeichenweise verarbeitet und dabei in einem Zustand aus F endet.</p>
+      <span class="lbl">4.1 Die logistische Gleichung</span>
+      <p>Das <strong>exponentielle</strong> Wachstumsmodell y′ = k·y (Trennung der Variablen → y = y₀e<sup>kx</sup>) ist unrealistisch, weil Ressourcen begrenzt sind. Die logistische Gleichung bremst das Wachstum bei Annäherung an die Kapazitätsgrenze G:</p>
+      <p class="formula">y′ = k · y · (G − y)</p>
+      <p>Sie ist <strong>trennbar</strong>; die Integration erfordert eine <strong>Partialbruchzerlegung</strong> von 1/(y(G−y)). Die Lösung ist die S-förmige logistische Kurve, die für x → ∞ gegen <strong>G</strong> strebt. Stationäre (konstante) Lösungen: y ≡ 0 und y ≡ G.</p>
     </div>
-
     <div class="box def">
-      <span class="lbl">Nichtdeterministischer endlicher Automat (NEA)</span>
-      <p>Gleicher Aufbau wie der DEA, aber mit <strong>δ: Q × Σ → P(Q)</strong> – zu einem Zustand und Zeichen ist eine <strong>Menge</strong> von Folgezuständen erlaubt: mehrere gleichzeitig mögliche oder auch keiner. Ein Wort wird akzeptiert, wenn <strong>mindestens ein</strong> möglicher Berechnungspfad in einem Endzustand endet.</p>
-    </div>
-
-    <div class="box warn">
-      <span class="lbl">Prüfungsfalle</span>
-      <p>NEA wirken mit weniger Zuständen eleganter, sind aber <strong>nicht mächtiger</strong> als DEA – zu jedem NEA existiert ein äquivalenter DEA. Der Preis: Der DEA kann im ungünstigsten Fall <strong>2ⁿ</strong> Zustände benötigen, wenn der NEA n Zustände hatte.</p>
-    </div>
-
-    <h4>NEA → DEA: Potenzmengenkonstruktion</h4>
-    <ol>
-      <li>Startzustand des DEA = {q₀} des NEA (einelementige Menge mit dem NEA-Startzustand).</li>
-      <li>Für jeden neuen DEA-Zustand (= Menge von NEA-Zuständen) und jedes Zeichen aus Σ: die Vereinigung aller NEA-Folgezustände dieser Menge berechnen – das ergibt den nächsten DEA-Zustand.</li>
-      <li>Ein DEA-Zustand ist Endzustand, wenn die zugehörige Menge <strong>mindestens einen</strong> NEA-Endzustand enthält.</li>
-      <li>Nicht erreichbare Zustände (Teilmengen, die nie als Folgezustand auftauchen) werden weggelassen.</li>
-    </ol>
-    <p>Enthält der NEA <strong>ε-Übergänge</strong> (Zustandswechsel ohne Eingabezeichen), berechnet man vor der Konstruktion für jeden Zustand die <strong>ε-Hülle</strong> (epsilon closure – alle über beliebig viele ε-Übergänge erreichbaren Zustände) und bezieht sie in die Übergangsbildung ein.</p>
-
-    <h4>Minimalautomat</h4>
-    <p>Der <strong>Minimalautomat</strong> ist der DEA mit der kleinstmöglichen Zustandszahl für eine gegebene reguläre Sprache. Man findet ihn, indem man <strong>äquivalente Zustände</strong> zu einem einzigen zusammenfasst: Zwei Zustände sind äquivalent, wenn sie für <strong>jede</strong> mögliche Eingabefortsetzung zum gleichen Akzeptanzergebnis führen.</p>
-
-    <h4>Reguläre Grammatik → DEA</h4>
-    <p>Jede reguläre (Typ-3-)Grammatik lässt sich direkt in einen DEA übersetzen:</p>
-    <div class="tw"><table class="mono">
-      <thead><tr><th>Grammatik</th><th>Automat</th></tr></thead>
-      <tbody>
-        <tr><td>Nichtterminale</td><td>= Zustände</td></tr>
-        <tr><td>Regel A → aB</td><td>Übergang δ(A, a) = B</td></tr>
-        <tr><td>Regel A → a</td><td>Übergang δ(A, a) = Endzustand</td></tr>
-      </tbody>
-    </table></div>
-
-    <h4>Reguläre Ausdrücke</h4>
-    <p>Reguläre Ausdrücke beschreiben reguläre Sprachen algebraisch, ohne Zustände zu zeichnen. Basisfälle: <strong>∅</strong> (leere Menge), <strong>ε</strong> (leeres Wort) und <strong>a</strong> (einzelnes Zeichen) sind reguläre Ausdrücke. Daraus lassen sich mit drei Operatoren beliebig komplexere Ausdrücke bilden:</p>
-    <div class="tw"><table>
-      <thead><tr><th>Ausdruck</th><th>Bedeutung</th><th>Beispiel über {a,b}</th></tr></thead>
-      <tbody>
-        <tr><td>u·v (bzw. uv)</td><td>Verkettung: erst u, dann v</td><td>ab → {ab}</td></tr>
-        <tr><td>u|v</td><td>Alternative (Union): u oder v</td><td>a|b → {a, b}</td></tr>
-        <tr><td>u*</td><td>Kleene-Stern: 0 oder mehr Wiederholungen von u</td><td>a* → {ε, a, aa, aaa, …}</td></tr>
-        <tr><td>u⁺</td><td>1 oder mehr Wiederholungen (= u·u*)</td><td>a⁺ → {a, aa, aaa, …}</td></tr>
-        <tr><td>(a|b)*</td><td>beliebige Wörter über {a,b}</td><td>= Σ*</td></tr>
-      </tbody>
-    </table></div>
-
-    <div class="box def">
-      <span class="lbl">Äquivalenz der Beschreibungsmittel</span>
-      <p><strong>DEA ↔ NEA ↔ NEA mit ε-Übergängen ↔ reguläre Grammatik ↔ regulärer Ausdruck</strong> – alle fünf Formalismen definieren exakt dieselbe Sprachklasse: die regulären Sprachen (Typ 3). Für jede Darstellung existiert ein Konstruktionsverfahren in eine der anderen; welche man in einer Aufgabe wählt, ist reine Zweckmässigkeit.</p>
+      <span class="lbl">4.2 Wechselstromkreis</span>
+      <p>Für den RL-Kreis liefert die Maschenregel eine <strong>lineare DGL erster Ordnung</strong>, für den RLC-Kreis eine <strong>zweiter Ordnung</strong>:</p>
+      <p class="formula">L·i′(t) + R·i(t) = u(t)<br>L·i″(t) + R·i′(t) + (1/C)·i(t) = u′(t)</p>
+      <p>Die <strong>homogene</strong> Lösung beschreibt den abklingenden <strong>Einschwingvorgang</strong> (transient), die <strong>partikuläre</strong> Lösung den <strong>stationären Zustand</strong> nach dem Einschwingen. Bei sinusförmiger Anregung u(t) = û·sin(ωt) führt der Ansatz C·cos(ωt) + D·sin(ωt) genau auf Amplitude und Phasenverschiebung des eingeschwungenen Stroms.</p>
+      <p>Die drei Fälle der Diskriminante entsprechen hier physikalisch dem <strong>Kriechfall</strong> (D &gt; 0), dem <strong>aperiodischen Grenzfall</strong> (D = 0) und dem <strong>Schwingfall</strong> (D &lt; 0).</p>
     </div>
   </div>
 </section>
 
 <!-- ══════════════ ÜBUNGSAUFGABEN ══════════════ -->
-<section class="sec" id="ea" data-num="Ü" data-title="Übungsaufgaben">
+<section class="sec" id="ue" data-num="Ü" data-title="Übungsaufgaben">
   <div class="sec-head">
     <button class="tab" data-act="read" title="Als gelesen markieren">Ü</button>
     <div class="sec-head-txt">
-      <p class="kicker">Prüfungstraining</p>
-      <h2>Übungsaufgaben</h2>
+      <p class="kicker">Übung</p>
+      <h2>Übungsaufgaben mit Lösungswegen</h2>
       <div class="sec-tools">
         <button class="tool t-read" data-act="read">Gelesen</button>
         <button class="tool t-band" data-act="band">Leseband hier</button>
@@ -541,123 +523,262 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
 
-    <div class="box warn">
-      <span class="lbl">Hinweis zur Nutzung</span>
-      <p>Übungsaufgaben und Lösungen stammen aus meinem Prüfungs-Lernleitfaden – kein offizieller Schlüssel. Rechne selbst nach.</p>
-    </div>
-
-    <!-- C.19 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.19</span><span class="task-t">Chomsky-Typ einer Grammatik bestimmen</span><span class="task-p">Chomsky-Hierarchie</span></div>
-      <div class="task-q">
-        <p>Gegeben: G = ({S}, {a,b}, {S→aSb, S→ab}, S). Welcher Chomsky-Typ? Welche Sprache?</p>
-      </div>
+      <div class="task-h"><span class="task-n">Ü.1</span><span class="task-t">Trennung der Variablen</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Lösen Sie y′ = x·y² mit y(0) = 1.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Beide Regeln haben links ein einzelnes Nichtterminal (S → aSb und S → ab sind beide von der Form A → β) – das ist die Regelform von <strong>Typ 2</strong>. Für die engere Form von Typ 3 (A → aB bzw. A → a) müsste S auf der rechten Seite am Rand stehen; bei S → aSb steht es aber <em>zwischen</em> den Terminalen a und b, also keine Typ-3-Form.</p>
-        <div class="step">S ⇒ aSb ⇒ aaSbb ⇒ aaaSbbb ⇒ …   (S→aSb n-mal angewendet)
-      ⇒ aⁿSbⁿ ⇒ aⁿ(ab)bⁿ = aⁿ⁺¹bⁿ⁺¹   (zuletzt S→ab)</div>
-        <p>Jede Ableitung hängt links und rechts symmetrisch je ein a und ein b an, bis mit S → ab abgebrochen wird.</p>
-        <div class="res">Typ 2 (kontextfrei). L(G) = {aⁿbⁿ | n ≥ 1}</div>
+        <div class="step">dy/dx = x·y²          |  trennen
+dy/y² = x dx
+∫y^(−2) dy = ∫x dx
+−1/y = x²/2 + C
+y = −1 / (x²/2 + C)
+
+Anfangsbedingung y(0) = 1:
+1 = −1/C   →   C = −1
+
+y(x) = −1/(x²/2 − 1) = 2/(2 − x²)</div>
+        <div class="res">y(x) = <strong>2/(2 − x²)</strong>. Probe: y(0) = 1 ✓; y′ = 4x/(2−x²)² und x·y² = x·4/(2−x²)² ✓</div>
+        <p>Beachten: y ≡ 0 ist ebenfalls Lösung (beim Teilen durch y² verloren gegangen), erfüllt hier aber die Anfangsbedingung nicht.</p>
       </div></details>
     </div>
 
-    <!-- C.20 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.20</span><span class="task-t">Chomsky-Typ einer zweiten Grammatik bestimmen</span><span class="task-p">Chomsky-Hierarchie</span></div>
-      <div class="task-q">
-        <p>Gegeben: G = ({S,A}, {0,1}, {S→0A, S→1, A→0A, A→1}, S). Welcher Typ? Welche Sprache?</p>
-      </div>
+      <div class="task-h"><span class="task-n">Ü.2</span><span class="task-t">Variation der Konstanten</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Bestimmen Sie die allgemeine Lösung von y′ + 2y = e<sup>x</sup>.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Alle vier Regeln haben die Form A → aB (S→0A, A→0A) oder A → a (S→1, A→1) – also rechtslinear. Das ist die Regelform von <strong>Typ 3</strong>.</p>
-        <div class="step">Beispielableitungen:
-S ⇒ 1                       Wort „1"
-S ⇒ 0A ⇒ 01                 Wort „01"
-S ⇒ 0A ⇒ 00A ⇒ 001          Wort „001"</div>
-        <p>Jede Ableitung endet, sobald S→1 oder A→1 angewendet wird – das erzeugt stets ein Wort, das auf „1" endet.</p>
-        <div class="res">Typ 3 (regulär). L(G) = alle Wörter aus {0,1}⁺, die mit 1 enden.</div>
+        <div class="step">1) homogen:  y' + 2y = 0
+   dy/y = −2 dx  →  ln|y| = −2x + c  →  y_h = C·e^(−2x)
+
+2) Variation:  y = C(x)·e^(−2x)
+   y' = C'(x)·e^(−2x) − 2C(x)·e^(−2x)
+   einsetzen:
+   C'e^(−2x) − 2Ce^(−2x) + 2Ce^(−2x) = e^x
+   C'(x)·e^(−2x) = e^x          ← die C-Terme heben sich IMMER weg
+   C'(x) = e^(3x)
+   C(x) = (1/3)e^(3x) + K
+
+3) zurück:  y = ((1/3)e^(3x) + K)·e^(−2x)</div>
+        <div class="res">y(x) = <strong>(1/3)·e<sup>x</sup> + K·e<sup>−2x</sup></strong><br>Probe: y′ = (1/3)e<sup>x</sup> − 2Ke<sup>−2x</sup>; y′ + 2y = (1/3)e<sup>x</sup> + (2/3)e<sup>x</sup> = e<sup>x</sup> ✓</div>
+        <p>Kontrolle des Verfahrens: Heben sich die Terme mit C(x) <em>nicht</em> weg, ist ein Rechenfehler passiert.</p>
       </div></details>
     </div>
 
-    <!-- C.21 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.21</span><span class="task-t">Grenzen der kontextfreien Sprachen</span><span class="task-p">Chomsky-Hierarchie</span></div>
-      <div class="task-q">
-        <p>Ist die Sprache L = {aⁿbⁿcⁿ | n ≥ 1} kontextfrei?</p>
-      </div>
+      <div class="task-h"><span class="task-n">Ü.3</span><span class="task-t">Homogene DGL 2. Ordnung – alle drei Fälle</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie die allgemeine Lösung von a) y″ − 5y′ + 6y = 0 · b) y″ − 6y′ + 9y = 0 · c) y″ + 2y′ + 5y = 0.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Nein. Ein Kellerautomat – das Automatenmodell für Typ 2 – verfügt nur über <strong>einen</strong> Stapel als Gedächtnis. Um aⁿbⁿcⁿ zu prüfen, müsste man aber zwei unabhängige Zählungen gleichzeitig verwalten: zunächst a gegen b abgleichen, danach – mit dem Ergebnis noch im Speicher – b gegen c. Das übersteigt die Möglichkeiten eines einzelnen Stapels.</p>
-        <div class="res">Nein. L ist kontextsensitiv (Typ 1), aber nicht kontextfrei.</div>
+        <div class="step">a) λ² − 5λ + 6 = (λ−2)(λ−3) = 0   →  λ = 2, 3      (D > 0)
+   y = C₁e^(2x) + C₂e^(3x)
+
+b) λ² − 6λ + 9 = (λ−3)² = 0       →  λ = 3 doppelt  (D = 0)
+   y = (C₁ + C₂x)·e^(3x)
+
+c) λ² + 2λ + 5 = 0
+   λ = (−2 ± √(4−20))/2 = −1 ± 2i                    (D < 0)
+   α = −1,  β = 2
+   y = e^(−x)·(C₁cos 2x + C₂sin 2x)</div>
+        <div class="res">Die drei Standardfälle. Bei c) gilt: <strong>Realteil in den Exponenten, Imaginärteil in die Winkelfunktionen.</strong></div>
       </div></details>
     </div>
 
-    <!-- C.22 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.22</span><span class="task-t">DEA konstruieren</span><span class="task-p">Endliche Automaten</span></div>
-      <div class="task-q">
-        <p>Konstruieren Sie einen DEA über Σ={0,1}, der alle Wörter akzeptiert, die mit „01" enden.</p>
-      </div>
+      <div class="task-h"><span class="task-n">Ü.4</span><span class="task-t">Störgliedansatz ohne Resonanz</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie die allgemeine Lösung von y″ − 3y′ + 2y = 4x.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Drei Zustände genügen: q₀ = „noch kein relevantes Suffix gesehen", q₁ = „zuletzt eine 0 gelesen", q₂ = „zuletzt 01 gelesen" (Endzustand).</p>
-        <div class="step">M = ({q₀, q₁, q₂}, {0,1}, δ, q₀, {q₂})
-δ(q₀, 0) = q₁      δ(q₀, 1) = q₀
-δ(q₁, 0) = q₁      δ(q₁, 1) = q₂
-δ(q₂, 0) = q₁      δ(q₂, 1) = q₀</div>
-        <p>Probe: „101" → q₀ →1→ q₀ →0→ q₁ →1→ q₂ ✓ (endet auf 01). „00" → q₀ →0→ q₁ →0→ q₁ ✗ (kein Endzustand – korrekt, „00" endet nicht auf „01").</p>
-        <div class="res">M wie oben; 3 Zustände, q₂ einziger Endzustand.</div>
+        <div class="step">homogen: λ² − 3λ + 2 = (λ−1)(λ−2)  →  y_h = C₁e^x + C₂e^(2x)
+
+Störfunktion 4x ist ein Polynom 1. Grades → Ansatz  y_p = ax + b
+y_p' = a,   y_p'' = 0
+
+einsetzen:  0 − 3a + 2(ax + b) = 4x
+            2a·x + (2b − 3a) = 4x + 0
+
+Koeffizientenvergleich:
+  x¹:  2a = 4        →  a = 2
+  x⁰:  2b − 3a = 0   →  2b = 6  →  b = 3</div>
+        <div class="res">y = <strong>C₁e<sup>x</sup> + C₂e<sup>2x</sup> + 2x + 3</strong><br>Probe: y<sub>p</sub>″ − 3y<sub>p</sub>′ + 2y<sub>p</sub> = 0 − 6 + 4x + 6 = 4x ✓</div>
+        <p><strong>Wichtig:</strong> Auch wenn rechts nur 4x steht, gehört das konstante Glied b in den Ansatz – sonst wäre das System nicht lösbar.</p>
       </div></details>
     </div>
 
-    <!-- C.23 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.23</span><span class="task-t">NEA in einen äquivalenten DEA umwandeln</span><span class="task-p">Endliche Automaten</span></div>
-      <div class="task-q">
-        <p>Gegeben NEA M mit: q₀ →a→ {q₀,q₁}, q₀ →b→ {q₀}, q₁ →b→ {q₂}. q₀ Start, q₂ End. Konstruieren Sie den äquivalenten DEA.</p>
-      </div>
+      <div class="task-h"><span class="task-n">Ü.5</span><span class="task-t">Schwingungsgleichung mit Anfangsbedingungen</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Lösen Sie y″ + 4y = 0 mit y(0) = 3, y′(0) = 2.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Potenzmengenkonstruktion: Start bei {q₀}, dann jeweils die Vereinigung der Folgezustände bilden, bis keine neue Menge mehr entsteht.</p>
-        <div class="step">Start: {q₀}
-δ({q₀}, a)     = {q₀,q₁}
-δ({q₀}, b)     = {q₀}
-δ({q₀,q₁}, a)  = {q₀,q₁}          (q₀→{q₀,q₁} ∪ q₁→∅)
-δ({q₀,q₁}, b)  = {q₀,q₂}  ← Endzustand (enthält q₂)
-δ({q₀,q₂}, a)  = {q₀,q₁}
-δ({q₀,q₂}, b)  = {q₀}</div>
-        <p>Drei erreichbare DEA-Zustände: {q₀}, {q₀,q₁}, {q₀,q₂} – letzterer ist Endzustand, da er q₂ enthält.</p>
-        <div class="res">L(M) = alle Wörter über {a,b}, die mit „ab" enden.</div>
+        <div class="step">λ² + 4 = 0  →  λ = ±2i    (α = 0, β = 2)
+y = C₁cos 2x + C₂sin 2x
+
+y(0)  = C₁ = 3
+y'    = −2C₁sin 2x + 2C₂cos 2x
+y'(0) = 2C₂ = 2   →   C₂ = 1</div>
+        <div class="res">y(x) = <strong>3cos 2x + sin 2x</strong> – eine ungedämpfte harmonische Schwingung mit Kreisfrequenz ω = 2.</div>
       </div></details>
     </div>
 
-    <!-- C.24 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.24</span><span class="task-t">Regulären Ausdruck aufstellen</span><span class="task-p">Endliche Automaten</span></div>
-      <div class="task-q">
-        <p>Geben Sie einen regulären Ausdruck für die Sprache aller Binärstrings an, die mindestens zwei aufeinanderfolgende Nullen enthalten.</p>
-      </div>
+      <div class="task-h"><span class="task-n">Ü.6</span><span class="task-t">Logistisches Wachstum</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Skizzieren Sie den Lösungsweg für y′ = k·y·(G − y) und geben Sie die stationären Lösungen sowie das Langzeitverhalten an.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Gesucht: irgendein Präfix, dann „00" als Kernstück, dann irgendein Suffix. Für „irgendein beliebiges Wort über {0,1}" steht (0|1)*.</p>
-        <div class="step">(0|1)*  00  (0|1)*
-Präfix  Kern  Suffix</div>
-        <div class="res">(0|1)*00(0|1)*</div>
+        <div class="step">trennen:   dy / (y(G−y)) = k dx
+
+Partialbruchzerlegung:
+  1/(y(G−y)) = A/y + B/(G−y)
+  1 = A(G−y) + B·y
+  y = 0:  1 = A·G   →  A = 1/G
+  y = G:  1 = B·G   →  B = 1/G
+
+(1/G)·∫[ 1/y + 1/(G−y) ] dy = ∫k dx
+(1/G)·[ ln|y| − ln|G−y| ] = kx + c
+ln| y/(G−y) | = G·k·x + c'
+y/(G−y) = K·e^(Gkx)</div>
+        <div class="res">Nach y aufgelöst ergibt sich die <strong>logistische Kurve</strong> y(x) = G·K·e<sup>Gkx</sup> / (1 + K·e<sup>Gkx</sup>). Stationäre Lösungen: <strong>y ≡ 0</strong> und <strong>y ≡ G</strong>. Für x → ∞ strebt jede Lösung mit 0 &lt; y₀ &lt; G gegen die Kapazitätsgrenze <strong>G</strong>; das Wachstum ist bei y = G/2 am größten.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Einsendeaufgabe</p>
+      <h2>Einsendeaufgabe Typ A · MAI13-XX02-K19</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Vier Aufgaben – einmal quer durch alle Verfahren. Lösungswege sind eigene Rechenwege zum Abgleich.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.1</span><span class="task-t">Allgemeine Lösung von y′ = 2x/(1+x²) · y</span><span class="task-p">Trennung</span></div>
+      <div class="task-q"><p>Bestimmen Sie die allgemeine Lösung der Differenzialgleichung y′(x) = (2x/(1+x²))·y(x).</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Rechts steht ein Produkt g(x)·h(y) → Trennung der Variablen.</p>
+        <div class="step">dy/y = 2x/(1+x²) dx
+
+∫dy/y = ∫ 2x/(1+x²) dx
+
+Das rechte Integral ist vom Typ ∫ f'/f dx = ln|f|,
+denn der Zähler 2x ist genau die Ableitung des Nenners:
+
+ln|y| = ln(1 + x²) + c
+
+|y| = e^c · (1 + x²)</div>
+        <div class="res">y(x) = <strong>C·(1 + x²)</strong>&nbsp;&nbsp;(C ∈ ℝ; C = 0 liefert die Lösung y ≡ 0)<br>
+        Probe: y′ = C·2x und (2x/(1+x²))·C(1+x²) = 2Cx ✓</div>
       </div></details>
     </div>
 
-    <!-- C.25 -->
     <div class="task">
-      <div class="task-h"><span class="task-n">C.25</span><span class="task-t">Regulären Ausdruck in einen NEA umwandeln</span><span class="task-p">Endliche Automaten</span></div>
-      <div class="task-q">
-        <p>Wandeln Sie den regulären Ausdruck a(a|b)*b in einen NEA um.</p>
-      </div>
+      <div class="task-h"><span class="task-n">A.2</span><span class="task-t">y″ + 4y′ + 3y = 6e<sup>−x</sup></span><span class="task-p">Resonanzfall</span></div>
+      <div class="task-q"><p>Bestimmen Sie die allgemeine Lösung.</p></div>
       <details><summary>Lösungsweg</summary><div class="sol">
-        <p>Der Ausdruck zerfällt in drei Teile: ein a am Anfang, beliebig viele a/b in der Mitte ((a|b)*), ein b am Ende. Das lässt sich mit drei Zuständen direkt umsetzen:</p>
-        <div class="step">q₀ →a→ q₁     (Anfangs-a)
-q₁ →a→ q₁     (Mittelteil: a)
-q₁ →b→ q₁     (Mittelteil: b)
-q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
-        <p>q₀ ist Start-, q₂ einziger Endzustand. Der Zustand q₁ hat für „b" zwei mögliche Folgezustände (q₁ und q₂) – genau hier steckt der Nichtdeterminismus: erst beim Lesen des tatsächlich letzten Zeichens „entscheidet" sich, ob es das b in der Mitte oder das abschliessende b war. (Systematischer, aber aufwändiger lässt sich derselbe Ausdruck auch mit der Thompson-Konstruktion aus Basisautomaten für a, b, |, · und * zusammensetzen.)</p>
-        <div class="res">NEA mit Q={q₀,q₁,q₂}, Start q₀, Endzustand q₂, Übergänge wie oben.</div>
+        <div class="step">1) homogen:  λ² + 4λ + 3 = (λ+1)(λ+3) = 0  →  λ = −1, −3
+   y_h = C₁e^(−x) + C₂e^(−3x)
+
+2) Störfunktion 6e^(−x):  k = −1 IST Nullstelle  →  RESONANZ
+   Ansatz daher  y_p = A·x·e^(−x)   (nicht A·e^(−x)!)
+
+   y_p'  = A·e^(−x)·(1 − x)
+   y_p'' = A·e^(−x)·(x − 2)
+
+   einsetzen:
+   A e^(−x)[ (x−2) + 4(1−x) + 3x ] = 6e^(−x)
+   A e^(−x)[ x − 2 + 4 − 4x + 3x ] = 6e^(−x)
+   A e^(−x)· 2 = 6 e^(−x)     →   A = 3</div>
+        <div class="res">y(x) = <strong>C₁e<sup>−x</sup> + C₂e<sup>−3x</sup> + 3x·e<sup>−x</sup></strong></div>
+        <p>Ohne den Faktor x wäre die Klammer identisch null geworden – die Gleichung 0 = 6 ist das typische Signal für einen vergessenen Resonanzfall.</p>
       </div></details>
     </div>
 
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.3</span><span class="task-t">Partikuläre Lösung von y″ + y = 2cos x − 8sin 3x</span><span class="task-p">Superposition</span></div>
+      <div class="task-q"><p>Bestimmen Sie eine partikuläre Lösung.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Zwei Störterme → beide getrennt behandeln und addieren (Superposition). Homogen: λ² + 1 = 0 → λ = ±i, also y<sub>h</sub> = C₁cos x + C₂sin x.</p>
+        <div class="step">TEIL 1:  2cos x  –  ω = 1 entspricht λ = ±i  →  RESONANZ
+Ansatz:  y₁ = x·(A cos x + B sin x)
+Mit y₁ = B·x·sin x:
+  y₁'  = B(sin x + x cos x)
+  y₁'' = B(2cos x − x sin x)
+  y₁'' + y₁ = 2B cos x  =  2 cos x   →   B = 1,  A = 0
+  →  y₁ = x·sin x
+
+TEIL 2:  −8 sin 3x  –  ω = 3, keine Resonanz
+Ansatz:  y₂ = C cos 3x + D sin 3x
+  y₂'' = −9C cos 3x − 9D sin 3x
+  y₂'' + y₂ = −8C cos 3x − 8D sin 3x = 0·cos 3x − 8·sin 3x
+  →  C = 0,  D = 1
+  →  y₂ = sin 3x</div>
+        <div class="res">y<sub>p</sub>(x) = <strong>x·sin x + sin 3x</strong><br>
+        Probe: (x sin x)″ + x sin x = 2cos x ✓ &nbsp;und&nbsp; (sin 3x)″ + sin 3x = −8 sin 3x ✓</div>
+        <p>Beide Male gilt: Der Ansatz enthält <strong>cos und sin</strong>, auch wenn rechts nur eines von beiden steht – hier fällt der jeweils andere Koeffizient dann auf null.</p>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.4</span><span class="task-t">Drei Anfangswertprobleme</span><span class="task-p">AWP</span></div>
+      <div class="task-q">
+        <p>a) y″ + 10y′ − 24y = 12x² + 14x + 1, y(0) = 0, y′(0) = 0<br>
+        b) y″ − 3y′ + 2y = e<sup>2x</sup>, y(0) = 1, y′(0) = 0<br>
+        c) 4y″ + 9y = 8cos(3x/2), y(0) = 0, y′(0) = −3/2</p>
+      </div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> λ² + 10λ − 24 = (λ+12)(λ−2) → λ = −12, 2. Störfunktion: Polynom 2. Grades, keine Resonanz.</p>
+        <div class="step">Ansatz y_p = ax² + bx + c,  y_p' = 2ax + b,  y_p'' = 2a
+2a + 10(2ax+b) − 24(ax²+bx+c) = 12x² + 14x + 1
+
+x²:  −24a = 12                →  a = −1/2
+x¹:  20a − 24b = 14  →  −10 − 24b = 14  →  b = −1
+x⁰:  2a + 10b − 24c = 1  →  −1 − 10 − 24c = 1  →  c = −1/2
+
+y = C₁e^(−12x) + C₂e^(2x) − ½x² − x − ½
+
+y(0)  = C₁ + C₂ − ½ = 0
+y'(0) = −12C₁ + 2C₂ − 1 = 0
+  →  C₁ + C₂ = ½  und  −6C₁ + C₂ = ½   →   C₁ = 0,  C₂ = ½</div>
+        <div class="res">a) y(x) = <strong>½e<sup>2x</sup> − ½x² − x − ½</strong> &nbsp;(Probe: y(0) = 0 ✓, y′ = e<sup>2x</sup> − x − 1 → y′(0) = 0 ✓)</div>
+
+        <p><strong>b)</strong> λ² − 3λ + 2 = (λ−1)(λ−2) → λ = 1, 2. Die Störfunktion e<sup>2x</sup> ist homogene Lösung → <strong>Resonanz</strong>.</p>
+        <div class="step">Ansatz y_p = A·x·e^(2x)
+  y_p'  = A e^(2x)(1 + 2x)
+  y_p'' = A e^(2x)(4 + 4x)
+einsetzen: A e^(2x)[(4+4x) − 3(1+2x) + 2x] = A e^(2x)·1 = e^(2x)  →  A = 1
+
+y = C₁e^x + C₂e^(2x) + x·e^(2x)
+
+y(0)  = C₁ + C₂ = 1
+y'(0) = C₁ + 2C₂ + 1 = 0   →  C₁ + 2C₂ = −1
+  →  C₂ = −2,  C₁ = 3</div>
+        <div class="res">b) y(x) = <strong>3e<sup>x</sup> − 2e<sup>2x</sup> + x·e<sup>2x</sup></strong> &nbsp;(Probe: y(0) = 1 ✓)</div>
+
+        <p><strong>c)</strong> Erst durch 4 teilen – die Normalform ist Voraussetzung für das charakteristische Polynom:</p>
+        <div class="step">y'' + (9/4)y = 2cos(3x/2)
+
+λ² + 9/4 = 0  →  λ = ±(3/2)i     →  ω = 3/2
+y_h = C₁cos(3x/2) + C₂sin(3x/2)
+
+Die Störfunktion hat GENAU diese Frequenz  →  RESONANZ
+Ansatz y_p = k·x·sin(3x/2):
+  y_p'  = k[ sin(ωx) + ωx cos(ωx) ]
+  y_p'' = k[ 2ω cos(ωx) − ω²x sin(ωx) ]
+  y_p'' + ω²y_p = 2kω·cos(ωx) = 2·cos(ωx)
+  →  k = 1/ω = 2/3
+
+y = C₁cos(3x/2) + C₂sin(3x/2) + (2/3)·x·sin(3x/2)
+
+y(0) = C₁ = 0
+y' = (3/2)C₂cos(3x/2) + (2/3)sin(3x/2) + x·cos(3x/2)   [bei C₁ = 0]
+y'(0) = (3/2)C₂ = −3/2   →   C₂ = −1</div>
+        <div class="res">c) y(x) = <strong>−sin(3x/2) + (2/3)·x·sin(3x/2)</strong><br>
+        Physikalisch der <strong>Resonanzfall</strong>: Der Faktor x lässt die Amplitude unbegrenzt anwachsen.</div>
+      </div></details>
+    </div>
   </div>
 </section>
 
@@ -666,7 +787,7 @@ q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
   <div class="sec-head">
     <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
     <div class="sec-head-txt">
-      <p class="kicker">Kurzkontrolle</p>
+      <p class="kicker">Selbstkontrolle</p>
       <h2>Schnellcheck</h2>
       <div class="sec-tools">
         <button class="tool t-read" data-act="read">Gelesen</button>
@@ -676,24 +797,37 @@ q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <div class="tw"><table>
-      <thead><tr><th>Kapitel</th><th>Das solltest du sicher können</th></tr></thead>
-      <tbody>
-        <tr><td><strong>K1</strong></td><td>Alphabet, Wort, Wortlänge, Verkettung, Σ* definieren</td></tr>
-        <tr><td><strong>K2</strong></td><td>Formale Grammatik G=(N,T,P,s) aufstellen; Ableitungen durchführen und Ableitungsbäume zeichnen; Chomsky-Hierarchie mit allen 4 Typen (Regelform + Automat) sicher zuordnen; Mehrdeutigkeit einer Grammatik erkennen</td></tr>
-        <tr><td><strong>K3</strong></td><td>Compiler vs. Interpreter erklären; Scanner/Parser den passenden Sprachklassen zuordnen</td></tr>
-        <tr><td><strong>K4</strong></td><td>DEA für eine gegebene Sprache konstruieren; NEA konstruieren und per Potenzmengenkonstruktion in einen DEA umwandeln; reguläre Ausdrücke schreiben und interpretieren; Äquivalenz DEA/NEA/reguläre Grammatik/RegEx kennen</td></tr>
-      </tbody>
-    </table></div>
+    <ul>
+      <li>Was bedeuten Ordnung, linear, homogen und „konstante Koeffizienten“?</li>
+      <li>Wie viele freie Konstanten hat die allgemeine Lösung einer DGL n-ter Ordnung?</li>
+      <li>Unterschied zwischen Anfangswert- und Randwertproblem?</li>
+      <li>Woran erkennt man, dass Trennung der Variablen möglich ist?</li>
+      <li>Welche Lösungen gehen beim Trennen typischerweise verloren?</li>
+      <li>Wie lauten die drei Schritte der Variation der Konstanten?</li>
+      <li>Woran merkt man, dass man sich bei der Variation verrechnet hat?</li>
+      <li>Welche Substitution passt zu y′ = f(y/x), welche zur Bernoulli-Gleichung?</li>
+      <li>Wie lautet die Lösungsstruktur der inhomogenen linearen DGL?</li>
+      <li>Wie stellt man das charakteristische Polynom auf?</li>
+      <li>Nennen Sie die drei Fälle der Diskriminante mit ihren Lösungsformen.</li>
+      <li>Was ändert sich bei einer doppelten Nullstelle?</li>
+      <li>Welcher Ansatz gehört zu einem Polynom, welcher zu A·e<sup>kx</sup>, welcher zu cos/sin?</li>
+      <li>Wann muss der Ansatz mit x multipliziert werden – und wann mit x²?</li>
+      <li>Woran erkennt man im Koeffizientenvergleich einen übersehenen Resonanzfall?</li>
+      <li>An welcher Stelle des Rechenwegs werden die Anfangsbedingungen eingesetzt?</li>
+      <li>Warum gehören bei cos-Störgliedern <em>beide</em> Winkelfunktionen in den Ansatz?</li>
+      <li>Was ist der Unterschied zwischen exponentiellem und logistischem Wachstum?</li>
+      <li>Welche stationären Lösungen hat die logistische Gleichung?</li>
+      <li>Was beschreiben beim Schwingkreis der homogene und was der partikuläre Anteil?</li>
+    </ul>
   </div>
 </section>
 
-<!-- ══════════════ FORMELN & KURZREFERENZ ══════════════ -->
-<section class="sec" id="formeln" data-num="F" data-title="Formeln &amp; Kurzreferenz">
+<!-- ══════════════ FORMELSAMMLUNG ══════════════ -->
+<section class="sec" id="formeln" data-num="F" data-title="Formeln & Kurzreferenz">
   <div class="sec-head">
     <button class="tab" data-act="read" title="Als gelesen markieren">F</button>
     <div class="sec-head-txt">
-      <p class="kicker">Kurzreferenz</p>
+      <p class="kicker">Referenz</p>
       <h2>Formeln &amp; Kurzreferenz</h2>
       <div class="sec-tools">
         <button class="tool t-read" data-act="read">Gelesen</button>
@@ -703,45 +837,49 @@ q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <h4>Chomsky-Hierarchie</h4>
-    <div class="tw"><table class="mono">
-      <thead><tr><th>Typ</th><th>Sprache</th><th>Regelform</th><th>Automat</th></tr></thead>
+    <h4>Erste Ordnung</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Typ</th><th>Verfahren</th><th>Lösung</th></tr></thead>
       <tbody>
-        <tr><td>0</td><td>Rek. aufzählbar</td><td>α → β</td><td>Turingmaschine</td></tr>
-        <tr><td>1</td><td>Kontextsensitiv</td><td>|α| ≤ |β|</td><td>Linear beschr. Automat</td></tr>
-        <tr><td>2</td><td>Kontextfrei</td><td>A → β</td><td>Kellerautomat</td></tr>
-        <tr><td>3</td><td>Regulär</td><td>A → aB | a</td><td>Endlicher Automat</td></tr>
+        <tr><td>y′ = g(x)·h(y)</td><td>Trennung</td><td>∫dy/h(y) = ∫g(x)dx</td></tr>
+        <tr><td>y′ + a(x)y = 0</td><td>Trennung</td><td>y = C·e<sup>−∫a dx</sup></td></tr>
+        <tr><td>y′ + a(x)y = b(x)</td><td>Variation</td><td>y = e<sup>−∫a dx</sup>·(∫b·e<sup>∫a dx</sup>dx + K)</td></tr>
+        <tr><td>y′ + a(x)y = b(x)y<sup>n</sup></td><td>Bernoulli</td><td>Substitution u = y<sup>1−n</sup></td></tr>
+        <tr><td>y′ = f(y/x)</td><td>homogen</td><td>Substitution u = y/x</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">Hierarchie: Typ 3 ⊂ Typ 2 ⊂ Typ 1 ⊂ Typ 0</p>
+    <p class="formula">Nützlich: ∫ f′(x)/f(x) dx = ln|f(x)| + C</p>
 
-    <h4>Reguläre Ausdrücke</h4>
-    <div class="tw"><table class="mono">
-      <thead><tr><th>Zeichen</th><th>Bedeutung</th></tr></thead>
+    <h4>Homogen, konstante Koeffizienten</h4>
+    <p class="formula">charakteristisches Polynom:&nbsp; λ² + a₁λ + a₀ = 0</p>
+    <div class="tw"><table>
       <tbody>
-        <tr><td>∅</td><td>leere Sprache</td></tr>
-        <tr><td>ε</td><td>leeres Wort</td></tr>
-        <tr><td>a·b</td><td>Verkettung</td></tr>
-        <tr><td>a|b</td><td>Alternative</td></tr>
-        <tr><td>a*</td><td>Kleene-Stern (0+ Wiederholungen)</td></tr>
-        <tr><td>a⁺</td><td>= a·a* (1+ Wiederholungen)</td></tr>
+        <tr><td>λ₁ ≠ λ₂ reell</td><td>y = C₁e<sup>λ₁x</sup> + C₂e<sup>λ₂x</sup></td></tr>
+        <tr><td>λ doppelt</td><td>y = (C₁ + C₂x)e<sup>λx</sup></td></tr>
+        <tr><td>λ = α ± βi</td><td>y = e<sup>αx</sup>(C₁cos βx + C₂sin βx)</td></tr>
       </tbody>
     </table></div>
 
-    <h4>DEA / NEA</h4>
-    <div class="tw"><table class="mono">
-      <thead><tr><th>Automat</th><th>Übergangsfunktion</th></tr></thead>
+    <h4>Inhomogen: Ansatztabelle</h4>
+    <div class="tw"><table>
+      <thead><tr><th>b(x)</th><th>Ansatz y<sub>p</sub></th><th>bei Resonanz</th></tr></thead>
       <tbody>
-        <tr><td>DEA</td><td>δ: Q × Σ → Q (eindeutig)</td></tr>
-        <tr><td>NEA</td><td>δ: Q × Σ → P(Q) (Menge von Zuständen)</td></tr>
-        <tr><td>NEA → DEA</td><td>Potenzmengenkonstruktion</td></tr>
+        <tr><td>Polynom Grad m</td><td>vollständiges Polynom Grad m</td><td>· x<sup>k</sup> (k = Vielfachheit von λ = 0)</td></tr>
+        <tr><td>A·e<sup>kx</sup></td><td>B·e<sup>kx</sup></td><td>· x, wenn k Nullstelle ist (· x² bei doppelter)</td></tr>
+        <tr><td>A cos ωx + B sin ωx</td><td>C cos ωx + D sin ωx</td><td>· x, wenn ±ωi Nullstellen sind</td></tr>
+        <tr><td>e<sup>kx</sup>·Polynom</td><td>e<sup>kx</sup>·Polynom</td><td>analog</td></tr>
+        <tr><td>Summe</td><td>Ansätze einzeln, dann addieren</td><td>je Summand prüfen</td></tr>
       </tbody>
     </table></div>
+    <p class="formula">Spezialfall Resonanz bei y″ + ω²y = A·cos(ωx):<br>y<sub>p</sub> = (A/(2ω))·x·sin(ωx)</p>
+
+    <h4>Ablaufplan</h4>
+    <p class="formula">1. char. Polynom → y_h<br>2. Ansatz wählen (Resonanz prüfen!)<br>3. einsetzen, Koeffizientenvergleich → y_p<br>4. y = y_h + y_p<br>5. Anfangsbedingungen in die GESAMTLÖSUNG<br>6. Probe durch Einsetzen</p>
   </div>
 </section>
 
     <footer>
-      Lernunterlage zum Studienheft TGI06 · Formale Sprachen und abstrakte Automaten 1 · Theoretische Grundlagen der Informatik · Wilhelm Büchner Hochschule.<br>
+      Lernunterlage zum Studienheft MAI13 · Gewöhnliche Differenzialgleichungen · Weiterführende Mathematik · Wilhelm Büchner Hochschule.<br>
       Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
     </footer>
   </main>
@@ -769,7 +907,7 @@ q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
       return Promise.resolve();
     }
   };
-  var KEY = "tgi06:state";
+  var KEY = "mai13:state";
 
   var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
 

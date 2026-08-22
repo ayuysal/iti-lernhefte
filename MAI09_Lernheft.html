@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAI09 – Reihen &amp; Integraltransformation</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.heftnav{display:flex;align-items:center;gap:.3rem}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0;position:relative}
+.copy-def{position:absolute;top:.4rem;right:.45rem;font-family:var(--font-ui);font-size:.58rem;font-weight:650;letter-spacing:.03em;background:var(--paper-sunk);color:var(--ink-faint);border:1px solid var(--rule-soft);border-radius:2px;padding:.2rem .42rem;line-height:1;cursor:pointer;opacity:0;transition:.15s}
+.box.def:hover .copy-def,.copy-def:focus-visible{opacity:1}
+.copy-def:hover{color:var(--accent);border-color:var(--accent)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("mai09:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">MAI09 <span>· WMAPS</span></div>
+    <nav class="heftnav">
+      <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+      <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
+      <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
+      <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
+    </nav>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Reihen und Integraltransformation</h1>
+      <p class="sub">Konvergenzkriterien für Reihen, Potenz- und Taylorreihen mit Konvergenzradius, Fourierreihen periodischer Funktionen sowie Fourier- und Laplacetransformation bis zur Lösung von Anfangswertproblemen – mit Übungsaufgaben und Lösungswegen.</p>
+      <div class="meta">
+        <span>WMAPS · MAI09</span>
+        <span>4 Kapitel</span>
+        <span>Übungsaufgaben mit Lösungen</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Reihen und Konvergenzkriterien">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Reihen und Konvergenzkriterien</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Eine Reihe ist der Grenzwert ihrer Partialsummen. Die Kriterien sagen, <em>ob</em> sie konvergiert – <em>wogegen</em>, muss man selbst herausfinden.</p>
+
+    <div class="box def">
+      <span class="lbl">Definition 1.1</span>
+      <p>Ist (a<sub>i</sub>) eine Zahlenfolge, so heißt die Reihe konvergent gegen den <strong>Summenwert (Reihenwert) S</strong>, wenn die Folge der Partialsummen konvergiert:</p>
+      <p class="formula">∑<sub>i=1</sub><sup>∞</sup> a<sub>i</sub> := lim<sub>p→∞</sub> ∑<sub>i=1</sub><sup>p</sup> a<sub>i</sub> = S</p>
+      <p>Existiert dieser Grenzwert nicht, <strong>divergiert</strong> die Reihe. Die Schreibweise mit ∞ ist <strong>nur eine Kurzform</strong> für den Grenzwert der Partialsummen.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">Die geometrische Reihe – der wichtigste Baustein</span>
+      <p class="formula">∑<sub>i=0</sub><sup>p</sup> qⁱ = (q<sup>p+1</sup> − 1)/(q − 1)&nbsp;&nbsp;&nbsp;(endlich, q ≠ 1)<br><br>∑<sub>i=0</sub><sup>∞</sup> qⁱ = 1/(1 − q)&nbsp;&nbsp;&nbsp;<strong>für |q| &lt; 1</strong></p>
+      <p><em>Beispiel:</em> q = ¾ → ∑ = 1/(1 − ¾) = 4. &nbsp; q = ½ → ∑<sub>i=0</sub><sup>∞</sup>(½)ⁱ = 2, also ∑<sub>i=1</sub><sup>∞</sup>(½)ⁱ = 1 („Schokoladenhalbierung“).</p>
+      <p>Dagegen divergiert ∑ i, denn die geschlossene Form p(p+1)/2 geht gegen ∞.</p>
+    </div>
+
+    <h4>1.2 Die vier Kriterien</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Kriterium</th><th>Prüfgröße</th><th>Aussage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Quotienten</strong></td><td>q = lim<sub>i→∞</sub> |a<sub>i+1</sub> / a<sub>i</sub>|</td><td>q &lt; 1 → konvergent · q &gt; 1 → divergent · <strong>q = 1 → keine Aussage</strong></td></tr>
+        <tr><td><strong>Wurzel</strong></td><td>q = lim<sub>i→∞</sub> <sup>i</sup>√|a<sub>i</sub>|</td><td>ebenso: q &lt; 1 konvergent, q &gt; 1 divergent, q = 1 keine Aussage</td></tr>
+        <tr><td><strong>Leibniz</strong></td><td>alternierende Reihe ∑(−1)<sup>i</sup>b<sub>i</sub></td><td>konvergiert, wenn b<sub>i</sub> <strong>monoton fallend</strong> ist <strong>und</strong> gegen 0 geht</td></tr>
+        <tr><td><strong>notwendiges Kriterium</strong></td><td>lim<sub>i→∞</sub> a<sub>i</sub></td><td>≠ 0 → Reihe divergiert. <strong>= 0 beweist nichts</strong></td></tr>
+      </tbody>
+    </table></div>
+    <div class="box warn">
+      <span class="lbl">Die harmonische Reihe ∑ 1/i</span>
+      <p>Das Standardbeispiel für q = 1: Quotienten- <em>und</em> Wurzelkriterium liefern 1 – <strong>keine Aussage</strong>. Die Glieder gehen gegen 0, das notwendige Kriterium ist also erfüllt. Trotzdem <strong>divergiert</strong> sie. Merksatz: <strong>a<sub>i</sub> → 0 ist notwendig, aber nicht hinreichend.</strong></p>
+    </div>
+    <p><strong>Rechentrick beim Quotientenkriterium:</strong> Fakultäten kürzen über (i+1)! = i!·(i+1); danach entscheidet der <strong>Grad</strong> von Zähler und Nenner. Beispiel ∑ i¹⁷/i! → Quotient = (i+1)¹⁶/i¹⁷ → 0 &lt; 1, also konvergent. Beispiel ∑ 2ⁱ → Quotient = 2 &gt; 1, divergent.</p>
+
+    <h4>1.3 Absolute Konvergenz, Majorante, Minorante</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Begriff</th><th>Inhalt</th></tr></thead>
+      <tbody>
+        <tr><td><strong>absolut konvergent</strong></td><td>∑|a<sub>i</sub>| konvergiert. Daraus folgt Konvergenz von ∑a<sub>i</sub> – <strong>die Umkehrung gilt nicht</strong></td></tr>
+        <tr><td><strong>Majorantenkriterium</strong></td><td>Gilt |a<sub>i</sub>| ≤ b<sub>i</sub> und konvergiert ∑b<sub>i</sub>, so konvergiert ∑a<sub>i</sub> (absolut)</td></tr>
+        <tr><td><strong>Minorantenkriterium</strong></td><td>Gilt a<sub>i</sub> ≥ c<sub>i</sub> ≥ 0 und divergiert ∑c<sub>i</sub>, so divergiert ∑a<sub>i</sub></td></tr>
+      </tbody>
+    </table></div>
+    <p>Als Vergleichsreihen dienen fast immer die <strong>geometrische Reihe</strong> (konvergent für |q| &lt; 1), die <strong>harmonische Reihe</strong> ∑1/i (divergent) und die Reihen ∑1/i<sup>α</sup> (konvergent für α &gt; 1).</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Potenz- und Taylorreihen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Potenz- und Taylorreihen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Reihen, deren Glieder von x abhängen – und die Frage, für welche x sie konvergieren.</p>
+
+    <div class="box def">
+      <span class="lbl">Potenzreihe (Def. 2.1) und Konvergenzradius (Def. 2.2)</span>
+      <p class="formula">P(x) = ∑<sub>k=0</sub><sup>∞</sup> a<sub>k</sub>·(x − x₀)<sup>k</sup></p>
+      <p>Es gibt ein <strong>r ≥ 0</strong> (den <strong>Konvergenzradius</strong>), sodass die Reihe für |x − x₀| &lt; r <strong>absolut konvergiert</strong> und für |x − x₀| &gt; r divergiert. Über die <strong>Randpunkte</strong> |x − x₀| = r sagt der Radius nichts – sie müssen einzeln geprüft werden. Der <strong>Konvergenzbereich</strong> ist das Intervall inklusive der konvergenten Randpunkte.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Berechnung des Konvergenzradius (Sätze 2.1 / 2.2)</span>
+      <p class="formula">r = lim<sub>k→∞</sub> | a<sub>k</sub> / a<sub>k+1</sub> |&nbsp;&nbsp;&nbsp;&nbsp;(aus dem Quotientenkriterium)<br>r = 1 / lim<sub>k→∞</sub> <sup>k</sup>√|a<sub>k</sub>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(aus dem Wurzelkriterium)</p>
+      <p>Für x₀ ≠ 0 verschiebt sich nur der Mittelpunkt: Konvergenz für x ∈ (x₀ − r, x₀ + r).</p>
+    </div>
+    <p><strong>Operationen (Sätze 2.3/2.4):</strong> Innerhalb des Konvergenzbereichs darf man Potenzreihen <strong>gliedweise addieren, differenzieren und integrieren</strong>; der Konvergenzradius bleibt dabei erhalten.</p>
+
+    <div class="box def">
+      <span class="lbl">Taylorreihe und Taylorpolynom (Def. 2.3)</span>
+      <p class="formula">T(x) = ∑<sub>k=0</sub><sup>∞</sup> f<sup>(k)</sup>(x₀)/k! · (x − x₀)<sup>k</sup></p>
+      <p>Das <strong>Taylorpolynom n-ten Grades</strong> ist die endliche Summe bis k = n – die beste polynomiale Näherung von f in der Nähe von x₀. Für x₀ = 0 spricht man von der <strong>MacLaurin-Reihe</strong>.</p>
+    </div>
+    <p><strong>Die wichtigsten Reihenentwicklungen (x₀ = 0):</strong></p>
+    <p class="formula">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>sin x = x − x³/3! + x⁵/5! − …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>cos x = 1 − x²/2! + x⁴/4! − …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>1/(1−x) = 1 + x + x² + x³ + …&nbsp;&nbsp;&nbsp;&nbsp;(r = 1)<br>ln(1+x) = x − x²/2 + x³/3 − …&nbsp;&nbsp;&nbsp;&nbsp;(r = 1)</p>
+    <p>Die Sätze 2.5 und 2.6 klären, wann die Taylorreihe die Funktion <strong>tatsächlich darstellt</strong>: genau dann, wenn das <strong>Restglied</strong> für n → ∞ gegen null geht.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Fourierreihen">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Fourierreihen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Periodische Funktionen als Summe von Sinus- und Cosinusschwingungen – auch dann, wenn die Funktion Sprünge hat.</p>
+
+    <div class="box def">
+      <span class="lbl">Definition 3.2 – Fourierreihe einer 2π-periodischen Funktion</span>
+      <p class="formula">F<sub>f</sub>(x) = a₀/2 + ∑<sub>n=1</sub><sup>∞</sup> ( a<sub>n</sub>·cos(nx) + b<sub>n</sub>·sin(nx) )<br><br>a<sub>n</sub> = (1/π) ∫<sub>0</sub><sup>2π</sup> f(x)·cos(nx) dx&nbsp;&nbsp;&nbsp;(n = 0, 1, 2, …)<br>b<sub>n</sub> = (1/π) ∫<sub>0</sub><sup>2π</sup> f(x)·sin(nx) dx&nbsp;&nbsp;&nbsp;(n = 1, 2, …)</p>
+      <p><strong>Achtung:</strong> a₀ wird in der Reihe <strong>halbiert</strong> – a₀/2 ist der Mittelwert der Funktion über eine Periode.</p>
+    </div>
+    <div class="box">
+      <span class="lbl">Symmetrie spart die halbe Arbeit</span>
+      <p>Ist f <strong>gerade</strong> (achsensymmetrisch), so sind <strong>alle b<sub>n</sub> = 0</strong> → reine Cosinusreihe.<br>
+      Ist f <strong>ungerade</strong> (punktsymmetrisch), so sind <strong>alle a<sub>n</sub> = 0</strong> → reine Sinusreihe.<br>
+      Vor dem Integrieren also immer erst auf Symmetrie prüfen.</p>
+    </div>
+    <div class="box warn">
+      <span class="lbl">Satz 3.1 – wann stellt die Reihe die Funktion dar?</span>
+      <p><strong>Voraussetzungen:</strong> (1) [0, 2π] lässt sich in <em>endlich viele</em> Teilintervalle zerlegen, auf denen f stetig und monoton ist; (2) an jeder Unstetigkeitsstelle existieren links- und rechtsseitiger Grenzwert.</p>
+      <p><strong>Dann gilt:</strong> Überall, wo f <strong>stetig</strong> ist, ist F<sub>f</sub>(x) = f(x). An jeder <strong>Sprungstelle</strong> liefert die Reihe das <strong>arithmetische Mittel</strong> der einseitigen Grenzwerte:</p>
+      <p class="formula">F<sub>f</sub>(x) = ( f⁻(x) + f⁺(x) ) / 2</p>
+      <p>Das ist mehr, als Taylorreihen leisten: Die Funktion muss nicht einmal überall stetig sein.</p>
+    </div>
+    <p>Für Funktionen mit der <strong>Periode T</strong> statt 2π (Def. 3.3, Satz 3.2) ersetzt man nx durch nωx mit <strong>ω = 2π/T</strong> und integriert über eine volle Periode, mit dem Vorfaktor 2/T statt 1/π.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Fourier- und Laplacetransformation">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4</p>
+      <h2>Fourier- und Laplacetransformation</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Von der Zeitfunktion zur Bildfunktion – und zurück. Die Laplacetransformation macht aus einer Differenzialgleichung eine algebraische Gleichung.</p>
+
+    <h4>4.1 Fouriertransformation</h4>
+    <p>Verallgemeinert die Fourierreihe auf <strong>nichtperiodische</strong> Funktionen: Aus der Summe über diskrete Frequenzen wird ein Integral über ein kontinuierliches Spektrum. Die <strong>Rücktransformation</strong> ist hier oft schwierig – genau das macht die Laplacetransformation attraktiver.</p>
+
+    <div class="box def">
+      <span class="lbl">Definition 4.3 – Laplacetransformation</span>
+      <p class="formula">F(s) = ℒ{f(t)} = ∫<sub>0</sub><sup>∞</sup> f(t)·e<sup>−st</sup> dt</p>
+      <p>f heißt <strong>Originalfunktion</strong> oder <strong>Zeitfunktion</strong>, F die <strong>Bildfunktion</strong>. Formal ist s komplex mit positivem Realteil – in der Praxis und in diesem Heft genügt <strong>s &gt; 0 reell</strong>. Das uneigentliche Integral muss existieren.</p>
+    </div>
+
+    <h4>Korrespondenztabelle</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>f(t)</th><th>F(s) = ℒ{f(t)}</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>1/s</td></tr>
+        <tr><td>t</td><td>1/s²</td></tr>
+        <tr><td>tⁿ</td><td>n!/s<sup>n+1</sup></td></tr>
+        <tr><td>e<sup>at</sup></td><td>1/(s − a)</td></tr>
+        <tr><td>sin(ωt)</td><td>ω/(s² + ω²)</td></tr>
+        <tr><td>cos(ωt)</td><td>s/(s² + ω²)</td></tr>
+        <tr><td>e<sup>−at</sup>·sin(ωt)</td><td>ω/((s+a)² + ω²)</td></tr>
+        <tr><td>e<sup>−at</sup>·cos(ωt)</td><td>(s+a)/((s+a)² + ω²)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box def">
+      <span class="lbl">Die vier Sätze (4.4–4.7)</span>
+      <p class="formula"><strong>Linearität:</strong>&nbsp;&nbsp;ℒ{a₁f₁ + a₂f₂} = a₁·ℒ{f₁} + a₂·ℒ{f₂}<br><br><strong>Ähnlichkeitssatz:</strong>&nbsp;&nbsp;ℒ{f(at)} = (1/a)·F(s/a)&nbsp;&nbsp;&nbsp;(a &gt; 0)<br><br><strong>Verschiebungssatz:</strong>&nbsp;&nbsp;ℒ{f(t − a)} = e<sup>−as</sup>·F(s)&nbsp;&nbsp;&nbsp;(a &gt; 0, f(t−a) := 0 für t &lt; a)<br><br><strong>Dämpfungssatz:</strong>&nbsp;&nbsp;ℒ{e<sup>−at</sup>·f(t)} = F(s + a)</p>
+      <p><em>Merkhilfe:</em> Verschiebung im <strong>Zeitbereich</strong> → Faktor e<sup>−as</sup> im Bildbereich. Dämpfung im Zeitbereich → <strong>Verschiebung im Bildbereich</strong>. Beispiel: ℒ{e<sup>−t</sup>cos t} = (s+1)/((s+1)²+1) = (s+1)/(s² + 2s + 2).</p>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Satz 4.8 – Ableitungssatz (der Schlüssel zu den DGLen)</span>
+      <p class="formula">ℒ{f′(t)}&nbsp; = s·F(s) − f(0)<br>ℒ{f″(t)} = s²·F(s) − s·f(0) − f′(0)<br><br>allgemein: ℒ{f<sup>(n)</sup>} = sⁿF(s) − s<sup>n−1</sup>f(0) − s<sup>n−2</sup>f′(0) − … − f<sup>(n−1)</sup>(0)</p>
+      <p>Die <strong>Anfangswerte stecken direkt in der Formel</strong> – deshalb löst die Laplacetransformation Anfangswertprobleme in einem Zug, ohne nachträgliche Konstantenbestimmung.</p>
+    </div>
+
+    <div class="box def">
+      <span class="lbl">Lösung eines linearen Anfangswertproblems – drei Schritte</span>
+      <p><strong>(i)</strong> Laplacetransformation auf beide Seiten der DGL anwenden, dabei Satz 4.8 für die Ableitungen benutzen.<br>
+      <strong>(ii)</strong> Die entstehende <em>algebraische</em> Gleichung nach der Bildfunktion Y(s) auflösen.<br>
+      <strong>(iii)</strong> Y(s) nötigenfalls per <strong>Partialbruchzerlegung</strong> in einfache rationale Terme zerlegen und mit der Korrespondenztabelle zurücktransformieren.</p>
+    </div>
+    <p><em>Beispiel:</em> y″ + 5y′ + 4y = 0 mit y(0) = 2, y′(0) = 1.</p>
+    <p class="formula">(s²Y − 2s − 1) + 5(sY − 2) + 4Y = 0<br>Y·(s² + 5s + 4) = 2s + 11<br>Y = (2s + 11)/((s+1)(s+4))<br>Partialbruch: Y = 3/(s+1) − 1/(s+4)<br><strong>y(t) = 3e<sup>−t</sup> − e<sup>−4t</sup></strong></p>
+    <p>Probe: y(0) = 3 − 1 = 2 ✓ &nbsp;·&nbsp; y′(t) = −3e<sup>−t</sup> + 4e<sup>−4t</sup>, y′(0) = −3 + 4 = 1 ✓</p>
+  </div>
+</section>
+
+<!-- ══════════════ ÜBUNGSAUFGABEN ══════════════ -->
+<section class="sec" id="ue" data-num="Ü" data-title="Übungsaufgaben">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">Ü</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Übung</p>
+      <h2>Übungsaufgaben mit Lösungswegen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die Aufgabentypen des Hefts, vollständig durchgerechnet.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.1</span><span class="task-t">Teleskopsumme: Konvergenz und Reihenwert</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Bekannt ist ∑<sub>i=1</sub><sup>p</sup> 1/(i(i+1)) = p/(p+1). Zeigen Sie, dass ∑<sub>i=1</sub><sup>∞</sup> 1/(i(i+1)) konvergiert, und bestimmen Sie den Reihenwert.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Die geschlossene Form ist gegeben – man muss nur den Grenzwert der Partialsummen bilden:</p>
+        <div class="step">lim(p→∞) p/(p+1) = lim(p→∞) 1/(1 + 1/p) = 1</div>
+        <div class="res">Die Reihe konvergiert, der Reihenwert ist <strong>S = 1</strong>.</div>
+        <p>Hintergrund: 1/(i(i+1)) = 1/i − 1/(i+1) – in der Summe heben sich alle inneren Terme auf (Teleskopsumme), übrig bleibt 1 − 1/(p+1).</p>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.2</span><span class="task-t">Quotienten- und Wurzelkriterium anwenden</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Untersuchen Sie: a) ∑ k/5<sup>k</sup> (Quotientenkriterium) · b) ∑ (5/4)<sup>k</sup> (Wurzelkriterium) · c) ∑ 2<sup>k</sup>/k!</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a)  |a(k+1)/a(k)| = [(k+1)/5^(k+1)] · [5^k/k] = (k+1)/(5k)
+    lim = 1/5 &lt; 1   →   KONVERGENT
+
+b)  ᵏ√|a(k)| = ᵏ√((5/4)^k) = 5/4
+    q = 5/4 &gt; 1     →   DIVERGENT   (Glieder wachsen sogar)
+
+c)  |a(k+1)/a(k)| = [2^(k+1)/(k+1)!] · [k!/2^k] = 2/(k+1)
+    lim = 0 &lt; 1     →   KONVERGENT</div>
+        <div class="res">Faustregel: <strong>Fakultät im Nenner schlägt jede Potenz</strong> – solche Reihen konvergieren immer. Beim Wurzelkriterium lohnt der Blick, ob a<sub>k</sub> schon die Form (…)<sup>k</sup> hat; dann kürzt sich die Wurzel sofort weg.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.3</span><span class="task-t">Leibnizkriterium</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Untersuchen Sie ∑<sub>k=1</sub><sup>∞</sup> (−1)<sup>k</sup>/k sowie ∑<sub>k=1</sub><sup>∞</sup> (−1)<sup>k</sup>·k/(k+1).</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">1) b(k) = 1/k
+   • monoton fallend:  1 &gt; 1/2 &gt; 1/3 &gt; …   ✓
+   • Nullfolge:        lim 1/k = 0          ✓
+   → nach Leibniz KONVERGENT (alternierende harmonische Reihe)
+
+2) b(k) = k/(k+1)
+   • lim k/(k+1) = 1 ≠ 0                    ✗
+   → das NOTWENDIGE Kriterium ist verletzt → DIVERGENT</div>
+        <div class="res">Beide Leibniz-Bedingungen müssen erfüllt sein. Fall 1 zeigt außerdem: Die Reihe konvergiert, aber <strong>nicht absolut</strong> (∑1/k divergiert) – man nennt das bedingte Konvergenz.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.4</span><span class="task-t">Konvergenzradius und -bereich</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Bestimmen Sie den Konvergenzradius von a) ∑ k³/2<sup>k</sup> · x<sup>k</sup> und b) ∑ (x−2)<sup>k</sup>/(k·2<sup>k</sup>), und untersuchen Sie bei b) die Randpunkte.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a)  a(k) = k³/2^k
+    r = lim |a(k)/a(k+1)| = lim [k³/2^k] · [2^(k+1)/(k+1)³]
+      = lim 2·k³/(k+1)³ = 2
+    → Konvergenz für |x| &lt; 2
+
+b)  a(k) = 1/(k·2^k),  Entwicklungspunkt x₀ = 2
+    r = lim |a(k)/a(k+1)| = lim [(k+1)·2^(k+1)] / [k·2^k] = 2
+    → Konvergenz für |x − 2| &lt; 2, also 0 &lt; x &lt; 4
+
+    Randpunkte:
+    x = 4 → ∑ 2^k/(k·2^k) = ∑ 1/k        → divergent (harmonisch)
+    x = 0 → ∑ (−2)^k/(k·2^k) = ∑ (−1)^k/k → konvergent (Leibniz)</div>
+        <div class="res">a) r = 2 &nbsp;·&nbsp; b) r = 2, Konvergenzbereich <strong>[0, 4)</strong> – der linke Rand gehört dazu, der rechte nicht. Genau deshalb muss man die Randpunkte <strong>immer einzeln prüfen</strong>.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.5</span><span class="task-t">Taylorpolynom</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Bestimmen Sie das Taylorpolynom 3. Grades von f(x) = √x um x₀ = 1 und schätzen Sie damit √1,1.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">f(x)    = x^(1/2)        f(1)    = 1
+f'(x)   = ½x^(−1/2)      f'(1)   = 1/2
+f''(x)  = −¼x^(−3/2)     f''(1)  = −1/4
+f'''(x) = 3/8·x^(−5/2)   f'''(1) = 3/8
+
+T₃(x) = 1 + ½(x−1) − (1/4)/2!·(x−1)² + (3/8)/3!·(x−1)³
+      = 1 + ½(x−1) − ⅛(x−1)² + (1/16)(x−1)³
+
+x = 1,1 → T₃ = 1 + 0,05 − 0,00125 + 0,0000625 = 1,0488125</div>
+        <div class="res">Exakt: √1,1 = 1,04880885… – die Näherung stimmt auf <strong>fünf Nachkommastellen</strong>. Nicht vergessen: die Fakultät k! im Nenner jedes Glieds.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.6</span><span class="task-t">Fourierreihe einer Rechteckfunktion</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie die Fourierreihe der 2π-periodischen Funktion f(x) = −1 für 0 ≤ x &lt; π und f(x) = 1 für π ≤ x &lt; 2π, und geben Sie den Wert der Reihe bei x = 0 an.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a₀ = (1/π)[∫₀^π (−1)dx + ∫_π^2π 1 dx] = (1/π)(−π + π) = 0
+
+aₙ = (1/π)[∫₀^π (−1)cos(nx)dx + ∫_π^2π cos(nx)dx]
+   = (1/π)[ −sin(nx)/n |₀^π + sin(nx)/n |_π^2π ] = 0    (sin(nπ)=0)
+
+bₙ = (1/π)[∫₀^π (−1)sin(nx)dx + ∫_π^2π sin(nx)dx]
+   = (1/π)[ cos(nx)/n |₀^π − cos(nx)/n |_π^2π ]
+   = (2/(nπ))·(cos(nπ) − 1)
+   → n gerade: bₙ = 0 ;  n ungerade: bₙ = −4/(nπ)</div>
+        <p>Damit ergibt sich die reine Sinusreihe</p>
+        <div class="step">F(x) = −(4/π)·[ sin x + sin(3x)/3 + sin(5x)/5 + … ]</div>
+        <div class="res">Bei <strong>x = 0</strong> ist eine Sprungstelle: f⁻(0) = 1 (Wert von links, also aus dem Intervall davor) und f⁺(0) = −1. Nach Satz 3.1 liefert die Reihe das <strong>arithmetische Mittel</strong> (1 + (−1))/2 = <strong>0</strong> – und tatsächlich sind alle Sinusterme bei x = 0 gleich null ✓</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.7</span><span class="task-t">Laplacetransformierte mit den Sätzen bestimmen</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Berechnen Sie a) ℒ{3 + t} · b) ℒ{e<sup>−2t</sup>·t} · c) ℒ{e<sup>−at</sup>·cos(ωt)}.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a) Linearität (Satz 4.4):
+   ℒ{3 + t} = 3·ℒ{1} + ℒ{t} = 3/s + 1/s²
+
+b) Dämpfungssatz (Satz 4.7) mit f(t) = t, F(s) = 1/s²:
+   ℒ{e^(−2t)·t} = F(s + 2) = 1/(s + 2)²
+
+c) Dämpfungssatz mit f(t) = cos(ωt), F(s) = s/(s² + ω²):
+   ℒ{e^(−at)·cos(ωt)} = F(s + a) = (s + a) / ((s + a)² + ω²)</div>
+        <div class="res">Merksatz für c): <strong>Im Bildbereich überall s durch (s + a) ersetzen</strong> – auch im Zähler. Ein häufiger Fehler ist, nur den Nenner anzupassen.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.8</span><span class="task-t">Rücktransformation mit Partialbruchzerlegung</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Bestimmen Sie die Zeitfunktion zu F(s) = (s − 2)/(s·(s − 8)).</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">Ansatz:  (s − 2)/(s(s − 8)) = A/s + B/(s − 8)
+
+s − 2 = A(s − 8) + B·s
+
+s = 0:  −2 = −8A        →  A = 1/4
+s = 8:   6 =  8B        →  B = 3/4
+
+F(s) = (1/4)·(1/s) + (3/4)·(1/(s − 8))</div>
+        <p>Rücktransformation mit der Tabelle: 1/s → 1 und 1/(s − a) → e<sup>at</sup>.</p>
+        <div class="res">f(t) = <strong>¼ + ¾·e<sup>8t</sup></strong>. Probe für t = 0: ¼ + ¾ = 1, und der Grenzwertsatz liefert lim<sub>s→∞</sub> s·F(s) = 1 ✓</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.9</span><span class="task-t">Anfangswertproblem über Laplace lösen</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>Lösen Sie y″ + 3y′ + 2y = 0 mit y(0) = 1 und y′(0) = 0.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">(i) transformieren – Anfangswerte stecken im Ableitungssatz:
+    [s²Y − s·1 − 0] + 3[sY − 1] + 2Y = 0
+
+(ii) nach Y auflösen:
+    Y(s² + 3s + 2) = s + 3
+    Y = (s + 3)/((s + 1)(s + 2))
+
+(iii) Partialbruchzerlegung:
+    (s+3)/((s+1)(s+2)) = A/(s+1) + B/(s+2)
+    s = −1:  2 =  A      →  A = 2
+    s = −2:  1 = −B      →  B = −1
+
+    Y = 2/(s+1) − 1/(s+2)</div>
+        <div class="res">y(t) = <strong>2e<sup>−t</sup> − e<sup>−2t</sup></strong><br>
+        Probe: y(0) = 2 − 1 = 1 ✓ · y′(t) = −2e<sup>−t</sup> + 2e<sup>−2t</sup> → y′(0) = 0 ✓ · Einsetzen in die DGL ergibt 0 ✓</div>
+        <p>Der Vorteil gegenüber dem klassischen Weg: <strong>keine nachträgliche Bestimmung von Integrationskonstanten</strong> – die Anfangswerte sind von Anfang an eingebaut.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Einsendeaufgabe</p>
+      <h2>Einsendeaufgabe Typ A · MAI09-XX01-K18</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Vier Aufgaben quer durch alle Kapitel. Lösungswege sind eigene Ansätze zum Abgleich – die genauen Zahlenwerte bitte am Original-Aufgabenblatt prüfen.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.1</span><span class="task-t">Konvergenzverhalten mit drei verschiedenen Kriterien</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>a) ∑ k/5<sup>k</sup> mit dem <strong>Quotientenkriterium</strong> · b) ∑ (5/4)<sup>k</sup> mit dem <strong>Wurzelkriterium</strong> · c) eine alternierende Reihe ∑ (−1)<sup>k</sup>·… mit dem <strong>Leibnizkriterium</strong>.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Die Aufgabe schreibt das Kriterium jeweils vor – also genau dieses verwenden und die Rechnung vollständig zeigen.</p>
+        <div class="step">a) q = lim |a(k+1)/a(k)| = lim (k+1)/(5k) = 1/5 &lt; 1  →  konvergent
+
+b) q = lim ᵏ√|a(k)| = 5/4 &gt; 1                        →  divergent
+
+c) Leibniz – BEIDE Bedingungen zeigen:
+   1. b(k) ist monoton fallend
+   2. lim b(k) = 0
+   sind beide erfüllt → konvergent (sonst: notwendiges Kriterium prüfen)</div>
+        <div class="res">Formulierungstipp für die Bewertung: Beim Leibnizkriterium reicht „geht gegen null“ <strong>nicht</strong> – die Monotonie muss ausdrücklich mitgezeigt werden.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.2</span><span class="task-t">Konvergenzradius zweier Potenzreihen</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>a) ∑ k³/2<sup>k</sup>·x<sup>k</sup> · b) ∑ (−1)<sup>k</sup>/(k·2<sup>k</sup>)·(x−2)<sup>k</sup></p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">r = lim | a(k) / a(k+1) |
+
+a) r = lim [k³/2^k] · [2^(k+1)/(k+1)³] = 2·lim (k/(k+1))³ = 2
+
+b) r = lim [1/(k·2^k)] · [(k+1)·2^(k+1)] = 2·lim (k+1)/k = 2
+   Entwicklungspunkt x₀ = 2  →  Konvergenz für |x − 2| &lt; 2</div>
+        <div class="res">Beide Male <strong>r = 2</strong>. Bei b) ist die Angabe des <strong>Mittelpunkts</strong> wichtig: Der Konvergenzbereich ist 0 &lt; x &lt; 4, nicht −2 &lt; x &lt; 2. Das Vorzeichen (−1)<sup>k</sup> beeinflusst den Radius nicht (Beträge!), nur das Randverhalten.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.3</span><span class="task-t">Fourierreihe einer abschnittsweise definierten Funktion</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie die Fourierreihe zu f auf dem Grundintervall 0 ≤ x &lt; 2π (abschnittsweise definiert, mit einem Sprung bei π) und geben Sie den Wert der Reihe an den Stellen x₁ = 0 und x₂ = π an.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">1. a₀ = (1/π)∫₀^2π f(x) dx        (Integral abschnittsweise aufteilen!)
+2. aₙ = (1/π)∫₀^2π f(x)cos(nx) dx
+3. bₙ = (1/π)∫₀^2π f(x)sin(nx) dx
+4. Reihe aufschreiben – a₀ dabei HALBIEREN
+5. Werte an x₁ und x₂ über Satz 3.1</div>
+        <p>Ist der Integrand abschnittsweise definiert, zerfällt jedes Integral in zwei Teile (0…π und π…2π). Für den Teil mit f(x) = x braucht man die <strong>partielle Integration</strong>:</p>
+        <div class="step">∫ x·cos(nx) dx = x·sin(nx)/n + cos(nx)/n²
+∫ x·sin(nx) dx = −x·cos(nx)/n + sin(nx)/n²</div>
+        <div class="res"><strong>Der eigentliche Prüfpunkt sind die Werte an x₁ und x₂:</strong> Beide sind Stellen, an denen die Funktion springt. Nach Satz 3.1 liefert die Reihe dort <strong>nicht</strong> den Funktionswert, sondern das arithmetische Mittel (f⁻ + f⁺)/2 der einseitigen Grenzwerte. Bei x = 0 sind das die Werte am linken Rand des Grundintervalls und am rechten Rand (Periodizität!).</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.4</span><span class="task-t">Laplacetransformation hin und zurück</span><span class="task-p">Kapitel 4</span></div>
+      <div class="task-q"><p>a) Laplacetransformierte von f(t) = e<sup>−at</sup>·cos(ωt) · b) mit Partialbruchzerlegung die Zeitfunktion zu einer gebrochen rationalen Bildfunktion.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Dämpfungssatz auf die Tabellenkorrespondenz anwenden:</p>
+        <div class="step">ℒ{cos(ωt)} = s/(s² + ω²)
+ℒ{e^(−at)·cos(ωt)} = F(s + a) = (s + a) / ((s + a)² + ω²)</div>
+        <p><strong>b)</strong> Vorgehen bei einer Bildfunktion der Form F(s) = Z(s)/N(s):</p>
+        <div class="step">1. Nenner faktorisieren, z. B. s² − 8s = s(s − 8)
+2. Ansatz A/s + B/(s−8) aufstellen
+3. mit dem Nenner durchmultiplizieren
+4. GESCHICKTE Werte einsetzen (die Nullstellen des Nenners!)
+5. jeden Summanden einzeln mit der Tabelle zurücktransformieren</div>
+        <p><em>Durchgerechnet für F(s) = (s − 2)/(s(s − 8)):</em></p>
+        <div class="step">s − 2 = A(s − 8) + Bs
+s = 0:  −2 = −8A  →  A = 1/4
+s = 8:   6 =  8B  →  B = 3/4
+f(t) = 1/4 + (3/4)·e^(8t)</div>
+        <div class="res">Die nützlichen Korrespondenzen für Teil b): 1/s → 1 · 1/(s−a) → e<sup>at</sup> · 1/(s−a)² → t·e<sup>at</sup> · ω/(s²+ω²) → sin(ωt). Bei doppelten Nullstellen im Nenner muss der Ansatz zusätzlich einen Term mit dem <strong>Quadrat</strong> enthalten.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Selbstkontrolle</p>
+      <h2>Schnellcheck</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <ul>
+      <li>Was bedeutet die Schreibweise ∑<sub>i=1</sub><sup>∞</sup> a<sub>i</sub> genau?</li>
+      <li>Wie lautet die Summenformel der geometrischen Reihe – und wann gilt sie?</li>
+      <li>Quotienten- und Wurzelkriterium: Wann liefern sie <em>keine</em> Aussage?</li>
+      <li>Welche zwei Bedingungen verlangt das Leibnizkriterium?</li>
+      <li>Warum ist a<sub>i</sub> → 0 nicht hinreichend für Konvergenz? Gegenbeispiel?</li>
+      <li>Was ist der Unterschied zwischen absoluter und bedingter Konvergenz?</li>
+      <li>Wie funktionieren Majoranten- und Minorantenkriterium?</li>
+      <li>Wie berechnet man den Konvergenzradius – zwei Formeln?</li>
+      <li>Was sagt r über die Randpunkte aus?</li>
+      <li>Was darf man mit Potenzreihen innerhalb des Konvergenzbereichs tun?</li>
+      <li>Wie lautet die Taylorreihe um x₀ – und wann stellt sie die Funktion dar?</li>
+      <li>Nennen Sie die Reihen von e<sup>x</sup>, sin x und cos x.</li>
+      <li>Wie lauten die Formeln für a<sub>n</sub> und b<sub>n</sub> – und was passiert mit a₀ in der Reihe?</li>
+      <li>Welche Koeffizienten verschwinden bei gerader, welche bei ungerader Funktion?</li>
+      <li>Was liefert die Fourierreihe an einer Sprungstelle?</li>
+      <li>Wie lautet die Definition der Laplacetransformation?</li>
+      <li>Was besagen Ähnlichkeits-, Verschiebungs- und Dämpfungssatz?</li>
+      <li>Wie lautet der Ableitungssatz für f′ und f″?</li>
+      <li>Warum braucht man bei der Laplace-Methode keine Integrationskonstanten?</li>
+      <li>Nennen Sie die drei Schritte zur Lösung eines Anfangswertproblems.</li>
+      <li>Welche Zeitfunktionen gehören zu 1/s, 1/s², 1/(s−a), ω/(s²+ω²), s/(s²+ω²)?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ FORMELSAMMLUNG ══════════════ -->
+<section class="sec" id="formeln" data-num="F" data-title="Formeln & Kurzreferenz">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">F</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Referenz</p>
+      <h2>Formeln &amp; Kurzreferenz</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Reihen</h4>
+    <p class="formula">geometrisch:&nbsp;&nbsp;∑<sub>i=0</sub><sup>∞</sup> qⁱ = 1/(1−q)&nbsp;&nbsp;für |q| &lt; 1<br>harmonisch:&nbsp;&nbsp;∑ 1/i&nbsp;&nbsp;divergiert&nbsp;&nbsp;·&nbsp;&nbsp;∑ 1/i<sup>α</sup> konvergiert für α &gt; 1<br>alternierend harmonisch:&nbsp;&nbsp;∑ (−1)ⁱ/i konvergiert (bedingt)</p>
+    <div class="tw"><table>
+      <thead><tr><th>Kriterium</th><th>Formel</th><th>konvergent</th></tr></thead>
+      <tbody>
+        <tr><td>Quotient</td><td>q = lim |a<sub>i+1</sub>/a<sub>i</sub>|</td><td>q &lt; 1</td></tr>
+        <tr><td>Wurzel</td><td>q = lim <sup>i</sup>√|a<sub>i</sub>|</td><td>q &lt; 1</td></tr>
+        <tr><td>Leibniz</td><td>b<sub>i</sub> ↓ 0, alternierend</td><td>immer</td></tr>
+        <tr><td>notwendig</td><td>lim a<sub>i</sub></td><td>≠ 0 ⇒ divergent</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Potenz- und Taylorreihen</h4>
+    <p class="formula">r = lim |a<sub>k</sub>/a<sub>k+1</sub>| = 1 / lim <sup>k</sup>√|a<sub>k</sub>|<br>Konvergenz für |x − x₀| &lt; r&nbsp;&nbsp;(Ränder einzeln prüfen!)<br><br>T(x) = ∑ f<sup>(k)</sup>(x₀)/k! · (x−x₀)<sup>k</sup><br><br>e<sup>x</sup> = ∑ xᵏ/k!&nbsp;·&nbsp;sin x = ∑ (−1)ᵏx<sup>2k+1</sup>/(2k+1)!&nbsp;·&nbsp;cos x = ∑ (−1)ᵏx<sup>2k</sup>/(2k)!</p>
+
+    <h4>Fourierreihen (Periode 2π)</h4>
+    <p class="formula">F(x) = a₀/2 + ∑ (aₙcos nx + bₙ sin nx)<br>aₙ = (1/π)∫₀<sup>2π</sup> f(x)cos(nx)dx&nbsp;&nbsp;·&nbsp;&nbsp;bₙ = (1/π)∫₀<sup>2π</sup> f(x)sin(nx)dx<br><br>gerade Funktion → bₙ = 0&nbsp;&nbsp;·&nbsp;&nbsp;ungerade → aₙ = 0<br>Sprungstelle → F(x) = (f⁻(x) + f⁺(x))/2<br>Periode T: ω = 2π/T, Vorfaktor 2/T</p>
+    <p class="formula">Hilfsintegrale:<br>∫ x·cos(nx)dx = x·sin(nx)/n + cos(nx)/n²<br>∫ x·sin(nx)dx = −x·cos(nx)/n + sin(nx)/n²</p>
+
+    <h4>Laplacetransformation</h4>
+    <p class="formula">F(s) = ∫₀<sup>∞</sup> f(t)·e<sup>−st</sup> dt</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Satz</th><th>Formel</th></tr></thead>
+      <tbody>
+        <tr><td>Linearität</td><td>ℒ{a₁f₁ + a₂f₂} = a₁F₁ + a₂F₂</td></tr>
+        <tr><td>Ähnlichkeit</td><td>ℒ{f(at)} = (1/a)F(s/a)</td></tr>
+        <tr><td>Verschiebung</td><td>ℒ{f(t−a)} = e<sup>−as</sup>F(s)</td></tr>
+        <tr><td>Dämpfung</td><td>ℒ{e<sup>−at</sup>f(t)} = F(s+a)</td></tr>
+        <tr><td>Ableitung</td><td>ℒ{f′} = sF(s) − f(0)</td></tr>
+        <tr><td></td><td>ℒ{f″} = s²F(s) − s·f(0) − f′(0)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>f(t)</th><th>F(s)</th><th>f(t)</th><th>F(s)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>1/s</td><td>sin ωt</td><td>ω/(s²+ω²)</td></tr>
+        <tr><td>t</td><td>1/s²</td><td>cos ωt</td><td>s/(s²+ω²)</td></tr>
+        <tr><td>tⁿ</td><td>n!/s<sup>n+1</sup></td><td>e<sup>−at</sup>sin ωt</td><td>ω/((s+a)²+ω²)</td></tr>
+        <tr><td>e<sup>at</sup></td><td>1/(s−a)</td><td>e<sup>−at</sup>cos ωt</td><td>(s+a)/((s+a)²+ω²)</td></tr>
+        <tr><td>t·e<sup>at</sup></td><td>1/(s−a)²</td><td></td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft MAI09 · Reihen und Integraltransformation · Weiterführende Mathematik · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "mai09:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Heft-Navigation (vor / zurück, innerhalb des Fachs) ---------- */
+  (function(){
+    var groups = [
+      ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"],
+      ["GPI15_Lernheft.html","GPI16_Lernheft.html","GPI21_Lernheft.html","GPI22_Lernheft.html"],
+      ["MAI06_Lernheft.html","MAI09_Lernheft.html","MAI11_Lernheft.html","MAI13_Lernheft.html","MAI14C_Lernheft.html"]
+    ];
+    var base = function(n){ return n.replace(/\.html$/i, "").toLowerCase(); };
+    var cur = base(decodeURIComponent(location.pathname.split("/").pop()));
+    var files = groups[0], idx = -1;
+    for(var g = 0; g < groups.length; g++){
+      for(var i = 0; i < groups[g].length; i++){ if(base(groups[g][i]) === cur){ files = groups[g]; idx = i; break; } }
+      if(idx > -1) break;
+    }
+    var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
+    if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
+    if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
+  })();
+
+  /* ---------- Kopier-Button an jede Definitions-Box ---------- */
+  (function(){
+    if(!navigator.clipboard) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".box.def"), function(box){
+      var txt = box.innerText.trim();
+      var b = document.createElement("button");
+      b.className = "copy-def"; b.type = "button"; b.textContent = "⧉ Kopieren"; b.title = "Definition kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(txt).then(function(){
+          b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = "⧉ Kopieren"; }, 1200);
+        }, function(){ b.textContent = "⚠ Fehler"; });
+      });
+      box.appendChild(b);
+    });
+  })();
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll(".sec details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

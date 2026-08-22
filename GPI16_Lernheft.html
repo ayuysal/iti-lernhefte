@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPI16 – Programmieren in C++, Teil II</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.heftnav{display:flex;align-items:center;gap:.3rem}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0;position:relative}
+.copy-def{position:absolute;top:.4rem;right:.45rem;font-family:var(--font-ui);font-size:.58rem;font-weight:650;letter-spacing:.03em;background:var(--paper-sunk);color:var(--ink-faint);border:1px solid var(--rule-soft);border-radius:2px;padding:.2rem .42rem;line-height:1;cursor:pointer;opacity:0;transition:.15s}
+.box.def:hover .copy-def,.copy-def:focus-visible{opacity:1}
+.copy-def:hover{color:var(--accent);border-color:var(--accent)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("gpi16:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">GPI16 <span>· EP</span></div>
+    <nav class="heftnav">
+      <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+      <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
+      <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
+      <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
+    </nav>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Programmieren in C++, Teil II</h1>
+      <p class="sub">Der objektorientierte Teil: Operatorüberladung, Speicherverwaltung mit new/delete, Ausnahmebehandlung, Konstruktoren und Destruktoren, Vererbung mit virtuellen und abstrakten Klassen, Dateiströme, Templates und die STL – mit Übungsaufgaben und Lösungswegen.</p>
+      <div class="meta">
+        <span>Erweiterte Programmierung · GPI16</span>
+        <span>8 Kapitel</span>
+        <span>Übungsaufgaben mit Lösungen</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Typumwandlungen und Operatorüberladung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Typumwandlungen und Operatorüberladung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die vier Cast-Operatoren im Detail – und das Konzept, das es nur in C++ gibt: eigene Typen mit den eingebauten Operatoren verknüpfen.</p>
+
+    <h4>1.1 Die Cast-Operatoren</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Operator</th><th>Wofür</th></tr></thead>
+      <tbody>
+        <tr><td><code>static_cast&lt;T&gt;(a)</code></td><td>ersetzt die C-Castings; nur wenn A implizit nach T umwandelbar ist (oder T nach A), wenn T ein enum-Typ und a im Wertebereich liegt, oder bei Zeigern voneinander abgeleiteter Klassen</td></tr>
+        <tr><td><code>const_cast&lt;T&gt;(a)</code></td><td>entfernt oder ergänzt <strong>ausschließlich</strong> <code>const</code>; die Typen dürfen sich sonst nicht unterscheiden</td></tr>
+        <tr><td><code>reinterpret_cast&lt;T&gt;(a)</code></td><td>schaltet die Typprüfung <strong>komplett ab</strong> – jeder Zeiger in jeden anderen, Zeiger ↔ ganze Zahl. Nur <code>const</code> lässt sich so nicht ändern</td></tr>
+        <tr><td><code>dynamic_cast&lt;T&gt;(a)</code></td><td>dynamisch, erst zur <strong>Laufzeit</strong> bestimmt, für verwandte Klassen</td></tr>
+      </tbody>
+    </table></div>
+    <div class="box warn">
+      <span class="lbl">Zwei Details, die gern geprüft werden</span>
+      <p>Der Compiler muss beim enum-Cast <strong>nicht prüfen</strong>, ob der Wert im Bereich liegt. Und: Ein Cast liefert <strong>keinen L-Wert</strong> – deshalb kann man so nicht in Referenztypen umwandeln; dafür gibt es den Referenz-Cast <code>const_cast&lt;T&amp;&gt;(a)</code>. Die Kurzformen <code>T(a)</code> (funktional) und <code>(T)a</code> (C-Stil) sind erlaubt, die Schlüsselwortform ist aber lesbarer und eindeutiger.</p>
+    </div>
+
+    <h4>1.2 Operatoren überladen</h4>
+    <p>Der Funktionsname ist das Schlüsselwort <code>operator</code> plus Operatorsymbol. Die Überladung muss <strong>so viele Parameter definieren, wie der Operator Operanden hat</strong> – als Memberfunktion entfällt das linke Argument, weil das Objekt selbst der linke Operand ist.</p>
+    <p class="formula">class Bruch {<br>&nbsp;&nbsp;int zaehler, nenner;<br>public:<br>&nbsp;&nbsp;int getZaehler() const { return zaehler; }<br>&nbsp;&nbsp;Bruch operator*(Bruch);<br>};<br><br>Bruch Bruch::operator*(Bruch faktor) {<br>&nbsp;&nbsp;Bruch tmp;<br>&nbsp;&nbsp;tmp.zaehler = zaehler * faktor.getZaehler();<br>&nbsp;&nbsp;tmp.nenner&nbsp; = nenner&nbsp; * faktor.getNenner();<br>&nbsp;&nbsp;return tmp;<br>}<br>// Aufruf: c = a * b;</p>
+    <ul>
+      <li>Argumenttyp möglichst <code>const TYPE&amp;</code> – vermeidet unnötiges Kopieren.</li>
+      <li>Methoden, die nur lesen, als <code>const</code> deklarieren (auch Getter).</li>
+      <li>Steht die Überladung <strong>außerhalb</strong> der Klasse, hat sie nur Zugriff auf die <code>public</code>-Elemente.</li>
+    </ul>
+
+    <div class="box def">
+      <span class="lbl">Prä- und Postfix unterscheiden</span>
+      <p>Der Postfix-Operator bekommt einen künstlichen <code>int</code>-Parameter als Unterscheidungsmerkmal:</p>
+      <p class="formula">Point&amp; operator++();&nbsp;&nbsp;&nbsp;&nbsp;// Praefix: ++p – gibt *this zurück<br>Point&nbsp; operator++(int);&nbsp;// Postfix: p++ – gibt den alten Wert zurück</p>
+    </div>
+
+    <h4>1.2.2 Restriktionen</h4>
+    <ul>
+      <li>Nur <strong>bereits existierende</strong> Operatoren sind überladbar – keine neuen Symbole.</li>
+      <li>Es gelten dieselben Regeln wie beim Funktionsüberladen; passt nichts, meldet der Compiler „no match for operator“.</li>
+      <li><strong>Eine Unterscheidung allein am Rückgabetyp ist nicht möglich.</strong></li>
+    </ul>
+    <p>Nicht überladbar sind:</p>
+    <p class="formula">()&nbsp;&nbsp;::&nbsp;&nbsp;?:&nbsp;&nbsp;.&nbsp;&nbsp;.*&nbsp;&nbsp;sizeof&nbsp;&nbsp;typeid()&nbsp;&nbsp;throw<br>static_cast&lt;&gt;&nbsp;&nbsp;dynamic_cast&lt;&gt;&nbsp;&nbsp;const_cast&lt;&gt;&nbsp;&nbsp;reinterpret_cast&lt;&gt;</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Speicherverwaltung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Speicherverwaltung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Stack oder Heap – und warum man die C-Funktionen und die C++-Operatoren niemals mischen darf.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Stack</th><th>Heap</th></tr></thead>
+      <tbody>
+        <tr><td>Anforderung</td><td>automatisch bei der Deklaration</td><td>explizit durch das Programm</td></tr>
+        <tr><td>Freigabe</td><td>automatisch beim Verlassen des Blocks</td><td>explizit – sonst Speicherleck</td></tr>
+        <tr><td>Größe zur Laufzeit änderbar</td><td>nein</td><td>ja</td></tr>
+        <tr><td>Schlüsselwort</td><td><code>auto</code> (wird nie geschrieben, ist Standard)</td><td><code>new</code>/<code>delete</code> bzw. <code>malloc</code>/<code>free</code></td></tr>
+      </tbody>
+    </table></div>
+    <p>Der Stack-Bereich einer Funktion enthält die <strong>lokalen Variablen, die mit den Argumenten initialisierten Parameter und die Rücksprungadresse</strong>. Bei <code>return</code> wird alles davon entfernt. Deshalb legt jeder rekursive Aufruf einen neuen Satz an.</p>
+
+    <div class="box warn">
+      <span class="lbl">Speicherleck und hängender Zeiger</span>
+      <p>Wird die Referenz auf dynamisch belegten Speicher überschrieben, lässt sich der Bereich <strong>weder freigeben noch nutzen</strong> – ein Speicherleck. Deshalb existieren Speicherfunktionen immer <strong>paarweise</strong>, und Bibliotheken, die Heap-Speicher herausgeben, müssen eine passende Freigabefunktion mitliefern.</p>
+    </div>
+
+    <h4>2.3 C-Funktionen (aus &lt;cstdlib&gt;)</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Funktion</th><th>Wirkung</th></tr></thead>
+      <tbody>
+        <tr><td>malloc(s)</td><td>s Byte reservieren, Rückgabe <code>void*</code>; Inhalt <strong>undefiniert</strong></td></tr>
+        <tr><td>calloc(n,s)</td><td>Speicher für n Objekte der Größe s, <strong>mit Nullen initialisiert</strong></td></tr>
+        <tr><td>realloc(p,s)</td><td>Größe ändern; <code>realloc(NULL,s)</code> ≡ malloc, <code>realloc(p,0)</code> ≡ free</td></tr>
+        <tr><td>free(p)</td><td>freigeben; <code>free(NULL)</code> ist erlaubt und tut nichts</td></tr>
+      </tbody>
+    </table></div>
+    <p>Rückgabetyp ist <code>void*</code>, weil der Speicher jeden Datentyp aufnehmen kann und <code>void*</code> zu allen kompatibel ist. <strong>Rückgabewert immer prüfen</strong> – bei zu wenig Speicher kommt NULL zurück. Diese Funktionen kümmern sich <strong>nicht</strong> um den Inhalt und sollten daher nur mit einfachen Datentypen verwendet werden.</p>
+    <p class="formula">if ((str = (char*) malloc(35 * sizeof(char))) == NULL) { … }</p>
+    <p>Mit <code>sizeof</code> statt einer festen Zahl bleibt der Code portabel – ein <code>char</code> ist nicht überall ein Byte.</p>
+
+    <h4>2.4 C++-Operatoren</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Ausdruck</th><th>Wirkung</th></tr></thead>
+      <tbody>
+        <tr><td>new T(…)</td><td>Speicher für ein Objekt + <strong>Konstruktoraufruf</strong> (ohne Liste: Default-Konstruktor)</td></tr>
+        <tr><td>delete p</td><td><strong>Destruktor</strong> aufrufen, dann Speicher freigeben</td></tr>
+        <tr><td>new T[n]</td><td>n Objekte, für jedes den <strong>Default</strong>-Konstruktor – Parameter sind hier nicht möglich</td></tr>
+        <tr><td>delete[] p</td><td>Destruktor für alle Feldelemente, dann freigeben</td></tr>
+      </tbody>
+    </table></div>
+    <div class="box warn">
+      <span class="lbl">Die wichtigste Regel des Kapitels</span>
+      <p>Die Verwaltungsarten <strong>niemals mischen</strong>. Auch <code>new</code>/<code>delete</code> und <code>new[]</code>/<code>delete[]</code> sind trotz des ähnlichen Namens <strong>nicht garantiert kompatibel</strong>. Im günstigsten Fall gibt es ein Speicherleck, im schlimmsten ist das Programmverhalten unvorhersehbar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Ausnahmebehandlung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Ausnahmebehandlung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Fehlerbehandlung, die vom eigentlichen Anwendungscode getrennt bleibt.</p>
+
+    <div class="box def">
+      <span class="lbl">Error gegen Exception</span>
+      <p><strong>Error (Fehler)</strong> = tritt wahrscheinlich auf – Programmierfehler, falsche Benutzereingaben. Dagegen hilft normale Prüfung mit <code>if</code>-<code>else</code>.<br>
+      <strong>Exception (Ausnahme)</strong> = tritt höchstwahrscheinlich <em>nicht</em> auf – die gespeicherte Datei ist plötzlich unlesbar, der Speicher reicht nicht. Dafür gibt es die strukturierte Ausnahmebehandlung.</p>
+    </div>
+    <p>Der Vorteil gegenüber der alten Methode (nach jedem Funktionsaufruf den Rückgabewert prüfen): Die auslösende Funktion wirft eine Ausnahme, die <strong>alle Informationen zur Problemerkennung mit sich trägt</strong>. Der Behandlungscode steht getrennt vom Normalcode. Damit ist das Programm robuster, die Fehlerklassen sind unabhängig entwickelbar, und der Programmierer behält die Kontrolle über die Reaktion.</p>
+
+    <h4>3.2 try-catch</h4>
+    <p class="formula">try {<br>&nbsp;&nbsp;// zu testender Code<br>} catch (bad_alloc&amp; ex) {<br>&nbsp;&nbsp;cerr &lt;&lt; ex.what() &lt;&lt; endl;<br>&nbsp;&nbsp;exit(1);<br>}</p>
+    <ul>
+      <li><code>catch (...)</code> fängt <strong>jede</strong> Ausnahme – man erfährt dann aber nicht, welche.</li>
+      <li>Beim Werfen wird automatisch ein Objekt eines bestimmten Typs erzeugt; bei fehlgeschlagener dynamischer Allokation z.&nbsp;B. <code>bad_alloc</code>. Über diesen Typ wird ausgewählt, welcher catch-Block greift.</li>
+      <li>Das Objekt <strong>als Referenz <code>&amp;</code></strong> entgegennehmen – dann arbeitet man mit dem Original statt mit einer Kopie. <code>what()</code> liefert eine (meist knappe) Beschreibung.</li>
+      <li>Fehlermeldungen <strong>immer über <code>cerr</code></strong> ausgeben, nicht über <code>cout</code>: <code>cerr</code> ist ungepuffert und lässt sich getrennt umleiten.</li>
+      <li><code>exit(n)</code> aus <code>&lt;cstdlib&gt;</code> beendet das Programm; n ≠ 0 signalisiert dem Betriebssystem einen Fehler.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 4 ══════════════ -->
+<section class="sec" id="k4" data-num="4" data-title="Klassen: Konstruktor, Destruktor, static, friend">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">4</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 4</p>
+      <h2>Klassen: Konstruktor, Destruktor, static, friend</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Der Kern des Hefts: Wie Objekte entstehen und vergehen, wie sie kopiert werden – und die zwei Ausnahmen von der Kapselung, <code>static</code> und <code>friend</code>.</p>
+
+    <div class="box def">
+      <span class="lbl">Information Hiding</span>
+      <p>Eine Komponente soll nur über eine <strong>festgelegte Schnittstelle</strong> benutzbar sein, die von der Implementierung unabhängig ist – eine Änderung der Implementierung darf keine Änderung der Anwendung erzwingen. Ergänzt wird das durch <strong>Datenabstraktion</strong>: Zugriff nur über festgelegte Operationen.</p>
+      <p>Der Zugriffsschutz ist <strong>kein Schutz vor mutwilliger Änderung</strong> – umgehen lässt er sich immer. Er schützt vor <em>versehentlicher</em> Änderung und ist das Hilfsmittel für saubere abstrakte Typen.</p>
+    </div>
+
+    <h4>4.2 Aufteilung auf Dateien</h4>
+    <p>Klassendefinition in die Header-Datei, Implementierung in die <code>.cpp</code>. Header dürfen beliebig oft eingebunden werden, solange sie nur Deklarationen enthalten. Für Definitionen braucht es einen <strong>Include-Guard</strong>:</p>
+    <p class="formula">#ifndef __KURS6_H__<br>#define __KURS6_H__<br>class Kurs { … };<br>#endif</p>
+
+    <h4>4.4 Konstruktor und Destruktor</h4>
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Konstruktor</th><th>Destruktor</th></tr></thead>
+      <tbody>
+        <tr><td>Name</td><td>= Klassenname</td><td>= <code>~</code> + Klassenname</td></tr>
+        <tr><td>Rückgabetyp</td><td>keiner, <strong>auch nicht void</strong></td><td>keiner</td></tr>
+        <tr><td>Anzahl</td><td>beliebig viele (überladen)</td><td><strong>genau einer</strong>, argumentlos</td></tr>
+        <tr><td>Aufgabe</td><td>konsistenten Zustand herstellen, Ressourcen anfordern</td><td>Ressourcen freigeben</td></tr>
+        <tr><td>Reihenfolge der Teilobjekte</td><td>in Deklarationsreihenfolge</td><td><strong>in umgekehrter</strong> Reihenfolge</td></tr>
+      </tbody>
+    </table></div>
+    <p>Fehlt ein eigener, stellt der Compiler <strong>Standardkonstruktor und Destruktor</strong> bereit. Der Standardkonstruktor ist der ohne Argumente.</p>
+
+    <div class="box def">
+      <span class="lbl">Initialisierungsliste</span>
+      <p>Zwischen Argumentliste und Rumpf, eingeleitet mit <code>:</code> – mehrere Einträge mit Komma:</p>
+      <p class="formula">APerson::APerson(const string&amp; a_name, const Datum&amp; a_gebdat, int a_gender)<br>&nbsp;&nbsp;: name(a_name), gebdat(a_gebdat), gender(a_gender) { }</p>
+      <p>Drei Punkte, die geprüft werden: <strong>(1)</strong> Der Compiler <strong>ignoriert die Reihenfolge in der Liste</strong> und initialisiert in der Reihenfolge der Deklaration im Klassenkörper. <strong>(2)</strong> Für <code>const</code>-Member, Referenzen und <code>* const</code>-Zeiger ist die Liste die <strong>einzige</strong> Möglichkeit zur Initialisierung. <strong>(3)</strong> Was im Rumpf steht, ist eine nachträgliche <em>Zuweisung</em> – aus Effizienzgründen also möglichst viel in die Liste.</p>
+    </div>
+    <p><strong>Was wird automatisch initialisiert?</strong> Einfache Variablen: nur wenn <code>static</code> (dann mit 0), sonst <strong>undefiniert</strong>. Datenelemente, die selbst Klassen sind: immer über ihren Standardkonstruktor. Statische einfache Klassenvariablen werden <em>einmal</em> vor der ersten Instanz mit NULL initialisiert und danach von Konstruktoraufrufen ignoriert.</p>
+
+    <h4>4.5 Kopieren und Zuweisen</h4>
+    <p>Der <strong>Kopierkonstruktor</strong> nimmt eine Referenz auf ein Objekt desselben Typs entgegen: <code>A(const A&amp;);</code>. Der compilergenerierte ruft die Kopierkonstruktoren aller Datenelemente in Deklarationsreihenfolge auf – für Klassen aus einfachen Elementen genügt das (bitweise Kopie).</p>
+    <div class="box warn">
+      <span class="lbl">Wann der generierte nicht reicht</span>
+      <p>Sobald der reguläre Konstruktor <strong>Ressourcen anfordert</strong> – dynamischen Speicher belegt oder eine Datei öffnet. Dasselbe gilt für den Zuweisungsoperator. Beide müssen dann selbst geschrieben werden, und der Standard verlangt, dass es <strong>nichtstatische Memberfunktionen</strong> der Klasse sind.</p>
+    </div>
+
+    <h4>4.6 Statische Elemente</h4>
+    <p>Existieren <strong>einmal pro Klasse</strong>, nicht pro Instanz, und leben über die ganze Programmlaufzeit – wie globale Variablen, aber (sofern <code>private</code>) nur in der Klasse sichtbar. Deklaration im Header, <strong>Definition in der .cpp</strong>:</p>
+    <p class="formula">class A { static int statischeVariable; static void statischeFunktion(); };<br>int A::statischeVariable = 5;&nbsp;&nbsp;// Definition + Initialisierung</p>
+    <div class="box def">
+      <span class="lbl">Statische Methoden</span>
+      <p>Sind an die Klasse gebunden, nicht an ein Objekt: aufrufbar ohne Instanz (qualifiziert mit dem Klassennamen), <strong>ohne <code>this</code>-Zeiger</strong> und <strong>ohne Zugriff auf nichtstatische Member</strong>. Typisches Beispiel: <code>static bool ist_schaltjahr(int j)</code> – das Ergebnis hängt nur vom Argument ab.</p>
+      <p class="formula">return (j%4 == 0) &amp;&amp; (j%100 != 0 || j%400 == 0);</p>
+    </div>
+
+    <h4>4.7 Befreundete Funktionen</h4>
+    <p>Eine mit <code>friend</code> deklarierte Funktion darf auf <code>private</code>- und <code>protected</code>-Daten einer fremden Klasse zugreifen. Das <strong>widerspricht der Datenkapselung</strong> und schwächt sie ab – also nur mit Bedacht einsetzen.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 5 ══════════════ -->
+<section class="sec" id="k5" data-num="5" data-title="Vererbung">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">5</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 5</p>
+      <h2>Vererbung</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Neben der Kapselung das zweite Grundkonzept der OOP. Die zwei Zugriffstabellen in diesem Kapitel sind der am häufigsten geprüfte Stoff des ganzen Hefts.</p>
+
+    <div class="box def">
+      <span class="lbl">Zwei Zwecke der Vererbung</span>
+      <p><strong>Abstraktion</strong> – Klassen werden in einer Hierarchie aus Generalisierungen und Spezialisierungen angeordnet. <strong>Wiederverwendung</strong> – eine Klasse ähnelt der, von der sie erbt, unterscheidet sich aber in Details. Eine konkrete Vererbung kann beides erfüllen.</p>
+    </div>
+
+    <h4>5.3 Zugriffsrechte – die zwei Tabellen</h4>
+    <p>Zuerst: Wer darf auf ein Element der Basisklasse überhaupt zugreifen?</p>
+    <div class="tw"><table>
+      <thead><tr><th>Element der Basisklasse</th><th>Basisklasse selbst</th><th>abgeleitete Klasse</th><th>andere Klasse</th></tr></thead>
+      <tbody>
+        <tr><td><code>private</code></td><td>ja</td><td>nein</td><td>nein</td></tr>
+        <tr><td><code>protected</code></td><td>ja</td><td>ja</td><td>nein</td></tr>
+        <tr><td><code>public</code></td><td>ja</td><td>ja</td><td>ja</td></tr>
+      </tbody>
+    </table></div>
+    <p>Dann: Wie verändert der Zugriffsmodifizierer bei der Ableitung diese Rechte?</p>
+    <div class="tw"><table>
+      <thead><tr><th>in der Basisklasse</th><th>: private</th><th>: protected</th><th>: public</th></tr></thead>
+      <tbody>
+        <tr><td><code>private</code></td><td>kein Zugriff</td><td>kein Zugriff</td><td>kein Zugriff</td></tr>
+        <tr><td><code>protected</code></td><td>private</td><td>protected</td><td>protected</td></tr>
+        <tr><td><code>public</code></td><td>private</td><td>protected</td><td>public</td></tr>
+      </tbody>
+    </table></div>
+    <div class="box warn">
+      <span class="lbl">Merksatz</span>
+      <p>Was in der Basisklasse <code>private</code> ist, bleibt in <strong>jeder</strong> Ableitung unzugänglich – Zugriff nur über öffentliche Methoden der Basisklasse. Durch Ableiten kann man sich den Zugriff auf private Elemente also <strong>nicht erschleichen</strong>. Die private-Ableitung nutzt man, wenn eine <em>neue</em> Schnittstelle entstehen soll: Es wird nur die Implementierung vererbt.</p>
+    </div>
+    <p>Jede Instanz der abgeleiteten Klasse enthält ein anonymes Objekt vom Typ der Basisklasse. Dieses wird <strong>vor</strong> den zusätzlichen Komponenten durch impliziten Aufruf des Basisklassenkonstruktors erzeugt.</p>
+
+    <h4>5.4 „Ist-ein“ – wann ist Vererbung richtig?</h4>
+    <p>Die Hierarchie stimmt, wenn sich alle diese Fragen mit Ja beantworten lassen: Ist ein A ein B? Ist A eine Erweiterung von B? Ist A eine Subklasse/ein Untertyp von B? Sind alle Elemente der Menge A auch Elemente der Menge B?</p>
+    <p>Unterklasse = <strong>Spezialisierung</strong>, Basisklasse = <strong>Generalisierung</strong>; beides sind inverse Prozeduren der Datenmodellierung. Bei der <strong>totalen</strong> Erweiterung muss jede Entität der Basisklasse auch Entität einer Unterklasse sein – die Basisklasse ist dann eine <strong>abstrakte Klasse</strong>. In UML: abstrakte Klassen und ihre abstrakten Methoden <em>kursiv</em> oder mit Stereotyp <code>&lt;&lt;abstract&gt;&gt;</code>, befreundete Klassen mit <code>&lt;&lt;friend&gt;&gt;</code>. Rein virtuelle Methoden lassen sich so darstellen – <strong>nur virtuelle Methoden kann UML nicht abbilden</strong>.</p>
+
+    <h4>5.5 Virtuelle Methoden</h4>
+    <p>Methoden, von denen man erwartet, dass abgeleitete Klassen sie redefinieren. Nutzen: Über einen <strong>Basisklassenzeiger oder eine Basisklassenreferenz</strong> wird die Methode der <em>spezialisierten</em> Klasse aufgerufen, ohne dass diese an der Stelle bekannt sein muss.</p>
+    <div class="box warn">
+      <span class="lbl">Der Effekt in einem Satz</span>
+      <p>Mit <code>virtual</code> in der Basisklasse gibt das Beispiel „Klasse A · Klasse X · Klasse Y“ aus – <strong>ohne</strong> <code>virtual</code> dreimal „Klasse A“.</p>
+    </div>
+
+    <h4>5.6 Abstrakte Klassen</h4>
+    <p>Eine Methode wird <strong>rein virtuell</strong> durch <code>= 0</code> hinter der Deklaration; damit ist die ganze Klasse abstrakt.</p>
+    <p class="formula">class A { public: virtual void fkt() = 0; };&nbsp;&nbsp;// abstrakt<br>// A a;&nbsp;→ error: cannot declare variable 'a' to be of abstract type 'A'</p>
+    <ul>
+      <li>Können nur aus Deklarationen bestehen; von ihnen werden <strong>nie Objekte erstellt</strong>.</li>
+      <li>Dienen oft als <strong>Schnittstelle</strong> (in anderen Sprachen <em>interface</em>) und als Startpunkt einer Hierarchie.</li>
+      <li>Alle abgeleiteten Klassen <strong>müssen sämtliche rein virtuellen Funktionen überschreiben</strong> – sonst sind auch sie nicht instanziierbar.</li>
+      <li>Vorteil: Beim Einsatz der abgeleiteten Klasse kann man sich darauf verlassen, dass die Methode implementiert ist.</li>
+    </ul>
+
+    <h4>5.7 Mehrfachvererbung</h4>
+    <p class="formula">class KlasseAB : public KlasseA, public KlasseB { … };</p>
+    <ul>
+      <li><strong>Mehrdeutigkeiten</strong> bei gleichnamigen Elementen werden mit dem Bereichsoperator aufgelöst: <code>ab.KlasseA::tuwas();</code> – der Aufruf <code>ab.tuwas();</code> ließe sich nicht übersetzen.</li>
+      <li>Dieselbe Klasse <strong>direkt</strong> zweimal als Basis anzugeben ist verboten. Indirekt geht es – dann sind alle Basiselemente <strong>doppelt</strong> vorhanden.</li>
+      <li>Lösung: <strong>virtuelle Basisklassen</strong> – <code>class KlasseA : virtual public Basis { … };</code>. Dann existieren die Basiselemente in KlasseAB nur noch einfach.</li>
+      <li>Die Notwendigkeit ist umstritten: Mehrfachvererbung erhöht die Komplexität, fast alle Probleme lassen sich ohne sie lösen.</li>
+    </ul>
+    <p><strong>5.8 Befreundete Klassen:</strong> Mit <code>friend A;</code> in Klasse B erhält die ganze Klasse A Zugriff auf deren private Elemente.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 6 ══════════════ -->
+<section class="sec" id="k6" data-num="6" data-title="Ein- und Ausgabe, Dateien">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">6</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 6</p>
+      <h2>Ein- und Ausgabe, Dateien</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Was hinter <code>cout</code> und <code>cin</code> steckt – und wie man Dateien öffnet, prüft, positioniert und binär liest.</p>
+
+    <div class="box def">
+      <span class="lbl">Die Klassenhierarchie</span>
+      <p><code>streambuf</code> verwaltet den Puffer. <code>ios</code> ist die Basisklasse und besitzt ein streambuf-Objekt. Davon abgeleitet <code>istream</code> und <code>ostream</code>; <code>iostream</code> erbt von beiden. <code>ifstream</code>, <code>ofstream</code> und <code>fstream</code> ergänzen die Datei-Anbindung. Weil die E/A <strong>nicht Teil der Sprachspezifikation</strong>, sondern Bibliothek ist, bleibt C++ plattformunabhängig.</p>
+    </div>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Stream</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>cin</td><td>Standardeingabe (Tastatur)</td></tr>
+        <tr><td>cout</td><td>Standardausgabe (Bildschirm), gepuffert</td></tr>
+        <tr><td>cerr</td><td>Fehlerausgabe, <strong>ungepuffert</strong> – erscheint sofort</td></tr>
+        <tr><td>clog</td><td>Fehlerausgabe, <strong>gepuffert</strong> – meist in eine Protokolldatei umgeleitet</td></tr>
+      </tbody>
+    </table></div>
+    <p>Beim Einlesen über <code>cin</code> gelten <strong>Whitespaces</strong> (Leerzeichen, Tabulator, Zeilenvorschub) als Trennzeichen und werden entfernt – deshalb scheitert das Einlesen eines vollständigen Namens in einen String. Abhilfe: <code>getline()</code>. Bei C-Strings kommt hinzu, dass die Eingabe die Feldgröße nicht kennt → <strong>Pufferüberlauf</strong>.</p>
+    <p>Weitere Memberfunktionen zur Kontrolle: <code>get()</code>, <code>getline()</code>, <code>ignore()</code>, <code>peek()</code>, <code>putback()</code> beim Lesen sowie <code>put()</code> (ein Zeichen, verkettbar) und <code>write()</code> (mit maximaler Zeichenzahl) beim Schreiben.</p>
+
+    <h4>6.3 Dateien</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Klasse</th><th>Zweck</th><th>Standardmodus</th></tr></thead>
+      <tbody>
+        <tr><td>ofstream</td><td>schreiben</td><td><code>ios::out</code></td></tr>
+        <tr><td>ifstream</td><td>lesen</td><td><code>ios::in</code></td></tr>
+        <tr><td>fstream</td><td>lesen und schreiben</td><td><code>ios::in | ios::out</code></td></tr>
+      </tbody>
+    </table></div>
+    <p>Öffnen mit <code>open(Dateiname, Modus)</code> oder direkt über den Konstruktor; schließen mit <code>close()</code> – der Destruktor erledigt das ohnehin automatisch und schreibt die Puffer noch weg. Prüfen mit <code>is_open()</code>.</p>
+    <div class="box warn">
+      <span class="lbl">Zwei Stolperstellen beim Dateinamen</span>
+      <p>Der Name ist eine C-Zeichenkette (<code>const char*</code>). Als Konstante im Programm muss der Backslash <strong>doppelt</strong> geschrieben werden, sonst gilt er als Escape-Zeichen. Besser: Schrägstriche verwenden, die funktionieren auf allen gängigen Systemen. Und: <strong>Ein eigener Modus-Parameter überschreibt den Standardwert der Klasse</strong>.</p>
+    </div>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Modus</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>ios::in</td><td>zum Lesen öffnen</td></tr>
+        <tr><td>ios::out</td><td>zum Schreiben öffnen</td></tr>
+        <tr><td>ios::binary</td><td>Binärstrom, kein Eingriff in die Daten</td></tr>
+        <tr><td>ios::ate</td><td>Positionszeiger beim Öffnen ans <strong>Dateiende</strong></td></tr>
+        <tr><td>ios::app</td><td>alle Schreibvorgänge hängen ans Ende an</td></tr>
+        <tr><td>ios::trunc</td><td>Datei beim Öffnen leeren</td></tr>
+      </tbody>
+    </table></div>
+    <p>Kombiniert wird mit dem Oder-Bitoperator:</p>
+    <p class="formula">myfile.open("exp.bin", ios::out | ios::app | ios::binary);</p>
+    <p>Textdatei ist der Standard; der Zeilenvorschub wird dann plattformabhängig behandelt (Linux LF = ASCII 10, Mac OS CR = 13, Windows CRLF). Bei <strong>binär</strong> findet kein Eingriff statt.</p>
+
+    <h4>6.3.4 Zustandsprüfung</h4>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Methode</th><th>Rückgabe</th></tr></thead>
+      <tbody>
+        <tr><td>bad()</td><td>true, wenn das Schreiben fehlschlägt</td></tr>
+        <tr><td>fail()</td><td>wie bad(), zusätzlich bei Formatfehlern</td></tr>
+        <tr><td>eof()</td><td>true, wenn das Dateiende erreicht ist</td></tr>
+        <tr><td>good()</td><td>true, wenn alle anderen Prüfungen false ergeben</td></tr>
+        <tr><td>clear()</td><td>setzt alle Fehlerzustände zurück (keine Rückgabe)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>6.3.5 Dateizeiger</h4>
+    <p>Jedes Stream-Objekt hat mindestens einen Dateizeiger: den <strong>get-Zeiger</strong> (nächste Leseposition) und den <strong>put-Zeiger</strong> (nächste Schreibposition). <code>ifstream</code>/<code>ofstream</code> haben nur den jeweils relevanten, <code>fstream</code> beide.</p>
+    <div class="tw"><table class="mono">
+      <thead><tr><th>Aufruf</th><th>Wirkung</th></tr></thead>
+      <tbody>
+        <tr><td>tellg() / tellp()</td><td>aktuelle Position abfragen (<code>pos_type</code>)</td></tr>
+        <tr><td>seekg(Pos) / seekp(Pos)</td><td>absolut vom Dateibeginn setzen</td></tr>
+        <tr><td>seekg(Offset, Startwert)</td><td>relativ – Startwert ist <code>ios::beg</code>, <code>ios::cur</code> oder <code>ios::end</code></td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Dateigröße bestimmen:</strong> mit <code>ios::ate</code> öffnen und sofort <code>tellg()</code> abfragen – das ist eleganter als Anfangs- und Endposition zu subtrahieren.</p>
+    <p><strong>Binär lesen/schreiben:</strong> <code>read(Block, Groesse)</code> und <code>write(Block, Groesse)</code>; <code>Block</code> ist ein <code>char*</code> auf das Feld, <code>Groesse</code> die Zeichenzahl.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 7 ══════════════ -->
+<section class="sec" id="k7" data-num="7" data-title="Generische Programmierung (Templates)">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">7</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 7</p>
+      <h2>Generische Programmierung (Templates)</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Mit Templates verlässt man die objektorientierte und betritt die generische Programmierung: Funktionen und Klassen, die für beliebige Datentypen funktionieren.</p>
+
+    <div class="box def">
+      <span class="lbl">Funktionstemplate</span>
+      <p>Eine <strong>Schablone</strong>, die dem Compiler mitteilt, wie eine Funktion zu erzeugen ist. Beim ersten Aufruf erzeugt er daraus eine „echte“ Funktion und ersetzt den Platzhalter durch den tatsächlichen Typ – den er <strong>allein aus den Argumenten</strong> ableitet, denn hier findet <strong>keine Typumwandlung</strong> statt.</p>
+      <p class="formula">template &lt;typename T&gt;<br>T max(const T&amp; a, const T&amp; b) { return (a &gt; b) ? a : b; }<br><br>max(3, 7);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// T = int, automatisch<br>max&lt;double&gt;(3, 7.5);&nbsp;// explizit angegeben</p>
+      <p>Sprachgebrauch: Eine <strong>Templatefunktion</strong> ist ein Exemplar eines <strong>Funktionstemplates</strong>.</p>
+    </div>
+    <p><strong>Voraussetzungen</strong> an den eingesetzten Typ: Der verwendete Operator (hier <code>&gt;</code>) muss anwendbar sein, und es muss ein <strong>Kopierkonstruktor</strong> existieren, weil bei „call by value“ kopiert wird. <code>std::string</code> erfüllt beides. Mit <code>const</code> (und Referenz) wird das Kopieren vermieden und zugesichert, dass die Objekte unverändert bleiben.</p>
+    <div class="box warn">
+      <span class="lbl">Warum nicht einfach ein Makro?</span>
+      <p><code>#define MAX(a,b) (((a)&lt;(b)) ? (b) : (a))</code> sieht generisch aus, bietet aber <strong>keine Typsicherheit</strong> – Fehler sind kaum überprüfbar. Eine gewöhnliche Funktion wäre typsicher, müsste aber pro Typ neu geschrieben werden. Das Template löst beides.</p>
+    </div>
+    <p><strong>Klassentemplates</strong> lassen den verwalteten Typ offen, statt ihn bei der Klassendefinition festzulegen – die Grundlage der gesamten Standardbibliothek.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 8 ══════════════ -->
+<section class="sec" id="k8" data-num="8" data-title="Fortgeschrittene Datentypen (STL)">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">8</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 8</p>
+      <h2>Fortgeschrittene Datentypen (STL)</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Container, Iteratoren, Algorithmen – die drei Bausteine der Standard Template Library.</p>
+
+    <p>Die C++-Standardbibliothek enthält die <strong>STL</strong> (Container plus Algorithmen), die C-Standardbibliothek, Strings, Streams, Typinformationen zur Laufzeit, Hilfen für dynamischen Speicher sowie Klassen für komplexe Zahlen und numerische Vektoren. Sie heißt „Template Library“, weil sie durchgehend Klassentemplates einsetzt.</p>
+
+    <div class="box def">
+      <span class="lbl">Die drei Bausteine</span>
+      <p><strong>Container</strong> – datentypunabhängige Sammlungen: <code>vector&lt;T&gt;</code>, <code>deque&lt;T&gt;</code>, <code>list&lt;T&gt;</code>, <code>set&lt;T&gt;</code>, dazu Warteschlangen, Stapel und assoziative Felder (maps).<br>
+      <strong>Iteratoren</strong> – „Zeiger“, mit denen ein Container durchlaufen wird; sie <strong>entkoppeln</strong> Algorithmen von Containern. Die meisten Container liefern welche über <code>begin()</code> und <code>end()</code>. Arten: random_access, bidirectional, reverse, forward.<br>
+      <strong>Algorithmen</strong> – arbeiten auf durch Iteratoren begrenzten Bereichen: <code>sort</code>, <code>partition</code>, <code>fill</code>, <code>copy</code>, <code>replace</code> …</p>
+    </div>
+    <p>Algorithmen lassen sich in drei Kategorien einteilen:</p>
+    <ul>
+      <li><strong>nichtmodifizierend</strong> – ändern weder Werte noch Reihenfolge,</li>
+      <li><strong>modifizierend</strong> – dürfen Werte ändern und umordnen,</li>
+      <li><strong>mutierend</strong> – ändern nur die Reihenfolge, keine Werte.</li>
+    </ul>
+    <p>Eine Funktion, die ein Containerelement entgegennimmt und einen Wahrheitswert liefert, heißt <strong>Prädikat</strong>. Damit gibt man z.&nbsp;B. <code>sort</code> eine eigene Sortierregel mit.</p>
+    <div class="box warn">
+      <span class="lbl">Portabilität</span>
+      <p>Setzt man herstellerspezifische Bibliotheken ein, entspricht der Code <strong>nicht mehr Standard-C++</strong> und ist kaum noch portabel. Daher zuerst prüfen, ob die Standardbibliothek die Funktionalität schon bietet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ÜBUNGSAUFGABEN ══════════════ -->
+<section class="sec" id="ue" data-num="Ü" data-title="Übungsaufgaben">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">Ü</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Übung</p>
+      <h2>Übungsaufgaben mit Lösungswegen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die Programmieraufgaben aus allen acht Kapiteln. Die Lösungswege sind eigene Ansätze – zum Abgleich, nicht als offizieller Lösungsschlüssel.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">1.1/1.2</span><span class="task-t">Bruch um alle Grundrechenarten und Kürzen erweitern</span><span class="task-p">Operatoren</span></div>
+      <div class="task-q"><p>Erweitern Sie die Bruch-Klasse aus Beispiel 1.1 um <code>+</code>, <code>−</code> und <code>/</code> sowie um eine Methode zum Kürzen nach jeder Rechenoperation.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">Bruch Bruch::operator+(const Bruch&amp; b) const {
+  Bruch t;
+  t.zaehler = zaehler * b.nenner + b.zaehler * nenner;   // Hauptnenner
+  t.nenner  = nenner * b.nenner;
+  t.kuerzen();
+  return t;
+}
+// operator- analog mit Minus, operator/ = Multiplikation mit dem Kehrwert:
+//   t.zaehler = zaehler * b.nenner;  t.nenner = nenner * b.zaehler;
+
+void Bruch::kuerzen() {
+  if (nenner &lt; 0) { zaehler = -zaehler; nenner = -nenner; }
+  int a = abs(zaehler), b = abs(nenner), r;
+  while (b != 0) { r = a % b; a = b; b = r; }   // ggT nach Euklid
+  if (a &gt; 1) { zaehler /= a; nenner /= a; }
+}</div>
+        <div class="res">Zwei Details, die Punkte bringen: Parameter als <code>const Bruch&amp;</code> (keine Kopie), Methode selbst <code>const</code> (Operanden bleiben unverändert). Das Kürzen gehört ans Ende <em>jeder</em> Operation.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">1.3</span><span class="task-t">Klasse Datum mit ++ in beiden Varianten</span><span class="task-p">Operatoren · Kapselung</span></div>
+      <div class="task-q"><p><code>setzeDatum(t,m,j)</code>, <code>heute()</code>, <code>show()</code>, Präfix- und Postfix-<code>++</code> sowie eine <strong>nichtöffentliche</strong> <code>korrektesDatum()</code> (Monatslänge, Schaltjahr). Test: 27.2.2013, dann viermal inkrementieren.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">class Datum {
+private:
+  int tag, monat, jahr;
+  bool korrektesDatum(int t, int m, int j) const {
+    if (m &lt; 1 || m &gt; 12 || t &lt; 1) return false;
+    int len[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    if (m == 2 &amp;&amp; schaltjahr(j)) return t &lt;= 29;
+    return t &lt;= len[m-1];
+  }
+  static bool schaltjahr(int j) { return j%4==0 &amp;&amp; (j%100!=0 || j%400==0); }
+public:
+  bool setzeDatum(int t, int m, int j) {
+    if (!korrektesDatum(t,m,j)) return false;
+    tag = t; monat = m; jahr = j; return true;
+  }
+  Datum&amp; operator++()   { naechsterTag(); return *this; }        // Praefix
+  Datum  operator++(int){ Datum alt = *this; naechsterTag(); return alt; } // Postfix
+  void show() const { cout &lt;&lt; tag &lt;&lt; "." &lt;&lt; monat &lt;&lt; "." &lt;&lt; jahr &lt;&lt; endl; }
+};</div>
+        <div class="res">Testfolge ab 27.2.2013: 28.2. → 1.3. (2013 ist <strong>kein</strong> Schaltjahr) → 2.3. → 3.3. Die Schaltjahrprüfung ist der klassische Punktebringer: durch 4 <strong>und</strong> (nicht durch 100 <strong>oder</strong> durch 400). <code>schaltjahr</code> hängt nur vom Jahr ab → <code>static</code>.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">2.1/2.2</span><span class="task-t">Heap dynamisch nutzen</span><span class="task-p">new · delete[]</span></div>
+      <div class="task-q"><p>a) Auf- und Abbau des Heaps mit einfachen Zahlen demonstrieren. b) Ein <code>int</code>-Feld mit 1000 Elementen dynamisch anlegen, mit 1…1000 füllen, ein zweites <code>double</code>-Feld anlegen, dort die Wurzeln speichern und jedes zehnte Element ausgeben.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">int*    a = new int[1000];
+double* b = new double[1000];
+
+for (int i = 0; i &lt; 1000; i++) { a[i] = i + 1; b[i] = sqrt((double)a[i]); }
+for (int i = 9; i &lt; 1000; i += 10)
+  cout &lt;&lt; setw(5) &lt;&lt; a[i] &lt;&lt; setw(12) &lt;&lt; b[i] &lt;&lt; endl;
+
+delete[] a;      // KEIN delete a;
+delete[] b;</div>
+        <div class="res">Die Bewertung hängt an drei Punkten: <code>new[]</code> mit passendem <strong><code>delete[]</code></strong> (nicht <code>delete</code>), Freigabe überhaupt vorhanden (sonst Speicherleck), und keine Vermischung mit <code>malloc</code>/<code>free</code>.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">3.1</span><span class="task-t">Verfügbaren Heap-Speicher ermitteln</span><span class="task-p">Ausnahmen</span></div>
+      <div class="task-q"><p>Schreiben Sie ein Programm, das die Größe des verfügbaren Heap-Speichers in Kilobyte ermittelt.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Genau der Anwendungsfall für <code>bad_alloc</code>: in einer Schleife anfordern, bis die Ausnahme kommt.</p>
+        <div class="step">long kb = 0;
+try {
+  while (true) { new char[1024]; kb++; }   // 1 KB pro Durchlauf
+} catch (bad_alloc&amp; ex) {
+  cerr &lt;&lt; "Abbruch: " &lt;&lt; ex.what() &lt;&lt; endl;
+  cout &lt;&lt; "Verfuegbar waren ca. " &lt;&lt; kb &lt;&lt; " KB" &lt;&lt; endl;
+}</div>
+        <div class="res">Kernpunkte: <code>try</code> um den anfordernden Code, <code>catch (bad_alloc&amp;)</code> <strong>als Referenz</strong>, Meldung über <code>cerr</code>. Das Ergebnis ist ein Näherungswert – das Betriebssystem vergibt nicht deterministisch.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">4.1</span><span class="task-t">Kreis, Rechteck, Quader</span><span class="task-p">Konstruktoren</span></div>
+      <div class="task-q"><p>Drei Klassen mit privaten <code>double</code>-Attributen und Default 1 bei fehlender Initialisierung. Memberfunktionen bei Kreis <strong>innerhalb</strong>, bei Rechteck <strong>außerhalb</strong> der Klasse definieren. Ergänzen Sie überall <code>Flaeche()</code>, <code>Umfang()</code> und <code>toStr()</code>.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">class Kreis {                       // alles INNERHALB -&gt; implizit inline
+private:
+  double radius;
+public:
+  Kreis(double r = 1) { setzeRadius(r); }        // Default-Wert 1
+  void   setzeRadius(double r) { radius = (r &gt; 0) ? r : 1; }
+  double Radius()  const { return radius; }
+  double Flaeche() const { return 3.14159265 * radius * radius; }
+  double Umfang()  const { return 2 * 3.14159265 * radius; }
+  string toStr()   const { return "Kreis mit Radius " + to_string(radius); }
+};
+
+class Rechteck {                    // Definitionen AUSSERHALB
+private:
+  double a, b;
+public:
+  Rechteck(double x = 1, double y = 1);
+  void   setzeSeitenlaenge(double x, double y);
+  double Seitenlaengea() const;
+  double Flaeche() const;
+};
+Rechteck::Rechteck(double x, double y) : a(x), b(y) { }
+double Rechteck::Flaeche() const { return a * b; }</div>
+        <div class="res">Der Default „1“ wird am elegantesten über <strong>Default-Parameter im Konstruktor</strong> gelöst – dann ist derselbe Konstruktor zugleich Standardkonstruktor. Beim Quader: <code>Flaeche()</code> = Oberfläche 2(ab+ac+bc), <code>Umfang()</code> = Kantenlänge 4(a+b+c).</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">4.2</span><span class="task-t">Klasse Date auf Header und Quelldatei aufteilen</span><span class="task-p">Dateiaufteilung</span></div>
+      <div class="task-q"><p>Klasse mit Tag/Monat/Jahr/Name privat, Konstruktor, Destruktor, <code>setDate()</code> (ungültige Daten wie 30.2.2008 werden nicht gespeichert), Getter und die private <code>correctDate()</code>. Der Klassencode soll vom übrigen Code getrennt sein.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Drei Dateien – das ist der eigentliche Prüfpunkt der Aufgabe:</p>
+        <div class="step">// ---- date.h ----
+#ifndef __DATE_H__
+#define __DATE_H__
+#include &lt;string&gt;
+class Date {
+private:
+  int day, month, year;
+  std::string name;
+  bool correctDate(int d, int m, int y);
+public:
+  Date();
+  ~Date();
+  bool setDate(int d, int m, int y, std::string n);
+  int getDay(); int getMonth(); int getYear();
+  std::string getName();
+};
+#endif
+
+// ---- date.cpp ----  Implementierung mit Date::…
+// ---- main.cpp ----  #include "date.h", nur noch Benutzung</div>
+        <div class="res">Include-Guard nicht vergessen, sonst bricht die Übersetzung ab, sobald der Header zweimal eingebunden wird. <code>setDate()</code> gibt <code>bool</code> zurück und speichert nur, wenn <code>correctDate()</code> true liefert. <code>getName()</code> liefert bei fehlendem Text eine leere Zeichenkette – also im Konstruktor initialisieren.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">5.1</span><span class="task-t">Ist Rechteck von Quadrat abgeleitet – oder umgekehrt?</span><span class="task-p">Vererbung · Theorie</span></div>
+      <div class="task-q"><p>Julia will Rechteck von Quadrat ableiten, Desiree Quadrat von Rechteck. Erklären Sie, wie die Meinungen zustande kommen, und wägen Sie ab.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>Julias Argument</strong> ist das der <em>Erweiterung</em>: Ein Quadrat hat eine Seitenlänge, ein Rechteck zwei – das Rechteck fügt also etwas hinzu. Das klingt nach Spezialisierung, ist aber die Sicht „mehr Attribute = abgeleitet“.</p>
+        <p><strong>Desirees Argument</strong> ist der <em>Ist-ein-Test</em> aus Abschnitt 5.4: „Ist ein Quadrat ein Rechteck?“ → ja. „Ist ein Rechteck ein Quadrat?“ → nein. Mengenmäßig sind alle Quadrate Elemente der Menge der Rechtecke, also ist Quadrat die Spezialisierung.</p>
+        <div class="res">Nach den Regeln des Studienhefts hat <strong>Desiree recht</strong>: <code>class Quadrat : public Rechteck</code>. Fairerweise gehört die bekannte Schwäche dazu: Erbt Quadrat den Setter <code>setzeSeitenlaenge(a,b)</code>, kann man ein Quadrat in einen ungültigen Zustand bringen – ein Objekt gerät über die Basisklassenschnittstelle in einen Zustand, den seine eigene Klasse nicht zulässt. Sauberer ist deshalb oft eine gemeinsame abstrakte Basisklasse <code>Form</code> mit rein virtuellen <code>Flaeche()</code> und <code>Umfang()</code>.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">5.2/5.3</span><span class="task-t">Klassenhierarchie Tier · Hund · Katze · Vogel</span><span class="task-p">Vererbung · virtual</span></div>
+      <div class="task-q"><p>Alle Tiere haben Name, Fellfarbe (char), Krallenlänge und Beinzahl (int), geben ihre Daten aus und machen einen artspezifischen Laut. Hunde fangen Katzen, Katzen Vögel, Vögel Insekten – die Anzahl wird im Objekt gespeichert. Zugriffsrechte beachten. Danach ein <code>Papiervogel</code> mit leerem Konstruktor.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">class Tier {
+protected:                        // protected: Unterklassen brauchen Zugriff
+  string name; char fellfarbe;
+  int krallenlaenge, beine;
+  int gefangen;
+public:
+  Tier(string n = "", char f = ' ', int k = 0, int b = 0)
+    : name(n), fellfarbe(f), krallenlaenge(k), beine(b), gefangen(0) {}
+  virtual void lautGeben() const { cout &lt;&lt; "..." &lt;&lt; endl; }   // virtual!
+  virtual void zeigeInfo() const {
+    cout &lt;&lt; name &lt;&lt; ", " &lt;&lt; beine &lt;&lt; " Beine, gefangen: " &lt;&lt; gefangen &lt;&lt; endl;
+  }
+  void fangen() { gefangen++; }
+};
+
+class Hund : public Tier {
+public:
+  Hund(string n, char f, int k) : Tier(n, f, k, 4) {}
+  void lautGeben() const { cout &lt;&lt; "Wau" &lt;&lt; endl; }
+};
+// Katze analog (4 Beine, "Miau"), Vogel mit 2 Beinen und "Piep"
+
+// Aufgabe 5.3:
+class Papiervogel : public Vogel {
+public:
+  Papiervogel() : Vogel("", ' ', 0) {}     // leerer Konstruktor
+};</div>
+        <div class="res">Drei Bewertungspunkte: Attribute <strong><code>protected</code></strong> statt private, damit die Unterklassen herankommen · <code>lautGeben()</code> <strong>virtual</strong>, sonst ruft ein <code>Tier*</code> immer die Basisversion auf · die abgeleiteten Konstruktoren reichen über die <strong>Initialisierungsliste</strong> an <code>Tier</code> weiter. Test mit Boxer, Miezekatze und Amsel.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">6.1</span><span class="task-t">Zahlen aus Datei lesen, sortiert in zweite Datei schreiben</span><span class="task-p">fstream</span></div>
+      <div class="task-q"><p>Zehn ganze Zahlen aus einer Zeile einer Datei einlesen, der Größe nach sortieren und zeilenweise in eine zweite Datei ausgeben.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">int z[10];
+ifstream ein("zahlen.txt");
+if (!ein.is_open()) { cerr &lt;&lt; "Datei fehlt" &lt;&lt; endl; return 1; }
+for (int i = 0; i &lt; 10; i++) ein &gt;&gt; z[i];   // Whitespace trennt automatisch
+ein.close();
+
+for (int i = 0; i &lt; 9; i++)                  // einfaches Sortieren
+  for (int j = i+1; j &lt; 10; j++)
+    if (z[j] &lt; z[i]) { int t = z[i]; z[i] = z[j]; z[j] = t; }
+
+ofstream aus("sortiert.txt");
+for (int i = 0; i &lt; 10; i++) aus &lt;&lt; z[i] &lt;&lt; endl;
+aus.close();</div>
+        <div class="res">Dass <code>&gt;&gt;</code> die Whitespaces als Trennzeichen behandelt, ist hier genau das gewünschte Verhalten. <code>is_open()</code>-Prüfung nicht vergessen.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">6.2</span><span class="task-t">Binärdatei füllen, ändern, ausgeben</span><span class="task-p">binary · seekp</span></div>
+      <div class="task-q"><p>Neue Binärdatei mit 1…50 füllen, danach alle durch 5 teilbaren Zahlen durch 99 ersetzen, abschließend zur Kontrolle ausgeben. Zwischen allen Teilschritten wird die Datei geschlossen.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">// 1. Schreiben
+ofstream f1("zahlen.bin", ios::out | ios::binary);
+for (int i = 1; i &lt;= 50; i++) f1.write((char*)&amp;i, sizeof(int));
+f1.close();
+
+// 2. Ersetzen – gezielt positionieren statt alles neu zu schreiben
+fstream f2("zahlen.bin", ios::in | ios::out | ios::binary);
+int neu = 99;
+for (int i = 1; i &lt;= 50; i++)
+  if (i % 5 == 0) {
+    f2.seekp((i-1) * sizeof(int), ios::beg);
+    f2.write((char*)&amp;neu, sizeof(int));
+  }
+f2.close();
+
+// 3. Kontrolle
+ifstream f3("zahlen.bin", ios::in | ios::binary);
+int w;
+while (f3.read((char*)&amp;w, sizeof(int))) cout &lt;&lt; w &lt;&lt; " ";
+f3.close();</div>
+        <div class="res">Kernpunkte: <code>ios::binary</code> überall · Cast auf <code>char*</code> bei <code>read</code>/<code>write</code> · Position = Index × <code>sizeof(int)</code> mit <code>ios::beg</code> · zum Ändern <code>fstream</code> mit <code>in|out</code>, weil <code>ofstream</code> allein die Datei leeren würde.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">7.1</span><span class="task-t">Funktionstemplate vertausche()</span><span class="task-p">Templates</span></div>
+      <div class="task-q"><p>Template für eine Funktion, die vier übergebene Werte vertauscht. Achtung: mit Referenzen arbeiten.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">template &lt;typename T&gt;
+void vertausche(T&amp; a, T&amp; b, T&amp; c, T&amp; d) {
+  T t = a; a = b; b = c; c = d; d = t;   // zyklisch, ohne Datenverlust
+}
+
+int main() {
+  int w = 1, x = 2, y = 3, z = 4;
+  vertausche(w, x, y, z);       // 2 3 4 1
+  string a="A", b="B", c="C", d="D";
+  vertausche(a, b, c, d);       // funktioniert unveraendert
+}</div>
+        <div class="res">Ohne <code>&amp;</code> würde die Funktion nur Kopien tauschen und im Aufrufer bliebe alles unverändert – deshalb der ausdrückliche Hinweis in der Aufgabe. Eine <strong>Hilfsvariable</strong> ist nötig, sonst geht der erste Wert verloren.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">7.2</span><span class="task-t">Klassentemplate Array mit Grenzprüfung</span><span class="task-p">Templates · operator[]</span></div>
+      <div class="task-q"><p>Klassentemplate für ein Array, das sich wie ein Feld ganzer Zahlen verhält. Überladen Sie <code>[ ]</code> und prüfen Sie die Feldgrenzen.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">template &lt;typename T&gt;
+class Array {
+private:
+  T*  daten;
+  int groesse;
+public:
+  Array(int n) : groesse(n) { daten = new T[n]; }
+  ~Array() { delete[] daten; }                 // Destruktor ist Pflicht!
+
+  T&amp; operator[](int i) {
+    if (i &lt; 0 || i &gt;= groesse) {
+      cerr &lt;&lt; "Index " &lt;&lt; i &lt;&lt; " ausserhalb 0.." &lt;&lt; groesse-1 &lt;&lt; endl;
+      exit(1);
+    }
+    return daten[i];
+  }
+  int size() const { return groesse; }
+};
+
+Array&lt;int&gt; a(10);
+a[3] = 42;      // ok
+a[10] = 1;      // Fehlermeldung statt stiller Speicherverletzung</div>
+        <div class="res">Genau das, was ein rohes C++-Feld <em>nicht</em> kann (Kapitel 2 in GPI15: keine Indexprüfung zur Laufzeit). Der Rückgabetyp muss <strong><code>T&amp;</code></strong> sein, sonst wäre <code>a[3] = 42;</code> unmöglich – es braucht einen L-Wert. Wer <code>new[]</code> im Konstruktor benutzt, braucht <code>delete[]</code> im Destruktor – und streng genommen auch einen eigenen Kopierkonstruktor (Abschnitt 4.5).</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Selbstkontrolle</p>
+      <h2>Schnellcheck</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <ul>
+      <li>Welcher der vier Casts arbeitet zur Laufzeit, welche zur Übersetzungszeit?</li>
+      <li>Warum liefert ein Cast keinen L-Wert – und was hilft?</li>
+      <li>Wie unterscheidet der Compiler <code>++p</code> von <code>p++</code> beim Überladen?</li>
+      <li>Nennen Sie vier nicht überladbare Operatoren.</li>
+      <li>Kann man Operatoren allein am Rückgabetyp unterscheiden?</li>
+      <li>Was steht im Stack-Bereich einer Funktion – drei Dinge.</li>
+      <li>Unterschied <code>malloc</code> und <code>calloc</code>? Warum liefert <code>malloc</code> <code>void*</code>?</li>
+      <li>Was macht <code>new</code>, was <code>malloc</code> nicht macht?</li>
+      <li>Warum darf man <code>delete</code> und <code>delete[]</code> nicht verwechseln?</li>
+      <li>Unterschied Error und Exception – je ein Beispiel.</li>
+      <li>Warum fängt man Ausnahmen als Referenz? Warum <code>cerr</code> statt <code>cout</code>?</li>
+      <li>Wie viele Konstruktoren darf eine Klasse haben, wie viele Destruktoren?</li>
+      <li>In welcher Reihenfolge initialisiert der Compiler die Member?</li>
+      <li>Welche drei Arten von Membern lassen sich <em>nur</em> in der Initialisierungsliste initialisieren?</li>
+      <li>Wann reicht der generierte Kopierkonstruktor nicht mehr?</li>
+      <li>Warum hat eine statische Methode keinen <code>this</code>-Zeiger?</li>
+      <li>Wo wird eine statische Klassenvariable definiert?</li>
+      <li>Was ist mit <code>private</code>-Elementen der Basisklasse in der abgeleiteten Klasse?</li>
+      <li>Was wird aus einem <code>public</code>-Element bei <code>: protected</code>-Ableitung?</li>
+      <li>Was passiert ohne <code>virtual</code> beim Aufruf über einen Basisklassenzeiger?</li>
+      <li>Wodurch wird eine Klasse abstrakt, und was folgt daraus für abgeleitete Klassen?</li>
+      <li>Wie löst man Mehrdeutigkeiten bei Mehrfachvererbung – und was ist eine virtuelle Basisklasse?</li>
+      <li>Unterschied <code>cerr</code> und <code>clog</code>?</li>
+      <li>Was bewirkt <code>ios::ate</code>, was <code>ios::app</code>?</li>
+      <li>Wann liefert <code>good()</code> true?</li>
+      <li>Wie bestimmt man elegant die Dateigröße?</li>
+      <li>Woraus leitet der Compiler bei einem Funktionstemplate den Typ ab – und findet dabei eine Typumwandlung statt?</li>
+      <li>Welche zwei Voraussetzungen muss ein Typ für <code>max&lt;T&gt;</code> erfüllen?</li>
+      <li>Wozu dienen Iteratoren in der STL?</li>
+      <li>Was ist ein Prädikat?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ KURZREFERENZ ══════════════ -->
+<section class="sec" id="formeln" data-num="F" data-title="Syntax-Kurzreferenz">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">F</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Referenz</p>
+      <h2>Syntax-Kurzreferenz</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <h4>Klassengerüst mit allem, was GPI16 verlangt</h4>
+    <p class="formula">class A {<br>private:<br>&nbsp;&nbsp;int wert;<br>&nbsp;&nbsp;static int anzahl;&nbsp;&nbsp;// nur Deklaration<br>public:<br>&nbsp;&nbsp;A(int w = 0) : wert(w) { }&nbsp;&nbsp;// Initialisierungsliste<br>&nbsp;&nbsp;A(const A&amp; alt);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Kopierkonstruktor<br>&nbsp;&nbsp;~A();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// genau einer, argumentlos<br>&nbsp;&nbsp;A operator+(const A&amp;) const;<br>&nbsp;&nbsp;virtual void zeige() const;<br>&nbsp;&nbsp;static int getAnzahl();&nbsp;&nbsp;&nbsp;// kein this<br>&nbsp;&nbsp;friend void hilfe(A&amp;);<br>};<br>int A::anzahl = 0;&nbsp;&nbsp;// Definition in der .cpp</p>
+
+    <h4>Vererbung</h4>
+    <p class="formula">class B : public A { … };&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Rechte bleiben erhalten<br>class C : private A { … };&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// alles wird private<br>class D : virtual public A { … };// virtuelle Basisklasse<br>virtual void f() = 0;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// rein virtuell -&gt; Klasse ist abstrakt</p>
+
+    <h4>Speicher</h4>
+    <p class="formula">T* p&nbsp; = new T(args);&nbsp;&nbsp;→ delete p;<br>T* f&nbsp; = new T[n];&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ delete[] f;<br>void* m = malloc(s);&nbsp;&nbsp;&nbsp;→ free(m);&nbsp;&nbsp;// niemals mischen!</p>
+
+    <h4>Dateien</h4>
+    <p class="formula">fstream f("datei.txt", ios::in | ios::out | ios::binary);<br>if (!f.is_open()) { … }<br>f.seekg(0, ios::end); size = f.tellg();&nbsp;&nbsp;// oder gleich mit ios::ate<br>f.read((char*)&amp;wert, sizeof(int));<br>f.write((char*)&amp;wert, sizeof(int));<br>f.close();</p>
+
+    <h4>Templates</h4>
+    <p class="formula">template &lt;typename T&gt; T max(const T&amp; a, const T&amp; b);<br>template &lt;typename T&gt; class Array { T* daten; … };<br>Array&lt;int&gt; a(10);</p>
+
+    <h4>Ausnahmen</h4>
+    <p class="formula">try { … }<br>catch (bad_alloc&amp; ex) { cerr &lt;&lt; ex.what(); exit(1); }<br>catch (...) { /* alles Übrige */ }</p>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft GPI16 · Programmieren in C++, Teil II · Erweiterte Programmierung · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "gpi16:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Heft-Navigation (vor / zurück, innerhalb des Fachs) ---------- */
+  (function(){
+    var groups = [
+      ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"],
+      ["GPI15_Lernheft.html","GPI16_Lernheft.html","GPI21_Lernheft.html","GPI22_Lernheft.html"],
+      ["MAI06_Lernheft.html","MAI09_Lernheft.html","MAI11_Lernheft.html","MAI13_Lernheft.html","MAI14C_Lernheft.html"]
+    ];
+    var base = function(n){ return n.replace(/\.html$/i, "").toLowerCase(); };
+    var cur = base(decodeURIComponent(location.pathname.split("/").pop()));
+    var files = groups[0], idx = -1;
+    for(var g = 0; g < groups.length; g++){
+      for(var i = 0; i < groups[g].length; i++){ if(base(groups[g][i]) === cur){ files = groups[g]; idx = i; break; } }
+      if(idx > -1) break;
+    }
+    var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
+    if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
+    if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
+  })();
+
+  /* ---------- Kopier-Button an jede Definitions-Box ---------- */
+  (function(){
+    if(!navigator.clipboard) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".box.def"), function(box){
+      var txt = box.innerText.trim();
+      var b = document.createElement("button");
+      b.className = "copy-def"; b.type = "button"; b.textContent = "⧉ Kopieren"; b.title = "Definition kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(txt).then(function(){
+          b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = "⧉ Kopieren"; }, 1200);
+        }, function(){ b.textContent = "⚠ Fehler"; });
+      });
+      box.appendChild(b);
+    });
+  })();
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll(".sec details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

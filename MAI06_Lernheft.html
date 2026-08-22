@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAI06 – Vektoralgebra &amp; Analytische Geometrie</title>
+<style>
+:root{
+  --paper:#EFF2F0;
+  --paper-raised:#F9FBFA;
+  --paper-sunk:#E4E9E6;
+  --ink:#17201D;
+  --ink-soft:#5A6663;
+  --ink-faint:#8A9490;
+  --rule:#CBD4D0;
+  --rule-soft:#DDE4E1;
+  --accent:#0E5F63;
+  --accent-soft:#D5E6E5;
+  --mark:#8E2436;
+  --mark-soft:#F0DEE1;
+  --mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;
+  --paper-raised:#1B211E;
+  --paper-sunk:#0C100E;
+  --ink:#E3EAE7;
+  --ink-soft:#9FADA8;
+  --ink-faint:#6F7C78;
+  --rule:#2C3733;
+  --rule-soft:#222B28;
+  --accent:#54C3C6;
+  --accent-soft:#123033;
+  --mark:#E38294;
+  --mark-soft:#33191F;
+  --mark-deep:#F0A6B3;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5.5rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{
+  max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;align-items:center;gap:.3rem}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{
+  font-size:.72rem;font-weight:650;letter-spacing:.05em;
+  background:var(--paper-raised);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:2px;
+  padding:.38rem .6rem;line-height:1;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.icon{min-width:2.1rem;text-align:center}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.heftnav{display:flex;align-items:center;gap:.3rem}
+select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
+
+/* Fortschrittsschiene */
+.rail{height:3px;background:var(--rule-soft);position:relative}
+.rail i{display:block;height:100%;width:0;background:var(--mark);transition:width .35s ease}
+.progress-txt{font-family:var(--font-ui);font-size:.7rem;font-weight:650;color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+
+/* ---------- Grundraster ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.6rem;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ---------- Inhaltsnavigation ---------- */
+.toc{position:sticky;top:5rem;max-height:calc(100vh - 7rem);overflow-y:auto;padding:1.6rem 0 3rem;font-family:var(--font-ui)}
+@media (max-width:980px){.toc{position:static;max-height:none;padding:1.2rem 0 .4rem;border-bottom:1px solid var(--rule)}
+  .toc-body{display:none}.toc.open .toc-body{display:block}}
+.toc-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:750;margin:0 0 .7rem;display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font-family:var(--font-ui);cursor:default}
+@media (max-width:980px){.toc-h{cursor:pointer}}
+.toc-h .chev{display:none}
+@media (max-width:980px){.toc-h .chev{display:inline}}
+.toc a{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-size:.79rem;line-height:1.35;color:var(--ink-soft);text-decoration:none;
+  padding:.32rem .45rem .32rem .3rem;border-left:2px solid transparent;transition:.15s;
+}
+.toc a:hover{color:var(--accent);background:var(--paper-raised)}
+.toc a.here{color:var(--accent);border-left-color:var(--accent);font-weight:650}
+.toc a .num{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-faint);min-width:1.4rem}
+.toc a.done{color:var(--ink-faint)}
+.toc a.done .num::after{content:"✓";color:var(--mark);margin-left:.15rem;font-family:var(--font-ui)}
+.toc a.marked{background:var(--mark-soft)}
+
+/* ---------- Titelblock ---------- */
+.hero{padding:3.2rem 0 2rem;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .9rem}
+.hero h1{font-size:2.55rem;line-height:1.1;margin:0 0 .7rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:1rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.hero .meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-top:1.4rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+
+/* ---------- Abschnitte ---------- */
+main{padding-bottom:6rem;min-width:0}
+.sec{position:relative;padding:2.4rem 0 .6rem;border-bottom:1px solid var(--rule-soft);scroll-margin-top:5.5rem}
+.sec:last-of-type{border-bottom:0}
+.sec.read{background:linear-gradient(to right,var(--mark-soft),transparent 62%);border-radius:2px}
+.sec.read > .sec-head h2,.sec.read > .sec-head h3{color:var(--ink-soft)}
+
+.sec-head{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.5rem}
+/* Registerkarte / Reiter */
+.tab{
+  flex:0 0 auto;position:relative;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:700;
+  background:var(--paper-raised);color:var(--ink-faint);
+  border:1px solid var(--rule);border-right-width:3px;border-right-color:var(--rule);
+  border-radius:3px 0 0 3px;
+  padding:.3rem .5rem;line-height:1;min-width:2.6rem;text-align:center;
+  transition:.18s;margin-top:.35rem;
+}
+.tab:hover{border-color:var(--mark);border-right-color:var(--mark);color:var(--mark)}
+.sec.read .tab{background:var(--mark);border-color:var(--mark);border-right-color:var(--mark-deep);color:#fff;box-shadow:0 1px 3px var(--shadow)}
+html[data-theme="dark"] .sec.read .tab{color:#12100F}
+@media (min-width:1240px){
+  .sec-head{margin-left:0}
+  .tab{margin-left:-3.6rem;position:absolute;left:0}
+  .sec-head{padding-left:0}
+}
+.sec-head-txt{min-width:0;flex:1 1 auto}
+.sec h2{font-size:1.72rem;line-height:1.18;margin:.1rem 0 .25rem;font-weight:600;letter-spacing:-.01em}
+.sec h3{font-size:1.24rem;line-height:1.25;margin:.1rem 0 .25rem;font-weight:600}
+.kicker{font-family:var(--font-ui);font-size:.65rem;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);font-weight:750;margin:0 0 .3rem}
+.sec-tools{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.tool{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.03em;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--rule-soft);
+  border-radius:2px;padding:.24rem .48rem;line-height:1;transition:.15s;
+}
+.tool:hover{color:var(--mark);border-color:var(--mark)}
+.sec.read .tool.t-read{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.sec.bookmarked .tool.t-band{color:#fff;background:var(--mark);border-color:var(--mark)}
+html[data-theme="dark"] .sec.bookmarked .tool.t-band{color:#12100F}
+
+/* ---------- Leseband ---------- */
+.band{
+  display:none;position:absolute;top:-.2rem;right:-.4rem;z-index:5;
+  width:2.1rem;padding:.5rem .25rem 1.5rem;
+  background:linear-gradient(160deg,var(--mark),var(--mark-deep));
+  color:#fff;font-family:var(--font-ui);font-size:.58rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;text-align:center;
+  writing-mode:vertical-rl;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);
+  box-shadow:-2px 2px 6px var(--shadow);
+}
+html[data-theme="dark"] .band{color:#12100F}
+.sec.bookmarked .band{display:block}
+.sec.bookmarked{outline:1px solid var(--mark);outline-offset:.6rem;border-radius:2px}
+
+.jump{
+  position:fixed;right:1rem;bottom:1rem;z-index:60;display:none;
+  font-family:var(--font-ui);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  background:var(--mark);color:#fff;border:0;border-radius:2px;
+  padding:.62rem .85rem;box-shadow:0 3px 12px var(--shadow);
+}
+html[data-theme="dark"] .jump{color:#12100F}
+.jump.on{display:block}
+
+/* ---------- Fliesstext ---------- */
+.body{max-width:74ch}
+.body p{margin:.75rem 0}
+.body ul,.body ol{margin:.7rem 0;padding-left:1.3rem}
+.body li{margin:.3rem 0}
+.body strong{font-weight:700}
+.body em{font-style:italic;color:var(--ink-soft)}
+.body code{font-family:var(--font-mono);font-size:.86em;background:var(--paper-sunk);padding:.08em .32em;border-radius:2px}
+.body h4{font-family:var(--font-ui);font-size:.86rem;font-weight:750;letter-spacing:.02em;margin:1.5rem 0 .4rem;color:var(--accent)}
+.lead{font-size:1.03rem;color:var(--ink-soft)}
+
+/* ---------- Tabellen ---------- */
+.tw{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--rule);border-radius:2px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--paper-sunk)}
+td code,th code{background:transparent;padding:0}
+.mono td:first-child,.mono th:first-child{font-family:var(--font-mono);white-space:nowrap}
+.layer td:first-child{font-family:var(--font-mono);font-weight:700;color:var(--accent);width:2.2rem}
+
+/* ---------- Merkkästen ---------- */
+.box{border-left:3px solid var(--accent);background:var(--paper-raised);padding:.75rem 1rem;margin:1.2rem 0;border-radius:0 2px 2px 0;position:relative}
+.copy-def{position:absolute;top:.4rem;right:.45rem;font-family:var(--font-ui);font-size:.58rem;font-weight:650;letter-spacing:.03em;background:var(--paper-sunk);color:var(--ink-faint);border:1px solid var(--rule-soft);border-radius:2px;padding:.2rem .42rem;line-height:1;cursor:pointer;opacity:0;transition:.15s}
+.box.def:hover .copy-def,.copy-def:focus-visible{opacity:1}
+.copy-def:hover{color:var(--accent);border-color:var(--accent)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.box .lbl{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--accent);display:block;margin-bottom:.3rem}
+.box.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+.box.warn .lbl{color:var(--mark)}
+.box.def{border-left-color:var(--ink);background:var(--paper-sunk)}
+.box.def .lbl{color:var(--ink-soft)}
+
+.formula{font-family:var(--font-mono);font-size:.92rem;background:var(--paper-sunk);padding:.5rem .75rem;border-radius:2px;display:inline-block;margin:.2rem 0}
+
+/* ---------- Einsendeaufgabe ---------- */
+.task{border:1px solid var(--rule);border-radius:2px;margin:1.3rem 0;background:var(--paper-raised);overflow:hidden}
+.task-h{display:flex;align-items:baseline;gap:.6rem;padding:.75rem 1rem;background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+.task-n{font-family:var(--font-mono);font-weight:800;color:var(--accent);font-size:1rem}
+.task-t{font-family:var(--font-ui);font-weight:700;font-size:.86rem;flex:1 1 auto}
+.task-p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task-q{padding:.85rem 1rem;font-size:.94rem}
+.task-q ol{margin:.4rem 0;padding-left:1.4rem}
+details{border-top:1px dashed var(--rule)}
+summary{
+  font-family:var(--font-ui);font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  padding:.6rem 1rem;color:var(--mark);cursor:pointer;list-style:none;user-select:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+summary:hover{background:var(--mark-soft)}
+.sol{padding:.2rem 1rem 1rem;font-size:.92rem;border-top:1px solid var(--rule-soft)}
+.sol .step{font-family:var(--font-mono);font-size:.84rem;background:var(--paper-sunk);padding:.55rem .7rem;border-radius:2px;margin:.5rem 0;white-space:pre-wrap;line-height:1.6}
+.sol .res{border-left:3px solid var(--mark);padding-left:.7rem;margin:.6rem 0;font-weight:700}
+
+/* ---------- Abkürzungen ---------- */
+.abbr-grid{columns:2;column-gap:2rem;font-size:.86rem;margin:1rem 0}
+@media (max-width:640px){.abbr-grid{columns:1}}
+.abbr-grid dl{margin:0}
+.abbr-row{break-inside:avoid;display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px solid var(--rule-soft)}
+.abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
+.abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
+
+footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+</style>
+<script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("mai06:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">MAI06 <span>· WMAPS</span></div>
+    <nav class="heftnav">
+      <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+      <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
+      <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
+      <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
+    </nav>
+    <div class="topbar-spacer"></div>
+    <span class="progress-txt" id="ptxt">0 / 0 gelesen</span>
+    <div class="ctl">
+      <select class="btn" id="fontSel" autocomplete="off" title="Schriftart wählen" aria-label="Schriftart wählen">
+        <option value="serif">Charter</option>
+        <option value="georgia">Georgia</option>
+        <option value="sans">Sans</option>
+        <option value="humanist">Verdana</option>
+        <option value="cambria">Cambria</option>
+      </select>
+      <button class="btn icon" id="fsMinus" title="Schrift kleiner" aria-label="Schrift verkleinern">A−</button>
+      <button class="btn icon" id="fsPlus" title="Schrift grösser" aria-label="Schrift vergrössern">A+</button>
+      <button class="btn" id="themeBtn" title="Hell / Dunkel">◐ Dunkel</button>
+      <button class="btn" id="resetBtn" title="Alle Markierungen löschen">Zurücksetzen</button>
+    </div>
+  </div>
+  <div class="rail"><i id="railFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <button class="toc-h" id="tocToggle">Inhalt <span class="chev">▾</span></button>
+    <div class="toc-body" id="tocBody"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Studienheft · Wilhelm Büchner Hochschule</p>
+      <h1>Vektoralgebra und Analytische Geometrie</h1>
+      <p class="sub">Vektoren grafisch und in Koordinaten, lineare Unabhängigkeit, Skalar-, Vektor- und Spatprodukt sowie Geraden und Ebenen im Raum mit ihren Schnittgebilden – mit Übungsaufgaben und Lösungswegen.</p>
+      <div class="meta">
+        <span>WMAPS · MAI06 · 1124K19</span>
+        <span>3 Kapitel</span>
+        <span>Übungsaufgaben mit Lösungen</span>
+      </div>
+    </div>
+
+<!-- ══════════════ KAPITEL 1 ══════════════ -->
+<section class="sec" id="k1" data-num="1" data-title="Grundlagen der Vektoralgebra">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">1</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 1</p>
+      <h2>Grundlagen der Vektoralgebra</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Vektoren sind gerichtete Strecken. Erst grafisch, dann in Koordinaten – und am Ende der zentrale Begriff der linearen Algebra: die lineare Unabhängigkeit.</p>
+
+    <div class="box def">
+      <span class="lbl">Vektor und Gleichheit (Def. 1.1 / 1.2)</span>
+      <p>Ein <strong>Vektor</strong> <span class="mono">a = AE</span> mit Anfangspunkt A und Endpunkt E ist die gerichtete Strecke von A nach E.</p>
+      <p><strong>Zwei Vektoren sind gleich, wenn sie in Länge und Richtung übereinstimmen</strong> – auf Anfangs- und Endpunkt kommt es <em>nicht</em> an. Verschieben ändert den Vektor also nicht.</p>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Betrag</strong> |a|</td><td>die Länge des Vektors – eine reelle Zahl</td></tr>
+        <tr><td><strong>Repräsentant</strong></td><td>jede durch Verschieben erzeugte Kopie desselben Vektors</td></tr>
+        <tr><td><strong>Ortsvektor</strong></td><td>der Repräsentant, dessen Anfangspunkt der Koordinatenursprung ist</td></tr>
+        <tr><td><strong>Einheitsvektor</strong> e</td><td>Vektor mit Betrag 1; e<sub>a</sub> = Einheitsvektor in Richtung von a</td></tr>
+        <tr><td><strong>Standard-Einheitsvektoren</strong></td><td>e₁, e₂, e₃ – zeigen in Richtung der x-, y- bzw. z-Achse</td></tr>
+        <tr><td><strong>antiparallel</strong></td><td>gleiche Länge, parallel, aber entgegengesetzte Richtung → <em>nicht</em> gleich</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>1.1.2 Grafisches Rechnen</h4>
+    <ul>
+      <li><strong>Addition</strong> (Def. 1.3): a₂ so verschieben, dass sein Anfangspunkt auf dem Endpunkt von a₁ liegt; die Summe reicht vom Anfang von a₁ zum Ende von a₂.</li>
+      <li><strong>Negativer Vektor</strong> (Def. 1.4): −a vertauscht Anfangs- und Endpunkt – gleiche Länge, entgegengesetzte Richtung.</li>
+      <li><strong>Subtraktion</strong> (Def. 1.5): <span class="mono">a − b = a + (−b)</span>.</li>
+      <li><strong>Nullvektor</strong> (Def. 1.6): Anfangs- und Endpunkt identisch, Länge 0, per Definition <em>jede beliebige</em> Richtung. Er ist das <strong>neutrale Element</strong>: a + 0 = a.</li>
+      <li><strong>Eine Division durch Vektoren gibt es nicht.</strong></li>
+    </ul>
+    <div class="box def">
+      <span class="lbl">Rechenregeln (Sätze 1.1–1.3)</span>
+      <p class="formula">a₁ + a₂ = a₂ + a₁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Kommutativgesetz)<br>(a₁ + a₂) + a₃ = a₁ + (a₂ + a₃)&nbsp;&nbsp;(Assoziativgesetz)<br><br>λ·(μ·a) = (λ·μ)·a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Assoziativgesetz)<br>(λ + μ)·a = λ·a + μ·a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1. Distributivgesetz)<br>λ·(a + b) = λ·a + λ·b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2. Distributivgesetz)</p>
+      <p><strong>Skalare Multiplikation</strong> (Def. 1.7): |λ·a| = |λ|·|a|; Richtung bleibt für λ &gt; 0, kehrt sich um für λ &lt; 0, und für λ = 0 entsteht der Nullvektor. Anschaulich: strecken (|λ| &gt; 1) oder stauchen, bei negativem λ zusätzlich umdrehen.</p>
+    </div>
+
+    <h4>1.2 Koordinatendarstellung</h4>
+    <p>Ein Vektor wird als einspaltige Matrix geschrieben; seine Einträge heißen <strong>Koordinaten</strong> oder <strong>Komponenten</strong>. In der Ebene zwei, im Raum drei, allgemein n im ℝⁿ.</p>
+    <div class="box def">
+      <span class="lbl">Die vier Grundformeln</span>
+      <p class="formula">Vektor aus zwei Punkten (Satz 1.4):&nbsp;&nbsp;AE = E − A&nbsp;&nbsp;(Koordinaten von A abziehen)<br><br>Addition (Satz 1.5):&nbsp;&nbsp;a + b = (a₁+b₁, a₂+b₂, …, aₙ+bₙ)ᵀ&nbsp;&nbsp;— komponentenweise<br>Skalare Mult.:&nbsp;&nbsp;λ·a = (λa₁, λa₂, …, λaₙ)ᵀ<br><br>Betrag (Satz 1.6):&nbsp;&nbsp;|a| = √(a₁² + a₂² + … + aₙ²)&nbsp;&nbsp;— das ist Pythagoras</p>
+      <p>Addiert werden dürfen nur Vektoren <strong>derselben Dimension</strong>.</p>
+    </div>
+    <p><strong>Beispiel:</strong> |(3, 4)ᵀ| = √(9+16) = 5 &nbsp;·&nbsp; |(−1, 3, −2)ᵀ| = √(1+9+4) = √14 &nbsp;·&nbsp; |e₁| = 1 ✓</p>
+
+    <div class="box def">
+      <span class="lbl">Linearkombination (Def. 1.9)</span>
+      <p>Jeder Vektor der Form <span class="mono">a = λ₁a₁ + λ₂a₂ + … + λ<sub>k</sub>a<sub>k</sub></span> heißt <strong>Linearkombination</strong> von a₁,…,a<sub>k</sub>.</p>
+      <p>Ob ein Vektor eine Linearkombination gegebener Vektoren ist, führt immer auf ein <strong>lineares Gleichungssystem</strong>: Ansatz aufstellen, komponentenweise lesen, lösen. Ist das System unlösbar (Widerspruch wie „−1 = 0“), ist er keine.</p>
+    </div>
+
+    <h4>1.3 Lineare Unabhängigkeit</h4>
+    <div class="box def">
+      <span class="lbl">Definition 1.10</span>
+      <p>{a₁,…,a<sub>k</sub>} heißt <strong>linear unabhängig</strong>, wenn sich der Nullvektor <strong>nur trivial</strong> darstellen lässt:</p>
+      <p class="formula">λ₁a₁ + λ₂a₂ + … + λ<sub>k</sub>a<sub>k</sub> = 0&nbsp;&nbsp;⟹&nbsp;&nbsp;λ₁ = λ₂ = … = λ<sub>k</sub> = 0</p>
+      <p>Gibt es eine Darstellung, bei der <strong>nicht alle</strong> Koeffizienten null sind, heißt die Menge <strong>linear abhängig</strong>.</p>
+      <p><strong>Gleichwertig und anschaulicher:</strong> Linear abhängig heißt, dass sich <strong>mindestens einer</strong> der Vektoren als Linearkombination der übrigen schreiben lässt.</p>
+    </div>
+    <div class="box warn">
+      <span class="lbl">Satz 1.8 – der Zeitsparer</span>
+      <p>Ist die <strong>Anzahl k der Vektoren größer als die Dimension n</strong>, so sind sie <strong>stets linear abhängig</strong>. Vier Vektoren im ℝ³ sind also ohne jede Rechnung linear abhängig.</p>
+    </div>
+    <p><strong>Standardverfahren</strong>, wenn man es nicht ansieht: Ansatz λ₁a₁ + λ₂a₂ + λ₃a₃ = 0 aufstellen, das entstehende homogene LGS mit dem <strong>Gauß-Algorithmus</strong> lösen. Eindeutige Lösung λ = 0 → unabhängig; unendlich viele Lösungen → abhängig.</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 2 ══════════════ -->
+<section class="sec" id="k2" data-num="2" data-title="Produkte von Vektoren">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">2</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 2</p>
+      <h2>Produkte von Vektoren</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Drei Produkte, drei Ergebnistypen: Skalarprodukt → Zahl, Vektorprodukt → Vektor, Spatprodukt → Zahl (Volumen).</p>
+
+    <h4>2.1 Skalarprodukt</h4>
+    <div class="box def">
+      <span class="lbl">Definition 2.1 und Satz 2.3 – die zwei Formeln</span>
+      <p class="formula">geometrisch:&nbsp;&nbsp;⟨a, b⟩ = |a| · |b| · cos φ<br>in Koordinaten:&nbsp;&nbsp;⟨a, b⟩ = a₁b₁ + a₂b₂ + a₃b₃</p>
+      <p>Das Ergebnis ist eine <strong>reelle Zahl</strong> (ein „Skalar“) – daher der Name. In Koordinaten also: paarweise multiplizieren und aufsummieren.</p>
+    </div>
+    <p><strong>Rechenregeln (Satz 2.1):</strong> ⟨a,b⟩ = ⟨b,a⟩ (kommutativ) · ⟨r·a, b⟩ = r·⟨a,b⟩ · ⟨a, b+c⟩ = ⟨a,b⟩ + ⟨a,c⟩ (linear).</p>
+    <div class="box warn">
+      <span class="lbl">Satz 2.2 – Orthogonalitätskriterium</span>
+      <p>Zwei vom Nullvektor verschiedene Vektoren stehen <strong>genau dann senkrecht aufeinander, wenn ⟨a, b⟩ = 0</strong> ist.</p>
+      <p><em>Warum:</em> Bei Vektoren ≠ 0 sind beide Beträge ungleich null, also wird das Produkt genau dann null, wenn cos φ = 0 ist – und das heißt φ = 90° = π/2.</p>
+    </div>
+    <div class="box def">
+      <span class="lbl">Satz 2.4 – Winkel zwischen zwei Vektoren</span>
+      <p class="formula">cos φ = ⟨a, b⟩ / (|a| · |b|)&nbsp;&nbsp;&nbsp;&nbsp;⟹&nbsp;&nbsp;φ = arccos( ⟨a,b⟩ / (|a|·|b|) )</p>
+      <p>Der Zähler wird dabei <strong>in Koordinaten</strong> berechnet – sonst wäre die Formel zwar richtig, aber sinnlos. Beide Vektoren müssen ≠ 0 sein, sonst würde durch null dividiert.</p>
+      <p><strong>Beispiel:</strong> a = (1, 1, −1)ᵀ, b = (2, 0, 3)ᵀ → ⟨a,b⟩ = 2 + 0 − 3 = −1, |a| = √3, |b| = √13 → cos φ = −1/(√3·√13) ≈ −0,160 → φ ≈ 99,2°.</p>
+    </div>
+
+    <h4>2.2 Vektorprodukt (Kreuzprodukt)</h4>
+    <div class="box def">
+      <span class="lbl">Definition 2.2 – existiert nur im ℝ³</span>
+      <p class="formula">a × b = ( a₂b₃ − a₃b₂ ,&nbsp; a₃b₁ − a₁b₃ ,&nbsp; a₁b₂ − a₂b₁ )ᵀ</p>
+      <p>Das Ergebnis ist ein <strong>Vektor</strong>. Im ℝ² gibt es kein Vektorprodukt.</p>
+      <p><strong>Beispiel:</strong> a = (2, −2, 1)ᵀ, b = (3, 2, 6)ᵀ → a × b = (−2·6 − 1·2, 1·3 − 2·6, 2·2 − (−2)·3)ᵀ = (−14, −9, 10)ᵀ</p>
+    </div>
+    <p><strong>Rechenregeln (Satz 2.5):</strong> a × b = −(b × a) – <strong>nicht kommutativ, sondern antikommutativ</strong> · (r·a) × b = a × (r·b) = r·(a × b) · a × (b + c) = a×b + a×c (linear).</p>
+    <div class="box warn">
+      <span class="lbl">Satz 2.6 – die entscheidende Eigenschaft</span>
+      <p>Für a, b ≠ 0 mit c = a × b gilt:<br>
+      <strong>a)</strong> Sind a und b <strong>parallel</strong> (a = λb), so ist c = <strong>0</strong>.<br>
+      <strong>b)</strong> Sind sie nicht parallel, so steht c <strong>senkrecht auf a und auf b</strong>.</p>
+      <p>Genau daraus gewinnt man später den <strong>Normalenvektor</strong> einer Ebene. Probe: ⟨a×b, a⟩ = ⟨a×b, b⟩ = 0.</p>
+    </div>
+
+    <h4>2.3 Spatprodukt</h4>
+    <div class="box def">
+      <span class="lbl">Definition 2.3 und Satz 2.7</span>
+      <p class="formula">⟨a b c⟩ = ⟨a, b × c⟩&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V = |⟨a b c⟩|</p>
+      <p>Kombination aus Vektor- und Skalarprodukt, deshalb nur im ℝ³. Der <strong>Betrag</strong> ist das Volumen des von a, b, c aufgespannten <strong>Spats</strong> (Parallelepiped).</p>
+    </div>
+    <div class="box warn">
+      <span class="lbl">Satz 2.8 – wann das Spatprodukt null ist</span>
+      <p>a) wenn einer der Vektoren der Nullvektor ist,<br>
+      b) wenn die drei Vektoren <strong>in einer gemeinsamen Ebene liegen</strong> – also linear abhängig sind.</p>
+      <p>Anschaulich: Das Spat hat dann die Höhe null, also auch das Volumen null. Damit ist <strong>⟨a b c⟩ = 0 ein Test auf lineare Abhängigkeit</strong> dreier Vektoren im Raum.</p>
+    </div>
+    <p><strong>Beispiel:</strong> a = (1,2,3)ᵀ, b = (−3,0,2)ᵀ, c = (−1,3,2)ᵀ → b × c = (−6, 4, −9)ᵀ … ⟨a, b×c⟩ = −18, also V = 18. Für a = (1,2,3)ᵀ, b = (−3,0,2)ᵀ, c = (1,6,4)ᵀ ergibt sich 0 – und tatsächlich gilt 2a − b = c, die drei sind linear abhängig.</p>
+    <p>Alternativ berechnet Satz 2.9 das Spatprodukt <strong>als Determinante</strong> der aus a, b, c gebildeten 3×3-Matrix (Regel von Sarrus).</p>
+  </div>
+</section>
+
+<!-- ══════════════ KAPITEL 3 ══════════════ -->
+<section class="sec" id="k3" data-num="3" data-title="Geraden und Ebenen im Raum">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">3</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Kapitel 3</p>
+      <h2>Geraden und Ebenen im Raum</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Analytische Geometrie: Objekte durch Gleichungen beschreiben – und ihre Schnittgebilde ausrechnen.</p>
+
+    <div class="box def">
+      <span class="lbl">Die drei Darstellungsformen</span>
+      <p class="formula">Gerade (Def. 3.1):&nbsp;&nbsp;g: x = P₁ + t·(P₂ − P₁),&nbsp;&nbsp;t ∈ ℝ<br><br>Ebene, Parameterform (Def. 3.2):<br>&nbsp;&nbsp;E: x = P₁ + t·(P₂ − P₁) + s·(P₃ − P₁),&nbsp;&nbsp;t, s ∈ ℝ<br><br>Ebene, parameterfreie Form (Def. 3.3):<br>&nbsp;&nbsp;E: ax + by + cz = D</p>
+    </div>
+    <ul>
+      <li>(P₂ − P₁) ist der <strong>Richtungsvektor</strong> – berechnet als Koordinatendifferenz.</li>
+      <li>Der Richtungsvektor ist <strong>nicht eindeutig</strong>: Jedes Vielfache ≠ 0 tut es ebenso. Auch als Aufpunkt taugt jeder Punkt der Geraden. Deshalb spricht man korrekt von <em>einer</em>, nicht von <em>der</em> Geradengleichung.</li>
+      <li>Für die Ebene dürfen die drei Punkte <strong>nicht auf einer gemeinsamen Geraden</strong> liegen – nur dann ist sie eindeutig (deshalb wackelt ein dreibeiniger Tisch nicht).</li>
+      <li><strong>Punktprobe:</strong> Punkt einsetzen und prüfen, ob es ein passendes t (bzw. t und s) gibt – bei der parameterfreien Form einfach die Koordinaten einsetzen.</li>
+    </ul>
+
+    <div class="box def">
+      <span class="lbl">Satz 3.1 – Normalenvektor und parameterfreie Form</span>
+      <p>Ist n ein Vektor senkrecht auf E (<strong>Normalenvektor</strong>) und P ein Punkt auf E, so gilt</p>
+      <p class="formula">E:&nbsp; n₁x + n₂y + n₃z = ⟨n, P⟩</p>
+      <p>Die Komponenten des Normalenvektors sind also die <strong>Koeffizienten</strong> der Gleichung, die rechte Seite ist das Skalarprodukt aus n und einem Punkt der Ebene.</p>
+    </div>
+    <div class="box">
+      <span class="lbl">Algorithmus: Parameterform → parameterfreie Form</span>
+      <p><strong>1.</strong> Normalenvektor als Vektorprodukt der beiden Richtungsvektoren berechnen: n = u × v<br>
+      <strong>2.</strong> D = ⟨n, P₁⟩ berechnen<br>
+      <strong>3.</strong> mit n = (a, b, c)ᵀ die Gleichung ax + by + cz = D hinschreiben</p>
+      <p><strong>Probe:</strong> Einige Punkte aus der Parameterform berechnen und in die parameterfreie Gleichung einsetzen.</p>
+    </div>
+    <div class="box">
+      <span class="lbl">Umgekehrt: parameterfrei → Parameterform</span>
+      <p>Nicht mit ausgefeilten Algorithmen aufhalten – die einfache Methode genügt: <strong>Drei Punkte der Ebene bestimmen</strong>, die nicht auf einer Geraden liegen (z.&nbsp;B. jeweils zwei Koordinaten null setzen und nach der dritten auflösen), und daraus die Parameterform bilden.</p>
+      <p><em>Beispiel</em> E: x − y + z = −3 → P₁ = (0,0,−3)ᵀ, P₂ = (−3,0,0)ᵀ, P₃ = (0,3,0)ᵀ → E: x = (0,0,−3)ᵀ + t·(−1,0,1)ᵀ + s·(0,1,1)ᵀ (Richtungsvektoren dürfen gekürzt werden).</p>
+    </div>
+
+    <h4>3.2 Schnitte</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Fall</th><th>Vorgehen</th><th>mögliche Ergebnisse</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Gerade ∩ Gerade</strong></td><td>beide Parameterformen gleichsetzen → LGS in t und s</td><td>Schnittpunkt · parallel (unlösbar) · identisch · <strong>windschief</strong></td></tr>
+        <tr><td><strong>Gerade ∩ Ebene</strong></td><td>Komponenten x, y, z der Geraden in die parameterfreie Ebenengleichung einsetzen → eine Gleichung in t</td><td>genau ein Durchstoßpunkt · keiner (Widerspruch wie „2 = −1“) · Gerade liegt in der Ebene (Identität)</td></tr>
+        <tr><td><strong>Ebene ∩ Ebene</strong></td><td>Parameterform der einen in die parameterfreie der anderen einsetzen</td><td>Schnittgerade · parallel (Widerspruch „1 = 2“) · identisch (wahre Aussage „1 = 1“)</td></tr>
+      </tbody>
+    </table></div>
+    <p><em>Beispiel Durchstoßpunkt:</em> E: 21x + 15y + 8z = 89 und g: x = (1,0,0)ᵀ + t·(2,0,−1)ᵀ. Einsetzen von x = 1+2t, y = 0, z = −t liefert 21(1+2t) − 8t = 89 → t = 2 → S = (5, 0, −2)ᵀ.</p>
+
+    <div class="box def">
+      <span class="lbl">Winkel – für die Einsendeaufgabe</span>
+      <p class="formula">Gerade/Gerade:&nbsp;&nbsp;cos φ = |⟨r₁, r₂⟩| / (|r₁|·|r₂|)&nbsp;&nbsp;(Richtungsvektoren)<br>Ebene/Ebene:&nbsp;&nbsp;&nbsp;&nbsp;cos φ = |⟨n₁, n₂⟩| / (|n₁|·|n₂|)&nbsp;&nbsp;(Normalenvektoren)<br>Gerade/Ebene:&nbsp;&nbsp;&nbsp;<strong>sin φ = |⟨r, n⟩| / (|r|·|n|)</strong></p>
+      <p>Beim Schnittwinkel zwischen Gerade und Ebene steht der <strong>Sinus</strong>, weil der Normalenvektor senkrecht zur Ebene zeigt – der über das Skalarprodukt berechnete Winkel ist also das Komplement zum gesuchten. Der Betrag im Zähler sorgt für den spitzen Winkel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ÜBUNGSAUFGABEN ══════════════ -->
+<section class="sec" id="ue" data-num="Ü" data-title="Übungsaufgaben">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">Ü</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Übung</p>
+      <h2>Übungsaufgaben mit Lösungswegen</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+        <button class="tool" id="openAll">Alle Lösungen öffnen</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Die Aufgabentypen des Hefts, durchgerechnet mit nachprüfbaren Zahlen.</p>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.1</span><span class="task-t">Vektor aus zwei Punkten, Betrag, Einheitsvektor</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Gegeben A = (1, −2, 2)ᵀ und E = (4, 2, 2)ᵀ. Bestimmen Sie den Vektor AE, seinen Betrag und den Einheitsvektor in seiner Richtung.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">AE = E − A = (4−1, 2−(−2), 2−2)ᵀ = (3, 4, 0)ᵀ
+|AE| = √(3² + 4² + 0²) = √25 = 5
+e = (1/|a|)·a = (3/5, 4/5, 0)ᵀ = (0,6 ; 0,8 ; 0)ᵀ</div>
+        <div class="res">Probe: |e| = √(0,36 + 0,64) = 1 ✓</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.2</span><span class="task-t">Linearkombination – oder nicht?</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>Ist a = (−2, 3)ᵀ eine Linearkombination von b₁ = (2, −2)ᵀ und b₂ = (−1, 1)ᵀ?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Ansatz aufstellen und zeilenweise lesen:</p>
+        <div class="step">λ₁·(2, −2)ᵀ + λ₂·(−1, 1)ᵀ = (−2, 3)ᵀ
+
+I:&nbsp;&nbsp; 2λ₁ − λ₂ = −2
+II: −2λ₁ + λ₂ =  3
+------------------------
+I + II:      0 =  1     ← Widerspruch</div>
+        <div class="res">Das System ist <strong>unlösbar</strong> – a ist keine Linearkombination von b₁ und b₂. Grund: b₂ = −½·b₁, die beiden spannen nur eine Gerade auf, und a liegt nicht darauf.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.3</span><span class="task-t">Lineare Unabhängigkeit prüfen</span><span class="task-p">Kapitel 1</span></div>
+      <div class="task-q"><p>a) Sind a₁ = (1,1,1)ᵀ, a₂ = (−1,0,1)ᵀ, a₃ = (1,2,0)ᵀ? &nbsp; b) Vier Vektoren im ℝ³ – was gilt immer?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Ansatz λ₁a₁ + λ₂a₂ + λ₃a₃ = 0 aufstellen. Hier sieht man die Abhängigkeit sogar direkt:</p>
+        <div class="step">a₁ + a₂ = (1−1, 1+0, 1+1)ᵀ = (0, 1, 2)ᵀ … passt nicht
+Probe mit λ₁ = λ₂ = 1, λ₃ = −1:
+(1,1,1)ᵀ + (−1,0,1)ᵀ − (1,2,0)ᵀ = (−1, −1, 2)ᵀ ≠ 0</div>
+        <p>Also das LGS lösen:</p>
+        <div class="step">I:   λ₁ − λ₂ + λ₃ = 0
+II:  λ₁      + 2λ₃ = 0
+III: λ₁ + λ₂      = 0
+
+III − I:  2λ₂ − λ₃ = 0  → λ₃ = 2λ₂
+in II:    λ₁ = −2λ₃ = −4λ₂
+in III:  −4λ₂ + λ₂ = 0 → λ₂ = 0 → λ₁ = λ₃ = 0</div>
+        <div class="res">a) Nur die triviale Lösung → die drei Vektoren sind <strong>linear unabhängig</strong>.<br>
+        b) Nach <strong>Satz 1.8</strong> sind vier Vektoren im ℝ³ <strong>immer linear abhängig</strong> – k &gt; n. Ohne jede Rechnung.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.4</span><span class="task-t">Skalarprodukt, Orthogonalität, Winkel</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>a = (1, 2, 2)ᵀ, b = (2, −1, 0)ᵀ, c = (0, 0, 3)ᵀ. Welche Paare stehen senkrecht? Wie groß ist der Winkel zwischen a und c?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">⟨a, b⟩ = 1·2 + 2·(−1) + 2·0 = 0      → a ⊥ b  ✓
+⟨b, c⟩ = 2·0 + (−1)·0 + 0·3   = 0      → b ⊥ c  ✓
+⟨a, c⟩ = 1·0 + 2·0 + 2·3      = 6      → nicht senkrecht
+
+|a| = √(1+4+4) = 3,   |c| = 3
+cos φ = 6 / (3·3) = 2/3 ≈ 0,6667
+φ = arccos(2/3) ≈ 48,19°</div>
+        <div class="res">a ⊥ b und b ⊥ c; der Winkel zwischen a und c beträgt ≈ <strong>48,2°</strong>. Merksatz: <strong>Skalarprodukt = 0 ⟺ senkrecht</strong> (für Vektoren ≠ 0).</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.5</span><span class="task-t">Vektorprodukt und Probe</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Berechnen Sie a × b für a = (2, −2, 1)ᵀ und b = (3, 2, 6)ᵀ und weisen Sie nach, dass das Ergebnis auf beiden senkrecht steht.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">a × b = ( a₂b₃ − a₃b₂ ,  a₃b₁ − a₁b₃ ,  a₁b₂ − a₂b₁ )ᵀ
+      = ( (−2)·6 − 1·2 ,  1·3 − 2·6 ,  2·2 − (−2)·3 )ᵀ
+      = ( −14 , −9 , 10 )ᵀ
+
+Probe:
+⟨a×b, a⟩ = (−14)·2 + (−9)·(−2) + 10·1 = −28 + 18 + 10 = 0 ✓
+⟨a×b, b⟩ = (−14)·3 + (−9)·2   + 10·6 = −42 − 18 + 60 = 0 ✓</div>
+        <div class="res">a × b = (−14, −9, 10)ᵀ. Beide Skalarprodukte sind null → das Ergebnis steht senkrecht auf a <em>und</em> b (Satz 2.6b). Wäre a parallel zu b, käme der Nullvektor heraus.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.6</span><span class="task-t">Spatvolumen und Ebenenlage</span><span class="task-p">Kapitel 2</span></div>
+      <div class="task-q"><p>Berechnen Sie das Spatprodukt von a = (1,0,0)ᵀ, b = (1,2,0)ᵀ, c = (1,1,3)ᵀ. Was bedeutet das Ergebnis? Und was gilt für a, b und d = (2,2,0)ᵀ?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">b × c = ( 2·3 − 0·1 ,  0·1 − 1·3 ,  1·1 − 2·1 )ᵀ = ( 6 , −3 , −1 )ᵀ
+⟨a b c⟩ = ⟨(1,0,0)ᵀ , (6,−3,−1)ᵀ⟩ = 6
+V = |6| = 6
+
+b × d = ( 2·0 − 0·2 ,  0·2 − 1·0 ,  1·2 − 2·2 )ᵀ = ( 0 , 0 , −2 )ᵀ
+⟨a b d⟩ = ⟨(1,0,0)ᵀ , (0,0,−2)ᵀ⟩ = 0</div>
+        <div class="res">Erstes Spat: <strong>V = 6</strong>. Zweiter Fall: ⟨a b d⟩ = <strong>0</strong> → die drei Vektoren liegen in <strong>einer Ebene</strong> (hier der x-y-Ebene) und sind damit <strong>linear abhängig</strong> – das Spat hat die Höhe null (Satz 2.8b).</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.7</span><span class="task-t">Ebene: Parameterform → parameterfreie Form</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Wandeln Sie um: E: x = (1, 0, 2)ᵀ + t·(1, 1, 0)ᵀ + s·(0, 1, 1)ᵀ. Liegt Q = (2, 3, 3)ᵀ auf E?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">1. Normalenvektor:  n = u × v mit u = (1,1,0)ᵀ, v = (0,1,1)ᵀ
+   n = ( 1·1 − 0·1 ,  0·0 − 1·1 ,  1·1 − 1·0 )ᵀ = ( 1 , −1 , 1 )ᵀ
+
+2. D = ⟨n, P₁⟩ = 1·1 + (−1)·0 + 1·2 = 3
+
+3. E:  x − y + z = 3</div>
+        <p>Punktprobe für Q = (2, 3, 3)ᵀ:</p>
+        <div class="step">2 − 3 + 3 = 2 ≠ 3</div>
+        <div class="res">E: <strong>x − y + z = 3</strong>; Q liegt <strong>nicht</strong> auf der Ebene. Kontrolle des Aufpunkts: 1 − 0 + 2 = 3 ✓</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.8</span><span class="task-t">Durchstoßpunkt Gerade / Ebene</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie den Schnittpunkt von E: x − 2z = −1 mit g: x = (1, 0, 0)ᵀ + t·(1, 1, 1)ᵀ.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">Komponenten der Geraden:  x = 1 + t,  y = t,  z = t
+in die Ebenengleichung einsetzen:
+
+(1 + t) − 2t = −1
+1 − t = −1
+t = 2
+
+zurück in die Geradengleichung:
+S = (1,0,0)ᵀ + 2·(1,1,1)ᵀ = (3, 2, 2)ᵀ</div>
+        <div class="res">Durchstoßpunkt <strong>S = (3, 2, 2)ᵀ</strong>. Probe: 3 − 2·2 = −1 ✓</div>
+        <p>Zur Erinnerung: Ergäbe sich ein <strong>Widerspruch</strong> (z.&nbsp;B. „2 = −1“), wäre die Gerade parallel zur Ebene; ergäbe sich eine <strong>wahre Aussage ohne t</strong> („1 = 1“), läge sie ganz in der Ebene.</p>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.9</span><span class="task-t">Lotgerade auf eine Ebene</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie die Gerade, die senkrecht auf E: x + 2y − 3z = 0 steht und durch P = (5, 3, 1)ᵀ verläuft, sowie ihren Schnittpunkt mit E.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Der entscheidende Gedanke: Die <strong>Koeffizienten der parameterfreien Form sind der Normalenvektor</strong> – und der ist genau der Richtungsvektor der Lotgeraden.</p>
+        <div class="step">n = (1, 2, −3)ᵀ
+
+g: x = (5, 3, 1)ᵀ + t·(1, 2, −3)ᵀ
+
+Komponenten einsetzen: x = 5+t, y = 3+2t, z = 1−3t
+(5+t) + 2(3+2t) − 3(1−3t) = 0
+5 + t + 6 + 4t − 3 + 9t = 0
+8 + 14t = 0    →   t = −4/7
+
+S = (5 − 4/7, 3 − 8/7, 1 + 12/7)ᵀ = (31/7, 13/7, 19/7)ᵀ</div>
+        <div class="res">g: x = (5,3,1)ᵀ + t·(1,2,−3)ᵀ, Lotfußpunkt <strong>S = (31/7, 13/7, 19/7)ᵀ</strong>. Probe: 31/7 + 26/7 − 57/7 = 0 ✓</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">Ü.10</span><span class="task-t">Schnittgerade zweier Ebenen</span><span class="task-p">Kapitel 3</span></div>
+      <div class="task-q"><p>Bestimmen Sie die Schnittgerade von E₁: x + y + z = 1 und E₂: x − z = 0.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Aus E₂ folgt x = z. Eine der Variablen als Parameter wählen:</p>
+        <div class="step">Setze z = t.   Dann x = t.
+in E₁:  t + y + t = 1  →  y = 1 − 2t
+
+g: x = (0, 1, 0)ᵀ + t·(1, −2, 1)ᵀ</div>
+        <p>Kontrolle über die Normalenvektoren: n₁ = (1,1,1)ᵀ, n₂ = (1,0,−1)ᵀ. Die Schnittgerade läuft senkrecht zu beiden, ihr Richtungsvektor ist also n₁ × n₂:</p>
+        <div class="step">n₁ × n₂ = ( 1·(−1) − 1·0 ,  1·1 − 1·(−1) ,  1·0 − 1·1 )ᵀ = (−1, 2, −1)ᵀ</div>
+        <div class="res">g: x = (0,1,0)ᵀ + t·(1,−2,1)ᵀ. Der Richtungsvektor stimmt mit −(n₁ × n₂) überein – Richtungsvektoren sind ja nur bis auf Vielfache bestimmt. ✓</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EINSENDEAUFGABE ══════════════ -->
+<section class="sec" id="ea" data-num="A" data-title="Einsendeaufgabe Typ A">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">A</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Einsendeaufgabe</p>
+      <h2>Einsendeaufgabe Typ A · MAI06-XX04-K19</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">18 Punkte in drei Aufgaben.</p>
+    <div class="box warn">
+      <span class="lbl">Bitte beachten</span>
+      <p>Die <strong>konkreten Zahlenwerte</strong> der Vektoren bitte aus dem Original-Aufgabenblatt übernehmen – bei der Textübernahme aus dem Studienheft werden Spaltenvektoren verstümmelt. Die Lösungswege unten zeigen das <strong>Verfahren</strong>, jeweils an einem vollständig durchgerechneten Beispiel gleicher Bauart.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.1</span><span class="task-t">Parameter bestimmen, für die zwei Vektortripel linear abhängig sind</span><span class="task-p">6 Pkt.</span></div>
+      <div class="task-q"><p>Für welche Werte der reellen Parameter x und y sind sowohl das eine als auch das andere Tripel von Vektoren linear abhängig?</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p>Der schnellste Weg für <strong>drei Vektoren im ℝ³</strong>: Sie sind genau dann linear abhängig, wenn ihr <strong>Spatprodukt null</strong> ist (Satz 2.8b) – gleichbedeutend mit einer Determinante von null.</p>
+        <div class="step">1. Spatprodukt ⟨a b c⟩ in Abhängigkeit vom Parameter aufstellen
+2. = 0 setzen und nach dem Parameter auflösen
+3. dasselbe für das zweite Tripel
+4. beide Bedingungen müssen GLEICHZEITIG erfüllt sein</div>
+        <p><strong>Beispiel gleicher Bauart:</strong> Für welches x sind (x, 1, 3)ᵀ, (0, 2, 2)ᵀ, (1, 2, 1)ᵀ linear abhängig?</p>
+        <div class="step">b × c = ( 2·1 − 2·2 ,  2·1 − 0·1 ,  0·2 − 2·1 )ᵀ = ( −2 , 2 , −2 )ᵀ
+⟨a, b×c⟩ = x·(−2) + 1·2 + 3·(−2) = −2x − 4
+
+−2x − 4 = 0   →   x = −2</div>
+        <div class="res">Für x = −2 sind die drei Vektoren linear abhängig. Bei zwei Tripeln und zwei Parametern (x und y) entstehen zwei Gleichungen – deren gemeinsame Lösung ist gesucht. Probe: Werte einsetzen und prüfen, dass sich der Nullvektor nichttrivial kombinieren lässt.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.2</span><span class="task-t">Ebene durch drei Punkte, Lotgerade durch einen vierten</span><span class="task-p">6 Pkt.</span></div>
+      <div class="task-q"><p>a) Zeigen Sie, dass A, B und C nicht auf einer gemeinsamen Geraden liegen. b) Ebenengleichung durch A, B, C in <strong>parameterfreier</strong> Form. c) Gleichung der Geraden, die senkrecht auf E steht und durch D verläuft.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <p><strong>a)</strong> Die drei Punkte liegen genau dann <em>nicht</em> auf einer Geraden, wenn AB und AC <strong>nicht parallel</strong> sind – also wenn <strong>AB × AC ≠ 0</strong> ist. Das ist zugleich Schritt 1 von Teil b), man rechnet es also nur einmal.</p>
+        <p><strong>b)</strong> Der Algorithmus aus Kapitel 3:</p>
+        <div class="step">u = B − A,   v = C − A
+n = u × v                    (≠ 0  ⇒ Teil a) ist damit erledigt)
+D = ⟨n, A⟩
+E:  n₁x + n₂y + n₃z = D</div>
+        <p><strong>c)</strong> Der Normalenvektor der Ebene ist genau der <strong>Richtungsvektor der Lotgeraden</strong>:</p>
+        <div class="step">g: x = D + t·n</div>
+        <p><strong>Beispiel gleicher Bauart:</strong> A = (1,1,3)ᵀ, B = (0,2,4)ᵀ, C = (0,4,1)ᵀ, D = (1,1,2)ᵀ</p>
+        <div class="step">u = B − A = (−1, 1, 1)ᵀ,   v = C − A = (−1, 3, −2)ᵀ
+n = u × v = ( 1·(−2) − 1·3 ,  1·(−1) − (−1)·(−2) ,  (−1)·3 − 1·(−1) )ᵀ
+          = ( −5 , −3 , −2 )ᵀ  ≠ 0   ⇒ A, B, C nicht kollinear ✓
+D = ⟨n, A⟩ = −5 − 3 − 6 = −14
+E: −5x − 3y − 2z = −14   bzw.   5x + 3y + 2z = 14
+Probe mit B: 0 + 6 + 8 = 14 ✓   mit C: 0 + 12 + 2 = 14 ✓
+
+g: x = (1,1,2)ᵀ + t·(5, 3, 2)ᵀ</div>
+        <div class="res">Zwei Punkte, an denen es hakt: (a) und (b) mit <em>einer</em> Rechnung erledigen, und in (c) den Normalenvektor als Richtungsvektor erkennen – nicht neu ausrechnen.</div>
+      </div></details>
+    </div>
+
+    <div class="task">
+      <div class="task-h"><span class="task-n">A.3</span><span class="task-t">Ebene aus Normalenvektor, Durchstoßpunkt und Schnittwinkel</span><span class="task-p">6 Pkt.</span></div>
+      <div class="task-q"><p>Ebene E durch P₀ mit Normalenvektor n; Gerade g durch P₁ und P₂. Gesucht: E in parameterfreier Form, die Geradengleichung, der Durchstoßpunkt und der Schnittwinkel zwischen g und E.</p></div>
+      <details><summary>Lösungsweg</summary><div class="sol">
+        <div class="step">1. E:  n₁x + n₂y + n₃z = ⟨n, P₀⟩
+2. g:  x = P₁ + t·(P₂ − P₁)
+3. Durchstoßpunkt: x, y, z aus g in E einsetzen → t → in g einsetzen
+4. Schnittwinkel:  sin φ = |⟨r, n⟩| / (|r|·|n|)   mit r = Richtungsvektor</div>
+        <p><strong>Beispiel gleicher Bauart:</strong> P₀ = (1,3,2)ᵀ, n = (1,1,0)ᵀ, P₁ = (1,2,4)ᵀ, P₂ = (−2,3,3)ᵀ</p>
+        <div class="step">1. ⟨n, P₀⟩ = 1 + 3 + 0 = 4        →  E: x + y = 4
+
+2. r = P₂ − P₁ = (−3, 1, −1)ᵀ    →  g: x = (1,2,4)ᵀ + t·(−3,1,−1)ᵀ
+
+3. x = 1 − 3t,  y = 2 + t
+   (1 − 3t) + (2 + t) = 4  →  3 − 2t = 4  →  t = −1/2
+   S = (1 + 1,5 ;  2 − 0,5 ;  4 + 0,5)ᵀ = (2,5 ; 1,5 ; 4,5)ᵀ
+   Probe: 2,5 + 1,5 = 4 ✓
+
+4. ⟨r, n⟩ = −3 + 1 + 0 = −2,   |r| = √11,   |n| = √2
+   sin φ = |−2| / (√11·√2) = 2/√22 ≈ 0,4264
+   φ ≈ 25,24°</div>
+        <div class="res">Der häufigste Fehler in Teil 4: <strong>cos statt sin</strong>. Zwischen Gerade und Ebene steht der Sinus, weil n <em>senkrecht</em> zur Ebene zeigt. Der Betrag im Zähler liefert den spitzen Winkel.</div>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCHNELLCHECK ══════════════ -->
+<section class="sec" id="check" data-num="✓" data-title="Schnellcheck">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">✓</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Selbstkontrolle</p>
+      <h2>Schnellcheck</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <ul>
+      <li>Wann sind zwei Vektoren gleich – und was ist ein Repräsentant?</li>
+      <li>Was ist ein Ortsvektor, was ein Einheitsvektor?</li>
+      <li>Wie berechnet man den Vektor von A nach B aus den Koordinaten?</li>
+      <li>Wie lautet die Betragsformel – und welcher Satz steckt dahinter?</li>
+      <li>Wie erzeugt man aus a den Einheitsvektor in Richtung von a?</li>
+      <li>Was ist eine Linearkombination, und worauf führt die Frage „ist a eine Linearkombination von …?“ immer?</li>
+      <li>Definition der linearen Unabhängigkeit – und die anschauliche Umformulierung dazu?</li>
+      <li>Wann sind Vektoren <em>ohne</em> Rechnung linear abhängig?</li>
+      <li>Nennen Sie beide Formeln für das Skalarprodukt.</li>
+      <li>Woran erkennt man am Skalarprodukt, dass zwei Vektoren senkrecht stehen?</li>
+      <li>Wie berechnet man den Winkel zwischen zwei Vektoren?</li>
+      <li>In welchem Raum existiert das Vektorprodukt – und warum nicht in der Ebene?</li>
+      <li>Ist das Vektorprodukt kommutativ?</li>
+      <li>Was gilt für a × b, wenn a und b parallel sind – und wenn nicht?</li>
+      <li>Was besagt der Betrag des Spatprodukts geometrisch?</li>
+      <li>Was folgt aus ⟨a b c⟩ = 0?</li>
+      <li>Wie lauten Parameterform der Geraden, Parameterform und parameterfreie Form der Ebene?</li>
+      <li>Warum spricht man von <em>einer</em> und nicht von <em>der</em> Geradengleichung?</li>
+      <li>Welche Bedingung müssen die drei Punkte einer Ebene erfüllen?</li>
+      <li>Wie kommt man von der Parameterform zur parameterfreien Form – drei Schritte?</li>
+      <li>Wo steckt der Normalenvektor in der Gleichung ax + by + cz = D?</li>
+      <li>Wie bestimmt man den Durchstoßpunkt einer Geraden durch eine Ebene?</li>
+      <li>Was bedeutet ein Widerspruch beim Schneiden zweier Ebenen, was eine wahre Aussage ohne Parameter?</li>
+      <li>Welche Winkelformel gilt zwischen Gerade und Ebene – und warum steht dort der Sinus?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ FORMELSAMMLUNG ══════════════ -->
+<section class="sec" id="formeln" data-num="F" data-title="Formeln & Kurzreferenz">
+  <div class="sec-head">
+    <button class="tab" data-act="read" title="Als gelesen markieren">F</button>
+    <div class="sec-head-txt">
+      <p class="kicker">Referenz</p>
+      <h2>Formeln &amp; Kurzreferenz</h2>
+      <div class="sec-tools">
+        <button class="tool t-read" data-act="read">Gelesen</button>
+        <button class="tool t-band" data-act="band">Leseband hier</button>
+      </div>
+    </div>
+  </div>
+  <div class="band">Zuletzt gelesen</div>
+  <div class="body">
+    <p class="lead">Alles Rechenbare auf einen Blick – das gehört auf den Spickzettel für die Klausur (erlaubt ist alles Gedruckte und Handgeschriebene).</p>
+
+    <h4>Vektoren</h4>
+    <p class="formula">AB = B − A<br>|a| = √(a₁² + a₂² + a₃²)<br>e_a = a / |a|<br>a + b = (a₁+b₁, a₂+b₂, a₃+b₃)ᵀ&nbsp;&nbsp;·&nbsp;&nbsp;λ·a = (λa₁, λa₂, λa₃)ᵀ</p>
+
+    <h4>Produkte</h4>
+    <p class="formula">⟨a, b⟩ = a₁b₁ + a₂b₂ + a₃b₃ = |a|·|b|·cos φ<br><br>a × b = ( a₂b₃ − a₃b₂ ,  a₃b₁ − a₁b₃ ,  a₁b₂ − a₂b₁ )ᵀ<br><br>⟨a b c⟩ = ⟨a, b × c⟩&nbsp;&nbsp;&nbsp;&nbsp;V_Spat = |⟨a b c⟩|</p>
+    <div class="tw"><table>
+      <thead><tr><th>Test</th><th>Kriterium</th></tr></thead>
+      <tbody>
+        <tr><td>a ⊥ b</td><td>⟨a, b⟩ = 0</td></tr>
+        <tr><td>a ∥ b</td><td>a × b = 0 &nbsp;bzw.&nbsp; a = λb</td></tr>
+        <tr><td>a, b, c komplanar (linear abhängig)</td><td>⟨a b c⟩ = 0</td></tr>
+        <tr><td>k Vektoren im ℝⁿ mit k &gt; n</td><td>immer linear abhängig</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Winkel</h4>
+    <p class="formula">Vektor / Vektor:&nbsp;&nbsp;cos φ = ⟨a,b⟩ / (|a|·|b|)<br>Gerade / Gerade:&nbsp;&nbsp;cos φ = |⟨r₁,r₂⟩| / (|r₁|·|r₂|)<br>Ebene / Ebene:&nbsp;&nbsp;&nbsp;&nbsp;cos φ = |⟨n₁,n₂⟩| / (|n₁|·|n₂|)<br>Gerade / Ebene:&nbsp;&nbsp;&nbsp;sin φ = |⟨r,n⟩| / (|r|·|n|)</p>
+
+    <h4>Geraden und Ebenen</h4>
+    <p class="formula">g: x = P + t·r<br>E: x = P + t·u + s·v&nbsp;&nbsp;&nbsp;(Parameterform)<br>E: ax + by + cz = D&nbsp;&nbsp;&nbsp;&nbsp;(parameterfrei, n = (a,b,c)ᵀ, D = ⟨n,P⟩)</p>
+    <div class="tw"><table>
+      <thead><tr><th>Aufgabe</th><th>Rezept</th></tr></thead>
+      <tbody>
+        <tr><td>Ebene aus 3 Punkten</td><td>u = B−A, v = C−A, n = u×v, D = ⟨n,A⟩</td></tr>
+        <tr><td>parameterfrei → Parameterform</td><td>drei Punkte bestimmen (je zwei Koordinaten = 0 setzen)</td></tr>
+        <tr><td>Lot auf E durch P</td><td>g: x = P + t·n</td></tr>
+        <tr><td>Durchstoßpunkt g ∩ E</td><td>x, y, z aus g in E einsetzen, nach t auflösen, in g einsetzen</td></tr>
+        <tr><td>g ∩ g</td><td>Parameterformen gleichsetzen; keine Lösung + nicht parallel = windschief</td></tr>
+        <tr><td>E ∩ E</td><td>Parameterform in parameterfreie einsetzen; „1 = 2“ → parallel, „1 = 1“ → identisch</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+    <footer>
+      Lernunterlage zum Studienheft MAI06 · Vektoralgebra und Analytische Geometrie · Weiterführende Mathematik · Wilhelm Büchner Hochschule.<br>
+      Zusammenfassung in eigenen Worten; Lesestand und Leseband werden lokal gespeichert.
+    </footer>
+  </main>
+</div>
+
+<button class="jump" id="jumpBtn">↩ Zum Leseband</button>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Speicher: ITISync (localStorage + Supabase) mit Rückfallebene ---------- */
+  var mem = {};
+  var store = window.ITISync || {
+    get: function(k){
+      try{ if(window.localStorage) return Promise.resolve(window.localStorage.getItem(k)); }catch(e){}
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null);
+    },
+    set: function(k,v){
+      mem[k]=v;
+      try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){}
+      return Promise.resolve();
+    }
+  };
+  var KEY = "mai06:state";
+
+  var state = { read: [], band: null, theme: "light", base: 19, font: "serif" };
+
+  var FONTS = {
+    serif:    '"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
+    georgia:  'Georgia,"Times New Roman",Times,serif',
+    sans:     'ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    humanist: 'Verdana,"Segoe UI",Tahoma,Geneva,sans-serif',
+    cambria:  'Cambria,"Sitka Text",Constantia,"Palatino Linotype",Georgia,serif'
+  };
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var tocBody = document.getElementById("tocBody");
+  var railFill = document.getElementById("railFill");
+  var ptxt = document.getElementById("ptxt");
+  var jumpBtn = document.getElementById("jumpBtn");
+  var themeBtn = document.getElementById("themeBtn");
+  var fontSel = document.getElementById("fontSel");
+
+  /* ---------- Heft-Navigation (vor / zurück, innerhalb des Fachs) ---------- */
+  (function(){
+    var groups = [
+      ["ITI21_Lernheft.html","ITI22_Lernheft.html","ITI23_Lernheft.html","ITI24_Lernheft.html","ITI25_Lernheft.html","ITI26_Lernheft.html"],
+      ["GDI01_Lernheft.html","TGI01_Lernheft.html","TGI02_Lernheft.html","TGI06_Lernheft.html","TGI07_Lernheft.html"],
+      ["GPI15_Lernheft.html","GPI16_Lernheft.html","GPI21_Lernheft.html","GPI22_Lernheft.html"],
+      ["MAI06_Lernheft.html","MAI09_Lernheft.html","MAI11_Lernheft.html","MAI13_Lernheft.html","MAI14C_Lernheft.html"]
+    ];
+    var base = function(n){ return n.replace(/\.html$/i, "").toLowerCase(); };
+    var cur = base(decodeURIComponent(location.pathname.split("/").pop()));
+    var files = groups[0], idx = -1;
+    for(var g = 0; g < groups.length; g++){
+      for(var i = 0; i < groups[g].length; i++){ if(base(groups[g][i]) === cur){ files = groups[g]; idx = i; break; } }
+      if(idx > -1) break;
+    }
+    var pv = document.getElementById("navPrev"), nx = document.getElementById("navNext");
+    if(pv){ if(idx > 0){ pv.href = files[idx-1]; } else { pv.style.display = "none"; } }
+    if(nx){ if(idx > -1 && idx < files.length-1){ nx.href = files[idx+1]; } else { nx.style.display = "none"; } }
+  })();
+
+  /* ---------- Kopier-Button an jede Definitions-Box ---------- */
+  (function(){
+    if(!navigator.clipboard) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".box.def"), function(box){
+      var txt = box.innerText.trim();
+      var b = document.createElement("button");
+      b.className = "copy-def"; b.type = "button"; b.textContent = "⧉ Kopieren"; b.title = "Definition kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(txt).then(function(){
+          b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = "⧉ Kopieren"; }, 1200);
+        }, function(){ b.textContent = "⚠ Fehler"; });
+      });
+      box.appendChild(b);
+    });
+  })();
+
+  /* ---------- Inhaltsverzeichnis aufbauen ---------- */
+  secs.forEach(function(s){
+    var a = document.createElement("a");
+    a.href = "#" + s.id;
+    a.dataset.for = s.id;
+    a.innerHTML = '<span class="num">' + s.dataset.num + '</span><span>' + s.dataset.title + '</span>';
+    tocBody.appendChild(a);
+  });
+
+  function save(){ store.set(KEY, JSON.stringify(state)); }
+
+  function render(){
+    var total = secs.length, done = 0;
+    secs.forEach(function(s){
+      var isRead = state.read.indexOf(s.id) > -1;
+      var isBand = state.band === s.id;
+      s.classList.toggle("read", isRead);
+      s.classList.toggle("bookmarked", isBand);
+      if(isRead) done++;
+      var rBtn = s.querySelector(".t-read");
+      if(rBtn) rBtn.textContent = isRead ? "✓ Gelesen" : "Gelesen";
+      var bBtn = s.querySelector(".t-band");
+      if(bBtn) bBtn.textContent = isBand ? "◤ Leseband liegt hier" : "Leseband hier";
+      var link = tocBody.querySelector('a[data-for="' + s.id + '"]');
+      if(link){ link.classList.toggle("done", isRead); link.classList.toggle("marked", isBand); }
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    railFill.style.width = pct + "%";
+    ptxt.textContent = done + " / " + total + " gelesen";
+    jumpBtn.classList.toggle("on", !!state.band);
+
+    document.documentElement.dataset.theme = state.theme;
+    themeBtn.textContent = state.theme === "dark" ? "◑ Hell" : "◐ Dunkel";
+    document.documentElement.style.setProperty("--base", state.base + "px");
+    document.documentElement.style.setProperty("--font-body", FONTS[state.font] || FONTS.serif);
+    if(fontSel && fontSel.value !== state.font) fontSel.value = state.font;
+  }
+
+  /* ---------- Klicks auf Reiter und Werkzeuge ---------- */
+  document.addEventListener("click", function(ev){
+    var btn = ev.target.closest("[data-act]");
+    if(!btn) return;
+    var sec = btn.closest(".sec");
+    if(!sec) return;
+    var id = sec.id;
+
+    if(btn.dataset.act === "read"){
+      var i = state.read.indexOf(id);
+      if(i > -1) state.read.splice(i,1); else state.read.push(id);
+    } else if(btn.dataset.act === "band"){
+      state.band = (state.band === id) ? null : id;
+    }
+    render(); save();
+  });
+
+  /* ---------- Kopfleisten-Steuerung ---------- */
+  themeBtn.addEventListener("click", function(){
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    render(); save();
+  });
+  fontSel.addEventListener("change", function(){
+    if(FONTS[this.value]) state.font = this.value;
+    render(); save();
+  });
+  document.getElementById("fsPlus").addEventListener("click", function(){
+    state.base = Math.min(26, state.base + 1); render(); save();
+  });
+  document.getElementById("fsMinus").addEventListener("click", function(){
+    state.base = Math.max(15, state.base - 1); render(); save();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Alle Lesemarkierungen und das Leseband löschen?")) return;
+    state.read = []; state.band = null; render(); save();
+  });
+  jumpBtn.addEventListener("click", function(){
+    if(!state.band) return;
+    var el = document.getElementById(state.band);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("openAll").addEventListener("click", function(){
+    var all = document.querySelectorAll(".sec details");
+    var anyClosed = Array.prototype.some.call(all, function(d){ return !d.open; });
+    Array.prototype.forEach.call(all, function(d){ d.open = anyClosed; });
+    this.textContent = anyClosed ? "Alle Lösungen schliessen" : "Alle Lösungen öffnen";
+  });
+  var tocToggle = document.getElementById("tocToggle");
+  tocToggle.addEventListener("click", function(){
+    document.getElementById("toc").classList.toggle("open");
+  });
+
+  /* ---------- Aktiven Abschnitt in der Navigation hervorheben ---------- */
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var link = tocBody.querySelector('a[data-for="' + e.target.id + '"]');
+        if(link && e.isIntersecting){
+          Array.prototype.forEach.call(tocBody.querySelectorAll("a"), function(x){ x.classList.remove("here"); });
+          link.classList.add("here");
+        }
+      });
+    }, {rootMargin:"-15% 0px -70% 0px"});
+    secs.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- Start ---------- */
+  (async function init(){
+    var raw = await store.get(KEY);
+    if(raw){
+      try{
+        var p = JSON.parse(raw);
+        if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+        if(p.band && document.getElementById(p.band)) state.band = p.band;
+        if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+        if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+        if(p.font && FONTS[p.font]) state.font = p.font;
+      }catch(e){}
+    } else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+      state.theme = "dark";
+    }
+    render();
+  })();
+
+  /* ---------- Live-Sync: bei Cloud-Aktualisierung neu einlesen ---------- */
+  if(window.ITISync && window.ITISync.onChange){
+    window.ITISync.onChange(function(){
+      store.get(KEY).then(function(raw){
+        if(!raw) return;
+        try{
+          var p = JSON.parse(raw);
+          if(Array.isArray(p.read)) state.read = p.read.filter(function(id){ return document.getElementById(id); });
+          state.band = (p.band && document.getElementById(p.band)) ? p.band : null;
+          if(p.theme === "dark" || p.theme === "light") state.theme = p.theme;
+          if(typeof p.base === "number" && p.base >= 15 && p.base <= 26) state.base = p.base;
+          if(p.font && FONTS[p.font]) state.font = p.font;
+          render();
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
