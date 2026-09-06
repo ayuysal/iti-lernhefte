@@ -10,7 +10,7 @@
   --ink:#17201D;--ink-soft:#5A6663;--ink-faint:#8A9490;
   --rule:#CBD4D0;--rule-soft:#DDE4E1;
   --accent:#0E5F63;--accent-soft:#D5E6E5;--mark:#8E2436;--mark-soft:#F0DEE1;--mark-deep:#6E1A28;
-  --shadow:rgba(23,32,29,.10);
+  --shadow:rgba(23,32,29,.10);--vellum:#F6F1E4;--vellum-rule:#E0D6BF;--vellum-ink:#241E14;
   --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
   --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;--base:19px;
@@ -18,7 +18,7 @@
 html[data-theme="dark"]{
   --paper:#121614;--paper-raised:#1B211E;--paper-sunk:#0C100E;
   --ink:#E3EAE7;--ink-soft:#9FADA8;--ink-faint:#6F7C78;--rule:#2C3733;--rule-soft:#222B28;
-  --accent:#54C3C6;--accent-soft:#123033;--mark:#E38294;--mark-soft:#33191F;--mark-deep:#F0A6B3;--shadow:rgba(0,0,0,.45);
+  --accent:#54C3C6;--accent-soft:#123033;--mark:#E38294;--mark-soft:#33191F;--mark-deep:#F0A6B3;--shadow:rgba(0,0,0,.45);--vellum:#1E1B16;--vellum-rule:#3A3226;--vellum-ink:#EAE1CE;
 }
 *{box-sizing:border-box}
 html{font-size:var(--base);scroll-behavior:smooth}
@@ -57,6 +57,43 @@ select.btn{font-family:var(--font-ui);cursor:pointer;padding-right:.5rem}
 .rev-item.known{border-left:3px solid var(--accent);opacity:.72}
 .rev-head{display:flex;align-items:baseline;justify-content:space-between;gap:.7rem}
 .rev-term{font-family:var(--font-ui);font-weight:700;font-size:.98rem}
+.rev-num{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.09em;font-weight:750;color:var(--accent);background:var(--accent-soft);border:1px solid var(--rule);border-radius:2px;padding:.1rem .34rem;margin-right:.5rem;white-space:nowrap;vertical-align:.08em}
+.grp-count{float:right;font-weight:600;letter-spacing:.06em;color:var(--ink-faint);text-transform:none}
+/* ---- Memoria ---- */
+.mem-jump{display:flex;flex-wrap:wrap;gap:.3rem;margin:.6rem 0 1.2rem;padding-bottom:.7rem;border-bottom:1px solid var(--rule-soft)}
+.mem-jump a{font-family:var(--font-ui);font-size:.66rem;letter-spacing:.04em;text-decoration:none;color:var(--ink-soft);
+  border:1px solid var(--rule);background:var(--paper-raised);border-radius:2px;padding:.16rem .42rem;white-space:nowrap}
+.mem-jump a:hover{border-color:var(--accent);color:var(--accent)}
+.mem-jump a.fertig{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.mem-jump .reg{font-family:var(--font-ui);font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--accent);font-weight:800;align-self:center;padding:0 .15rem 0 .5rem}
+.mem-jump .reg:first-child{padding-left:0}
+.mem-piece{border:1px solid var(--rule);border-radius:3px;background:var(--paper-raised);margin:.7rem 0;overflow:hidden}
+.mem-piece.gelesen{border-left:3px solid var(--mark)}
+.mem-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem;padding:.55rem .8rem;border-bottom:1px solid var(--rule-soft)}
+.mem-id{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.09em;font-weight:800;color:var(--accent);background:var(--accent-soft);border:1px solid var(--rule);border-radius:2px;padding:.1rem .34rem}
+.mem-t{font-family:var(--font-ui);font-weight:750;font-size:.95rem}
+.mem-raum{font-family:var(--font-ui);font-size:.66rem;color:var(--ink-faint);letter-spacing:.04em}
+.mem-tools{margin-left:auto;display:flex;gap:.3rem;align-items:center}
+.mem-story{padding:1.05rem 1.25rem;background:var(--vellum);color:var(--vellum-ink)}
+.mem-story p{margin:0 0 1rem;text-align:justify;hyphens:auto}
+.mem-story p:first-of-type::first-letter{float:left;font-size:2.7rem;line-height:.86;padding:.08rem .34rem 0 0;font-weight:600;color:var(--mark)}
+.mem-arrow{display:block;margin:-.45rem 0 1.3rem;font-family:var(--font-ui);font-size:.78rem;letter-spacing:.02em;color:var(--mark);font-weight:700}
+.mem-arrow::before{content:"→";margin-right:.4em;opacity:.55}
+.mem-foot{padding:.7rem .9rem;border-top:1px solid var(--rule-soft)}
+.mem-foot h4{font-family:var(--font-ui);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800;margin:0 0 .35rem}
+.mem-foot ol{margin:0;padding-left:1.15rem;font-size:.85rem;line-height:1.5}
+.mem-foot ol li{margin-bottom:.3rem}
+.mem-foot ol li em{color:var(--mark);font-style:normal;font-weight:700}
+.mem-merk{font-style:italic;font-size:.92rem;margin:.55rem 0 0;padding-top:.55rem;border-top:1px dashed var(--rule)}
+.mem-piece .rev-item{border:0;border-top:1px solid var(--rule-soft);border-radius:0;margin:0;background:var(--paper-sunk)}
+.mem-piece .rev-item.known{border-left:3px solid var(--accent)}
+.mini.on{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.def-story{margin:.6rem 0 .1rem;padding:.9rem 1.05rem;background:var(--vellum);color:var(--vellum-ink);border:1px solid var(--vellum-rule);border-radius:3px}
+.def-story p{margin:0 0 .9rem;text-align:justify;hyphens:auto}
+.def-story .mem-arrow{margin:-.4rem 0 1.15rem}
+.def-story .mem-merk{border-top-color:var(--vellum-rule)}
+.def-story .mem-foot h4{color:var(--mark)}
 .rev-write{width:100%;font-family:var(--font-body);font-size:.9rem;margin:.5rem 0 .35rem;padding:.45rem .6rem;min-height:2.6rem;resize:vertical;border:1px solid var(--rule);border-radius:2px;background:var(--paper);color:var(--ink)}
 .rev-actions{display:flex;gap:.4rem;flex-wrap:wrap}
 .mini{font-family:var(--font-ui);font-size:.66rem;font-weight:650;letter-spacing:.02em;background:var(--paper-sunk);color:var(--ink-soft);border:1px solid var(--rule-soft);border-radius:2px;padding:.28rem .5rem;line-height:1}
@@ -120,12 +157,13 @@ footer a{color:var(--accent)}
   <div class="hero">
     <p class="eyebrow">Üben &amp; Wiederholen</p>
     <h1>Wiederholen</h1>
-    <p class="sub">Alle Definitionen, Abkürzungen und Schnellchecks aus den 20 Heften – gesammelt an einem Ort. Begriff sehen, selbst aufschreiben, einblenden und abgleichen. Dein „gewusst"-Stand wird gespeichert und geräteübergreifend synchronisiert.</p>
+    <p class="sub">Alle Definitionen, Abkürzungen und Schnellchecks aus den 20 Heften – gesammelt an einem Ort. Unter <strong>Memoria</strong> steht zu jeder Definition ein Reisebericht, der sie als Bildfolge verankert. Begriff sehen, selbst aufschreiben, einblenden und abgleichen. Dein „gewusst"-Stand wird gespeichert und geräteübergreifend synchronisiert.</p>
   </div>
 
   <div class="revbar">
     <div class="tabs">
       <button class="tab-btn on" data-tab="defs">Definitionen</button>
+      <button class="tab-btn" data-tab="memoria">Memoria</button>
       <button class="tab-btn" data-tab="merk">Merklisten</button>
       <button class="tab-btn" data-tab="abbr">Abkürzungen</button>
       <button class="tab-btn" data-tab="check">Schnellcheck</button>
@@ -157,11 +195,14 @@ footer a{color:var(--accent)}
 <script src="assets/auth-ui.js"></script>
 <script src="assets/review-data.js"></script>
 <script src="assets/reference-data.js"></script>
+<script src="assets/memoria-data.js"></script>
 <script>
 (function(){
   "use strict";
   var DATA = (window.ITI_REVIEW && window.ITI_REVIEW.hefte) ? window.ITI_REVIEW : {hefte:[]};
   var REF = window.ITI_REFERENCE || {referenz:[], conversions:null};
+  var MEM = window.ITI_MEMORIA || {orte:[], stuecke:[]};
+  var MEMBY = {}; (MEM.stuecke||[]).forEach(function(x){ MEMBY[x.kachel]=x; });
 
   var mem = {};
   var store = window.ITISync || {
@@ -169,7 +210,7 @@ footer a{color:var(--accent)}
     set:function(k,v){ mem[k]=v; try{ if(window.localStorage) localStorage.setItem(k,v); }catch(e){} return Promise.resolve(); }
   };
   var KEY = "review:state";
-  var state = { tab:"defs", fach:"alle", theme:"light", base:19, font:"serif", known:{} };
+  var state = { tab:"defs", fach:"alle", theme:"light", base:19, font:"serif", known:{}, read:{} };
 
   var FONTS = {
     serif:'"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif',
@@ -189,17 +230,54 @@ footer a{color:var(--accent)}
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
   function inFach(h){ return state.fach==="alle" || h.fach===state.fach; }
   function save(){ store.set(KEY, JSON.stringify(state)); }
+  function heftById(hid){ return DATA.hefte.filter(function(x){return x.id===hid;})[0]; }
+  function memOf(kachel){ return MEMBY[kachel]||null; }
+  function inFachM(m){ return state.fach==="alle" || m.fach===state.fach; }
   function defById(id){ var p=id.split("#"); var h=DATA.hefte.filter(function(x){return x.id===p[0];})[0]; return h?h.defs[+p[1]]:null; }
 
   function counts(){
-    /* zaehlt nur, was beim aktuellen Fachfilter auch sichtbar ist */
-    var done=0,total=0;
+    /* zaehlt getrennt nach Art, und nur was beim aktuellen Fachfilter sichtbar ist */
+    var c={defs:{done:0,total:0}, abbr:{done:0,total:0}, merk:{done:0,total:0}, read:{done:0,total:0}, done:0, total:0};
     DATA.hefte.filter(inFach).forEach(function(h){
-      h.defs.forEach(function(_,i){ total++; if(state.known[h.id+"#"+i]) done++; });
-      h.abbr.forEach(function(_,i){ total++; if(state.known[h.id+"~"+i]) done++; });
+      h.defs.forEach(function(_,i){ c.defs.total++; if(state.known[h.id+"#"+i]) c.defs.done++; });
+      h.abbr.forEach(function(_,i){ c.abbr.total++; if(state.known[h.id+"~"+i]) c.abbr.done++; });
     });
-    (REF.merklisten||[]).filter(inFach).forEach(function(m){ total++; if(state.known["merk:"+m.id]) done++; });
-    return {done:done,total:total};
+    (REF.merklisten||[]).filter(inFach).forEach(function(m){ c.merk.total++; if(state.known["merk:"+m.id]) c.merk.done++; });
+    (MEM.stuecke||[]).filter(inFachM).forEach(function(m){ c.read.total++; if(state.read["mem:"+m.id]) c.read.done++; });
+    c.done = c.defs.done + c.abbr.done + c.merk.done;
+    c.total = c.defs.total + c.abbr.total + c.merk.total;
+    return c;
+  }
+
+  /* Zaehlerbeschriftung: auf den zaehlbaren Tabs die Art nennen, sonst die Summe */
+  var COUNT_LABEL = {defs:"Definitionen", abbr:"Abkürzungen", merk:"Merklisten"};
+  function progText(c){
+    if(state.tab==="memoria") return c.read.done+" / "+c.read.total+" Geschichten gelesen";
+    var k=COUNT_LABEL[state.tab];
+    if(k) return c[state.tab].done+" / "+c[state.tab].total+" "+k+" gewusst";
+    return c.done+" / "+c.total+" gewusst (Def. + Abk. + Merklisten)";
+  }
+
+  /* ---------- Memoria-Bausteine ---------- */
+  function storyHtml(m, cls, hidden){
+    var h='<div class="'+cls+'"'+(hidden?" hidden":"")+'>';
+    (m.absaetze||[]).forEach(function(a){
+      h+='<p>'+a.text+'</p>'+(a.begriff?'<b class="mem-arrow">'+esc(a.begriff)+'</b>':'');
+    });
+    if(m.kette&&m.kette.length){
+      h+='<div class="mem-foot" style="border-top:0;padding:.2rem 0 0"><h4>Abrufkette</h4><ol>';
+      m.kette.forEach(function(k){ h+='<li>'+k+'</li>'; });
+      h+='</ol>'+(m.merksatz?'<p class="mem-merk">'+m.merksatz+'</p>':'')+'</div>';
+    }
+    return h+'</div>';
+  }
+  /* Selbsttest-Kachel: Begriff sehen, selbst schreiben, einblenden, abhaken */
+  function defCard(d, id, nr, extra){
+    var k=!!state.known[id];
+    return '<div class="rev-item'+(k?" known":"")+'" data-id="'+id+'"'+(extra||"")+'>'
+      +'<div class="rev-head"><span class="rev-term"><span class="rev-num">'+esc(nr)+'</span>'+esc(d.term)+'</span>'
+      +'<button class="mini known-t" data-act="known">'+(k?"✓ gewusst":"gewusst?")+'</button></div>'
+      +'<textarea class="rev-write" placeholder="Definition selbst schreiben …"></textarea>';
   }
 
   /* ---------- Rendering je Tab ---------- */
@@ -207,27 +285,73 @@ footer a{color:var(--accent)}
     var out="";
     DATA.hefte.filter(inFach).forEach(function(h){
       if(!h.defs.length) return;
-      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3>';
+      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)
+        +'<span class="grp-count">'+h.defs.length+' Definition'+(h.defs.length===1?"":"en")+'</span></h3>';
       h.defs.forEach(function(d,i){
-        var id=h.id+"#"+i, k=!!state.known[id];
-        out+='<div class="rev-item'+(k?" known":"")+'" data-id="'+id+'">'
-          +'<div class="rev-head"><span class="rev-term">'+esc(d.term)+'</span>'
-          +'<button class="mini known-t" data-act="known">'+(k?"✓ gewusst":"gewusst?")+'</button></div>'
-          +'<textarea class="rev-write" placeholder="Definition selbst schreiben …"></textarea>'
+        var id=h.id+"#"+i;
+        var nr=h.code+"-D"+(i+1<10?"0":"")+(i+1);
+        var m=memOf(nr), r=m&&!!state.read["mem:"+m.id];
+        out+=defCard(d,id,nr,' data-nr="'+nr+'"'+(m?' data-mid="'+m.id+'"':''))
           +'<div class="rev-actions"><button class="mini" data-act="reveal">Einblenden</button>'
-          +'<button class="mini" data-act="copy">⧉ Kopieren</button></div>'
-          +'<div class="rev-answer" hidden>'+d.html+'</div></div>';
+          +'<button class="mini" data-act="copy">⧉ Kopieren</button>'
+          +(m?'<button class="mini" data-act="story">📖 Geschichte '+esc(m.id)+'</button>'
+             +'<button class="mini read-t'+(r?" on":"")+'" data-act="read">'+(r?"✓ gelesen":"gelesen?")+'</button>':'')
+          +'</div>'
+          +'<div class="rev-answer" hidden>'+d.html+'</div>'
+          +(m?storyHtml(m,"def-story",true):'')
+          +'</div>';
       });
       out+='</div>';
     });
     return out || '<p class="empty">Keine Definitionen für dieses Fach.</p>';
   }
 
+  function renderMemoria(){
+    if(!(MEM.stuecke||[]).length) return '<p class="empty">Es sind noch keine Memoria-Stücke gebaut.</p>';
+    var kopf = '<p class="empty" style="text-align:left">Der Reisende geht einen einzigen Weg durch vier Regionen — '
+      + 'jede Definition ein Raum, jeder Bestandteil ein Ding darin. '
+      + '<a href="memoria/reise.html">Die ganze Reise am Stück lesen →</a></p>';
+    var sprung = "", letzteRegion = "";
+    var byOrt={};
+    MEM.stuecke.forEach(function(m){ (byOrt[m.heftCode]=byOrt[m.heftCode]||[]).push(m); });
+    var out="";
+    (MEM.orte||[]).forEach(function(o){
+      if(!(state.fach==="alle"||o.fach===state.fach)) return;
+      var list=(byOrt[o.code]||[]).slice().sort(function(a,b){ return a.defIndex-b.defIndex; });
+      if(!list.length) return;
+      var gel=list.filter(function(m){ return state.read["mem:"+m.id]; }).length;
+      if(o.region!==letzteRegion){ sprung+='<span class="reg">'+esc(o.region)+'</span>'; letzteRegion=o.region; }
+      sprung+='<a href="#ort-'+esc(o.code)+'"'+(gel===list.length?' class="fertig"':'')+'>'+esc(o.code)+'</a>';
+      out+='<div class="rev-group" id="ort-'+esc(o.code)+'"><h3>'+esc(o.region)+' · '+esc(o.ort)+' — '+esc(o.code)
+        +'<span class="grp-count"><i class="gel" style="font-style:normal">'+gel+'</i> / '+list.length+' gelesen</span></h3>';
+      list.forEach(function(m){
+        var r=!!state.read["mem:"+m.id];
+        var hh=heftById(m.heftId), d=hh?hh.defs[m.defIndex]:null;
+        out+='<div class="mem-piece'+(r?" gelesen":"")+'" data-mid="'+m.id+'">'
+          +'<div class="mem-head"><span class="mem-id">'+esc(m.id)+'</span>'
+          +'<span class="mem-t">'+esc(m.titel)+'</span>'
+          +'<span class="mem-raum">'+esc(m.raum)+'</span>'
+          +'<span class="mem-tools"><button class="mini read-t'+(r?" on":"")+'" data-act="read">'
+          +(r?"✓ gelesen":"gelesen?")+'</button></span></div>'
+          +storyHtml(m,"mem-story",false);
+        if(d) out+=defCard(d, m.heftId+"#"+m.defIndex, m.kachel)
+          +'<div class="rev-actions"><button class="mini" data-act="reveal">Einblenden</button>'
+          +'<button class="mini" data-act="copy">⧉ Kopieren</button></div>'
+          +'<div class="rev-answer" hidden>'+d.html+'</div></div>';
+        out+='</div>';
+      });
+      out+='</div>';
+    });
+    return out ? (kopf+'<div class="mem-jump">'+sprung+'</div>'+out)
+               : '<p class="empty">Für dieses Fach gibt es noch keine Memoria-Stücke.</p>';
+  }
+
   function renderAbbr(){
     var out="";
     DATA.hefte.filter(inFach).forEach(function(h){
       if(!h.abbr.length) return;
-      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)+'</h3>'
+      out+='<div class="rev-group"><h3>'+esc(h.code)+' · '+esc(h.title)
+        +'<span class="grp-count">'+h.abbr.length+' Abkürzungen</span></h3>'
         +'<div class="tw"><table><thead><tr><th>Kürzel</th><th>Bedeutung selbst schreiben</th><th style="width:2.5rem"></th><th>Bedeutung</th></tr></thead><tbody>';
       h.abbr.forEach(function(a,i){
         var id=h.id+"~"+i, k=!!state.known[id];
@@ -300,10 +424,10 @@ footer a{color:var(--accent)}
     applyChrome();
     Array.prototype.forEach.call(document.querySelectorAll(".tab-btn"),function(b){ b.classList.toggle("on", b.dataset.tab===state.tab); });
     Array.prototype.forEach.call(document.querySelectorAll(".fbtn"),function(b){ b.classList.toggle("on", b.dataset.fach===state.fach); });
-    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="merk"?renderMerklisten():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():state.tab==="referenz"?renderReferenz():renderFormeln();
-    document.getElementById("revealAll").style.display = (state.tab==="defs"||state.tab==="merk"||state.tab==="abbr")?"":"none";
+    content.innerHTML = state.tab==="defs"?renderDefs():state.tab==="memoria"?renderMemoria():state.tab==="merk"?renderMerklisten():state.tab==="abbr"?renderAbbr():state.tab==="check"?renderCheck():state.tab==="referenz"?renderReferenz():renderFormeln();
+    document.getElementById("revealAll").style.display = (state.tab==="defs"||state.tab==="memoria"||state.tab==="merk"||state.tab==="abbr")?"":"none";
     var c=counts(), pct=c.total?Math.round(c.done/c.total*100):0;
-    revProg.textContent = c.done+" / "+c.total+" gewusst";
+    revProg.textContent = progText(c);
     ptxt.textContent = pct+" % gewusst";
     railFill.style.width = pct+"%";
   }
@@ -312,12 +436,30 @@ footer a{color:var(--accent)}
   content.addEventListener("click", function(ev){
     var b=ev.target.closest("[data-act]"); if(!b) return;
     var act=b.dataset.act, row=ev.target.closest("[data-id]"), id=row&&row.dataset.id;
-    if(act==="reveal"){ var a=row.querySelector(".rev-answer"); a.hidden=!a.hidden; b.textContent=a.hidden?"Einblenden":"Ausblenden"; }
+    if(act==="story"){
+      var sc=ev.target.closest("[data-mid]"), st=sc&&sc.querySelector(".def-story");
+      if(st){ st.hidden=!st.hidden; b.textContent=(st.hidden?"📖 Geschichte ":"✖ Geschichte ")+sc.dataset.mid; }
+    }
+    else if(act==="read"){
+      var rc=ev.target.closest("[data-mid]"); if(!rc) return;
+      var mk="mem:"+rc.dataset.mid;
+      if(state.read[mk]) delete state.read[mk]; else state.read[mk]=1;
+      var on=!!state.read[mk];
+      rc.classList.toggle("gelesen", on);
+      b.classList.toggle("on", on);
+      b.textContent = on ? "✓ gelesen" : "gelesen?";
+      var grp=rc.closest(".rev-group"), gz=grp&&grp.querySelector(".gel");
+      if(gz) gz.textContent = grp.querySelectorAll(".mem-piece.gelesen").length;
+      if(state.tab==="memoria") revProg.textContent = progText(counts());
+      save();
+    }
+    else if(act==="reveal"){ var a=row.querySelector(".rev-answer"); a.hidden=!a.hidden; b.textContent=a.hidden?"Einblenden":"Ausblenden"; }
     else if(act==="reveal-abbr"){ var v=row.querySelector(".abbr-v"); v.hidden=!v.hidden; }
     else if(act==="copy"){
       if(!navigator.clipboard) return;
       var term=row.querySelector(".rev-term"), ans=row.querySelector(".rev-answer");
-      var txt=(term?term.textContent+" — ":"")+(ans?ans.innerText.trim():"");
+      var tt=""; if(term){ tt=term.textContent; var nn=term.querySelector(".rev-num"); if(nn) tt=tt.replace(nn.textContent,"").trim(); }
+      var txt=(tt?tt+" — ":"")+(ans?ans.innerText.trim():"");
       navigator.clipboard.writeText(txt).then(function(){ b.textContent="✓ Kopiert"; setTimeout(function(){ b.textContent="⧉ Kopieren"; },1100); });
     }
     else if(act==="known"){
@@ -326,7 +468,7 @@ footer a{color:var(--accent)}
       var t=row.querySelector(".known-t");
       if(t) t.textContent = state.known[id]? (state.tab==="abbr"?"✓":"✓ gewusst") : (state.tab==="abbr"?"?":"gewusst?");
       var c=counts(),pct=c.total?Math.round(c.done/c.total*100):0;
-      revProg.textContent=c.done+" / "+c.total+" gewusst"; ptxt.textContent=pct+" % gewusst"; railFill.style.width=pct+"%";
+      revProg.textContent=progText(c); ptxt.textContent=pct+" % gewusst"; railFill.style.width=pct+"%";
       save();
     }
   });
@@ -348,7 +490,7 @@ footer a{color:var(--accent)}
 
   if(window.ITISync && window.ITISync.onChange){
     window.ITISync.onChange(function(){
-      store.get(KEY).then(function(raw){ if(!raw)return; try{ var p=JSON.parse(raw); if(p.known) state.known=p.known; render(); }catch(e){} });
+      store.get(KEY).then(function(raw){ if(!raw)return; try{ var p=JSON.parse(raw); if(p.known) state.known=p.known; if(p.read) state.read=p.read; render(); }catch(e){} });
     });
   }
 
@@ -359,9 +501,13 @@ footer a{color:var(--accent)}
       if(typeof p.base==="number"&&p.base>=15&&p.base<=26) state.base=p.base;
       if(p.font&&FONTS[p.font]) state.font=p.font;
       if(p.known&&typeof p.known==="object") state.known=p.known;
+      if(p.read&&typeof p.read==="object") state.read=p.read;
       if(p.tab) state.tab=p.tab; if(p.fach) state.fach=p.fach;
     }catch(e){} }
     else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){ state.theme="dark"; }
+    /* Direktlink aus dem Hub: wiederholen.html#memoria oeffnet den Reisebericht */
+    var hash=(location.hash||"").replace("#","");
+    if(hash && document.querySelector('.tab-btn[data-tab="'+hash+'"]')) state.tab=hash;
     render();
   })();
 })();

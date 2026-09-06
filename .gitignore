@@ -1,6 +1,9 @@
 # Build-Zwischenstände (Inhaltsblöcke + Vorlage werden in die Hefte gespleisst)
 _content/
 
+# Memoria-Quellen (aus assets/review-data.js abgeleitet, Neuaufbau siehe memoria/CLAUDE.md)
+memoria/_quellen/
+
 # Betriebssystem / Editor
 .DS_Store
 Thumbs.db

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memoria · Die ganze Reise</title>
+<style>
+:root{
+  --paper:#EFF2F0;--paper-raised:#F9FBFA;
+  --ink:#17201D;--ink-soft:#5A6663;--ink-faint:#8A9490;
+  --rule:#CBD4D0;--rule-soft:#DDE4E1;
+  --accent:#0E5F63;--accent-soft:#D5E6E5;--mark:#8E2436;--mark-soft:#F0DEE1;
+  --vellum:#F6F1E4;--vellum-rule:#E0D6BF;--vellum-ink:#241E14;
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;--paper-raised:#1B211E;
+  --ink:#E3EAE7;--ink-soft:#9FADA8;--ink-faint:#6F7C78;--rule:#2C3733;--rule-soft:#222B28;
+  --accent:#54C3C6;--accent-soft:#123033;--mark:#E38294;--mark-soft:#33191F;
+  --vellum:#1E1B16;--vellum-rule:#3A3226;--vellum-ink:#EAE1CE;
+}
+*{box-sizing:border-box}
+html{font-size:var(--base)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.62}
+.top{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;padding:.55rem 1.2rem;font-family:var(--font-ui);font-size:.75rem}
+.top .brand{font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.top .sep{color:var(--ink-faint)}
+.top .right{margin-left:auto;display:flex;gap:.4rem;align-items:center}
+.btn{font:inherit;font-family:var(--font-ui);font-size:.72rem;padding:.28rem .6rem;border:1px solid var(--rule);
+  background:var(--paper-raised);color:var(--ink-soft);border-radius:3px;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{color:var(--mark);border-color:var(--mark);background:var(--mark-soft)}
+.wrap{max-width:1180px;margin:0 auto;padding:2rem 1.2rem 5rem}
+.hero{border-bottom:1px solid var(--rule);padding-bottom:1.1rem;margin-bottom:1.4rem}
+.eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .35rem}
+h1{font-size:2.1rem;margin:0 0 .5rem;letter-spacing:-.01em}
+.sub{color:var(--ink-soft);margin:0;max-width:48rem}
+.orth{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);
+  font-weight:800;border-bottom:1px solid var(--rule);padding-bottom:.35rem;margin:2.4rem 0 .9rem;
+  position:sticky;top:2.9rem;background:var(--paper);z-index:5}
+.orth .cnt{float:right;font-weight:600;color:var(--ink-faint);text-transform:none;letter-spacing:.05em}
+.piece{margin:1.8rem 0 0;border-top:2px solid var(--accent);padding-top:.9rem}
+.piece-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.55rem;margin-bottom:.15rem}
+.pid{font-family:var(--font-ui);font-size:.64rem;letter-spacing:.1em;font-weight:800;color:var(--accent);
+  background:var(--accent-soft);border:1px solid var(--rule);border-radius:2px;padding:.13rem .38rem}
+.ptitle{font-family:var(--font-ui);font-size:1.02rem;font-weight:750;margin:0}
+.pmeta{font-family:var(--font-ui);font-size:.67rem;color:var(--ink-faint);letter-spacing:.04em;margin:.15rem 0 .95rem}
+.cols{display:grid;grid-template-columns:1fr 20rem;gap:1.7rem;align-items:start}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.story{background:var(--vellum);color:var(--vellum-ink);border:1px solid var(--vellum-rule);border-radius:3px;
+  padding:1.3rem 1.5rem}
+.story p{margin:0 0 1.1rem;text-align:justify;hyphens:auto}
+.story p:first-of-type::first-letter{float:left;font-size:3.05rem;line-height:.86;padding:.1rem .38rem 0 0;font-weight:600;color:var(--mark)}
+.arrow{display:block;margin:-.5rem 0 1.45rem;font-family:var(--font-ui);font-size:.8rem;color:var(--mark);font-weight:700}
+.arrow::before{content:"→";margin-right:.4em;opacity:.55}
+.side{display:flex;flex-direction:column;gap:.9rem}
+.card{border:1px solid var(--rule);background:var(--paper-raised);border-radius:3px;padding:.8rem .95rem}
+.card h3{font-family:var(--font-ui);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  font-weight:800;margin:0 0 .5rem;border-bottom:1px solid var(--rule-soft);padding-bottom:.3rem}
+.card ol{margin:0;padding-left:1.15rem;font-size:.85rem;line-height:1.5}
+.card ol li{margin-bottom:.42rem}
+.card ol li em{color:var(--mark);font-style:normal;font-weight:700}
+.merk{font-size:.92rem;margin:0;font-style:italic}
+.orig{border-left:3px solid var(--mark);background:var(--mark-soft);padding:.65rem .85rem;border-radius:0 3px 3px 0}
+.orig h3{color:var(--mark);border-bottom-color:var(--mark)}
+.orig p{margin:0;font-size:.9rem}
+footer{margin-top:3.5rem;border-top:1px solid var(--rule);padding-top:.9rem;
+  font-family:var(--font-ui);font-size:.7rem;color:var(--ink-faint)}
+a{color:var(--accent)}
+@media print{
+  .top,footer{display:none}
+  .orth{position:static}
+  .piece{page-break-inside:avoid}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span class="brand">Memoria</span>
+  <span class="sep">·</span>
+  <span>Definitionen als begehbare Welt</span>
+  <span class="right">
+    <label style="color:var(--ink-faint)">Fach
+      <select class="btn" id="fachSel">
+        <option value="alle">alle</option>
+        <option value="ITI">ITI</option>
+        <option value="TGI">TGI</option>
+        <option value="EP">EP</option>
+        <option value="WMAPS">Mathe</option>
+      </select>
+    </label>
+    <button class="btn" id="themeBtn">◐ Dunkel</button>
+    <a class="btn" href="../wiederholen.html#memoria">Üben &amp; Wiederholen →</a>
+  </span>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Projekt Memoria</p>
+    <h1>Die ganze Reise</h1>
+    <p class="sub">Ein durchgehender Weg durch vier Regionen: <strong>Ader</strong> mit seinen Kanälen und Schleusen,
+    die <strong>Grundfeste</strong> aus Stein und Uhrwerk, <strong>Die Essen</strong> mit Giesserei und Werkbank,
+    und die <strong>Gezeitenküste</strong> mit Loten, Linsen und Tidenbecken. Jede Definition ist ein Raum, jeder
+    Bestandteil ein Ding darin. Rechts steht die Originaldefinition aus dem Heft, unverändert.
+    Zum Abhaken und Selbstabfragen: <a href="../wiederholen.html#memoria">Üben &amp; Wiederholen</a>.</p>
+  </div>
+  <div id="reise"></div>
+  <footer id="foot"></footer>
+</div>
+
+<script src="../assets/memoria-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var M = window.ITI_MEMORIA || {orte:[], stuecke:[]};
+  var host = document.getElementById("reise");
+  var fachSel = document.getElementById("fachSel");
+  var fach = "alle";
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  function render(){
+    var byOrt = {};
+    M.stuecke.forEach(function(m){ (byOrt[m.heftCode]=byOrt[m.heftCode]||[]).push(m); });
+    var out = "", n = 0;
+    (M.orte||[]).forEach(function(o){
+      if(!(fach==="alle" || o.fach===fach)) return;
+      var list = (byOrt[o.code]||[]).slice().sort(function(a,b){ return a.defIndex-b.defIndex; });
+      if(!list.length) return;
+      out += '<h2 class="orth">'+esc(o.region)+' · '+esc(o.ort)
+           + '<span class="cnt">'+esc(o.code)+' · '+list.length+' Stück'+(list.length===1?"":"e")+'</span></h2>';
+      list.forEach(function(m){
+        n++;
+        out += '<div class="piece"><div class="piece-head"><span class="pid">'+esc(m.id)+'</span>'
+             + '<h3 class="ptitle">'+esc(m.titel)+'</h3></div>'
+             + '<p class="pmeta">'+esc(m.heft)+' &nbsp;·&nbsp; '+esc(m.raum)
+             + ' &nbsp;·&nbsp; Kachel '+esc(m.kachel)+'</p><div class="cols"><div class="story">';
+        (m.absaetze||[]).forEach(function(a){
+          out += '<p>'+a.text+'</p>' + (a.begriff ? '<b class="arrow">'+esc(a.begriff)+'</b>' : '');
+        });
+        out += '</div><div class="side"><div class="card"><h3>Abrufkette</h3><ol>';
+        (m.kette||[]).forEach(function(k){ out += '<li>'+k+'</li>'; });
+        out += '</ol></div>'
+             + (m.merksatz ? '<div class="card"><h3>Merksatz</h3><p class="merk">'+m.merksatz+'</p></div>' : '')
+             + '<div class="card orig"><h3>Originaldefinition · '+esc(m.heftCode)+'</h3><p>'+m.original+'</p></div>'
+             + '</div></div></div>';
+      });
+    });
+    host.innerHTML = out || '<p>Für dieses Fach gibt es noch keine Stücke.</p>';
+    document.getElementById("foot").textContent =
+      "Projekt Memoria · " + n + " von " + M.stuecke.length + " Stücken angezeigt · erzeugt aus memoria/stuecke/ (_content/build_memoria.py)";
+  }
+
+  fachSel.addEventListener("change", function(){ fach = fachSel.value; render(); });
+
+  var tb = document.getElementById("themeBtn"), KEY = "memoria:theme", t = "light";
+  function setTheme(x){ document.documentElement.setAttribute("data-theme", x); tb.textContent = x==="dark" ? "☀ Hell" : "◐ Dunkel"; }
+  try{ t = localStorage.getItem(KEY) || "light"; }catch(e){}
+  setTheme(t);
+  tb.addEventListener("click", function(){
+    t = t==="dark" ? "light" : "dark"; setTheme(t);
+    try{ localStorage.setItem(KEY, t); }catch(e){}
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
