@@ -344,29 +344,29 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Eine Differenzialgleichung verknüpft eine gesuchte Funktion mit ihren Ableitungen. Gesucht ist keine Zahl, sondern eine <em>Funktion</em>.</p>
+    <p class="lead">Eine Differenzialgleichung verknüpft eine gesuchte Funktion mit ihren Ableitungen. Gesucht ist keine Zahl, sondern eine <em>Funktion</em>.<i class="sk" data-sk="mai13-feld"></i></p>
 
     <div class="box def">
       <span class="lbl">Die Vokabeln, die jede Aufgabe braucht</span>
       <div class="tw"><table>
         <tbody>
-          <tr><td><strong>Ordnung</strong></td><td>höchste vorkommende Ableitung</td></tr>
-          <tr><td><strong>gewöhnlich</strong></td><td>nur eine unabhängige Variable (sonst: partiell)</td></tr>
-          <tr><td><strong>linear</strong></td><td>y und alle Ableitungen kommen nur in der 1. Potenz und nicht als Argument von Funktionen vor</td></tr>
-          <tr><td><strong>homogen</strong></td><td>die „rechte Seite“ b(x) ist null</td></tr>
-          <tr><td><strong>inhomogen</strong></td><td>b(x) ≠ 0 – b heißt <strong>Störfunktion</strong> oder Störglied</td></tr>
-          <tr><td><strong>konstante Koeffizienten</strong></td><td>die a<sub>i</sub> sind Zahlen, keine Funktionen von x</td></tr>
+          <tr><td><strong>Ordnung</strong><i class="sk" data-sk="mai13-ordnung"></i></td><td>höchste vorkommende Ableitung</td></tr>
+          <tr><td><strong>gewöhnlich</strong><i class="sk" data-sk="mai13-gewoehnlich"></i></td><td>nur eine unabhängige Variable (sonst: partiell)</td></tr>
+          <tr><td><strong>linear</strong><i class="sk" data-sk="mai13-lin"></i></td><td>y und alle Ableitungen kommen nur in der 1. Potenz und nicht als Argument von Funktionen vor</td></tr>
+          <tr><td><strong>homogen</strong><i class="sk" data-sk="mai13-homogen"></i></td><td>die „rechte Seite“ b(x) ist null</td></tr>
+          <tr><td><strong>inhomogen</strong><i class="sk" data-sk="mai13-homogen"></i></td><td>b(x) ≠ 0 – b heißt <strong>Störfunktion</strong> oder Störglied</td></tr>
+          <tr><td><strong>konstante Koeffizienten</strong><i class="sk" data-sk="mai13-lin"></i></td><td>die a<sub>i</sub> sind Zahlen, keine Funktionen von x</td></tr>
         </tbody>
       </table></div>
     </div>
-    <p class="formula">allgemeine lineare DGL n-ter Ordnung:<br>y<sup>(n)</sup> + a<sub>n−1</sub>y<sup>(n−1)</sup> + … + a₁y′ + a₀y = b(x)</p>
+    <p class="formula">allgemeine lineare DGL n-ter Ordnung:<br>y<sup>(n)</sup> + a<sub>n−1</sub>y<sup>(n−1)</sup> + … + a₁y′ + a₀y = b(x)<i class="sk" data-sk="mai13-lin"></i></p>
 
     <div class="box def">
-      <span class="lbl">Allgemeine, partikuläre und singuläre Lösung</span>
-      <p>Die <strong>allgemeine Lösung</strong> einer DGL n-ter Ordnung enthält <strong>n freie Konstanten</strong> – sie beschreibt eine ganze Kurvenschar. Eine <strong>partikuläre (spezielle) Lösung</strong> entsteht durch Festlegen dieser Konstanten, in der Regel über <strong>Anfangsbedingungen</strong>.</p>
-      <p>Ein <strong>Anfangswertproblem (AWP)</strong> besteht aus der DGL <em>und</em> n Bedingungen an <em>derselben</em> Stelle x₀, z.&nbsp;B. y(0) = 2, y′(0) = 1. (Liegen die Bedingungen an verschiedenen Stellen, spricht man von einem Randwertproblem.)</p>
+      <span class="lbl">Allgemeine, partikuläre und singuläre Lösung<i class="sk" data-sk="mai13-schar"></i></span>
+      <p>Die <strong>allgemeine Lösung</strong> einer DGL n-ter Ordnung enthält <strong>n freie Konstanten</strong><i class="sk" data-sk="mai13-ordnung"></i> – sie beschreibt eine ganze Kurvenschar. Eine <strong>partikuläre (spezielle) Lösung</strong> entsteht durch Festlegen dieser Konstanten, in der Regel über <strong>Anfangsbedingungen</strong>.</p>
+      <p>Ein <strong>Anfangswertproblem (AWP)</strong><i class="sk" data-sk="mai13-awp"></i> besteht aus der DGL <em>und</em> n Bedingungen an <em>derselben</em> Stelle x₀, z.&nbsp;B. y(0) = 2, y′(0) = 1. (Liegen die Bedingungen an verschiedenen Stellen, spricht man von einem Randwertproblem.)</p>
     </div>
-    <p><strong>Probe:</strong> Eine Lösung lässt sich immer prüfen, indem man sie und ihre Ableitungen in die DGL einsetzt – bei Anfangswertproblemen zusätzlich die Bedingungen kontrollieren. Diese Probe kostet wenig Zeit und sichert Punkte.</p>
+    <p><strong>Probe:</strong><i class="sk" data-sk="mai13-probe"></i> Eine Lösung lässt sich immer prüfen, indem man sie und ihre Ableitungen in die DGL einsetzt – bei Anfangswertproblemen zusätzlich die Bedingungen kontrollieren. Diese Probe kostet wenig Zeit und sichert Punkte.</p>
   </div>
 </section>
 
@@ -387,41 +387,41 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   <div class="body">
     <p class="lead">Drei Lösungsverfahren – und die Kunst, der Gleichung anzusehen, welches passt.</p>
 
-    <p><strong>2.1 Existenz und Eindeutigkeit:</strong> Ist f(x, y) in einer Umgebung von (x₀, y₀) stetig, so besitzt y′ = f(x, y) mit y(x₀) = y₀ dort eine <strong>Lösung</strong> (Satz von Peano); ist zusätzlich ∂f/∂y stetig (Lipschitz-Bedingung), so ist sie <strong>eindeutig</strong> (Picard-Lindelöf). Praktisch heißt das: Man darf davon ausgehen, dass die gefundene Lösung <em>die</em> Lösung ist.</p>
+    <p><strong>2.1 Existenz und Eindeutigkeit:</strong> Ist f(x, y) in einer Umgebung von (x₀, y₀) stetig, so besitzt y′ = f(x, y) mit y(x₀) = y₀ dort eine <strong>Lösung</strong> (Satz von Peano); ist zusätzlich ∂f/∂y stetig (Lipschitz-Bedingung), so ist sie <strong>eindeutig</strong> (Picard-Lindelöf)<i class="sk" data-sk="mai13-peano"></i>. Praktisch heißt das: Man darf davon ausgehen, dass die gefundene Lösung <em>die</em> Lösung ist.</p>
 
     <div class="box def">
-      <span class="lbl">2.2.1 Trennung der Variablen</span>
+      <span class="lbl">2.2.1 Trennung der Variablen<i class="sk" data-sk="mai13-trenn"></i></span>
       <p><strong>Erkennungsmerkmal:</strong> Die rechte Seite lässt sich als Produkt schreiben, y′ = g(x)·h(y).</p>
       <p class="formula">dy/dx = g(x)·h(y)<br>&nbsp;&nbsp;⟹&nbsp; ∫ dy/h(y) = ∫ g(x) dx<br>&nbsp;&nbsp;⟹&nbsp; beide Seiten integrieren, <strong>eine</strong> Konstante C, dann nach y auflösen</p>
-      <p><em>Beispiel:</em> y′ = 2x·y → ∫dy/y = ∫2x dx → ln|y| = x² + C → <strong>y = K·e<sup>x²</sup></strong> mit K = ±e<sup>C</sup>.</p>
-      <p><strong>Nicht vergessen:</strong> Beim Teilen durch h(y) geht der Fall h(y) = 0 verloren – die konstanten Lösungen (hier y ≡ 0) separat prüfen.</p>
+      <p><em>Beispiel:</em> y′ = 2x·y → ∫dy/y = ∫2x dx → ln|y| = x² + C → <strong>y = K·e<sup>x²</sup></strong><i class="sk" data-sk="mai13-feld"></i> mit K = ±e<sup>C</sup>.</p>
+      <p><strong>Nicht vergessen:</strong> Beim Teilen durch h(y) geht der Fall h(y) = 0 verloren – die konstanten Lösungen (hier y ≡ 0) separat prüfen.<i class="sk" data-sk="mai13-verlust"></i></p>
     </div>
 
     <div class="box def">
-      <span class="lbl">2.2.2 Variation der Konstanten</span>
+      <span class="lbl">2.2.2 Variation der Konstanten<i class="sk" data-sk="mai13-var"></i></span>
       <p><strong>Für die lineare DGL erster Ordnung</strong> y′ + a(x)·y = b(x):</p>
       <p><strong>Schritt 1 – homogene Lösung</strong> über Trennung der Variablen:</p>
-      <p class="formula">y<sub>h</sub>(x) = C · e<sup>−∫a(x)dx</sup></p>
-      <p><strong>Schritt 2 – Konstante variieren:</strong> C wird zur Funktion C(x). Der Ansatz y = C(x)·e<sup>−∫a dx</sup> wird eingesetzt; die Terme mit C(x) heben sich weg, übrig bleibt eine direkt integrierbare Gleichung für C′(x):</p>
-      <p class="formula">C′(x) = b(x) · e<sup>∫a(x)dx</sup>&nbsp;&nbsp;⟹&nbsp;&nbsp;C(x) = ∫ b(x)·e<sup>∫a dx</sup> dx + K</p>
+      <p class="formula">y<sub>h</sub>(x) = C · e<sup>−∫a(x)dx</sup><i class="sk" data-sk="mai13-homogen"></i></p>
+      <p><strong>Schritt 2 – Konstante variieren:</strong> C wird zur Funktion C(x). Der Ansatz y = C(x)·e<sup>−∫a dx</sup> wird eingesetzt; die Terme mit C(x) heben sich weg, übrig bleibt eine direkt integrierbare Gleichung für C′(x):<i class="sk" data-sk="mai13-kuerzen"></i></p>
+      <p class="formula">C′(x) = b(x) · e<sup>∫a(x)dx</sup>&nbsp;&nbsp;⟹&nbsp;&nbsp;C(x) = ∫ b(x)·e<sup>∫a dx</sup> dx + K<i class="sk" data-sk="mai13-var"></i></p>
       <p><strong>Schritt 3:</strong> C(x) einsetzen – fertig ist die allgemeine Lösung.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">2.2.3 Substitution</span>
+      <span class="lbl">2.2.3 Substitution<i class="sk" data-sk="mai13-subst"></i></span>
       <p>Passt keines der beiden Verfahren, hilft oft eine Substitution, die die Gleichung auf einen der bekannten Typen zurückführt:</p>
       <div class="tw"><table class="mono">
         <thead><tr><th>Typ</th><th>Substitution</th><th>führt auf</th></tr></thead>
         <tbody>
-          <tr><td>y′ = f(ax + by + c)</td><td>u = ax + by + c</td><td>trennbar</td></tr>
-          <tr><td>y′ = f(y/x)&nbsp;(homogen)</td><td>u = y/x, also y = u·x</td><td>trennbar</td></tr>
-          <tr><td>Bernoulli: y′ + a(x)y = b(x)y<sup>n</sup></td><td>u = y<sup>1−n</sup></td><td>linear</td></tr>
+          <tr><td>y′ = f(ax + by + c)<i class="sk" data-sk="mai13-isoklin"></i></td><td>u = ax + by + c</td><td>trennbar</td></tr>
+          <tr><td>y′ = f(y/x)&nbsp;(homogen)<i class="sk" data-sk="mai13-isoklin"></i></td><td>u = y/x, also y = u·x</td><td>trennbar</td></tr>
+          <tr><td>Bernoulli: y′ + a(x)y = b(x)y<sup>n</sup><i class="sk" data-sk="mai13-bernoulli"></i></td><td>u = y<sup>1−n</sup></td><td>linear</td></tr>
         </tbody>
       </table></div>
-      <p>Nach der Substitution stets <strong>zurücksubstituieren</strong> – gesucht ist y(x), nicht u(x).</p>
+      <p>Nach der Substitution stets <strong>zurücksubstituieren</strong><i class="sk" data-sk="mai13-subst"></i> – gesucht ist y(x), nicht u(x).</p>
     </div>
     <div class="box warn">
-      <span class="lbl">Entscheidungsbaum für Ordnung 1</span>
+      <span class="lbl">Entscheidungsbaum für Ordnung 1<i class="sk" data-sk="mai13-baum"></i></span>
       <p>1. Lässt sich y′ = g(x)·h(y) schreiben? → <strong>Trennung der Variablen</strong><br>
       2. Hat sie die Form y′ + a(x)y = b(x)? → <strong>Variation der Konstanten</strong> (bei b ≡ 0 genügt Trennung)<br>
       3. Sonst → <strong>Substitution</strong> suchen</p>
@@ -447,56 +447,56 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Das Herzstück des Hefts – und der Stoff, aus dem die Klausuraufgaben sind.</p>
 
     <div class="box def">
-      <span class="lbl">3.1 Lösungsstruktur (Satz 3.3)</span>
+      <span class="lbl">3.1 Lösungsstruktur (Satz 3.3)<i class="sk" data-sk="mai13-struktur"></i></span>
       <p class="formula"><strong>y = y<sub>h</sub> + y<sub>p</sub></strong></p>
       <p>Die allgemeine Lösung der <strong>inhomogenen</strong> Gleichung ist die allgemeine Lösung der zugehörigen <strong>homogenen</strong> Gleichung plus <strong>eine einzige</strong> partikuläre Lösung der inhomogenen. Mehr braucht man nicht – deshalb zerfällt jede Aufgabe in genau zwei Teile.</p>
-      <p>Die Lösungen der homogenen Gleichung bilden einen <strong>Vektorraum der Dimension n</strong>: n linear unabhängige Lösungen (ein <strong>Fundamentalsystem</strong>) spannen alle auf.</p>
+      <p>Die Lösungen der homogenen Gleichung bilden einen <strong>Vektorraum der Dimension n</strong>: n linear unabhängige Lösungen (ein <strong>Fundamentalsystem</strong>) spannen alle auf.<i class="sk" data-sk="mai13-fundament"></i></p>
     </div>
 
     <h4>3.2 Homogener Fall mit konstanten Koeffizienten</h4>
     <div class="box def">
-      <span class="lbl">Charakteristisches Polynom (Def. 3.4, Satz 3.4)</span>
+      <span class="lbl">Charakteristisches Polynom (Def. 3.4, Satz 3.4)<i class="sk" data-sk="mai13-charpoly"></i></span>
       <p>Zu y<sup>(n)</sup> + a<sub>n−1</sub>y<sup>(n−1)</sup> + … + a₀y = 0 gehört</p>
       <p class="formula">p(λ) = λⁿ + a<sub>n−1</sub>λ<sup>n−1</sup> + … + a₁λ + a₀</p>
       <p>Ist λ₁ eine Nullstelle, so ist <strong>y = e<sup>λ₁x</sup></strong> eine Lösung. Man ersetzt also y<sup>(k)</sup> durch λ<sup>k</sup> und löst eine <em>algebraische</em> Gleichung.</p>
     </div>
-    <p>Für die Ordnung 2 (λ² + a₁λ + a₀ = 0) gibt es drei Fälle:</p>
+    <p>Für die Ordnung 2 (λ² + a₁λ + a₀ = 0) gibt es drei Fälle:<i class="sk" data-sk="mai13-diskr"></i></p>
     <div class="tw"><table>
       <thead><tr><th>Diskriminante</th><th>Nullstellen</th><th>Fundamentalsystem</th></tr></thead>
       <tbody>
-        <tr><td>D &gt; 0</td><td>zwei reelle λ₁ ≠ λ₂</td><td>y = C₁e<sup>λ₁x</sup> + C₂e<sup>λ₂x</sup></td></tr>
-        <tr><td>D = 0</td><td>doppelte Nullstelle λ</td><td>y = (C₁ + C₂·x)·e<sup>λx</sup></td></tr>
-        <tr><td>D &lt; 0</td><td>λ = α ± βi</td><td>y = e<sup>αx</sup>(C₁·cos βx + C₂·sin βx)</td></tr>
+        <tr><td>D &gt; 0<i class="sk" data-sk="mai13-dpos"></i></td><td>zwei reelle λ₁ ≠ λ₂</td><td>y = C₁e<sup>λ₁x</sup> + C₂e<sup>λ₂x</sup></td></tr>
+        <tr><td>D = 0<i class="sk" data-sk="mai13-dnull"></i></td><td>doppelte Nullstelle λ</td><td>y = (C₁ + C₂·x)·e<sup>λx</sup></td></tr>
+        <tr><td>D &lt; 0<i class="sk" data-sk="mai13-dneg"></i></td><td>λ = α ± βi</td><td>y = e<sup>αx</sup>(C₁·cos βx + C₂·sin βx)</td></tr>
       </tbody>
     </table></div>
-    <p>Bei mehrfachen Nullstellen der Vielfachheit k kommen die Faktoren x⁰, x¹, …, x<sup>k−1</sup> vor dem e-Term hinzu.</p>
+    <p>Bei mehrfachen Nullstellen der Vielfachheit k kommen die Faktoren x⁰, x¹, …, x<sup>k−1</sup> vor dem e-Term hinzu.<i class="sk" data-sk="mai13-dnull"></i></p>
 
     <h4>3.3 Inhomogener Fall: Ansatz vom Typ der rechten Seite</h4>
-    <p>Man wählt eine <strong>Ansatzfunktion</strong>, deren Struktur man an b(x) abliest, setzt sie in die DGL ein und bestimmt die Parameter durch <strong>Koeffizientenvergleich</strong>.</p>
+    <p>Man wählt eine <strong>Ansatzfunktion</strong><i class="sk" data-sk="mai13-ansatz"></i>, deren Struktur man an b(x) abliest, setzt sie in die DGL ein und bestimmt die Parameter durch <strong>Koeffizientenvergleich</strong>.<i class="sk" data-sk="mai13-koeff"></i></p>
     <div class="tw"><table>
       <thead><tr><th>Störfunktion b(x)</th><th>Ansatz y<sub>p</sub></th></tr></thead>
       <tbody>
-        <tr><td>Polynom vom Grad m</td><td>b<sub>m</sub>x<sup>m</sup> + … + b₁x + b₀ (vollständig, auch wenn Glieder fehlen!)</td></tr>
-        <tr><td>A·e<sup>kx</sup></td><td>B·e<sup>kx</sup></td></tr>
-        <tr><td>A·cos(ωx) + B·sin(ωx)</td><td>C·cos(ωx) + D·sin(ωx) — <strong>immer beide Terme</strong></td></tr>
+        <tr><td>Polynom vom Grad m</td><td>b<sub>m</sub>x<sup>m</sup> + … + b₁x + b₀ (vollständig, auch wenn Glieder fehlen!)<i class="sk" data-sk="mai13-koeff"></i></td></tr>
+        <tr><td>A·e<sup>kx</sup></td><td>B·e<sup>kx</sup><i class="sk" data-sk="mai13-ansatz"></i></td></tr>
+        <tr><td>A·cos(ωx) + B·sin(ωx)</td><td>C·cos(ωx) + D·sin(ωx) — <strong>immer beide Terme</strong><i class="sk" data-sk="mai13-cossin"></i></td></tr>
         <tr><td>Produkt der obigen</td><td>Produkt der Ansätze</td></tr>
-        <tr><td>Summe mehrerer Terme</td><td>je Summand getrennt ansetzen und addieren (Superposition)</td></tr>
+        <tr><td>Summe mehrerer Terme</td><td>je Summand getrennt ansetzen und addieren (Superposition)<i class="sk" data-sk="mai13-superpos"></i></td></tr>
       </tbody>
     </table></div>
     <div class="box warn">
-      <span class="lbl">Resonanz – die entscheidende Regel</span>
-      <p>Löst der Ansatz bereits die <strong>homogene</strong> Gleichung (ist also k eine Nullstelle des charakteristischen Polynoms bzw. ±ωi eine solche), so ist der Ansatz mit <strong>x</strong> zu multiplizieren – bei doppelter Nullstelle mit <strong>x²</strong>.</p>
-      <p><em>Beispiel:</em> y″ + 4y′ + 3y = 6e<sup>−x</sup> hat λ = −1, −3. Da e<sup>−x</sup> homogene Lösung ist, lautet der Ansatz <strong>y<sub>p</sub> = A·x·e<sup>−x</sup></strong> statt A·e<sup>−x</sup>. Ohne diesen Faktor führt der Koeffizientenvergleich auf 0 = 6 – ein sicheres Zeichen, dass Resonanz vorliegt.</p>
+      <span class="lbl">Resonanz – die entscheidende Regel<i class="sk" data-sk="mai13-respoly"></i></span>
+      <p>Löst der Ansatz bereits die <strong>homogene</strong> Gleichung (ist also k eine Nullstelle des charakteristischen Polynoms bzw. ±ωi eine solche)<i class="sk" data-sk="mai13-resonanz"></i>, so ist der Ansatz mit <strong>x</strong> zu multiplizieren – bei doppelter Nullstelle mit <strong>x²</strong>.</p>
+      <p><em>Beispiel:</em> y″ + 4y′ + 3y = 6e<sup>−x</sup> hat λ = −1, −3. Da e<sup>−x</sup> homogene Lösung ist, lautet der Ansatz <strong>y<sub>p</sub> = A·x·e<sup>−x</sup></strong> statt A·e<sup>−x</sup>. Ohne diesen Faktor führt der Koeffizientenvergleich auf 0 = 6 – ein sicheres Zeichen, dass Resonanz vorliegt.<i class="sk" data-sk="mai13-respoly"></i></p>
     </div>
     <div class="box def">
-      <span class="lbl">Ablaufplan für jede Aufgabe</span>
+      <span class="lbl">Ablaufplan für jede Aufgabe<i class="sk" data-sk="mai13-ablauf"></i></span>
       <p><strong>1.</strong> Charakteristisches Polynom aufstellen und Nullstellen bestimmen → y<sub>h</sub><br>
       <strong>2.</strong> Störfunktion ansehen, Ansatz wählen – <strong>Resonanz prüfen!</strong><br>
       <strong>3.</strong> Ansatz und Ableitungen einsetzen, Koeffizientenvergleich → y<sub>p</sub><br>
       <strong>4.</strong> y = y<sub>h</sub> + y<sub>p</sub><br>
       <strong>5.</strong> Erst <em>jetzt</em> die Anfangsbedingungen einsetzen und C₁, C₂ bestimmen<br>
       <strong>6.</strong> Probe</p>
-      <p><strong>Häufigster Fehler:</strong> die Konstanten schon aus y<sub>h</sub> allein bestimmen. Die Anfangsbedingungen gelten für die <strong>Gesamtlösung</strong>.</p>
+      <p><strong>Häufigster Fehler:</strong> die Konstanten schon aus y<sub>h</sub> allein bestimmen. Die Anfangsbedingungen gelten für die <strong>Gesamtlösung</strong>.<i class="sk" data-sk="mai13-awpgesamt"></i></p>
     </div>
   </div>
 </section>
@@ -519,17 +519,17 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Zwei Modelle, an denen sich zeigt, wozu der Apparat gut ist.</p>
 
     <div class="box def">
-      <span class="lbl">4.1 Die logistische Gleichung</span>
+      <span class="lbl">4.1 Die logistische Gleichung<i class="sk" data-sk="mai13-logist"></i></span>
       <p>Das <strong>exponentielle</strong> Wachstumsmodell y′ = k·y (Trennung der Variablen → y = y₀e<sup>kx</sup>) ist unrealistisch, weil Ressourcen begrenzt sind. Die logistische Gleichung bremst das Wachstum bei Annäherung an die Kapazitätsgrenze G:</p>
-      <p class="formula">y′ = k · y · (G − y)</p>
-      <p>Sie ist <strong>trennbar</strong>; die Integration erfordert eine <strong>Partialbruchzerlegung</strong> von 1/(y(G−y)). Die Lösung ist die S-förmige logistische Kurve, die für x → ∞ gegen <strong>G</strong> strebt. Stationäre (konstante) Lösungen: y ≡ 0 und y ≡ G.</p>
+      <p class="formula">y′ = k · y · (G − y)<i class="sk" data-sk="mai13-logfeld"></i></p>
+      <p>Sie ist <strong>trennbar</strong>; die Integration erfordert eine <strong>Partialbruchzerlegung</strong> von 1/(y(G−y))<i class="sk" data-sk="mai13-pbz"></i>. Die Lösung ist die S-förmige logistische Kurve, die für x → ∞ gegen <strong>G</strong> strebt. Stationäre (konstante) Lösungen: y ≡ 0 und y ≡ G.<i class="sk" data-sk="mai13-logfeld"></i></p>
     </div>
     <div class="box def">
-      <span class="lbl">4.2 Wechselstromkreis</span>
+      <span class="lbl">4.2 Wechselstromkreis<i class="sk" data-sk="mai13-kreis"></i></span>
       <p>Für den RL-Kreis liefert die Maschenregel eine <strong>lineare DGL erster Ordnung</strong>, für den RLC-Kreis eine <strong>zweiter Ordnung</strong>:</p>
-      <p class="formula">L·i′(t) + R·i(t) = u(t)<br>L·i″(t) + R·i′(t) + (1/C)·i(t) = u′(t)</p>
-      <p>Die <strong>homogene</strong> Lösung beschreibt den abklingenden <strong>Einschwingvorgang</strong> (transient), die <strong>partikuläre</strong> Lösung den <strong>stationären Zustand</strong> nach dem Einschwingen. Bei sinusförmiger Anregung u(t) = û·sin(ωt) führt der Ansatz C·cos(ωt) + D·sin(ωt) genau auf Amplitude und Phasenverschiebung des eingeschwungenen Stroms.</p>
-      <p>Die drei Fälle der Diskriminante entsprechen hier physikalisch dem <strong>Kriechfall</strong> (D &gt; 0), dem <strong>aperiodischen Grenzfall</strong> (D = 0) und dem <strong>Schwingfall</strong> (D &lt; 0).</p>
+      <p class="formula">L·i′(t) + R·i(t) = u(t)<br>L·i″(t) + R·i′(t) + (1/C)·i(t) = u′(t)<i class="sk" data-sk="mai13-kreis"></i></p>
+      <p>Die <strong>homogene</strong> Lösung beschreibt den abklingenden <strong>Einschwingvorgang</strong> (transient), die <strong>partikuläre</strong> Lösung den <strong>stationären Zustand</strong> nach dem Einschwingen.<i class="sk" data-sk="mai13-einschwing"></i> Bei sinusförmiger Anregung u(t) = û·sin(ωt) führt der Ansatz C·cos(ωt) + D·sin(ωt) genau auf Amplitude und Phasenverschiebung des eingeschwungenen Stroms.</p>
+      <p>Die drei Fälle der Diskriminante entsprechen hier physikalisch dem <strong>Kriechfall</strong> (D &gt; 0), dem <strong>aperiodischen Grenzfall</strong> (D = 0) und dem <strong>Schwingfall</strong> (D &lt; 0).<i class="sk" data-sk="mai13-faelle"></i></p>
     </div>
   </div>
 </section>
@@ -869,22 +869,22 @@ y'(0) = (3/2)C₂ = −3/2   →   C₂ = −1</div>
     <div class="tw"><table>
       <thead><tr><th>Typ</th><th>Verfahren</th><th>Lösung</th></tr></thead>
       <tbody>
-        <tr><td>y′ = g(x)·h(y)</td><td>Trennung</td><td>∫dy/h(y) = ∫g(x)dx</td></tr>
-        <tr><td>y′ + a(x)y = 0</td><td>Trennung</td><td>y = C·e<sup>−∫a dx</sup></td></tr>
-        <tr><td>y′ + a(x)y = b(x)</td><td>Variation</td><td>y = e<sup>−∫a dx</sup>·(∫b·e<sup>∫a dx</sup>dx + K)</td></tr>
-        <tr><td>y′ + a(x)y = b(x)y<sup>n</sup></td><td>Bernoulli</td><td>Substitution u = y<sup>1−n</sup></td></tr>
-        <tr><td>y′ = f(y/x)</td><td>homogen</td><td>Substitution u = y/x</td></tr>
+        <tr><td>y′ = g(x)·h(y)<i class="sk" data-sk="mai13-trenn"></i></td><td>Trennung</td><td>∫dy/h(y) = ∫g(x)dx</td></tr>
+        <tr><td>y′ + a(x)y = 0<i class="sk" data-sk="mai13-homogen"></i></td><td>Trennung</td><td>y = C·e<sup>−∫a dx</sup></td></tr>
+        <tr><td>y′ + a(x)y = b(x)<i class="sk" data-sk="mai13-var"></i></td><td>Variation</td><td>y = e<sup>−∫a dx</sup>·(∫b·e<sup>∫a dx</sup>dx + K)</td></tr>
+        <tr><td>y′ + a(x)y = b(x)y<sup>n</sup><i class="sk" data-sk="mai13-bernoulli"></i></td><td>Bernoulli</td><td>Substitution u = y<sup>1−n</sup></td></tr>
+        <tr><td>y′ = f(y/x)<i class="sk" data-sk="mai13-isoklin"></i></td><td>homogen</td><td>Substitution u = y/x</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">Nützlich: ∫ f′(x)/f(x) dx = ln|f(x)| + C</p>
+    <p class="formula">Nützlich: ∫ f′(x)/f(x) dx = ln|f(x)| + C<i class="sk" data-sk="mai13-lnf"></i></p>
 
     <h4>Homogen, konstante Koeffizienten</h4>
-    <p class="formula">charakteristisches Polynom:&nbsp; λ² + a₁λ + a₀ = 0</p>
+    <p class="formula">charakteristisches Polynom:&nbsp; λ² + a₁λ + a₀ = 0<i class="sk" data-sk="mai13-charpoly"></i></p>
     <div class="tw"><table>
       <tbody>
-        <tr><td>λ₁ ≠ λ₂ reell</td><td>y = C₁e<sup>λ₁x</sup> + C₂e<sup>λ₂x</sup></td></tr>
-        <tr><td>λ doppelt</td><td>y = (C₁ + C₂x)e<sup>λx</sup></td></tr>
-        <tr><td>λ = α ± βi</td><td>y = e<sup>αx</sup>(C₁cos βx + C₂sin βx)</td></tr>
+        <tr><td>λ₁ ≠ λ₂ reell<i class="sk" data-sk="mai13-dpos"></i></td><td>y = C₁e<sup>λ₁x</sup> + C₂e<sup>λ₂x</sup></td></tr>
+        <tr><td>λ doppelt<i class="sk" data-sk="mai13-dnull"></i></td><td>y = (C₁ + C₂x)e<sup>λx</sup></td></tr>
+        <tr><td>λ = α ± βi<i class="sk" data-sk="mai13-dneg"></i></td><td>y = e<sup>αx</sup>(C₁cos βx + C₂sin βx)</td></tr>
       </tbody>
     </table></div>
 
@@ -892,17 +892,17 @@ y'(0) = (3/2)C₂ = −3/2   →   C₂ = −1</div>
     <div class="tw"><table>
       <thead><tr><th>b(x)</th><th>Ansatz y<sub>p</sub></th><th>bei Resonanz</th></tr></thead>
       <tbody>
-        <tr><td>Polynom Grad m</td><td>vollständiges Polynom Grad m</td><td>· x<sup>k</sup> (k = Vielfachheit von λ = 0)</td></tr>
-        <tr><td>A·e<sup>kx</sup></td><td>B·e<sup>kx</sup></td><td>· x, wenn k Nullstelle ist (· x² bei doppelter)</td></tr>
-        <tr><td>A cos ωx + B sin ωx</td><td>C cos ωx + D sin ωx</td><td>· x, wenn ±ωi Nullstellen sind</td></tr>
+        <tr><td>Polynom Grad m<i class="sk" data-sk="mai13-koeff"></i></td><td>vollständiges Polynom Grad m</td><td>· x<sup>k</sup> (k = Vielfachheit von λ = 0)</td></tr>
+        <tr><td>A·e<sup>kx</sup><i class="sk" data-sk="mai13-respoly"></i></td><td>B·e<sup>kx</sup></td><td>· x, wenn k Nullstelle ist (· x² bei doppelter)</td></tr>
+        <tr><td>A cos ωx + B sin ωx<i class="sk" data-sk="mai13-cossin"></i></td><td>C cos ωx + D sin ωx</td><td>· x, wenn ±ωi Nullstellen sind</td></tr>
         <tr><td>e<sup>kx</sup>·Polynom</td><td>e<sup>kx</sup>·Polynom</td><td>analog</td></tr>
-        <tr><td>Summe</td><td>Ansätze einzeln, dann addieren</td><td>je Summand prüfen</td></tr>
+        <tr><td>Summe<i class="sk" data-sk="mai13-superpos"></i></td><td>Ansätze einzeln, dann addieren</td><td>je Summand prüfen</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">Spezialfall Resonanz bei y″ + ω²y = A·cos(ωx):<br>y<sub>p</sub> = (A/(2ω))·x·sin(ωx)</p>
+    <p class="formula">Spezialfall Resonanz bei y″ + ω²y = A·cos(ωx):<br>y<sub>p</sub> = (A/(2ω))·x·sin(ωx)<i class="sk" data-sk="mai13-resonanz"></i></p>
 
     <h4>Ablaufplan</h4>
-    <p class="formula">1. char. Polynom → y_h<br>2. Ansatz wählen (Resonanz prüfen!)<br>3. einsetzen, Koeffizientenvergleich → y_p<br>4. y = y_h + y_p<br>5. Anfangsbedingungen in die GESAMTLÖSUNG<br>6. Probe durch Einsetzen</p>
+    <p class="formula">1. char. Polynom → y_h<br>2. Ansatz wählen (Resonanz prüfen!)<br>3. einsetzen, Koeffizientenvergleich → y_p<br>4. y = y_h + y_p<br>5. Anfangsbedingungen in die GESAMTLÖSUNG<br>6. Probe durch Einsetzen<i class="sk" data-sk="mai13-ablauf"></i></p>
   </div>
 </section>
 

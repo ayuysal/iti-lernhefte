@@ -347,65 +347,65 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Endliche Automaten reichen nicht aus, um Sprachen wie {w | w enthält gleich viele a wie b} oder die Palindrome über {a,b} zu beschreiben – es fehlt eine Möglichkeit zu zählen bzw. sich das bereits Gelesene zu „merken". Der <strong>Kellerautomat</strong> rüstet den endlichen Automaten mit einem Stapelspeicher (Keller, Stack) aus und schliesst genau diese Lücke. Anders als bei endlichen Automaten sind nichtdeterministische und deterministische Kellerautomaten dabei <strong>nicht</strong> gleich mächtig – mit weitreichenden praktischen Folgen für das Parsen.</p>
 
     <div class="box def">
-      <span class="lbl">Nichtdeterministischer Kellerautomat (NKA), Def. 1.1</span>
-      <p>Ein NKA ist ein 7-Tupel M = (Q, Σ, Γ, δ, q0, k0, E) mit Zustandsmenge Q, Eingabealphabet Σ, Kelleralphabet Γ, Überführungsfunktion δ, Anfangszustand q0, Kellervorbelegungszeichen k0 ∈ Γ und Endzustandsmenge E ⊆ Q. In jedem Arbeitstakt wird zuerst das oberste Kellerzeichen (<strong>top of stack</strong>) mit <strong>pop</strong> verbrauchend gelesen, danach wird ein Kellerwort mit <strong>multiple push</strong> aufgeschrieben – dessen erstes Zeichen ist das neue top of stack.</p>
+      <span class="lbl">Nichtdeterministischer Kellerautomat (NKA), Def. 1.1<i class="sk" data-sk="tgi07-nka"></i></span>
+      <p>Ein NKA ist ein 7-Tupel M = (Q, Σ, Γ, δ, q0, k0, E) mit Zustandsmenge Q, Eingabealphabet Σ, Kelleralphabet Γ, Überführungsfunktion δ, Anfangszustand q0, Kellervorbelegungszeichen k0 ∈ Γ und Endzustandsmenge E ⊆ Q. In jedem Arbeitstakt wird zuerst das oberste Kellerzeichen (<strong>top of stack</strong>) mit <strong>pop</strong> verbrauchend gelesen, danach wird ein Kellerwort mit <strong>multiple push</strong> aufgeschrieben<i class="sk" data-sk="tgi07-push"></i> – dessen erstes Zeichen ist das neue top of stack.</p>
     </div>
 
-    <p class="formula">δ : Q × (Σ ∪ {ε}) × Γ → endlich(Q × Γ*)</p>
+    <p class="formula">δ : Q × (Σ ∪ {ε}) × Γ → endlich(Q × Γ*)<i class="sk" data-sk="tgi07-push"></i></p>
     <p>δ ist eine <strong>partielle</strong> Funktion: Existiert für ein Tripel kein Funktionswert, stoppt der Automat per <strong>Crash</strong> und das Wort wird abgewiesen. Auch spontane (ε-)Übergänge sind erlaubt; dabei wird das oberste Kellerzeichen ebenfalls verbrauchend gelesen. Der Analyseverlauf wird als Folge von <strong>Konfigurationen</strong> (Tripeln aus Q × Σ* × Γ*) protokolliert; ⊢* steht für „geht in beliebig vielen Schritten über in". Ein NKA akzeptiert w, wenn w vollständig gelesen wurde und danach (ggf. nach spontanen Übergängen) ein Endzustand erreicht ist – der Kellerinhalt spielt für die Akzeptanz keine Rolle:</p>
-    <p class="formula">L(M) = {w ∈ Σ* | (q0, w, k0) ⊢* (qe, ε, K), qe ∈ E, K ∈ Γ*}</p>
+    <p class="formula">L(M) = {w ∈ Σ* | (q0, w, k0) ⊢* (qe, ε, K), qe ∈ E, K ∈ Γ*}<i class="sk" data-sk="tgi07-konfig"></i></p>
 
     <div class="box">
-      <span class="lbl">Alternative: Akzeptanz per leerem Keller</span>
+      <span class="lbl">Alternative: Akzeptanz per leerem Keller<i class="sk" data-sk="tgi07-leer"></i></span>
       <p>Def. 1.2 definiert einen gleichwertigen NKA als 6-Tupel <em>ohne</em> Endzustandsmenge: Das Wort ist akzeptiert, wenn der Automat stoppt und der Keller leer ist. Satz 1.1 zeigt konstruktiv, dass beide Definitionen äquivalent sind – die Transformation in beide Richtungen ist auch praktisch wichtig, weil Werkzeuge wie AutoEdit nur die 7-Tupel-Form akzeptieren.</p>
     </div>
 
     <h4>Äquivalenz von NKA und kontextfreier Grammatik</h4>
     <p>Satz 1.2 beantwortet die zentrale Frage des Kapitels: <strong>Eine Sprache L ist kontextfrei genau dann, wenn L von einem NKA akzeptiert wird</strong> – also L<sub>kfS</sub> = L<sub>NKA</sub>. Der Beweis ist konstruktiv und liefert in beide Richtungen ein Verfahren:</p>
     <ul>
-      <li><strong>kfG → NKA:</strong> Der NKA braucht nur einen einzigen Zustand q0. Für jede Regel A → α wird die rechte Regelseite α ungelesen auf den Keller gelegt (δ(q0, ε, A) ∋ (q0, α)); für jedes Terminal a gilt δ(q0, a, a) ∋ (q0, ε). Der Keller simuliert so direkt eine Linksableitung, Kellervorbelegung ist das Spitzensymbol s.</li>
-      <li><strong>NKA → kfG:</strong> Für jeden möglichen Zustandsübergang entstehen Nichtterminale der Form [q, A, q'] („vom Zustand q mit A auf dem Keller lässt sich q' erreichen") und dazu passende Regeln; anschliessend werden unnütze Nichtterminale und Regeln eliminiert (s. u., Abschnitt 1.8).</li>
+      <li><strong>kfG → NKA:</strong><i class="sk" data-sk="tgi07-kfg2nka"></i> Der NKA braucht nur einen einzigen Zustand q0. Für jede Regel A → α wird die rechte Regelseite α ungelesen auf den Keller gelegt (δ(q0, ε, A) ∋ (q0, α)); für jedes Terminal a gilt δ(q0, a, a) ∋ (q0, ε). Der Keller simuliert so direkt eine Linksableitung, Kellervorbelegung ist das Spitzensymbol s.</li>
+      <li><strong>NKA → kfG:</strong><i class="sk" data-sk="tgi07-nka2kfg"></i> Für jeden möglichen Zustandsübergang entstehen Nichtterminale der Form [q, A, q'] („vom Zustand q mit A auf dem Keller lässt sich q' erreichen") und dazu passende Regeln; anschliessend werden unnütze Nichtterminale und Regeln eliminiert (s. u., Abschnitt 1.8).</li>
     </ul>
 
     <div class="box warn">
-      <span class="lbl">Prüfungsfalle</span>
+      <span class="lbl">Prüfungsfalle</span><i class="sk" data-sk="tgi07-exp"></i>
       <p>NKA sind für praktisches Parsen <strong>unbrauchbar</strong>: Die Analyse arbeitet im Allgemeinen mit <strong>exponentieller</strong> Zeitkomplexität ᐦ(k<sup>n</sup>), weil bei mehreren anwendbaren Regeln alle Wege verfolgt werden müssen (Backtracking). Auswege: (a) effizientere Verfahren für allgemeine kfG wie Chart-Parser oder der Earley-Algorithmus, (b) Transformation in eine günstigere Normalform (z. B. CNF, s. u.), oder (c) Beschränkung auf Unterklassen mit nachweislich effizientem Parsing – LL(k) und LR(k), Thema der Kapitel 2 und 3.</p>
     </div>
 
     <h4>Deterministischer Kellerautomat (DKA)</h4>
-    <p>Ein DKA ist wie ein NKA definiert (Def. 1.3), mit drei Einschränkungen: δ liefert <strong>Paare statt Mengen</strong> (δ : Q × (Σ ∪ {ε}) × Γ → Q × Γ*); ist δ(q, ε, A) definiert, muss δ(q, a, A) für alle a ∈ Σ undefiniert sein und umgekehrt – kein Nichtdeterminismus zwischen spontanem und gelesenem Übergang; und es gilt stets die 7-Tupel-Form mit Endzustandsmenge, die 6-Tupel-Form (leerer Keller) ist für DKA <strong>nicht</strong> zulässig. Für {aⁿbⁿ | n ≥ 1} etwa gibt es einen einfachen DKA (Beispiel 1.8): Jedes gelesene a wird gekellert, jedes gelesene b entkellert eines – erst wenn beim Erreichen des Wortendes wieder das Kellervorbelegungszeichen zutage tritt, wird akzeptiert.</p>
+    <p>Ein DKA ist wie ein NKA definiert (Def. 1.3), mit drei Einschränkungen: δ liefert <strong>Paare statt Mengen</strong> (δ : Q × (Σ ∪ {ε}) × Γ → Q × Γ*); ist δ(q, ε, A) definiert, muss δ(q, a, A) für alle a ∈ Σ undefiniert sein und umgekehrt – kein Nichtdeterminismus zwischen spontanem und gelesenem Übergang; und es gilt stets die 7-Tupel-Form mit Endzustandsmenge, die 6-Tupel-Form (leerer Keller) ist für DKA <strong>nicht</strong> zulässig. Für {aⁿbⁿ | n ≥ 1} etwa gibt es einen einfachen DKA (Beispiel 1.8)<i class="sk" data-sk="tgi07-dka"></i>: Jedes gelesene a wird gekellert, jedes gelesene b entkellert eines – erst wenn beim Erreichen des Wortendes wieder das Kellervorbelegungszeichen zutage tritt, wird akzeptiert.</p>
 
     <div class="tw"><table>
       <thead><tr><th>Automat</th><th>Kern der Definition</th><th>Beschreibungskraft</th></tr></thead>
       <tbody>
-        <tr><td><strong>NKA</strong></td><td>δ liefert eine (endliche) Menge möglicher Folgekonfigurationen</td><td>L<sub>NKA</sub> = L<sub>kfS</sub> – beschreibt <em>alle</em> kontextfreien Sprachen</td></tr>
-        <tr><td><strong>DKA</strong></td><td>δ liefert genau eine Folgekonfiguration; kein ε/a-Konflikt</td><td>L<sub>DKA</sub> = L<sub>dkfS</sub> ⊊ L<sub>kfS</sub> – eine <em>echte</em> Teilmenge!</td></tr>
+        <tr><td><strong>NKA</strong><i class="sk" data-sk="tgi07-nka"></i></td><td>δ liefert eine (endliche) Menge möglicher Folgekonfigurationen</td><td>L<sub>NKA</sub> = L<sub>kfS</sub> – beschreibt <em>alle</em> kontextfreien Sprachen</td></tr>
+        <tr><td><strong>DKA</strong><i class="sk" data-sk="tgi07-dka"></i></td><td>δ liefert genau eine Folgekonfiguration; kein ε/a-Konflikt</td><td>L<sub>DKA</sub> = L<sub>dkfS</sub> ⊊ L<sub>kfS</sub> – eine <em>echte</em> Teilmenge!</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
-      <span class="lbl">Prüfungsfalle: keine Analogie zu endlichen Automaten</span>
+      <span class="lbl">Prüfungsfalle: keine Analogie zu endlichen Automaten<i class="sk" data-sk="tgi07-palin"></i></span>
       <p>Bei endlichen Automaten gilt L<sub>DEA</sub> = L<sub>NEA</sub> – Determinismus kostet dort keine Beschreibungskraft. Bei Kellerautomaten gilt das <strong>nicht</strong>: L<sub>DKA</sub> ⊊ L<sub>NKA</sub>. Klassisches Beispiel: Für die Palindromsprache {w ∈ {a,b}* | w = umkehr(w)} (Beispiel 1.9) gibt es <em>keinen</em> DKA – ein DKA hat kein Mittel festzustellen, wann die Wortmitte erreicht ist, um vom Kellern aufs Entkellern umzuschalten. Markiert man die Mitte hingegen explizit (Sprache {v c v' | c ∈ Σ, v' = umkehr(v)}, Beispiel 1.10), existiert sehr wohl ein DKA.</p>
     </div>
 
-    <p>Die von DKA beschriebenen Sprachen heissen <strong>deterministisch kontextfreie Sprachen</strong>, kurz <strong>dkfS</strong>. Sie bilden die für Programmiersprachen wichtigste Sprachklasse und stimmen exakt mit den in Kapitel 3 behandelten <strong>LR(k)-Sprachen</strong> überein.</p>
+    <p>Die von DKA beschriebenen Sprachen heissen <strong>deterministisch kontextfreie Sprachen</strong>, kurz <strong>dkfS</strong><i class="sk" data-sk="tgi07-klassen"></i>. Sie bilden die für Programmiersprachen wichtigste Sprachklasse und stimmen exakt mit den in Kapitel 3 behandelten <strong>LR(k)-Sprachen</strong> überein.</p>
 
     <h4>Parsing und Parsergeneratoren</h4>
-    <p>Da NKA praktisch ausscheiden, liegt der Versuch nahe, Sprachen direkt über DKA zu beschreiben – doch schon für einen kleinen Ausschnitt der Zeichenrobotersprache ZR (Beispiel 1.11) entsteht ein DKA mit vielen Zuständen. Für eine vollständige Programmiersprache von Hand einen DKA zu entwerfen, ist aussichtslos. Deshalb verwendet man <strong>Parsergeneratoren</strong> wie VCC (aus AtoCC): Man übergibt eine kontextfreie Grammatik (für den Parser) und reguläre Ausdrücke (für den Scanner) und erhält automatisch einen lauffähigen Parser, wahlweise als LL(1)- oder LALR(1)-Analysator. Nichtterminale mit einfacher Struktur (z. B. Zahl, Farbwert) werden dabei vom Scanner vorbehandelt und erscheinen aus Sicht des Parsers als Terminale (Token) – das reduziert die Grammatik erheblich.</p>
+    <p>Da NKA praktisch ausscheiden, liegt der Versuch nahe, Sprachen direkt über DKA zu beschreiben – doch schon für einen kleinen Ausschnitt der Zeichenrobotersprache ZR (Beispiel 1.11) entsteht ein DKA mit vielen Zuständen. Für eine vollständige Programmiersprache von Hand einen DKA zu entwerfen, ist aussichtslos. Deshalb verwendet man <strong>Parsergeneratoren</strong><i class="sk" data-sk="tgi07-pargen"></i> wie VCC (aus AtoCC): Man übergibt eine kontextfreie Grammatik (für den Parser) und reguläre Ausdrücke (für den Scanner) und erhält automatisch einen lauffähigen Parser, wahlweise als LL(1)- oder LALR(1)-Analysator. Nichtterminale mit einfacher Struktur (z. B. Zahl, Farbwert) werden dabei vom Scanner vorbehandelt und erscheinen aus Sicht des Parsers als Terminale (Token) – das reduziert die Grammatik erheblich.</p>
 
     <h4>Grammatik-Optimierung: unnütze Nichtterminale und Kettenregeln</h4>
     <p>Grammatiken werden beim Entwurf oft mit sprechenden, aber teils überflüssigen Nichtterminalen angereichert (bessere Lesbarkeit, Wartbarkeit). Für effizientes Parsen sollte eine Grammatik jedoch reduziert werden:</p>
     <ul>
-      <li><strong>Unnütze Nichtterminale</strong> sind solche, die bei der Erzeugung <em>keines</em> Wortes der Sprache gebraucht werden. Sie werden iterativ ermittelt: Zuerst die Menge aller Nichtterminale, die zu einem Terminalwort ableiten, danach die vom Spitzensymbol aus erreichbaren – nur der Durchschnitt bleibt, alle anderen Regeln entfallen.</li>
-      <li><strong>Kettenregeln</strong> (unit productions) haben die Form X → Y mit X, Y ∈ N. Man bildet die endliche Menge M aller Paare (A,B) mit A ⇒* B und ersetzt jede Kettenregel durch die „durchgereichten" Alternativen von B.</li>
+      <li><strong>Unnütze Nichtterminale</strong><i class="sk" data-sk="tgi07-unnuetz"></i> sind solche, die bei der Erzeugung <em>keines</em> Wortes der Sprache gebraucht werden. Sie werden iterativ ermittelt: Zuerst die Menge aller Nichtterminale, die zu einem Terminalwort ableiten, danach die vom Spitzensymbol aus erreichbaren – nur der Durchschnitt bleibt, alle anderen Regeln entfallen.</li>
+      <li><strong>Kettenregeln</strong> (unit productions)<i class="sk" data-sk="tgi07-kette"></i> haben die Form X → Y mit X, Y ∈ N. Man bildet die endliche Menge M aller Paare (A,B) mit A ⇒* B und ersetzt jede Kettenregel durch die „durchgereichten" Alternativen von B.</li>
     </ul>
-    <p class="formula">M₁ = {X | (X→α) ∈ P, α ∈ T*};  M<sub>i+1</sub> = M<sub>i</sub> ∪ {X | (X→α) ∈ P, α ∈ (M<sub>i</sub> ∪ T)*}</p>
+    <p class="formula">M₁ = {X | (X→α) ∈ P, α ∈ T*};  M<sub>i+1</sub> = M<sub>i</sub> ∪ {X | (X→α) ∈ P, α ∈ (M<sub>i</sub> ∪ T)*}<i class="sk" data-sk="tgi07-mstufen"></i></p>
 
     <div class="box def">
-      <span class="lbl">Chomsky-Normalform (CNF), Def. 1.4</span>
-      <p>Eine kfG ist in CNF, wenn jede Regel entweder die Form X → a (a ∈ T) oder X → YZ (Y, Z ∈ N) besitzt. Satz 1.3: Zu jeder kfG G mit ε ∉ L(G) gibt es eine äquivalente kfG in CNF – konstruktiv über drei Schritte: (a) Regeln X → a direkt übernehmen, (b) in längeren rechten Seiten jedes Terminal a durch ein neues Nichtterminal X<sub>a</sub> ersetzen und X<sub>a</sub> → a ergänzen, (c) rechte Seiten der Länge ≥ 3 schrittweise mit neuen Nichtterminalen auf Länge 2 verkürzen.</p>
+      <span class="lbl">Chomsky-Normalform (CNF), Def. 1.4<i class="sk" data-sk="tgi07-cnf"></i></span>
+      <p>Eine kfG ist in CNF, wenn jede Regel entweder die Form X → a (a ∈ T) oder X → YZ (Y, Z ∈ N) besitzt. Satz 1.3: Zu jeder kfG G mit ε ∉ L(G) gibt es eine äquivalente kfG in CNF – konstruktiv über drei Schritte: (a) Regeln X → a direkt übernehmen, (b) in längeren rechten Seiten jedes Terminal a durch ein neues Nichtterminal X<sub>a</sub> ersetzen und X<sub>a</sub> → a ergänzen, (c) rechte Seiten der Länge ≥ 3 schrittweise mit neuen Nichtterminalen auf Länge 2 verkürzen.<i class="sk" data-sk="tgi07-cnfschritte"></i></p>
     </div>
-    <p>CNF garantiert Ableitungsbäume in Binärbaumform und ist Grundlage des <strong>Cocke-Younger-Kasami-Algorithmus (CYK)</strong>, eines auf dynamischer Programmierung basierenden Parse-Verfahrens mit Zeitkomplexität O(n³) – deutlich günstiger als das NKA-basierte Parsing.</p>
+    <p>CNF garantiert Ableitungsbäume in Binärbaumform und ist Grundlage des <strong>Cocke-Younger-Kasami-Algorithmus (CYK)</strong><i class="sk" data-sk="tgi07-cyk"></i>, eines auf dynamischer Programmierung basierenden Parse-Verfahrens mit Zeitkomplexität O(n³) – deutlich günstiger als das NKA-basierte Parsing.</p>
   </div>
 </section>
 
@@ -424,14 +424,14 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Top-down-Verfahren beginnen beim Spitzensymbol und erzeugen das Analysewort per Linksableitung – dabei drohen Sackgassen und teures Backtracking. Für die Klasse der <strong>LL(k)-Sprachen</strong> lässt sich das vermeiden: Mit Vorausschau auf k Token ist die anzuwendende Regel in jedem Schritt eindeutig (irrtumsfrei) bestimmbar – man spricht von <strong>prädiktiver</strong> Syntaxanalyse.</p>
+    <p class="lead">Top-down-Verfahren beginnen beim Spitzensymbol und erzeugen das Analysewort per Linksableitung – dabei drohen Sackgassen und teures Backtracking. Für die Klasse der <strong>LL(k)-Sprachen</strong> lässt sich das vermeiden: Mit Vorausschau auf k Token ist die anzuwendende Regel in jedem Schritt eindeutig (irrtumsfrei) bestimmbar – man spricht von <strong>prädiktiver</strong> Syntaxanalyse<i class="sk" data-sk="tgi07-topdown"></i>.</p>
 
     <div class="box def">
-      <span class="lbl">Bedeutung von L-L-(k)</span>
+      <span class="lbl">Bedeutung von L-L-(k)<i class="sk" data-sk="tgi07-ll"></i></span>
       <p><strong>Erstes L:</strong> Analyse des Eingabewortes von links nach rechts (der Lesekopf bewegt sich nur vorwärts, kein Rückgriff auf frühere Zeichen). <strong>Zweites L:</strong> Linksableitung – das am weitesten links stehende Nichtterminal wird zuerst ersetzt, das Wort entsteht vom Spitzensymbol her. <strong>k:</strong> Anzahl der Vorausschautoken auf das noch nicht analysierte Restwort, die eine sackgassenfreie Entscheidung garantieren (Lookahead-Verfahren).</p>
     </div>
 
-    <p>Es gilt die Hierarchie L<sub>LL(1)</sub> ⊊ L<sub>LL(2)</sub> ⊊ … ⊊ L<sub>LL(k)</sub> ⊊ … ⊊ L<sub>dkfS</sub>: LL(k)-Sprachen sind also eine <em>echte</em> Teilmenge der dkfS – nicht identisch! Erfreulicherweise ist die aus Effizienzgründen bevorzugte Klasse <strong>LL(1)</strong> bereits mächtig genug für die Praxis (z. B. für Pascal-ähnliche Programmiersprachen). Ob eine gegebene kfS überhaupt (für irgendein k) eine LL(k)-Sprache ist, ist allgemein nicht entscheidbar; ob sie für ein <em>festes</em> k vom LL(k)-Typ ist, ist dagegen stets entscheidbar.</p>
+    <p>Es gilt die Hierarchie L<sub>LL(1)</sub> ⊊ L<sub>LL(2)</sub> ⊊ … ⊊ L<sub>LL(k)</sub> ⊊ … ⊊ L<sub>dkfS</sub><i class="sk" data-sk="tgi07-klassen"></i>: LL(k)-Sprachen sind also eine <em>echte</em> Teilmenge der dkfS – nicht identisch! Erfreulicherweise ist die aus Effizienzgründen bevorzugte Klasse <strong>LL(1)</strong> bereits mächtig genug für die Praxis (z. B. für Pascal-ähnliche Programmiersprachen). Ob eine gegebene kfS überhaupt (für irgendein k) eine LL(k)-Sprache ist, ist allgemein nicht entscheidbar; ob sie für ein <em>festes</em> k vom LL(k)-Typ ist, ist dagegen stets entscheidbar.</p>
 
     <h4>Die zwei LL(1)-Forderungen</h4>
     <p>Eine kfG ist LL(1)-Grammatik, wenn sie beide folgenden Forderungen erfüllt (Def. 2.6):</p>
@@ -439,29 +439,29 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Forderung</th><th>Bedingung</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td><strong>1</strong> (Def. 2.2)</td><td>FIRST(α<sub>i</sub>) ∩ FIRST(α<sub>j</sub>) = ∅ für alle Alternativen α<sub>i</sub> ≠ α<sub>j</sub> eines Nichtterminals</td><td>An jedem Verzweigungspunkt muss das nächste Zeichen die Regel eindeutig festlegen</td></tr>
-        <tr><td><strong>2</strong> (Def. 2.4)</td><td>Für jedes X mit X ⇒* ε: FIRST(X) ∩ FOLLOW(X) = ∅</td><td>Bei möglichem „Verschwinden" von X darf nicht unklar sein, ob X angewendet wurde</td></tr>
+        <tr><td><strong>1</strong> (Def. 2.2)<i class="sk" data-sk="tgi07-first1"></i></td><td>FIRST(α<sub>i</sub>) ∩ FIRST(α<sub>j</sub>) = ∅ für alle Alternativen α<sub>i</sub> ≠ α<sub>j</sub> eines Nichtterminals</td><td>An jedem Verzweigungspunkt muss das nächste Zeichen die Regel eindeutig festlegen</td></tr>
+        <tr><td><strong>2</strong> (Def. 2.4)<i class="sk" data-sk="tgi07-first2"></i></td><td>Für jedes X mit X ⇒* ε: FIRST(X) ∩ FOLLOW(X) = ∅</td><td>Bei möglichem „Verschwinden" von X darf nicht unklar sein, ob X angewendet wurde</td></tr>
       </tbody>
     </table></div>
 
-    <p><strong>FIRST(α)</strong> ist die Menge aller Terminale, die bei irgendeiner Ableitung von α ganz vorn stehen können (ggf. inkl. ε, falls α ⇒* ε). <strong>FOLLOW(X)</strong> ist die Menge aller Terminale, die dem Nichtterminal X in irgendeiner aus dem Spitzensymbol ableitbaren Satzform unmittelbar folgen können. Zur Bestimmung von FOLLOW(X) betrachtet man jede Regel A → αXβ: FIRST(β) ohne ε kommt in FOLLOW(X); kann β ganz „verschwinden" (β ⇒* ε bzw. β ist leer), kommt zusätzlich FOLLOW(A) hinzu.</p>
+    <p><strong>FIRST(α)</strong><i class="sk" data-sk="tgi07-firstfollow"></i> ist die Menge aller Terminale, die bei irgendeiner Ableitung von α ganz vorn stehen können (ggf. inkl. ε, falls α ⇒* ε). <strong>FOLLOW(X)</strong><i class="sk" data-sk="tgi07-firstfollow"></i> ist die Menge aller Terminale, die dem Nichtterminal X in irgendeiner aus dem Spitzensymbol ableitbaren Satzform unmittelbar folgen können. Zur Bestimmung von FOLLOW(X) betrachtet man jede Regel A → αXβ: FIRST(β) ohne ε kommt in FOLLOW(X); kann β ganz „verschwinden" (β ⇒* ε bzw. β ist leer), kommt zusätzlich FOLLOW(A) hinzu.<i class="sk" data-sk="tgi07-follow"></i></p>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>FIRST-Mengen werden für <strong>Satzformen</strong> gebildet (Forderung 1: je Nichtterminal für jede seiner rechten Regelseiten), FOLLOW-Mengen dagegen für <strong>Nichtterminale</strong> (Forderung 2) – das wird gern verwechselt. Beispiel 2.1 zeigt eine typische Verletzung von Forderung 1: Bei G mit S → A | B, A → xA | y, B → xB | z beginnen beide Alternativen von S mit x, sodass bei Vorausschau auf x unklar bleibt, ob S → A oder S → B gilt. Beispiel 2.4 illustriert Forderung 2: Für G mit S → Xd, X → Ba | C, C → ε, B → d gilt X ⇒* ε, also FIRST(X) = {d, ε} und FOLLOW(X) = {d} – wegen FIRST(X) ∩ FOLLOW(X) = {d} ≠ ∅ ist G keine LL(1)-Grammatik. Ausserdem gilt: <strong>Jede LL(1)-Grammatik ist automatisch linksrekursionsfrei und eindeutig</strong> – linksrekursive Regeln (X → Xα) verletzen zwangsläufig Forderung 1.</p>
+      <p>FIRST-Mengen werden für <strong>Satzformen</strong> gebildet (Forderung 1: je Nichtterminal für jede seiner rechten Regelseiten), FOLLOW-Mengen dagegen für <strong>Nichtterminale</strong> (Forderung 2) – das wird gern verwechselt. Beispiel 2.1 zeigt eine typische Verletzung von Forderung 1<i class="sk" data-sk="tgi07-first1"></i>: Bei G mit S → A | B, A → xA | y, B → xB | z beginnen beide Alternativen von S mit x, sodass bei Vorausschau auf x unklar bleibt, ob S → A oder S → B gilt. Beispiel 2.4 illustriert Forderung 2<i class="sk" data-sk="tgi07-first2"></i>: Für G mit S → Xd, X → Ba | C, C → ε, B → d gilt X ⇒* ε, also FIRST(X) = {d, ε} und FOLLOW(X) = {d} – wegen FIRST(X) ∩ FOLLOW(X) = {d} ≠ ∅ ist G keine LL(1)-Grammatik. Ausserdem gilt: <strong>Jede LL(1)-Grammatik ist automatisch linksrekursionsfrei und eindeutig</strong><i class="sk" data-sk="tgi07-linksrek"></i> – linksrekursive Regeln (X → Xα) verletzen zwangsläufig Forderung 1.</p>
     </div>
 
     <h4>Parser durch rekursiven Abstieg</h4>
-    <p>LL(1)-Parser folgen dem Prinzip des <strong>rekursiven Abstiegs</strong>: Für jedes Nichtterminal wird eine parameterlose Prozedur erzeugt, deren Ablauf der zugehörigen rechten Regelseite entspricht. Nichtterminale in der Regel lösen den Aufruf der jeweiligen Prozedur aus, Terminale werden direkt mit dem nächsten Eingabezeichen „verrechnet". Bei mehreren Alternativen für ein Nichtterminal entscheidet die FIRST-Menge, in der das aktuelle Vorausschauzeichen liegt, welche Prozedurvariante gilt. Werden alle FIRST/FOLLOW-Berechnungen vorab in Tabellen abgelegt, spricht man von <strong>tabellengesteuerter</strong> Syntaxanalyse – mit Aufwand O(n) effizienter als CYK oder Earley.</p>
+    <p>LL(1)-Parser folgen dem Prinzip des <strong>rekursiven Abstiegs</strong><i class="sk" data-sk="tgi07-rekab"></i>: Für jedes Nichtterminal wird eine parameterlose Prozedur erzeugt, deren Ablauf der zugehörigen rechten Regelseite entspricht. Nichtterminale in der Regel lösen den Aufruf der jeweiligen Prozedur aus, Terminale werden direkt mit dem nächsten Eingabezeichen „verrechnet". Bei mehreren Alternativen für ein Nichtterminal entscheidet die FIRST-Menge, in der das aktuelle Vorausschauzeichen liegt, welche Prozedurvariante gilt. Werden alle FIRST/FOLLOW-Berechnungen vorab in Tabellen abgelegt, spricht man von <strong>tabellengesteuerter</strong> Syntaxanalyse<i class="sk" data-sk="tgi07-tabelle"></i> – mit Aufwand O(n) effizienter als CYK oder Earley.</p>
 
     <h4>Grammatiktransformationen</h4>
     <p>Ist eine kfG (noch) keine LL(1)-Grammatik, kann man drei Transformationen versuchen (nicht jede Grammatik lässt sich erfolgreich transformieren): Linksrekursion beseitigen, Mehrdeutigkeit beseitigen, gemeinsame Präfixe beseitigen.</p>
 
     <div class="box def">
-      <span class="lbl">Linksrekursion beseitigen (Satz 2.1)</span>
-      <p>Direkte Linksrekursion X → Xα | β wird durch X → βX', X' → αX' | ε ersetzt (X' neu). Für <em>indirekte</em> Linksrekursion (über mehrere Nichtterminale hinweg, z. B. S ⇒* Aa ⇒* Sda) reicht das nicht – hier hilft der <strong>Paull-Algorithmus</strong>: Die Nichtterminale werden X₁, …, Xₙ durchnummeriert; für aufsteigendes i und jedes j &lt; i wird jede Regel X<sub>i</sub> → X<sub>j</sub>γ durch die (bereits bereinigten) Alternativen von X<sub>j</sub> ersetzt, danach wird direkte Linksrekursion beseitigt. Voraussetzung ist eine zyklen- und ε-freie Grammatik.</p>
+      <span class="lbl">Linksrekursion beseitigen (Satz 2.1)<i class="sk" data-sk="tgi07-linksrekweg"></i></span>
+      <p>Direkte Linksrekursion X → Xα | β wird durch X → βX', X' → αX' | ε ersetzt (X' neu). Für <em>indirekte</em> Linksrekursion (über mehrere Nichtterminale hinweg, z. B. S ⇒* Aa ⇒* Sda) reicht das nicht – hier hilft der <strong>Paull-Algorithmus</strong><i class="sk" data-sk="tgi07-paull"></i>: Die Nichtterminale werden X₁, …, Xₙ durchnummeriert; für aufsteigendes i und jedes j &lt; i wird jede Regel X<sub>i</sub> → X<sub>j</sub>γ durch die (bereits bereinigten) Alternativen von X<sub>j</sub> ersetzt, danach wird direkte Linksrekursion beseitigt. Voraussetzung ist eine zyklen- und ε-freie Grammatik.</p>
     </div>
-    <p>Die beiden weiteren Transformationen dienen demselben Ziel: <strong>Beseitigung von Mehrdeutigkeit</strong> (mehrdeutige Grammatiken können nie LL(k)-Grammatiken sein) und <strong>Linksfaktorisierung</strong> – das Zusammenfassen von Alternativen mit gemeinsamem Terminalpräfix, da ein solches Präfix sonst Forderung 1 verletzt (die FIRST-Mengen wären nicht disjunkt); die Entscheidung zwischen den Alternativen wird dabei hinter das gemeinsame Präfix verschoben.</p>
+    <p>Die beiden weiteren Transformationen dienen demselben Ziel: <strong>Beseitigung von Mehrdeutigkeit</strong><i class="sk" data-sk="tgi07-mehrdeutig"></i> (mehrdeutige Grammatiken können nie LL(k)-Grammatiken sein) und <strong>Linksfaktorisierung</strong><i class="sk" data-sk="tgi07-faktor"></i> – das Zusammenfassen von Alternativen mit gemeinsamem Terminalpräfix, da ein solches Präfix sonst Forderung 1 verletzt (die FIRST-Mengen wären nicht disjunkt); die Entscheidung zwischen den Alternativen wird dabei hinter das gemeinsame Präfix verschoben.</p>
   </div>
 </section>
 
@@ -480,60 +480,60 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Während LL(k) top-down mit Linksableitung arbeitet, analysiert <strong>LR(k)</strong> bottom-up durch <strong>Linksreduktion</strong> – die Umkehrung einer Rechtsableitung. LR(1) ist die umfassendste Klasse deterministisch analysierbarer kontextfreier Sprachen überhaupt: Sie deckt sich exakt mit den dkfS aus Kapitel 1.</p>
+    <p class="lead">Während LL(k) top-down mit Linksableitung arbeitet, analysiert <strong>LR(k)</strong> bottom-up durch <strong>Linksreduktion</strong> – die Umkehrung einer Rechtsableitung<i class="sk" data-sk="tgi07-topdown"></i>. LR(1) ist die umfassendste Klasse deterministisch analysierbarer kontextfreier Sprachen überhaupt: Sie deckt sich exakt mit den dkfS aus Kapitel 1.</p>
 
     <div class="box def">
-      <span class="lbl">Bedeutung von L-R-(k)</span>
+      <span class="lbl">Bedeutung von L-R-(k)<i class="sk" data-sk="tgi07-lr"></i></span>
       <p><strong>L:</strong> Analyse von links nach rechts, wie bei DKA und LL(k). <strong>R:</strong> Rechtsableitung – ein Top-down-Verfahren würde das am weitesten rechts stehende Nichtterminal zuerst ersetzen; da hier bottom-up analysiert wird, „steht das Ganze auf dem Kopf": Es ist eine Linksreduktion. <strong>k:</strong> Vorausschauzeichen auf das Restwort; Standardwert k = 1 (LR ohne Zusatz meint LR(1)).</p>
     </div>
 
     <div class="box">
-      <span class="lbl">Durchgängiges Beispiel: arithmetische Ausdrücke (Beispiel 3.1)</span>
-      <p>G = (N,T,P,s), N={E,T,F}, T={+,*,a,(,)}, mit den nummerierten Regeln (1) E→E+T (2) E→T (3) T→T*F (4) T→F (5) F→(E) (6) F→a. Für a+a*(a+a) reduziert der Parser schrittweise: shift a, reduce (6) F→a, reduce (4) T→F, reduce (2) E→T, shift +, shift a, reduce (6) … bis das Startsymbol E allein im Keller steht und <em>accepted</em> gemeldet wird. An einer Stelle wäre statt shift auch reduce E→T formal möglich gewesen – das hätte in eine Sackgasse geführt: Ohne Vorausschau ist die Wahl also riskant.</p>
+      <span class="lbl">Durchgängiges Beispiel: arithmetische Ausdrücke (Beispiel 3.1)<i class="sk" data-sk="tgi07-shiftreduce"></i></span>
+      <p>G = (N,T,P,s), N={E,T,F}, T={+,*,a,(,)}, mit den nummerierten Regeln (1) E→E+T (2) E→T (3) T→T*F (4) T→F (5) F→(E) (6) F→a. Für a+a*(a+a) reduziert der Parser schrittweise: shift a, reduce (6) F→a, reduce (4) T→F, reduce (2) E→T, shift +, shift a, reduce (6) … bis das Startsymbol E allein im Keller steht und <em>accepted</em> gemeldet wird. An einer Stelle wäre statt shift auch reduce E→T formal möglich gewesen – das hätte in eine Sackgasse geführt: Ohne Vorausschau ist die Wahl also riskant.<i class="sk" data-sk="tgi07-konflikt"></i></p>
     </div>
 
     <h4>Shift, Reduce, Accept</h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>Aktion</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td>shift</td><td>nächstes Zeichen (Token) vom Eingabepuffer entfernen und auf den Stapel legen</td></tr>
-        <tr><td>reduce: X → β</td><td>oberster Stapelinhalt β wird durch das Nichtterminal X der linken Regelseite ersetzt (das „Handle"/Henkel)</td></tr>
-        <tr><td>accepted</td><td>Startsymbol steht allein im Keller, Eingabepuffer leer (Wortende markiert durch $)</td></tr>
+        <tr><td>shift<i class="sk" data-sk="tgi07-shiftreduce"></i></td><td>nächstes Zeichen (Token) vom Eingabepuffer entfernen und auf den Stapel legen</td></tr>
+        <tr><td>reduce: X → β<i class="sk" data-sk="tgi07-handle"></i></td><td>oberster Stapelinhalt β wird durch das Nichtterminal X der linken Regelseite ersetzt (das „Handle"/Henkel)</td></tr>
+        <tr><td>accepted<i class="sk" data-sk="tgi07-shiftreduce"></i></td><td>Startsymbol steht allein im Keller, Eingabepuffer leer (Wortende markiert durch $)</td></tr>
       </tbody>
     </table></div>
 
     <div class="box def">
-      <span class="lbl">LR(k)-Grammatik, Def. 3.1</span>
+      <span class="lbl">LR(k)-Grammatik, Def. 3.1<i class="sk" data-sk="tgi07-handle"></i></span>
       <p>Eine kfG ist LR(k)-Grammatik, wenn für jede Satzform αβγ einer Rechtsableitung (γ ∈ T*, β ∈ (N∪T)⁺) das Handle β allein durch Vorausschau auf die ersten k Zeichen von γ eindeutig bestimmbar ist. Satz 3.1: Zu jeder LR(k)-Grammatik mit k &gt; 1 gibt es eine äquivalente LR(1)-Grammatik – praktisch genügen also k ∈ {0, 1}.</p>
     </div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>Bei Nicht-LR(1)-Grammatiken treten <strong>shift/reduce-</strong> und <strong>reduce/reduce-Konflikte</strong> auf: Für den betrachteten Schritt ist sowohl shift als auch reduce möglich, oder für ein reduce kommen mindestens zwei Regeln infrage. <strong>LR(1)-Sprachen können dagegen nie mehrdeutig sein.</strong> VCC löst Konflikte pragmatisch: shift wird gegenüber reduce bevorzugt, bei reduce/reduce gewinnt die in der Regelliste zuerst notierte Produktion – sauberer ist es jedoch, mehrdeutige Grammatiken von vornherein zu vermeiden.</p>
+      <p>Bei Nicht-LR(1)-Grammatiken treten <strong>shift/reduce-</strong> und <strong>reduce/reduce-Konflikte</strong><i class="sk" data-sk="tgi07-konflikt"></i> auf: Für den betrachteten Schritt ist sowohl shift als auch reduce möglich, oder für ein reduce kommen mindestens zwei Regeln infrage. <strong>LR(1)-Sprachen können dagegen nie mehrdeutig sein.</strong><i class="sk" data-sk="tgi07-mehrdeutig"></i> VCC löst Konflikte pragmatisch: shift wird gegenüber reduce bevorzugt, bei reduce/reduce gewinnt die in der Regelliste zuerst notierte Produktion – sauberer ist es jedoch, mehrdeutige Grammatiken von vornherein zu vermeiden.</p>
     </div>
 
     <h4>Tabellengesteuerte Syntaxanalyse</h4>
-    <p>Eine vorab (durch einen Parsergenerator) berechnete <strong>Parsetabelle</strong> aus <em>action</em>-Teil (s = shift, r<em>i</em> = reduce mit Regel i, accept, leer = Fehler) und <em>goto</em>-Teil steuert die Analyse. Der Stapel trägt sowohl Vokabularzeichen als auch Zustandsnamen eines zugrunde liegenden DEA – die Tabelle steuert also praktisch einen DEA, der die jeweilige Stapelbelegung repräsentiert. Die Konstruktion der Tabelle selbst übernimmt der Parsergenerator.</p>
+    <p>Eine vorab (durch einen Parsergenerator) berechnete <strong>Parsetabelle</strong><i class="sk" data-sk="tgi07-lrtabelle"></i> aus <em>action</em>-Teil (s = shift, r<em>i</em> = reduce mit Regel i, accept, leer = Fehler) und <em>goto</em>-Teil steuert die Analyse. Der Stapel trägt sowohl Vokabularzeichen als auch Zustandsnamen eines zugrunde liegenden DEA – die Tabelle steuert also praktisch einen DEA, der die jeweilige Stapelbelegung repräsentiert. Die Konstruktion der Tabelle selbst übernimmt der Parsergenerator.</p>
 
     <div class="tw"><table class="mono">
       <thead><tr><th>Klasse</th><th>Vorausschau: Zustände</th><th>Vorausschau: Tabelle</th></tr></thead>
       <tbody>
         <tr><td>LR(0)</td><td>0</td><td>0</td></tr>
-        <tr><td>SLR(1)</td><td>0</td><td>1</td></tr>
+        <tr><td>SLR(1)<i class="sk" data-sk="tgi07-lrklassen"></i></td><td>0</td><td>1</td></tr>
         <tr><td>LR(1)</td><td>1</td><td>1</td></tr>
       </tbody>
     </table></div>
-    <p>SLR(1) („simple") deckt die meisten Programmiersprachkonstrukte ab und braucht deutlich kleinere Tabellen als volles LR(1); für reine LR(1)-Sprachen können DEA mit mehreren Hundert Zuständen entstehen – ohne Werkzeug nicht mehr von Hand machbar. <strong>LALR(1)</strong> (LookAhead-LR(1)) verschmilzt zusammenfassbare Zustände der LR(1)-Zustandsmenge zu kleineren Tabellen und ist für die meisten Praxisfälle der beste Kompromiss.</p>
+    <p>SLR(1) („simple") deckt die meisten Programmiersprachkonstrukte ab und braucht deutlich kleinere Tabellen als volles LR(1); für reine LR(1)-Sprachen können DEA mit mehreren Hundert Zuständen entstehen – ohne Werkzeug nicht mehr von Hand machbar. <strong>LALR(1)</strong> (LookAhead-LR(1))<i class="sk" data-sk="tgi07-lrklassen"></i> verschmilzt zusammenfassbare Zustände der LR(1)-Zustandsmenge zu kleineren Tabellen und ist für die meisten Praxisfälle der beste Kompromiss.</p>
 
     <div class="box">
-      <span class="lbl">Zusammenhang der Sprachklassen</span>
+      <span class="lbl">Zusammenhang der Sprachklassen<i class="sk" data-sk="tgi07-klassen"></i></span>
       <p>L<sub>dkfS</sub> = L<sub>LR(1)</sub> ist die umfassendste deterministisch analysierbare kfS-Klasse – identisch mit der von DKA beschreibbaren Klasse (Kapitel 1). Es gilt L<sub>LR(0)</sub> ⊊ L<sub>SLR(1)</sub> ⊊ L<sub>LALR(1)</sub> ⊊ L<sub>LR(1)</sub>. Satz 3.2: Jede LL(k)-Sprache ist auch LR(k)-Sprache – die Umkehrung gilt nicht, insbesondere ist L<sub>LALR(1)</sub> ⊋ L<sub>LL(1)</sub> eine echte Obermenge. Die Grammatik aus Beispiel 3.1 (arithmetische Ausdrücke mit Linksrekursion E → E+T) ist LR(1), aber keine LL(1)-Grammatik.</p>
     </div>
 
     <h4>Automatisierte Parsergenerierung und Compiler</h4>
     <p>LALR(1)-Parser werden in der Praxis nicht per Hand geschrieben, sondern von Parsergeneratoren erzeugt: klassisch <strong>Yacc</strong> (mit Scannergenerator <strong>Lex</strong>, moderner: Flex/Bison), im Kursumfeld <strong>VCC</strong> (Visual Compiler Construction) innerhalb von <strong>AtoCC</strong> – bietet LL(1)- und LALR(1)-Parsing mit grafischer Regeldarstellung.</p>
-    <p>Ein Parser wird zum <strong>Compiler</strong>, indem man den Produktionen <strong>semantische Regeln</strong> zur Seite stellt, die den Parsebaum mit Attributen annotieren. VCC verwendet ausschliesslich <strong>synthetisierte Attribute (S-Attribute)</strong> – ihr Wert ergibt sich aus den Attributwerten der Nachfolgerknoten. Das passt ideal zur Bottom-up-Analyse: Da diese von den Blättern zur Wurzel aufsteigt, liegen bei jeder Regelanwendung alle benötigten Operandenwerte bereits vor. In den Regeln bezeichnet $n den Wert des n-ten Vokabularzeichens der rechten Regelseite, $$ den Wert der linken Seite.</p>
-    <p>Am Beispiel der Zeichenrobotersprache ZR wird so ein vollständiger <strong>ZR → PS-Compiler</strong> gebaut: Die Regel für das Spitzensymbol erzeugt den PostScript-Dateikopf, jede weitere Regel liefert ein passendes Zielcode-Fragment (z. B. erzeugt Anweisung → FARBE FARBWERT einen <code>setrgbcolor</code>-Befehl). Der fertige Java-Compiler wird abschliessend im <strong>T-Diagramm (TDiag)</strong> mit seiner .class-Datei verknüpft, sodass der gesamte Übersetzungsprozess (ZR-Quelltext → PS → PDF) auf Knopfdruck abläuft.</p>
+    <p>Ein Parser wird zum <strong>Compiler</strong>, indem man den Produktionen <strong>semantische Regeln</strong> zur Seite stellt, die den Parsebaum mit Attributen annotieren. VCC verwendet ausschliesslich <strong>synthetisierte Attribute (S-Attribute)</strong><i class="sk" data-sk="tgi07-sattr"></i> – ihr Wert ergibt sich aus den Attributwerten der Nachfolgerknoten. Das passt ideal zur Bottom-up-Analyse: Da diese von den Blättern zur Wurzel aufsteigt, liegen bei jeder Regelanwendung alle benötigten Operandenwerte bereits vor. In den Regeln bezeichnet $n den Wert des n-ten Vokabularzeichens der rechten Regelseite, $$ den Wert der linken Seite.</p>
+    <p>Am Beispiel der Zeichenrobotersprache ZR wird so ein vollständiger <strong>ZR → PS-Compiler</strong> gebaut: Die Regel für das Spitzensymbol erzeugt den PostScript-Dateikopf, jede weitere Regel liefert ein passendes Zielcode-Fragment (z. B. erzeugt Anweisung → FARBE FARBWERT einen <code>setrgbcolor</code>-Befehl). Der fertige Java-Compiler wird abschliessend im <strong>T-Diagramm (TDiag)</strong><i class="sk" data-sk="tgi07-tdiag"></i> mit seiner .class-Datei verknüpft, sodass der gesamte Übersetzungsprozess (ZR-Quelltext → PS → PDF) auf Knopfdruck abläuft.</p>
   </div>
 </section>
 
@@ -552,34 +552,34 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Auch Kellerautomaten stossen an Grenzen: Für {aⁿbⁿcⁿ | n ≥ 0} geht die gezählte Anzahl n beim Verarbeiten von a gegen b im Keller verloren, wird aber für die Prüfung der c noch gebraucht; für {ss | s ∈ {a,b}*} bräuchte man eher eine Warteschlange als einen Stapel. Alan Turing ersann 1936 ein universelles Modell, das diese Grenzen überwindet: die <strong>Turing-Maschine</strong> – bis heute Fundament der Berechenbarkeits- und Komplexitätstheorie.</p>
+    <p class="lead">Auch Kellerautomaten stossen an Grenzen: Für {aⁿbⁿcⁿ | n ≥ 0} geht die gezählte Anzahl n beim Verarbeiten von a gegen b im Keller verloren, wird aber für die Prüfung der c noch gebraucht; für {ss | s ∈ {a,b}*} bräuchte man eher eine Warteschlange als einen Stapel<i class="sk" data-sk="tgi07-grenzen"></i>. Alan Turing ersann 1936 ein universelles Modell, das diese Grenzen überwindet: die <strong>Turing-Maschine</strong> – bis heute Fundament der Berechenbarkeits- und Komplexitätstheorie.</p>
 
     <div class="box def">
-      <span class="lbl">Turing-Maschine, Def. 4.1</span>
-      <p>Eine TM ist ein 7-Tupel M = (Q, Σ, Γ, δ, q0, $, E) mit Bandalphabet Γ (Σ ⊆ Γ\{$}), Blank-/Bandvorbelegungszeichen $ ∈ Γ\Σ und Überführungsfunktion δ : Q × Γ → Q × Γ × {L, N, R} (bei einer <strong>NTM</strong>: δ : Q × Γ → endlich(Q × Γ × {L, N, R})). Statt eines Kellers besitzt die TM ein potenziell unendliches, in Felder gegliedertes Band; ein Lese-<em>Schreib</em>-Kopf kann jedes Feld lesen <em>und</em> beschreiben und sich pro Takt um ein Feld nach links (L) oder rechts (R) bewegen oder stehen bleiben (N). DTM und NTM sind als Akzeptoren gleich mächtig (wie bei endlichen Automaten), sodass es genügt, DTM zu betrachten.</p>
+      <span class="lbl">Turing-Maschine, Def. 4.1<i class="sk" data-sk="tgi07-tm"></i></span>
+      <p>Eine TM ist ein 7-Tupel M = (Q, Σ, Γ, δ, q0, $, E) mit Bandalphabet Γ (Σ ⊆ Γ\{$}), Blank-/Bandvorbelegungszeichen $ ∈ Γ\Σ und Überführungsfunktion δ : Q × Γ → Q × Γ × {L, N, R} (bei einer <strong>NTM</strong>: δ : Q × Γ → endlich(Q × Γ × {L, N, R})). Statt eines Kellers besitzt die TM ein potenziell unendliches, in Felder gegliedertes Band; ein Lese-<em>Schreib</em>-Kopf kann jedes Feld lesen <em>und</em> beschreiben und sich pro Takt um ein Feld nach links (L) oder rechts (R) bewegen oder stehen bleiben (N). DTM und NTM sind als Akzeptoren gleich mächtig<i class="sk" data-sk="tgi07-dtmntm"></i> (wie bei endlichen Automaten), sodass es genügt, DTM zu betrachten.</p>
     </div>
 
-    <p>Nach der Anfangskonfiguration q0w (Kopf über dem ersten Zeichen von w, Zustand q0) legt δ(qi, k) = (qj, m, b) in jedem Takt fest: Zeichen m überschreibt k, der Zustand wechselt zu qj, der Kopf bewegt sich gemäss b. Ist δ(qi, k) undefiniert, stoppt die Maschine per <strong>Crash</strong>; andernfalls kann sie auch endlos weiterlaufen (unendlicher Rechts- oder Linkslauf, oder ein Endloszyklus).</p>
+    <p>Nach der Anfangskonfiguration q0w (Kopf über dem ersten Zeichen von w, Zustand q0) legt δ(qi, k) = (qj, m, b)<i class="sk" data-sk="tgi07-tmschritt"></i> in jedem Takt fest: Zeichen m überschreibt k, der Zustand wechselt zu qj, der Kopf bewegt sich gemäss b. Ist δ(qi, k) undefiniert, stoppt die Maschine per <strong>Crash</strong>; andernfalls kann sie auch endlos weiterlaufen (unendlicher Rechts- oder Linkslauf, oder ein Endloszyklus)<i class="sk" data-sk="tgi07-stopp"></i>.</p>
 
     <div class="box">
-      <span class="lbl">Beispielidee: TM für {aⁿbⁿcⁿ | n ≥ 0} (Beispiel 4.2)</span>
+      <span class="lbl">Beispielidee: TM für {aⁿbⁿcⁿ | n ≥ 0} (Beispiel 4.2)<i class="sk" data-sk="tgi07-anbncn"></i></span>
       <p>Bei jedem Rechtslauf wird das jeweils erste noch unbehandelte a, b und c durch ein Markierungszeichen d ersetzt; anschliessend prüft der Kopf bis zum Wortende, dass nur noch c folgen, und kehrt danach zum am weitesten links stehenden d zurück – der Zyklus beginnt erneut. Stehen am Ende (neben den Vorbelegungszeichen) nur noch d auf dem Band, wird akzeptiert. Diese TM verlässt den ursprünglich vom Eingabewort belegten Bandbereich nie, liesse sich also unmittelbar als LBTM auffassen (s. u.).</p>
     </div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
       <p>Ein Wort w wird akzeptiert, wenn die TM in endlich vielen Schritten einen Endzustand erreicht – <strong>unabhängig davon, ob w vollständig gelesen wurde</strong>, was danach auf dem Band steht oder wo sich der Kopf befindet. Das unterscheidet die TM grundlegend von endlichen Automaten und Kellerautomaten, die das Eingabewort stets vollständig abtasten:</p>
-      <p class="formula">L(M) = {w ∈ Σ* | q0w ⊢* αqeβ, α,β ∈ Γ*, qe ∈ E}</p>
+      <p class="formula">L(M) = {w ∈ Σ* | q0w ⊢* αqeβ, α,β ∈ Γ*, qe ∈ E}<i class="sk" data-sk="tgi07-stopp"></i></p>
     </div>
 
     <h4>DTM, NTM, LBTM und Sprachklassen</h4>
-    <p>Eine Sprache heisst <strong>rekursiv aufzählbar</strong> (semientscheidbar), wenn es eine DTM M mit L = L(M) gibt (Def. 4.4); Satz 4.1 zeigt: Diese Klasse L<sub>re</sub> stimmt exakt mit den <strong>Chomsky-Typ-0-Sprachen</strong> überein. Hält M für <em>jedes</em> Wort (akzeptierend oder ablehnend), heisst L <strong>rekursiv</strong> (entscheidbar, Def. 4.5). Es gilt L<sub>Typ1</sub> ⊆ L<sub>r</sub> ⊆ L<sub>re</sub> – ob eine rekursiv aufzählbare Sprache tatsächlich entscheidbar ist, ist im Allgemeinen selbst nicht algorithmisch entscheidbar.</p>
-    <p>Eine <strong>linear beschränkte TM (LBTM)</strong> ist eine NTM, deren Kopf den zu Beginn durch das Eingabewort belegten Bandbereich nie verlässt. Genau diese Maschinen beschreiben die <strong>Chomsky-Typ-1-Sprachen</strong> (kontextsensitive Sprachen, ksS): L<sub>LBTM</sub> = L<sub>Typ1</sub>.</p>
+    <p>Eine Sprache heisst <strong>rekursiv aufzählbar</strong> (semientscheidbar)<i class="sk" data-sk="tgi07-entscheid"></i>, wenn es eine DTM M mit L = L(M) gibt (Def. 4.4); Satz 4.1 zeigt: Diese Klasse L<sub>re</sub> stimmt exakt mit den <strong>Chomsky-Typ-0-Sprachen</strong> überein. Hält M für <em>jedes</em> Wort (akzeptierend oder ablehnend), heisst L <strong>rekursiv</strong> (entscheidbar, Def. 4.5). Es gilt L<sub>Typ1</sub> ⊆ L<sub>r</sub> ⊆ L<sub>re</sub> – ob eine rekursiv aufzählbare Sprache tatsächlich entscheidbar ist, ist im Allgemeinen selbst nicht algorithmisch entscheidbar.</p>
+    <p>Eine <strong>linear beschränkte TM (LBTM)</strong><i class="sk" data-sk="tgi07-lbtm"></i> ist eine NTM, deren Kopf den zu Beginn durch das Eingabewort belegten Bandbereich nie verlässt. Genau diese Maschinen beschreiben die <strong>Chomsky-Typ-1-Sprachen</strong> (kontextsensitive Sprachen, ksS): L<sub>LBTM</sub> = L<sub>Typ1</sub>.</p>
 
     <div class="tw"><table>
       <thead><tr><th>Chomsky-Typ</th><th>Sprachklasse</th><th>Automat</th></tr></thead>
       <tbody>
-        <tr><td>Typ 0</td><td>rekursiv aufzählbar (L<sub>re</sub>)</td><td>DTM / NTM</td></tr>
+        <tr><td>Typ 0<i class="sk" data-sk="tgi07-chomsky"></i></td><td>rekursiv aufzählbar (L<sub>re</sub>)</td><td>DTM / NTM</td></tr>
         <tr><td>Typ 1</td><td>kontextsensitiv (ksS)</td><td>LBTM</td></tr>
         <tr><td>Typ 2</td><td>kontextfrei (kfS), davon dkfS als Teilmenge</td><td>NKA, davon DKA für dkfS</td></tr>
         <tr><td>Typ 3</td><td>regulär (rS)</td><td>DEA / NEA</td></tr>
@@ -587,10 +587,10 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     </table></div>
 
     <h4>TM in Komplexitäts- und Berechenbarkeitstheorie</h4>
-    <p>In der <strong>Komplexitätstheorie</strong> dienen TM als prozessorunabhängiges Aufwandsmass: Der Aufwand eines Algorithmus wird über die Anzahl nötiger TM-Schritte gemessen. Die <strong>Berechenbarkeitstheorie</strong> untersucht dagegen, welche Probleme überhaupt algorithmisch lösbar (entscheidbar) sind. Zentral dafür ist die <strong>universelle Turing-Maschine (UTM)</strong>: Sie erwartet auf ihrem Band eine Codierung cod(M) einer beliebigen TM M, getrennt durch ein Blankzeichen von einem Eingabewort w, und liefert U(cod(M), w) = M(w) – sie simuliert also jede beliebige TM. Genau dieses Prinzip – Programm und Daten gemeinsam im Speicher – <strong>abstrahiert die bis heute aktuelle Von-Neumann-Architektur</strong>. Für Typ-0-Sprachen ist das Wortproblem generell unentscheidbar, für Typ-1-Sprachen entscheidbar, aber nur mit exponentiellem Aufwand.</p>
+    <p>In der <strong>Komplexitätstheorie</strong> dienen TM als prozessorunabhängiges Aufwandsmass: Der Aufwand eines Algorithmus wird über die Anzahl nötiger TM-Schritte gemessen. Die <strong>Berechenbarkeitstheorie</strong> untersucht dagegen, welche Probleme überhaupt algorithmisch lösbar (entscheidbar) sind. Zentral dafür ist die <strong>universelle Turing-Maschine (UTM)</strong><i class="sk" data-sk="tgi07-utm"></i>: Sie erwartet auf ihrem Band eine Codierung cod(M) einer beliebigen TM M, getrennt durch ein Blankzeichen von einem Eingabewort w, und liefert U(cod(M), w) = M(w) – sie simuliert also jede beliebige TM. Genau dieses Prinzip – Programm und Daten gemeinsam im Speicher – <strong>abstrahiert die bis heute aktuelle Von-Neumann-Architektur</strong>. Für Typ-0-Sprachen ist das Wortproblem generell unentscheidbar, für Typ-1-Sprachen entscheidbar, aber nur mit exponentiellem Aufwand.</p>
 
     <h4>TM zur Berechnung von Funktionen</h4>
-    <p>Über ihre Rolle als Akzeptor hinaus berechnen TM auch partielle Wortfunktionen f : (Σ*)ⁿ → Σ*. Die n Argumente werden, durch je ein Blankzeichen getrennt, auf das Band geschrieben (w₁$w₂$…$wₙ); nach dem Stopp liefert der Bandinhalt ab der Kopfposition bis zum nächsten Blank das Resultat. Beispiel: Eine <strong>Nachfolgermaschine</strong> für unär dargestellte Zahlen (Alphabet {I}) kommt mit nur zwei Zuständen aus – der Kopf geht einen Schritt nach links, schreibt dort ein I und bleibt stehen (Beispiel 4.4).</p>
+    <p>Über ihre Rolle als Akzeptor hinaus berechnen TM auch partielle Wortfunktionen f : (Σ*)ⁿ → Σ*. Die n Argumente werden, durch je ein Blankzeichen getrennt, auf das Band geschrieben (w₁$w₂$…$wₙ)<i class="sk" data-sk="tgi07-nachfolger"></i>; nach dem Stopp liefert der Bandinhalt ab der Kopfposition bis zum nächsten Blank das Resultat. Beispiel: Eine <strong>Nachfolgermaschine</strong><i class="sk" data-sk="tgi07-nachfolger"></i> für unär dargestellte Zahlen (Alphabet {I}) kommt mit nur zwei Zuständen aus – der Kopf geht einen Schritt nach links, schreibt dort ein I und bleibt stehen (Beispiel 4.4).</p>
   </div>
 </section>
 
@@ -737,29 +737,29 @@ TEMPO:     langsam|schnell|rasant</div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <div class="abbr-grid"><dl>
-      <div class="abbr-row"><dt>NKA</dt><dd>Nichtdeterministischer Kellerautomat – akzeptiert genau die kfS (L<sub>NKA</sub> = L<sub>kfS</sub>)</dd></div>
-      <div class="abbr-row"><dt>DKA</dt><dd>Deterministischer Kellerautomat – akzeptiert genau die dkfS, eine echte Teilmenge der kfS</dd></div>
-      <div class="abbr-row"><dt>dkfS</dt><dd>Deterministisch kontextfreie Sprachen – Klasse der DKA, identisch mit den LR(1)-Sprachen</dd></div>
-      <div class="abbr-row"><dt>tos</dt><dd>top of stack – oberstes Kellerzeichen</dd></div>
-      <div class="abbr-row"><dt>LL(k)</dt><dd>Top-down, Analyse links-nach-rechts, Linksableitung, k Vorausschautoken; echte Teilmenge der dkfS</dd></div>
-      <div class="abbr-row"><dt>FIRST(α)</dt><dd>Menge der Terminale, die eine aus α ableitbare Satzform eröffnen können</dd></div>
-      <div class="abbr-row"><dt>FOLLOW(X)</dt><dd>Menge der Terminale, die dem Nichtterminal X unmittelbar folgen können</dd></div>
-      <div class="abbr-row"><dt>LR(k)</dt><dd>Bottom-up, Analyse links-nach-rechts, Rechtsableitung/Linksreduktion, k Vorausschauzeichen; LR(1) = dkfS</dd></div>
-      <div class="abbr-row"><dt>LALR(1)</dt><dd>LookAhead-LR(1) – verschmilzt LR(1)-Zustände zu kleineren Tabellen; L<sub>LALR(1)</sub> ⊋ L<sub>LL(1)</sub></dd></div>
-      <div class="abbr-row"><dt>SLR(1)</dt><dd>„simple" LR(1) – einfachste, aber am wenigsten mächtige Tabellenkonstruktion</dd></div>
-      <div class="abbr-row"><dt>Handle</dt><dd>der bei reduce zu ersetzende Satzform-Ausschnitt (auch: die zugehörige Regel)</dd></div>
-      <div class="abbr-row"><dt>CNF</dt><dd>Chomsky-Normalform – jede Regel X → a oder X → YZ; Basis des CYK-Algorithmus</dd></div>
-      <div class="abbr-row"><dt>CYK</dt><dd>Cocke-Younger-Kasami-Algorithmus – Parse-Verfahren für kfG in CNF, O(n³)</dd></div>
-      <div class="abbr-row"><dt>TM</dt><dd>Turing-Maschine – unendliches Band, Lese-Schreib-Kopf, Übergangsfunktion Q×Γ→Q×Γ×{L,N,R}</dd></div>
-      <div class="abbr-row"><dt>DTM / NTM</dt><dd>deterministische / nichtdeterministische TM – als Akzeptoren gleich mächtig</dd></div>
-      <div class="abbr-row"><dt>LBTM</dt><dd>linear beschränkte TM – Kopf bleibt im Eingabewort-Bandbereich; beschreibt Chomsky-Typ 1 (ksS)</dd></div>
-      <div class="abbr-row"><dt>UTM</dt><dd>universelle Turing-Maschine – simuliert jede TM anhand einer Codierung; abstrahiert die Von-Neumann-Architektur</dd></div>
-      <div class="abbr-row"><dt>S-Attribut</dt><dd>synthetisiertes Attribut – Wert ergibt sich aus Attributen der Nachfolgerknoten (passend zu Bottom-up)</dd></div>
-      <div class="abbr-row"><dt>VCC</dt><dd>Visual Compiler Construction – Scanner-/Parser-/Compilergenerator in AtoCC (LL(1) und LALR(1))</dd></div>
-      <div class="abbr-row"><dt>TDiag</dt><dd>Werkzeug zur Modellierung von Übersetzungsprozessen als T-Diagramm</dd></div>
+      <div class="abbr-row"><dt>NKA<i class="sk" data-sk="tgi07-nka"></i></dt><dd>Nichtdeterministischer Kellerautomat – akzeptiert genau die kfS (L<sub>NKA</sub> = L<sub>kfS</sub>)</dd></div>
+      <div class="abbr-row"><dt>DKA<i class="sk" data-sk="tgi07-dka"></i></dt><dd>Deterministischer Kellerautomat – akzeptiert genau die dkfS, eine echte Teilmenge der kfS</dd></div>
+      <div class="abbr-row"><dt>dkfS<i class="sk" data-sk="tgi07-klassen"></i></dt><dd>Deterministisch kontextfreie Sprachen – Klasse der DKA, identisch mit den LR(1)-Sprachen</dd></div>
+      <div class="abbr-row"><dt>tos<i class="sk" data-sk="tgi07-push"></i></dt><dd>top of stack – oberstes Kellerzeichen</dd></div>
+      <div class="abbr-row"><dt>LL(k)<i class="sk" data-sk="tgi07-ll"></i></dt><dd>Top-down, Analyse links-nach-rechts, Linksableitung, k Vorausschautoken; echte Teilmenge der dkfS</dd></div>
+      <div class="abbr-row"><dt>FIRST(α)<i class="sk" data-sk="tgi07-firstfollow"></i></dt><dd>Menge der Terminale, die eine aus α ableitbare Satzform eröffnen können</dd></div>
+      <div class="abbr-row"><dt>FOLLOW(X)<i class="sk" data-sk="tgi07-follow"></i></dt><dd>Menge der Terminale, die dem Nichtterminal X unmittelbar folgen können</dd></div>
+      <div class="abbr-row"><dt>LR(k)<i class="sk" data-sk="tgi07-lr"></i></dt><dd>Bottom-up, Analyse links-nach-rechts, Rechtsableitung/Linksreduktion, k Vorausschauzeichen; LR(1) = dkfS</dd></div>
+      <div class="abbr-row"><dt>LALR(1)<i class="sk" data-sk="tgi07-lrklassen"></i></dt><dd>LookAhead-LR(1) – verschmilzt LR(1)-Zustände zu kleineren Tabellen; L<sub>LALR(1)</sub> ⊋ L<sub>LL(1)</sub></dd></div>
+      <div class="abbr-row"><dt>SLR(1)<i class="sk" data-sk="tgi07-lrklassen"></i></dt><dd>„simple" LR(1) – einfachste, aber am wenigsten mächtige Tabellenkonstruktion</dd></div>
+      <div class="abbr-row"><dt>Handle<i class="sk" data-sk="tgi07-handle"></i></dt><dd>der bei reduce zu ersetzende Satzform-Ausschnitt (auch: die zugehörige Regel)</dd></div>
+      <div class="abbr-row"><dt>CNF<i class="sk" data-sk="tgi07-cnf"></i></dt><dd>Chomsky-Normalform – jede Regel X → a oder X → YZ; Basis des CYK-Algorithmus</dd></div>
+      <div class="abbr-row"><dt>CYK<i class="sk" data-sk="tgi07-cyk"></i></dt><dd>Cocke-Younger-Kasami-Algorithmus – Parse-Verfahren für kfG in CNF, O(n³)</dd></div>
+      <div class="abbr-row"><dt>TM<i class="sk" data-sk="tgi07-tm"></i></dt><dd>Turing-Maschine – unendliches Band, Lese-Schreib-Kopf, Übergangsfunktion Q×Γ→Q×Γ×{L,N,R}</dd></div>
+      <div class="abbr-row"><dt>DTM / NTM<i class="sk" data-sk="tgi07-dtmntm"></i></dt><dd>deterministische / nichtdeterministische TM – als Akzeptoren gleich mächtig</dd></div>
+      <div class="abbr-row"><dt>LBTM<i class="sk" data-sk="tgi07-lbtm"></i></dt><dd>linear beschränkte TM – Kopf bleibt im Eingabewort-Bandbereich; beschreibt Chomsky-Typ 1 (ksS)</dd></div>
+      <div class="abbr-row"><dt>UTM<i class="sk" data-sk="tgi07-utm"></i></dt><dd>universelle Turing-Maschine – simuliert jede TM anhand einer Codierung; abstrahiert die Von-Neumann-Architektur</dd></div>
+      <div class="abbr-row"><dt>S-Attribut<i class="sk" data-sk="tgi07-sattr"></i></dt><dd>synthetisiertes Attribut – Wert ergibt sich aus Attributen der Nachfolgerknoten (passend zu Bottom-up)</dd></div>
+      <div class="abbr-row"><dt>VCC<i class="sk" data-sk="tgi07-pargen"></i></dt><dd>Visual Compiler Construction – Scanner-/Parser-/Compilergenerator in AtoCC (LL(1) und LALR(1))</dd></div>
+      <div class="abbr-row"><dt>TDiag<i class="sk" data-sk="tgi07-tdiag"></i></dt><dd>Werkzeug zur Modellierung von Übersetzungsprozessen als T-Diagramm</dd></div>
     </dl></div>
 
-    <h4>Chomsky-Hierarchie im Überblick</h4>
+    <h4>Chomsky-Hierarchie im Überblick<i class="sk" data-sk="tgi07-chomsky"></i></h4>
     <div class="tw"><table>
       <thead><tr><th>Typ</th><th>Sprachklasse</th><th>Automat</th><th>Beispiel</th></tr></thead>
       <tbody>

@@ -347,22 +347,22 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">GDI01 legt die Grundbegriffe der Informatik: was ein Algorithmus ist, welche Eigenschaften er erfüllen muss und in welchen Schritten daraus ein lauffähiges Programm entsteht.</p>
 
     <div class="box def">
-      <span class="lbl">EVA-Prinzip</span>
+      <span class="lbl">EVA-Prinzip<i class="sk" data-sk="gdi01-eva"></i></span>
       <p><strong>Eingabe → Verarbeitung → Ausgabe</strong> – das Grundprinzip jeder Datenverarbeitung.</p>
     </div>
 
     <h4>Algorithmus – fünf Eigenschaften</h4>
     <p>Ein Algorithmus muss fünf Eigenschaften erfüllen:</p>
     <ol>
-      <li><strong>Endlichkeit</strong> (Finitheit): endliche Beschreibung</li>
-      <li><strong>Ausführbarkeit</strong>: jeder Schritt ist ausführbar</li>
-      <li><strong>Eindeutigkeit</strong> (Determiniertheit): gleiche Eingabe → gleiches Ergebnis</li>
-      <li><strong>Terminierung</strong>: der Algorithmus endet nach endlich vielen Schritten</li>
-      <li><strong>Allgemeinheit</strong>: löst eine Klasse von Problemen, nicht nur eine einzelne Instanz</li>
+      <li><strong>Endlichkeit</strong> (Finitheit)<i class="sk" data-sk="gdi01-endlich"></i>: endliche Beschreibung</li>
+      <li><strong>Ausführbarkeit</strong><i class="sk" data-sk="gdi01-ausfuehr"></i>: jeder Schritt ist ausführbar</li>
+      <li><strong>Eindeutigkeit</strong> (Determiniertheit)<i class="sk" data-sk="gdi01-eindeutig"></i>: gleiche Eingabe → gleiches Ergebnis</li>
+      <li><strong>Terminierung</strong><i class="sk" data-sk="gdi01-termin"></i>: der Algorithmus endet nach endlich vielen Schritten</li>
+      <li><strong>Allgemeinheit</strong><i class="sk" data-sk="gdi01-allgemein"></i>: löst eine Klasse von Problemen, nicht nur eine einzelne Instanz</li>
     </ol>
 
     <h4>Vom Problem zum Programm</h4>
-    <p>Drei Schritte der Programmerstellung: <strong>Problemanalyse → Algorithmenentwurf → Implementierung.</strong></p>
+    <p>Drei Schritte der Programmerstellung: <strong>Problemanalyse → Algorithmenentwurf → Implementierung.</strong><i class="sk" data-sk="gdi01-prog"></i></p>
   </div>
 </section>
 
@@ -387,19 +387,19 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Struktur</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td><strong>Sequenz</strong></td><td>Anweisungen hintereinander</td></tr>
-        <tr><td><strong>Selektion</strong> (if/else)</td><td>bedingte Ausführung</td></tr>
-        <tr><td><strong>Iteration</strong> (while/for)</td><td>Wiederholung</td></tr>
+        <tr><td><strong>Sequenz</strong><i class="sk" data-sk="gdi01-sequenz"></i></td><td>Anweisungen hintereinander</td></tr>
+        <tr><td><strong>Selektion</strong> (if/else)<i class="sk" data-sk="gdi01-selektion"></i></td><td>bedingte Ausführung</td></tr>
+        <tr><td><strong>Iteration</strong> (while/for)<i class="sk" data-sk="gdi01-iteration"></i></td><td>Wiederholung</td></tr>
       </tbody>
     </table></div>
 
     <div class="box def">
-      <span class="lbl">Objektorientierung</span>
-      <p><strong>Klassen</strong> sind Baupläne mit Attributen und Methoden, <strong>Objekte</strong> deren konkrete Instanzen. Schlüsselkonzepte: <strong>Kapselung, Vererbung, Polymorphie.</strong></p>
+      <span class="lbl">Objektorientierung<i class="sk" data-sk="gdi01-klasse"></i></span>
+      <p><strong>Klassen</strong> sind Baupläne mit Attributen und Methoden, <strong>Objekte</strong> deren konkrete Instanzen. Schlüsselkonzepte: <strong>Kapselung, Vererbung, Polymorphie.</strong><i class="sk" data-sk="gdi01-oopkonz"></i></p>
     </div>
 
     <div class="box">
-      <span class="lbl">Komplexität (Vorgriff)</span>
+      <span class="lbl">Komplexität (Vorgriff)<i class="sk" data-sk="gdi01-komplex"></i></span>
       <p>Unterschiedliche Algorithmen haben unterschiedlichen Ressourcenverbrauch: Die Anzahl der Schritte wächst je nach Algorithmus mit der Eingabegrösse n.</p>
     </div>
   </div>
@@ -423,27 +423,27 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Von Babbages mechanischem Entwurf über das theoretische Berechnungsmodell der Turing-Maschine bis zur bis heute gültigen Von-Neumann-Architektur – die Entwicklungslinie des programmierbaren Rechners.</p>
 
     <h4>Analytische Maschine (Babbage, ca. 1837)</h4>
-    <p>Erster Entwurf eines programmierbaren Rechners. Bestandteile: <strong>Mill</strong> (Rechenwerk), <strong>Store</strong> (Speicher) und <strong>Lochkarten</strong> (Programm/Daten). Die Maschine wurde nie fertiggestellt.</p>
+    <p>Erster Entwurf eines programmierbaren Rechners. Bestandteile: <strong>Mill</strong> (Rechenwerk), <strong>Store</strong> (Speicher) und <strong>Lochkarten</strong> (Programm/Daten).<i class="sk" data-sk="gdi01-babbage"></i> Die Maschine wurde nie fertiggestellt.</p>
 
     <h4>Turing-Maschine (1936)</h4>
     <p>Theoretisches Berechnungsmodell.</p>
     <div class="box def">
-      <span class="lbl">Bestandteile &amp; These</span>
-      <p>Eine Turing-Maschine besteht aus <strong>unendlichem Band</strong>, <strong>Lese-/Schreibkopf</strong>, <strong>endlicher Zustandsmenge</strong> und <strong>Übergangsfunktion</strong>.</p>
-      <p><strong>Church-Turing-These:</strong> Alles, was intuitiv berechenbar ist, ist auch von einer Turing-Maschine berechenbar.</p>
+      <span class="lbl">Bestandteile &amp; These<i class="sk" data-sk="gdi01-turing"></i></span>
+      <p>Eine Turing-Maschine besteht aus <strong>unendlichem Band</strong>, <strong>Lese-/Schreibkopf</strong>, <strong>endlicher Zustandsmenge</strong> und <strong>Übergangsfunktion</strong>.<i class="sk" data-sk="gdi01-tmlauf"></i></p>
+      <p><strong>Church-Turing-These:</strong><i class="sk" data-sk="gdi01-church"></i> Alles, was intuitiv berechenbar ist, ist auch von einer Turing-Maschine berechenbar.</p>
     </div>
     <div class="box">
-      <span class="lbl">Halteproblem</span>
+      <span class="lbl">Halteproblem<i class="sk" data-sk="gdi01-halte"></i></span>
       <p>Es gibt kein allgemeines Verfahren, das für beliebige Programme entscheidet, ob sie terminieren.</p>
     </div>
 
     <h4>Von-Neumann-Architektur (1945)</h4>
     <div class="box def">
-      <span class="lbl">Vier Bestandteile</span>
+      <span class="lbl">Vier Bestandteile<i class="sk" data-sk="gdi01-vn"></i></span>
       <p><strong>Rechenwerk</strong> (ALU), <strong>Steuerwerk</strong>, <strong>Speicher</strong> (Daten <em>und</em> Programme) sowie <strong>Ein-/Ausgabewerk</strong>.</p>
-      <p>Kernprinzip: Programme und Daten liegen im gleichen Speicher (<strong>Programmspeicherkonzept</strong>). Befehle werden sequenziell abgearbeitet – der <strong>Von-Neumann-Flaschenhals</strong>.</p>
+      <p>Kernprinzip: Programme und Daten liegen im gleichen Speicher (<strong>Programmspeicherkonzept</strong>)<i class="sk" data-sk="gdi01-psk"></i>. Befehle werden sequenziell abgearbeitet – der <strong>Von-Neumann-Flaschenhals</strong>.<i class="sk" data-sk="gdi01-flasche"></i></p>
     </div>
-    <p class="formula">Befehlszyklus: Fetch → Decode → Execute</p>
+    <p class="formula">Befehlszyklus: Fetch → Decode → Execute<i class="sk" data-sk="gdi01-zyklus"></i></p>
   </div>
 </section>
 
@@ -466,28 +466,28 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <h4>Stellenwertsystem</h4>
     <p>Jede Ziffer hat einen Wert abhängig von ihrer Position:</p>
-    <p class="formula">Dezimal: aₙ·10ⁿ + aₙ₋₁·10ⁿ⁻¹ + ... + a₁·10 + a₀</p>
-    <p class="formula">Dual: aₙ·2ⁿ + aₙ₋₁·2ⁿ⁻¹ + ... + a₁·2 + a₀</p>
+    <p class="formula">Dezimal: aₙ·10ⁿ + aₙ₋₁·10ⁿ⁻¹ + ... + a₁·10 + a₀<i class="sk" data-sk="gdi01-stelle10"></i></p>
+    <p class="formula">Dual: aₙ·2ⁿ + aₙ₋₁·2ⁿ⁻¹ + ... + a₁·2 + a₀<i class="sk" data-sk="gdi01-stelle2"></i></p>
 
     <h4>Dual → Dezimal</h4>
     <p>Zweierpotenzen der gesetzten Bits aufsummieren:</p>
-    <p class="formula">10110₂ = 1·16 + 0·8 + 1·4 + 1·2 + 0·1 = 22</p>
+    <p class="formula">10110₂ = 1·16 + 0·8 + 1·4 + 1·2 + 0·1 = 22<i class="sk" data-sk="gdi01-d2d"></i></p>
 
     <h4>Dezimal → Dual</h4>
     <p>Sukzessive Division durch 2, Reste von unten nach oben ablesen:</p>
-    <p class="formula">42 ÷ 2 = 21 Rest 0<br>21 ÷ 2 = 10 Rest 1<br>10 ÷ 2 = 5 Rest 0<br>5 ÷ 2 = 2 Rest 1<br>2 ÷ 2 = 1 Rest 0<br>1 ÷ 2 = 0 Rest 1</p>
-    <p>Reste von unten nach oben gelesen: <strong>42 = 101010₂</strong></p>
+    <p class="formula">42 ÷ 2 = 21 Rest 0<br>21 ÷ 2 = 10 Rest 1<br>10 ÷ 2 = 5 Rest 0<br>5 ÷ 2 = 2 Rest 1<br>2 ÷ 2 = 1 Rest 0<br>1 ÷ 2 = 0 Rest 1<i class="sk" data-sk="gdi01-div2"></i></p>
+    <p>Reste von unten nach oben gelesen: <strong>42 = 101010₂</strong><i class="sk" data-sk="gdi01-div2"></i></p>
 
     <h4>Duale Addition</h4>
-    <p>Wie im Dezimalsystem, aber ein Übertrag entsteht schon bei 1+1 = 10₂:</p>
-    <p class="formula">1011₂ (11) + 0110₂ (6) = 10001₂ (17)</p>
+    <p>Wie im Dezimalsystem, aber ein Übertrag entsteht schon bei 1+1 = 10₂:<i class="sk" data-sk="gdi01-add"></i></p>
+    <p class="formula">1011₂ (11) + 0110₂ (6) = 10001₂ (17)<i class="sk" data-sk="gdi01-add"></i></p>
 
     <div class="box def">
-      <span class="lbl">Duale Subtraktion (Zweierkomplement)</span>
+      <span class="lbl">Duale Subtraktion (Zweierkomplement)<i class="sk" data-sk="gdi01-zk"></i></span>
       <p>Statt eines eigenen Subtraktionswerks wird die Subtraktion als Addition des Zweierkomplements durchgeführt:</p>
       <ol>
-        <li>Einerkomplement bilden (alle Bits umkehren)</li>
-        <li>+1 addieren = Zweierkomplement</li>
+        <li>Einerkomplement bilden (alle Bits umkehren)<i class="sk" data-sk="gdi01-ek"></i></li>
+        <li>+1 addieren = Zweierkomplement<i class="sk" data-sk="gdi01-zkwarum"></i></li>
         <li>Addition durchführen</li>
       </ol>
     </div>
@@ -496,12 +496,12 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>System</th><th>Basis</th><th>Ziffern</th><th>Bit pro Ziffer</th></tr></thead>
       <tbody>
-        <tr><td><strong>Hexadezimal</strong></td><td>16</td><td>0–9, A–F</td><td>4 Bit</td></tr>
-        <tr><td><strong>Oktal</strong></td><td>8</td><td>0–7</td><td>3 Bit</td></tr>
+        <tr><td><strong>Hexadezimal</strong><i class="sk" data-sk="gdi01-hexziff"></i></td><td>16</td><td>0–9, A–F</td><td>4 Bit</td></tr>
+        <tr><td><strong>Oktal</strong><i class="sk" data-sk="gdi01-hexokt"></i></td><td>8</td><td>0–7</td><td>3 Bit</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">0xAF = 10·16 + 15 = 175</p>
-    <p>Dual → Hex: je 4 Bit von rechts gruppieren: <strong>1010 1111₂ = AF₁₆</strong></p>
+    <p class="formula">0xAF = 10·16 + 15 = 175<i class="sk" data-sk="gdi01-hex2dez"></i></p>
+    <p>Dual → Hex: je 4 Bit von rechts gruppieren: <strong>1010 1111₂ = AF₁₆</strong><i class="sk" data-sk="gdi01-hexokt"></i></p>
   </div>
 </section>
 
@@ -525,20 +525,20 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Gatter</th><th>Symbol</th><th>Funktion</th><th>Wahrheitstabelle (2 Inputs)</th></tr></thead>
       <tbody>
-        <tr><td><strong>AND</strong> (UND)</td><td>∧</td><td>Output = 1 nur wenn ALLE Inputs = 1</td><td>0∧0=0, 0∧1=0, 1∧0=0, 1∧1=1</td></tr>
-        <tr><td><strong>OR</strong> (ODER)</td><td>∨</td><td>Output = 1 wenn MINDESTENS EIN Input = 1</td><td>0∨0=0, 0∨1=1, 1∨0=1, 1∨1=1</td></tr>
-        <tr><td><strong>NOT</strong> (NICHT)</td><td>¬</td><td>Invertiert den Input</td><td>¬0=1, ¬1=0</td></tr>
+        <tr><td><strong>AND</strong> (UND)<i class="sk" data-sk="gdi01-and"></i></td><td>∧</td><td>Output = 1 nur wenn ALLE Inputs = 1</td><td>0∧0=0, 0∧1=0, 1∧0=0, 1∧1=1</td></tr>
+        <tr><td><strong>OR</strong> (ODER)<i class="sk" data-sk="gdi01-or"></i></td><td>∨</td><td>Output = 1 wenn MINDESTENS EIN Input = 1</td><td>0∨0=0, 0∨1=1, 1∨0=1, 1∨1=1</td></tr>
+        <tr><td><strong>NOT</strong> (NICHT)<i class="sk" data-sk="gdi01-not"></i></td><td>¬</td><td>Invertiert den Input</td><td>¬0=1, ¬1=0</td></tr>
       </tbody>
     </table></div>
 
     <h4>Halbaddierer</h4>
     <div class="box def">
-      <span class="lbl">Halbaddierer (2 Inputs: A, B)</span>
-      <p class="formula">S = A ⊕ B  (XOR)</p>
-      <p class="formula">C = A ∧ B  (AND)</p>
+      <span class="lbl">Halbaddierer (2 Inputs: A, B)<i class="sk" data-sk="gdi01-ha"></i></span>
+      <p class="formula">S = A ⊕ B  (XOR)<i class="sk" data-sk="gdi01-xor"></i></p>
+      <p class="formula">C = A ∧ B  (AND)<i class="sk" data-sk="gdi01-and"></i></p>
     </div>
     <div class="tw"><table class="mono">
-      <thead><tr><th>A</th><th>B</th><th>S (Summe)</th><th>C (Carry)</th></tr></thead>
+      <thead><tr><th>A</th><th>B</th><th>S (Summe)</th><th>C (Carry)<i class="sk" data-sk="gdi01-hatab"></i></th></tr></thead>
       <tbody>
         <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
         <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
@@ -549,11 +549,11 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <h4>Volladdierer</h4>
     <div class="box def">
-      <span class="lbl">Volladdierer (3 Inputs: A, B, Cᵢₙ)</span>
-      <p class="formula">S = A ⊕ B ⊕ Cᵢₙ</p>
-      <p class="formula">Cₒᵤₜ = (A ∧ B) ∨ (Cᵢₙ ∧ (A ⊕ B))</p>
+      <span class="lbl">Volladdierer (3 Inputs: A, B, Cᵢₙ)<i class="sk" data-sk="gdi01-va"></i></span>
+      <p class="formula">S = A ⊕ B ⊕ Cᵢₙ<i class="sk" data-sk="gdi01-vasum"></i></p>
+      <p class="formula">Cₒᵤₜ = (A ∧ B) ∨ (Cᵢₙ ∧ (A ⊕ B))<i class="sk" data-sk="gdi01-vacout"></i></p>
     </div>
-    <p>Für mehrstellige Addition werden Volladdierer kaskadiert (<strong>Carry-Ripple-Adder</strong>).</p>
+    <p>Für mehrstellige Addition werden Volladdierer kaskadiert (<strong>Carry-Ripple-Adder</strong>)<i class="sk" data-sk="gdi01-ripple"></i>.</p>
   </div>
 </section>
 
@@ -709,29 +709,29 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Umrechnung</th><th>Regel</th></tr></thead>
       <tbody>
-        <tr><td>Dual → Dezimal</td><td>Σ aᵢ · 2ⁱ</td></tr>
-        <tr><td>Dezimal → Dual</td><td>sukzessive Division durch 2, Reste rückwärts</td></tr>
-        <tr><td>Hex → Dezimal</td><td>Σ aᵢ · 16ⁱ  (A=10, B=11, ..., F=15)</td></tr>
-        <tr><td>Stellenwertigkeit</td><td>1 Hex-Ziffer = 4 Bit · 1 Oktal-Ziffer = 3 Bit</td></tr>
+        <tr><td>Dual → Dezimal</td><td>Σ aᵢ · 2ⁱ<i class="sk" data-sk="gdi01-d2d"></i></td></tr>
+        <tr><td>Dezimal → Dual</td><td>sukzessive Division durch 2, Reste rückwärts<i class="sk" data-sk="gdi01-div2"></i></td></tr>
+        <tr><td>Hex → Dezimal</td><td>Σ aᵢ · 16ⁱ  (A=10, B=11, ..., F=15)<i class="sk" data-sk="gdi01-hex2dez"></i></td></tr>
+        <tr><td>Stellenwertigkeit</td><td>1 Hex-Ziffer = 4 Bit · 1 Oktal-Ziffer = 3 Bit<i class="sk" data-sk="gdi01-hexokt"></i></td></tr>
       </tbody>
     </table></div>
 
     <h4>Zweierkomplement (n Bit)</h4>
     <div class="box def">
       <span class="lbl">Bildung &amp; Bereich</span>
-      <p class="formula">Einerkomplement: alle Bits invertieren</p>
-      <p class="formula">Zweierkomplement: Einerkomplement + 1</p>
-      <p>Darstellbarer Bereich: <strong>−2ⁿ⁻¹ bis 2ⁿ⁻¹ − 1</strong></p>
+      <p class="formula">Einerkomplement: alle Bits invertieren<i class="sk" data-sk="gdi01-ek"></i></p>
+      <p class="formula">Zweierkomplement: Einerkomplement + 1<i class="sk" data-sk="gdi01-zk"></i></p>
+      <p>Darstellbarer Bereich: <strong>−2ⁿ⁻¹ bis 2ⁿ⁻¹ − 1</strong><i class="sk" data-sk="gdi01-zkring"></i></p>
     </div>
 
     <h4>Logische Gatter</h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>Gatter</th><th>Formel</th></tr></thead>
       <tbody>
-        <tr><td>AND (Konjunktion)</td><td>A ∧ B</td></tr>
-        <tr><td>OR (Disjunktion)</td><td>A ∨ B</td></tr>
-        <tr><td>NOT (Negation)</td><td>¬A</td></tr>
-        <tr><td>XOR</td><td>A ⊕ B = (A ∧ ¬B) ∨ (¬A ∧ B)</td></tr>
+        <tr><td>AND (Konjunktion)</td><td>A ∧ B<i class="sk" data-sk="gdi01-and"></i></td></tr>
+        <tr><td>OR (Disjunktion)</td><td>A ∨ B<i class="sk" data-sk="gdi01-or"></i></td></tr>
+        <tr><td>NOT (Negation)</td><td>¬A<i class="sk" data-sk="gdi01-not"></i></td></tr>
+        <tr><td>XOR</td><td>A ⊕ B = (A ∧ ¬B) ∨ (¬A ∧ B)<i class="sk" data-sk="gdi01-xor"></i></td></tr>
       </tbody>
     </table></div>
 
@@ -739,8 +739,8 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Baustein</th><th>Formel</th></tr></thead>
       <tbody>
-        <tr><td>Halbaddierer (HA)</td><td>S = A ⊕ B · C = A ∧ B</td></tr>
-        <tr><td>Volladdierer (VA)</td><td>S = A ⊕ B ⊕ Cᵢₙ · Cₒᵤₜ = (A ∧ B) ∨ (Cᵢₙ ∧ (A ⊕ B))</td></tr>
+        <tr><td>Halbaddierer (HA)</td><td>S = A ⊕ B · C = A ∧ B<i class="sk" data-sk="gdi01-ha"></i></td></tr>
+        <tr><td>Volladdierer (VA)</td><td>S = A ⊕ B ⊕ Cᵢₙ · Cₒᵤₜ = (A ∧ B) ∨ (Cᵢₙ ∧ (A ⊕ B))<i class="sk" data-sk="gdi01-va"></i></td></tr>
       </tbody>
     </table></div>
   </div>

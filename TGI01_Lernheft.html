@@ -347,7 +347,7 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Ein <strong>Algorithmus</strong> ist eine eindeutige, endliche Handlungsvorschrift zur Lösung eines Problems – unabhängig davon, in welcher Form er notiert wird. TGI01 unterscheidet drei gleichwertige Darstellungsformen, die ineinander überführbar sind.</p>
 
     <div class="box def">
-      <span class="lbl">Algorithmusbegriff</span>
+      <span class="lbl">Algorithmusbegriff<i class="sk" data-sk="tgi01-algo"></i></span>
       <p>Ein Algorithmus muss <strong>determiniert</strong> (eindeutig festgelegte Schritte, bei gleicher Eingabe stets gleiches Ergebnis), <strong>effektiv ausführbar</strong> (jeder Schritt tatsächlich durchführbar), <strong>finit</strong> (endlich formuliert) und <strong>terminierend</strong> (endet nach endlich vielen Schritten) sein. Die Notation – Pseudocode, Flussdiagramm oder Struktogramm – ändert daran nichts, nur Lesbarkeit und Kontrollstruktur-Disziplin unterscheiden sich.</p>
     </div>
 
@@ -355,9 +355,9 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Form</th><th>Merkmal</th></tr></thead>
       <tbody>
-        <tr><td><strong>Pseudocode / Programmiersprache</strong></td><td>textuell, nah am späteren Code; im Studienheft in <strong>Groovy</strong> notiert</td></tr>
-        <tr><td><strong>Flussdiagramm</strong></td><td>grafisch, Symbole durch Pfeile verbunden; zeigt den Kontrollfluss explizit</td></tr>
-        <tr><td><strong>Struktogramm (Nassi-Shneiderman)</strong></td><td>grafisch, verschachtelte Blöcke <em>ohne</em> Pfeile; erzwingt strukturierte Kontrollstrukturen</td></tr>
+        <tr><td><strong>Pseudocode / Programmiersprache</strong><i class="sk" data-sk="tgi01-drei"></i></td><td>textuell, nah am späteren Code; im Studienheft in <strong>Groovy</strong> notiert</td></tr>
+        <tr><td><strong>Flussdiagramm</strong><i class="sk" data-sk="tgi01-symbole"></i></td><td>grafisch, Symbole durch Pfeile verbunden; zeigt den Kontrollfluss explizit</td></tr>
+        <tr><td><strong>Struktogramm (Nassi-Shneiderman)</strong><i class="sk" data-sk="tgi01-nsbloecke"></i></td><td>grafisch, verschachtelte Blöcke <em>ohne</em> Pfeile; erzwingt strukturierte Kontrollstrukturen</td></tr>
       </tbody>
     </table></div>
 
@@ -365,19 +365,19 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Symbol</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td>Oval</td><td>Start / Ende</td></tr>
+        <tr><td>Oval<i class="sk" data-sk="tgi01-symbole"></i></td><td>Start / Ende</td></tr>
         <tr><td>Rechteck</td><td>Verarbeitung (Anweisung)</td></tr>
-        <tr><td>Raute</td><td>Entscheidung (Verzweigung)</td></tr>
-        <tr><td>Parallelogramm</td><td>Ein- / Ausgabe</td></tr>
+        <tr><td>Raute<i class="sk" data-sk="tgi01-raute"></i></td><td>Entscheidung (Verzweigung)</td></tr>
+        <tr><td>Parallelogramm<i class="sk" data-sk="tgi01-raute"></i></td><td>Ein- / Ausgabe</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p><strong>Raute ≠ Parallelogramm.</strong> Die Raute steht für eine Entscheidung (Ja/Nein-Verzweigung mit zwei Ausgängen), das Parallelogramm für Ein-/Ausgabe (ein Eingang, ein Ausgang). Beide werden gern verwechselt.</p>
+      <p><strong>Raute ≠ Parallelogramm.</strong><i class="sk" data-sk="tgi01-raute"></i> Die Raute steht für eine Entscheidung (Ja/Nein-Verzweigung mit zwei Ausgängen), das Parallelogramm für Ein-/Ausgabe (ein Eingang, ein Ausgang). Beide werden gern verwechselt.</p>
     </div>
 
-    <p>Das <strong>Struktogramm</strong> verzichtet bewusst auf Pfeile: Sequenz, Auswahl (if/else) und Wiederholung (while/do-while) werden als ineinander geschachtelte Rechteckblöcke gezeichnet. Das erzwingt <strong>strukturierte Programmierung</strong> ohne Sprünge und macht die Blockstruktur eines Algorithmus auf einen Blick sichtbar – dafür lässt sich ein bereits gezeichnetes Struktogramm schwerer nachträglich ändern als ein Flussdiagramm.</p>
+    <p>Das <strong>Struktogramm</strong> verzichtet bewusst auf Pfeile: Sequenz, Auswahl (if/else) und Wiederholung (while/do-while)<i class="sk" data-sk="tgi01-nsbloecke"></i> werden als ineinander geschachtelte Rechteckblöcke gezeichnet. Das erzwingt <strong>strukturierte Programmierung</strong><i class="sk" data-sk="tgi01-drei"></i> ohne Sprünge und macht die Blockstruktur eines Algorithmus auf einen Blick sichtbar – dafür lässt sich ein bereits gezeichnetes Struktogramm schwerer nachträglich ändern als ein Flussdiagramm.</p>
   </div>
 </section>
 
@@ -400,30 +400,30 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <div class="box def">
       <span class="lbl">Mengen und Potenzmenge</span>
-      <p>Eine Menge wird in der Form <strong>M = {x | Bedingung}</strong> notiert („Menge aller x, für die die Bedingung gilt"). Die <strong>Potenzmenge P(M)</strong> ist die Menge <em>aller</em> Teilmengen von M – einschliesslich der leeren Menge ∅ und M selbst. Bei |M| = n Elementen hat die Potenzmenge stets <strong>|P(M)| = 2ⁿ</strong> Elemente.</p>
+      <p>Eine Menge wird in der Form <strong>M = {x | Bedingung}</strong><i class="sk" data-sk="tgi01-menge"></i> notiert („Menge aller x, für die die Bedingung gilt"). Die <strong>Potenzmenge P(M)</strong> ist die Menge <em>aller</em> Teilmengen von M – einschliesslich der leeren Menge ∅ und M selbst. Bei |M| = n Elementen hat die Potenzmenge stets <strong>|P(M)| = 2ⁿ</strong><i class="sk" data-sk="tgi01-potenz"></i> Elemente.</p>
     </div>
 
     <h4>Relationseigenschaften</h4>
-    <p>Eine Relation R auf einer Menge M ist eine Teilmenge von M × M. Vier Eigenschaften entscheiden über ihre Klassifikation:</p>
+    <p>Eine Relation R auf einer Menge M ist eine Teilmenge von M × M<i class="sk" data-sk="tgi01-kreuz"></i>. Vier Eigenschaften entscheiden über ihre Klassifikation:</p>
     <div class="tw"><table class="mono">
       <thead><tr><th>Eigenschaft</th><th>Definition</th></tr></thead>
       <tbody>
-        <tr><td>Reflexiv</td><td>∀x: (x,x) ∈ R</td></tr>
-        <tr><td>Symmetrisch</td><td>(x,y) ∈ R → (y,x) ∈ R</td></tr>
-        <tr><td>Antisymmetrisch</td><td>(x,y) ∈ R ∧ (y,x) ∈ R → x = y</td></tr>
-        <tr><td>Transitiv</td><td>(x,y) ∈ R ∧ (y,z) ∈ R → (x,z) ∈ R</td></tr>
+        <tr><td>Reflexiv<i class="sk" data-sk="tgi01-reflexiv"></i></td><td>∀x: (x,x) ∈ R</td></tr>
+        <tr><td>Symmetrisch<i class="sk" data-sk="tgi01-symm"></i></td><td>(x,y) ∈ R → (y,x) ∈ R</td></tr>
+        <tr><td>Antisymmetrisch<i class="sk" data-sk="tgi01-antisymm"></i></td><td>(x,y) ∈ R ∧ (y,x) ∈ R → x = y</td></tr>
+        <tr><td>Transitiv<i class="sk" data-sk="tgi01-trans"></i></td><td>(x,y) ∈ R ∧ (y,z) ∈ R → (x,z) ∈ R</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>Symmetrisch und antisymmetrisch schliessen sich nicht aus, wie es klingt – eine Relation kann beides zugleich sein (z. B. die Gleichheitsrelation) oder keins von beidem. Für die beiden zentralen Kombinationen gilt:</p>
-      <p class="formula">Äquivalenzrelation = reflexiv + symmetrisch + transitiv</p>
-      <p class="formula">Partielle Ordnung = reflexiv + antisymmetrisch + transitiv</p>
+      <p>Symmetrisch und antisymmetrisch schliessen sich nicht aus, wie es klingt – eine Relation kann beides zugleich sein (z. B. die Gleichheitsrelation) oder keins von beidem.<i class="sk" data-sk="tgi01-beides"></i> Für die beiden zentralen Kombinationen gilt:</p>
+      <p class="formula">Äquivalenzrelation = reflexiv + symmetrisch + transitiv<i class="sk" data-sk="tgi01-aequiv"></i></p>
+      <p class="formula">Partielle Ordnung = reflexiv + antisymmetrisch + transitiv<i class="sk" data-sk="tgi01-ordnung"></i></p>
     </div>
 
     <h4>Algebren</h4>
-    <p>Eine <strong>Algebra</strong> ist eine abstrakte Struktur aus drei Bestandteilen: einer <strong>Trägermenge</strong> (die Elemente), einer oder mehreren <strong>Operationen</strong> auf dieser Menge und <strong>Axiomen</strong>, denen diese Operationen genügen müssen. Dieses Denkschema – Menge, Operationen, Regeln – ist genau das Muster, nach dem in Kapitel 3 abstrakte Datentypen definiert werden.</p>
+    <p>Eine <strong>Algebra</strong><i class="sk" data-sk="tgi01-algebra"></i> ist eine abstrakte Struktur aus drei Bestandteilen: einer <strong>Trägermenge</strong> (die Elemente), einer oder mehreren <strong>Operationen</strong> auf dieser Menge und <strong>Axiomen</strong>, denen diese Operationen genügen müssen. Dieses Denkschema – Menge, Operationen, Regeln – ist genau das Muster, nach dem in Kapitel 3 abstrakte Datentypen definiert werden.</p>
   </div>
 </section>
 
@@ -443,23 +443,23 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <div class="box def">
-      <span class="lbl">Abstrakter Datentyp (ADT)</span>
+      <span class="lbl">Abstrakter Datentyp (ADT)<i class="sk" data-sk="tgi01-adt"></i></span>
       <p>Ein ADT spezifiziert einen Datentyp <strong>unabhängig von seiner Implementierung</strong> – festgelegt durch eine <strong>Signatur</strong> (welche Operationen gibt es, mit welchen Parametern) und <strong>Axiome</strong> (wie verhalten sich diese Operationen zueinander). Das WIE der Umsetzung (z. B. Array oder verkettete Liste) bleibt offen.</p>
     </div>
 
     <h4>Statisch vs. dynamisch</h4>
     <ul>
-      <li><strong>Statische Datentypen</strong> – Grösse steht zur Übersetzungszeit fest.
+      <li><strong>Statische Datentypen</strong><i class="sk" data-sk="tgi01-statdyn"></i> – Grösse steht zur Übersetzungszeit fest.
         <ul>
           <li><em>Basisdatentypen:</em> int, float, char, boolean</li>
           <li><em>Aggregiert:</em> Array, Record/Struct, String</li>
         </ul>
       </li>
-      <li><strong>Dynamische Datentypen</strong> – Grösse ändert sich zur Laufzeit.
+      <li><strong>Dynamische Datentypen</strong><i class="sk" data-sk="tgi01-statdyn"></i> – Grösse ändert sich zur Laufzeit.
         <ul>
           <li><em>Liste</em> (einfach oder doppelt verkettet)</li>
-          <li><em>Stack</em> (Keller/Stapel) – LIFO</li>
-          <li><em>Queue</em> (Schlange) – FIFO</li>
+          <li><em>Stack</em> (Keller/Stapel) – LIFO<i class="sk" data-sk="tgi01-stack"></i></li>
+          <li><em>Queue</em> (Schlange) – FIFO<i class="sk" data-sk="tgi01-queue"></i></li>
         </ul>
       </li>
     </ul>
@@ -468,18 +468,18 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>ADT</th><th>Prinzip</th><th>Operationen</th><th>Anwendung</th></tr></thead>
       <tbody>
-        <tr><td>Stack (Keller)</td><td>LIFO – Last In, First Out</td><td>push(x), pop(), top(), isEmpty()</td><td>Klammerprüfung, Funktionsaufrufe, Rücksprungadressen</td></tr>
-        <tr><td>Queue (Schlange)</td><td>FIFO – First In, First Out</td><td>enqueue(x), dequeue(), front(), isEmpty()</td><td>Druckerwarteschlange, BFS</td></tr>
+        <tr><td>Stack (Keller)<i class="sk" data-sk="tgi01-stack"></i></td><td>LIFO – Last In, First Out</td><td>push(x), pop(), top(), isEmpty()</td><td>Klammerprüfung, Funktionsaufrufe, Rücksprungadressen<i class="sk" data-sk="tgi01-klammer"></i></td></tr>
+        <tr><td>Queue (Schlange)<i class="sk" data-sk="tgi01-queue"></i></td><td>FIFO – First In, First Out</td><td>enqueue(x), dequeue(), front(), isEmpty()</td><td>Druckerwarteschlange, BFS</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>ADT und Implementierung sind zwei verschiedene Ebenen: <strong>Stack ist ein Verhalten (LIFO), keine feste Datenstruktur.</strong> Er lässt sich array-basiert wie listenbasiert realisieren – solange push/pop/top/isEmpty sich LIFO-konform verhalten, ist die Signatur erfüllt.</p>
+      <p>ADT und Implementierung sind zwei verschiedene Ebenen: <strong>Stack ist ein Verhalten (LIFO), keine feste Datenstruktur.</strong><i class="sk" data-sk="tgi01-adt"></i> Er lässt sich array-basiert wie listenbasiert realisieren – solange push/pop/top/isEmpty sich LIFO-konform verhalten, ist die Signatur erfüllt.</p>
     </div>
 
     <h4>Verkettete Liste</h4>
-    <p>Eine verkettete Liste besteht aus <strong>Knoten</strong>, die jeweils ein Datenelement und einen Zeiger auf den nächsten Knoten enthalten. Bei der <strong>einfach verketteten Liste</strong> existiert nur ein Vorwärtszeiger (Navigation nur in eine Richtung); die <strong>doppelt verkettete Liste</strong> besitzt zusätzlich einen Rückwärtszeiger und erlaubt Navigation in beide Richtungen – erkauft mit einem zweiten Zeiger pro Knoten.</p>
+    <p>Eine verkettete Liste besteht aus <strong>Knoten</strong><i class="sk" data-sk="tgi01-knoten"></i>, die jeweils ein Datenelement und einen Zeiger auf den nächsten Knoten enthalten. Bei der <strong>einfach verketteten Liste</strong><i class="sk" data-sk="tgi01-einfach"></i> existiert nur ein Vorwärtszeiger (Navigation nur in eine Richtung); die <strong>doppelt verkettete Liste</strong><i class="sk" data-sk="tgi01-doppelt"></i> besitzt zusätzlich einen Rückwärtszeiger und erlaubt Navigation in beide Richtungen – erkauft mit einem zweiten Zeiger pro Knoten.</p>
   </div>
 </section>
 
@@ -498,19 +498,19 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <p class="lead">Die drei einfachen Sortierverfahren laufen alle in <strong>O(n²)</strong> – der Unterschied liegt in der Arbeitsweise, nicht in der asymptotischen Komplexität. Genau diese Unterscheidung wird gern abgefragt.</p>
+    <p class="lead">Die drei einfachen Sortierverfahren laufen alle in <strong>O(n²)</strong><i class="sk" data-sk="tgi01-komplex"></i> – der Unterschied liegt in der Arbeitsweise, nicht in der asymptotischen Komplexität. Genau diese Unterscheidung wird gern abgefragt.</p>
 
     <div class="tw"><table>
       <thead><tr><th>Algorithmus</th><th>Prinzip</th><th>Stabil?</th><th>Besonderheit</th></tr></thead>
       <tbody>
-        <tr><td><strong>BubbleSort</strong></td><td>benachbarte Elemente vergleichen &amp; tauschen, mehrere Durchläufe</td><td>Ja</td><td>einfach, aber ineffizient</td></tr>
-        <tr><td><strong>SelectionSort</strong></td><td>Minimum suchen, an den Anfang tauschen</td><td>Nein</td><td>wenig Tauschoperationen</td></tr>
-        <tr><td><strong>InsertionSort</strong></td><td>Element in bereits sortierte Teilliste einfügen</td><td>Ja</td><td>gut für fast sortierte Listen</td></tr>
+        <tr><td><strong>BubbleSort</strong><i class="sk" data-sk="tgi01-bubble"></i></td><td>benachbarte Elemente vergleichen &amp; tauschen, mehrere Durchläufe</td><td>Ja</td><td>einfach, aber ineffizient</td></tr>
+        <tr><td><strong>SelectionSort</strong><i class="sk" data-sk="tgi01-selection"></i></td><td>Minimum suchen, an den Anfang tauschen</td><td>Nein</td><td>wenig Tauschoperationen</td></tr>
+        <tr><td><strong>InsertionSort</strong><i class="sk" data-sk="tgi01-insertion"></i></td><td>Element in bereits sortierte Teilliste einfügen</td><td>Ja</td><td>gut für fast sortierte Listen</td></tr>
       </tbody>
     </table></div>
 
     <div class="box def">
-      <span class="lbl">Stabilität</span>
+      <span class="lbl">Stabilität<i class="sk" data-sk="tgi01-stabil"></i></span>
       <p>Ein Sortierverfahren heisst <strong>stabil</strong>, wenn Elemente mit gleichem Schlüssel ihre relative Reihenfolge zueinander behalten. SelectionSort ist <em>nicht</em> stabil, weil das Tauschen über grosse Distanzen gleiche Schlüssel vertauschen kann.</p>
     </div>
 
@@ -518,16 +518,16 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Verfahren</th><th>Idee</th><th>Komplexität</th></tr></thead>
       <tbody>
-        <tr><td>Lineare Suche</td><td>jedes Element der Reihe nach prüfen</td><td>O(n)</td></tr>
-        <tr><td>Binäre Suche</td><td>Liste muss sortiert sein; Mitte vergleichen, jeweils eine Hälfte ausschliessen</td><td>O(log n)</td></tr>
-        <tr><td>Fibonacci-Suche</td><td>wie binäre Suche, Aufteilung aber nach Fibonacci-Zahlen statt exakter Mitte</td><td>O(log n)</td></tr>
-        <tr><td>Interpolatorische Suche</td><td>Position wird aus dem Wert geschätzt, nicht nur die Mitte</td><td>O(log log n) bei Gleichverteilung</td></tr>
+        <tr><td>Lineare Suche<i class="sk" data-sk="tgi01-linear"></i></td><td>jedes Element der Reihe nach prüfen</td><td>O(n)</td></tr>
+        <tr><td>Binäre Suche<i class="sk" data-sk="tgi01-binaer"></i></td><td>Liste muss sortiert sein; Mitte vergleichen, jeweils eine Hälfte ausschliessen</td><td>O(log n)</td></tr>
+        <tr><td>Fibonacci-Suche<i class="sk" data-sk="tgi01-fibo"></i></td><td>wie binäre Suche, Aufteilung aber nach Fibonacci-Zahlen statt exakter Mitte</td><td>O(log n)</td></tr>
+        <tr><td>Interpolatorische Suche<i class="sk" data-sk="tgi01-interpol"></i></td><td>Position wird aus dem Wert geschätzt, nicht nur die Mitte</td><td>O(log log n) bei Gleichverteilung</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>Binäre, Fibonacci- und interpolatorische Suche setzen alle eine <strong>sortierte</strong> Liste voraus. Der Vorteil der interpolatorischen Suche (O(log log n)) gilt zudem nur <em>unter der Annahme gleichverteilter Werte</em> – bei ungünstiger Verteilung fällt sie auf lineares Verhalten (O(n)) zurück.</p>
+      <p>Binäre, Fibonacci- und interpolatorische Suche setzen alle eine <strong>sortierte</strong> Liste voraus<i class="sk" data-sk="tgi01-unsortiert"></i>. Der Vorteil der interpolatorischen Suche (O(log log n)) gilt zudem nur <em>unter der Annahme gleichverteilter Werte</em><i class="sk" data-sk="tgi01-interpol"></i> – bei ungünstiger Verteilung fällt sie auf lineares Verhalten (O(n)) zurück.</p>
     </div>
   </div>
 </section>
@@ -548,34 +548,34 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <div class="box def">
-      <span class="lbl">Baum</span>
-      <p>Ein <strong>Baum</strong> ist ein zusammenhängender, zyklenfreier Graph mit einer ausgezeichneten <strong>Wurzel</strong> – ein Baum ist also stets ein Spezialfall eines Graphen. Zwei Kenngrössen bestimmen seine Grösse: die <strong>Ordnung k</strong> (maximale Anzahl Söhne pro Knoten) und die <strong>Höhe m</strong> (Länge des längsten Pfads von der Wurzel zu einem Blatt).</p>
-      <p class="formula">Maximale Blattzahl auf Niveau m:  kᵐ</p>
+      <span class="lbl">Baum<i class="sk" data-sk="tgi01-baum"></i></span>
+      <p>Ein <strong>Baum</strong> ist ein zusammenhängender, zyklenfreier Graph mit einer ausgezeichneten <strong>Wurzel</strong> – ein Baum ist also stets ein Spezialfall eines Graphen<i class="sk" data-sk="tgi01-baumgraph"></i>. Zwei Kenngrössen bestimmen seine Grösse: die <strong>Ordnung k</strong> (maximale Anzahl Söhne pro Knoten) und die <strong>Höhe m</strong> (Länge des längsten Pfads von der Wurzel zu einem Blatt).</p>
+      <p class="formula">Maximale Blattzahl auf Niveau m:  kᵐ<i class="sk" data-sk="tgi01-blatt"></i></p>
     </div>
 
-    <p>Der <strong>Binärbaum</strong> ist der Sonderfall k = 2. Beim <strong>binären Suchbaum (BST)</strong> gilt zusätzlich an jedem Knoten: links stehen die kleineren, rechts die grösseren Werte – diese Ordnung ist es, die die Inorder-Traversierung sortiert ausgibt.</p>
+    <p>Der <strong>Binärbaum</strong><i class="sk" data-sk="tgi01-blatt"></i> ist der Sonderfall k = 2. Beim <strong>binären Suchbaum (BST)</strong><i class="sk" data-sk="tgi01-bst"></i> gilt zusätzlich an jedem Knoten: links stehen die kleineren, rechts die grösseren Werte – diese Ordnung ist es, die die Inorder-Traversierung sortiert ausgibt.</p>
 
     <h4>Traversierung von Binärbäumen</h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>Verfahren</th><th>Reihenfolge</th><th>Merkregel</th></tr></thead>
       <tbody>
-        <tr><td>Preorder</td><td>Wurzel → links → rechts</td><td>WLR</td></tr>
-        <tr><td>Inorder</td><td>links → Wurzel → rechts</td><td>LWR – bei BST sortiert!</td></tr>
-        <tr><td>Postorder</td><td>links → rechts → Wurzel</td><td>LRW</td></tr>
+        <tr><td>Preorder<i class="sk" data-sk="tgi01-preorder"></i></td><td>Wurzel → links → rechts</td><td>WLR</td></tr>
+        <tr><td>Inorder<i class="sk" data-sk="tgi01-inorder"></i></td><td>links → Wurzel → rechts</td><td>LWR – bei BST sortiert!</td></tr>
+        <tr><td>Postorder<i class="sk" data-sk="tgi01-postorder"></i></td><td>links → rechts → Wurzel</td><td>LRW</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>Nur die <strong>Inorder</strong>-Traversierung liefert bei einem binären <em>Suchbaum</em> eine sortierte Folge – bei einem beliebigen Binärbaum ohne Suchbaum-Eigenschaft gilt das nicht. Pre- und Postorder sind unabhängig von der Suchbaum-Eigenschaft nie automatisch sortiert.</p>
+      <p>Nur die <strong>Inorder</strong>-Traversierung liefert<i class="sk" data-sk="tgi01-inbst"></i> bei einem binären <em>Suchbaum</em> eine sortierte Folge – bei einem beliebigen Binärbaum ohne Suchbaum-Eigenschaft gilt das nicht. Pre- und Postorder sind unabhängig von der Suchbaum-Eigenschaft nie automatisch sortiert.</p>
     </div>
 
     <h4>Graphen</h4>
-    <p>Ein <strong>Graph G = (V, E)</strong> besteht aus einer Knotenmenge V und einer Kantenmenge E. Bei einem <strong>gerichteten Graphen</strong> haben die Kanten eine Richtung (Pfeile, „von … nach …"); bei einem ungerichteten Graphen nicht.</p>
+    <p>Ein <strong>Graph G = (V, E)</strong><i class="sk" data-sk="tgi01-graph"></i> besteht aus einer Knotenmenge V und einer Kantenmenge E. Bei einem <strong>gerichteten Graphen</strong><i class="sk" data-sk="tgi01-graph"></i> haben die Kanten eine Richtung (Pfeile, „von … nach …"); bei einem ungerichteten Graphen nicht.</p>
 
     <div class="box">
-      <span class="lbl">Adjazenzmatrix</span>
-      <p>Die Adjazenzmatrix eines Graphen mit n Knoten ist eine <strong>n × n-Matrix A</strong>. Es gilt <strong>A[i][j] = 1</strong>, falls eine Kante von Knoten i nach Knoten j existiert, sonst 0. Bei gerichteten Graphen ist die Matrix im Allgemeinen <em>nicht</em> symmetrisch.</p>
+      <span class="lbl">Adjazenzmatrix<i class="sk" data-sk="tgi01-adj"></i></span>
+      <p>Die Adjazenzmatrix eines Graphen mit n Knoten ist eine <strong>n × n-Matrix A</strong>. Es gilt <strong>A[i][j] = 1</strong><i class="sk" data-sk="tgi01-adj"></i>, falls eine Kante von Knoten i nach Knoten j existiert, sonst 0. Bei gerichteten Graphen ist die Matrix im Allgemeinen <em>nicht</em> symmetrisch<i class="sk" data-sk="tgi01-adjsym"></i>.</p>
     </div>
   </div>
 </section>
@@ -749,20 +749,20 @@ Max. Blätter = kᵐ = 3⁴ = 81</div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <h4>Bäume</h4>
-    <p class="formula">Maximale Blattzahl auf Niveau m bei Ordnung k:  kᵐ</p>
-    <p class="formula">Höhe eines vollständigen Binärbaums mit n Knoten:  ⌊log₂ n⌋</p>
+    <p class="formula">Maximale Blattzahl auf Niveau m bei Ordnung k:  kᵐ<i class="sk" data-sk="tgi01-blatt"></i></p>
+    <p class="formula">Höhe eines vollständigen Binärbaums mit n Knoten:  ⌊log₂ n⌋<i class="sk" data-sk="tgi01-hoehe"></i></p>
 
-    <h4>Sortieralgorithmen – Komplexitäten</h4>
+    <h4>Sortieralgorithmen – Komplexitäten<i class="sk" data-sk="tgi01-komplex"></i></h4>
     <div class="tw"><table class="mono">
-      <thead><tr><th>Algorithmus</th><th>Best</th><th>Average</th><th>Worst</th><th>Stabil?</th><th>In-situ?</th></tr></thead>
+      <thead><tr><th>Algorithmus</th><th>Best</th><th>Average</th><th>Worst</th><th>Stabil?<i class="sk" data-sk="tgi01-stabil"></i></th><th>In-situ?</th></tr></thead>
       <tbody>
-        <tr><td>BubbleSort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
-        <tr><td>SelectionSort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td>InsertionSort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
-        <tr><td>QuickSort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td>MergeSort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Ja</td><td>Nein</td></tr>
-        <tr><td>HeapSort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td>RadixSort</td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>BubbleSort<i class="sk" data-sk="tgi01-bubble"></i></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
+        <tr><td>SelectionSort<i class="sk" data-sk="tgi01-selection"></i></td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td>InsertionSort<i class="sk" data-sk="tgi01-insertion"></i></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
+        <tr><td>QuickSort<i class="sk" data-sk="tgi01-quick"></i></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td>MergeSort<i class="sk" data-sk="tgi01-merge"></i></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>HeapSort<i class="sk" data-sk="tgi01-heap"></i></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td>RadixSort<i class="sk" data-sk="tgi01-radix"></i></td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>Ja</td><td>Nein</td></tr>
       </tbody>
     </table></div>
   </div>

@@ -347,34 +347,34 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Das Spezifikum der Numerik: Fehler treten immer auf – die Kunst ist, sie abzuschätzen.</p>
 
     <div class="box def">
-      <span class="lbl">1.1.1 Die drei Fehlerarten</span>
+      <span class="lbl">1.1.1 Die drei Fehlerarten<i class="sk" data-sk="mai14c-fehlerarten"></i></span>
       <p><strong>Eingabedatenfehler</strong> – ungenau abgelesene Messwerte, Tippfehler. Nicht Aufgabe der Mathematik.<br>
       <strong>Verfahrensfehler</strong> – ein Rechner beherrscht nur die Grundrechenarten und nur endlich viele Schritte. Wurzeln, Logarithmen, trigonometrische Funktionen und selbst π und e müssen <strong>angenähert</strong> werden.<br>
       <strong>Rundungsfehler</strong> – entstehen beim Abschneiden auf die darstellbare Stellenzahl.</p>
       <p>Der Fokus der Numerik liegt auf der <strong>Minimierung der Verfahrensfehler</strong>.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Definition 1.1 – absoluter und relativer Fehler</span>
+      <span class="lbl">Definition 1.1 – absoluter und relativer Fehler<i class="sk" data-sk="mai14c-absrel"></i></span>
       <p class="formula">absoluter Fehler:&nbsp;&nbsp;Δx = |x̃ − x|<br>relativer Fehler:&nbsp;&nbsp;δx = |x̃ − x| / |x|&nbsp;&nbsp;&nbsp;(für x ≠ 0)</p>
       <p><strong>Warum beide?</strong> Ein absoluter Fehler von 1 ist bei x = 100 harmlos (δ = 1&nbsp;%), bei x = 0,01 katastrophal. Der relative Fehler misst die <em>Güte der Annäherung</em>, der absolute nur den Abstand.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">1.1.2 Fehlerfortpflanzung (Satz 1.1)</span>
+      <span class="lbl">1.1.2 Fehlerfortpflanzung (Satz 1.1)<i class="sk" data-sk="mai14c-fortpfl"></i></span>
       <p>Werden fehlerbehaftete Größen weiterverrechnet, schaukeln sich Fehler auf. Für z = f(x, y) gilt näherungsweise (über die Taylor-Entwicklung erster Ordnung):</p>
-      <p class="formula">Δz ≈ | ∂f/∂x | · Δx + | ∂f/∂y | · Δy</p>
+      <p class="formula">Δz ≈ | ∂f/∂x | · Δx + | ∂f/∂y | · Δy<i class="sk" data-sk="mai14c-fortpfl"></i></p>
       <p>Dabei ist die <strong>partielle Ableitung</strong> ∂f/∂x die gewöhnliche Ableitung nach x, wobei y als Konstante behandelt wird (Def. 1.2).</p>
       <p>Faustregeln, die daraus folgen:</p>
       <ul>
-        <li><strong>Addition/Subtraktion:</strong> die <em>absoluten</em> Fehler addieren sich.</li>
-        <li><strong>Multiplikation/Division:</strong> die <em>relativen</em> Fehler addieren sich.</li>
-        <li><strong>Auslöschung:</strong> Subtrahiert man zwei fast gleich große Zahlen, bleibt der absolute Fehler gleich, während das Ergebnis winzig wird – der <strong>relative Fehler explodiert</strong>. Solche Differenzen möglichst durch Umformung vermeiden.</li>
+        <li><strong>Addition/Subtraktion:</strong><i class="sk" data-sk="mai14c-addmult"></i> die <em>absoluten</em> Fehler addieren sich.</li>
+        <li><strong>Multiplikation/Division:</strong><i class="sk" data-sk="mai14c-addmult"></i> die <em>relativen</em> Fehler addieren sich.</li>
+        <li><strong>Auslöschung:</strong><i class="sk" data-sk="mai14c-ausloesch"></i> Subtrahiert man zwei fast gleich große Zahlen, bleibt der absolute Fehler gleich, während das Ergebnis winzig wird – der <strong>relative Fehler explodiert</strong>. Solche Differenzen möglichst durch Umformung vermeiden.</li>
       </ul>
     </div>
 
     <h4>1.2 Maschinenzahlen</h4>
     <div class="box def">
-      <span class="lbl">Definition 1.3 – Gleitpunktdarstellung</span>
+      <span class="lbl">Definition 1.3 – Gleitpunktdarstellung<i class="sk" data-sk="mai14c-gleitpunkt"></i></span>
       <p class="formula">y = sign · a · 10<sup>e</sup>&nbsp;&nbsp;&nbsp;mit&nbsp;&nbsp;0,1 ≤ a &lt; 1</p>
       <p><strong>sign</strong> = Vorzeichen, <strong>a</strong> = Mantisse mit fest vorgegebener Ziffernzahl m (der <em>Mantissenlänge</em>), <strong>e</strong> = ganzzahliger Exponent in einem Bereich e<sub>min</sub> ≤ e ≤ e<sub>max</sub> (häufig |e| ≤ 99). Einzige Ausnahme von der Normierung ist die Null.</p>
       <div class="tw"><table class="mono">
@@ -382,18 +382,18 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
         <tbody>
           <tr><td>0,00321</td><td>0,32100 · 10<sup>−2</sup></td></tr>
           <tr><td>10,0</td><td>0,10000 · 10<sup>2</sup></td></tr>
-          <tr><td>−200,22</td><td>−0,20022 · 10<sup>3</sup></td></tr>
+          <tr><td>−200,22<i class="sk" data-sk="mai14c-gleitpunkt"></i></td><td>−0,20022 · 10<sup>3</sup></td></tr>
           <tr><td>0,0</td><td>0,00000 · 10<sup>0</sup></td></tr>
         </tbody>
       </table></div>
       <p>Die einfachere <strong>Festkommadarstellung</strong> mit fester Nachkommastellenzahl findet man noch in Taschenrechnern.</p>
     </div>
     <div class="box warn">
-      <span class="lbl">1.2.2 Unterlauf und Überlauf</span>
+      <span class="lbl">1.2.2 Unterlauf und Überlauf<i class="sk" data-sk="mai14c-zahlengerade"></i></span>
       <p><strong>Überlauf (overflow):</strong> Das Ergebnis ist betragsmäßig zu groß – der Exponent überschreitet e<sub>max</sub>. Das Programm bricht ab oder liefert „inf“.<br>
       <strong>Unterlauf (underflow):</strong> Das Ergebnis ist zu klein – der Exponent unterschreitet e<sub>min</sub>. Es wird stillschweigend zu <strong>0</strong>, was gefährlicher ist: Anschließende Divisionen führen zu sinnlosen Ergebnissen.</p>
     </div>
-    <p><strong>1.2.3 Rundung (Def. 1.4):</strong> Beim Runden auf m Mantissenstellen entscheidet die (m+1)-te Ziffer: &lt; 5 abrunden, ≥ 5 aufrunden. Der dabei entstehende <strong>relative Rundungsfehler</strong> ist durch die <strong>Maschinengenauigkeit</strong> beschränkt – bei m-stelliger Dezimalmantisse gilt δ ≤ ½ · 10<sup>1−m</sup>. Sie ist die kleinste Größe, um die sich zwei Maschinenzahlen unterscheiden können, und damit die prinzipielle Genauigkeitsgrenze jeder Rechnung.</p>
+    <p><strong>1.2.3 Rundung (Def. 1.4):</strong><i class="sk" data-sk="mai14c-rundung"></i> Beim Runden auf m Mantissenstellen entscheidet die (m+1)-te Ziffer: &lt; 5 abrunden, ≥ 5 aufrunden. Der dabei entstehende <strong>relative Rundungsfehler</strong> ist durch die <strong>Maschinengenauigkeit</strong> beschränkt – bei m-stelliger Dezimalmantisse gilt δ ≤ ½ · 10<sup>1−m</sup><i class="sk" data-sk="mai14c-rundung"></i>. Sie ist die kleinste Größe, um die sich zwei Maschinenzahlen unterscheiden können, und damit die prinzipielle Genauigkeitsgrenze jeder Rechnung.</p>
   </div>
 </section>
 
@@ -415,52 +415,52 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Eines der Grundprobleme der Numerik – gelöst durch drei Iterationsverfahren: Banach, Bisektion und Newton.</p>
 
     <div class="box def">
-      <span class="lbl">Nullstelle und Fixpunkt (Def. 2.1 / 2.2)</span>
+      <span class="lbl">Nullstelle und Fixpunkt (Def. 2.1 / 2.2)<i class="sk" data-sk="mai14c-nullfix"></i></span>
       <p><strong>Nullstelle:</strong> x* mit f(x*) = 0. &nbsp;&nbsp;<strong>Fixpunkt:</strong> x* mit g(x*) = x*.</p>
       <p>Beide Probleme lassen sich <strong>ineinander überführen</strong>: Aus f(x) = 0 wird durch Umstellen g(x) = x (z.&nbsp;B. g(x) = x + f(x) oder g(x) = x − f(x)/f′(x)). Deshalb genügen Fixpunktverfahren, um Nullstellen zu berechnen.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Satz 2.1 – Existenz einer Nullstelle</span>
+      <span class="lbl">Satz 2.1 – Existenz einer Nullstelle<i class="sk" data-sk="mai14c-zws"></i></span>
       <p>Ist f auf [a, b] <strong>stetig</strong> und gilt <strong>f(a)·f(b) &lt; 0</strong> (also verschiedene Vorzeichen und beide ≠ 0), so hat f im Innern des Intervalls <strong>mindestens eine</strong> Nullstelle.</p>
       <p>Das ist ein Spezialfall des <strong>Zwischenwertsatzes</strong>. Die Stetigkeit ist unverzichtbar: f(x) = 1/x wechselt zwischen −1 und 1 das Vorzeichen, hat dort aber keine Nullstelle.</p>
     </div>
 
     <h4>2.2 Fixpunktsatz von Banach</h4>
     <div class="box def">
-      <span class="lbl">Kontrahierende Funktion (Def. 2.5) und Satz 2.3</span>
+      <span class="lbl">Kontrahierende Funktion (Def. 2.5) und Satz 2.3<i class="sk" data-sk="mai14c-kontrakt"></i></span>
       <p>g: I → I heißt <strong>kontrahierend</strong>, wenn es ein K mit 0 ≤ K &lt; 1 gibt, sodass für alle x, y ∈ I gilt:</p>
-      <p class="formula">| g(x) − g(y) | ≤ K · | x − y |</p>
+      <p class="formula">| g(x) − g(y) | ≤ K · | x − y |<i class="sk" data-sk="mai14c-kontrakt"></i></p>
       <p>Die Bildpunkte liegen also stets <em>näher beieinander</em> als die Urbilder – daher „zusammenziehend“.</p>
       <p><strong>Fixpunktsatz von Banach:</strong> Eine kontrahierende Selbstabbildung eines abgeschlossenen Intervalls besitzt <strong>genau einen</strong> Fixpunkt x*, und die Iteration</p>
-      <p class="formula">x<sub>n+1</sub> = g(x<sub>n</sub>)</p>
-      <p>konvergiert von <strong>jedem</strong> Startwert aus gegen ihn. Praktisches Prüfkriterium: <strong>|g′(x)| ≤ K &lt; 1</strong> auf dem ganzen Intervall.</p>
-      <p><strong>Fehlerabschätzung:</strong> |x<sub>n</sub> − x*| ≤ K<sup>n</sup>/(1−K) · |x₁ − x₀| (a priori) bzw. ≤ K/(1−K) · |x<sub>n</sub> − x<sub>n−1</sub>| (a posteriori) – damit lässt sich die nötige Schrittzahl <em>vorab</em> bestimmen.</p>
+      <p class="formula">x<sub>n+1</sub> = g(x<sub>n</sub>)<i class="sk" data-sk="mai14c-spinnen"></i></p>
+      <p>konvergiert von <strong>jedem</strong> Startwert aus gegen ihn. Praktisches Prüfkriterium: <strong>|g′(x)| ≤ K &lt; 1</strong><i class="sk" data-sk="mai14c-gstrich"></i> auf dem ganzen Intervall.</p>
+      <p><strong>Fehlerabschätzung:</strong><i class="sk" data-sk="mai14c-fehlerab"></i> |x<sub>n</sub> − x*| ≤ K<sup>n</sup>/(1−K) · |x₁ − x₀| (a priori) bzw. ≤ K/(1−K) · |x<sub>n</sub> − x<sub>n−1</sub>| (a posteriori) – damit lässt sich die nötige Schrittzahl <em>vorab</em> bestimmen.</p>
     </div>
 
     <h4>2.3 Bisektions- und Newton-Verfahren</h4>
     <div class="box def">
-      <span class="lbl">Bisektionsverfahren (Intervallhalbierung)</span>
+      <span class="lbl">Bisektionsverfahren (Intervallhalbierung)<i class="sk" data-sk="mai14c-bisekt"></i></span>
       <p><strong>Voraussetzung:</strong> f stetig auf [a, b] mit f(a)·f(b) &lt; 0.</p>
       <p class="formula">1.&nbsp; m = (a + b)/2 berechnen<br>2.&nbsp; f(m) = 0?&nbsp;→ fertig<br>3.&nbsp; f(a)·f(m) &lt; 0?&nbsp;→ neues Intervall [a, m], sonst [m, b]<br>4.&nbsp; wiederholen, bis b − a &lt; ε</p>
-      <p><strong>Vorteil:</strong> konvergiert <em>immer</em>, und der Fehler ist exakt bekannt: nach n Schritten höchstens (b−a)/2ⁿ. <strong>Nachteil:</strong> nur <strong>lineare</strong> Konvergenz – pro Schritt ein Bit Genauigkeit, also rund 3,3 Schritte je Dezimalstelle.</p>
+      <p><strong>Vorteil:</strong> konvergiert <em>immer</em>, und der Fehler ist exakt bekannt: nach n Schritten höchstens (b−a)/2ⁿ.<i class="sk" data-sk="mai14c-bisfehler"></i> <strong>Nachteil:</strong> nur <strong>lineare</strong> Konvergenz – pro Schritt ein Bit Genauigkeit, also rund 3,3 Schritte je Dezimalstelle.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Newton-Verfahren</span>
+      <span class="lbl">Newton-Verfahren</span><i class="sk" data-sk="mai14c-newton"></i>
       <p class="formula">x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>) / f′(x<sub>n</sub>)</p>
       <p><strong>Idee:</strong> Die Funktion wird im Punkt x<sub>n</sub> durch ihre <strong>Tangente</strong> ersetzt; deren Nullstelle ist die neue Näherung. Deshalb auch „Tangentenverfahren“.</p>
-      <p><strong>Vorteil:</strong> <strong>quadratische</strong> Konvergenz – die Zahl der korrekten Stellen verdoppelt sich pro Schritt. <strong>Nachteile:</strong> f′ muss berechenbar und ≠ 0 sein, und die Konvergenz ist nur <strong>lokal</strong> – bei schlechtem Startwert kann das Verfahren divergieren oder wegspringen.</p>
+      <p><strong>Vorteil:</strong> <strong>quadratische</strong> Konvergenz – die Zahl der korrekten Stellen verdoppelt sich pro Schritt. <strong>Nachteile:</strong> f′ muss berechenbar und ≠ 0 sein, und die Konvergenz ist nur <strong>lokal</strong> – bei schlechtem Startwert kann das Verfahren divergieren oder wegspringen.<i class="sk" data-sk="mai14c-newtonfail"></i></p>
       <p><em>Klassisches Beispiel – Wurzelziehen:</em> f(x) = x² − a liefert die babylonische Formel</p>
-      <p class="formula">x<sub>n+1</sub> = ½·( x<sub>n</sub> + a/x<sub>n</sub> )</p>
+      <p class="formula">x<sub>n+1</sub> = ½·( x<sub>n</sub> + a/x<sub>n</sub> )<i class="sk" data-sk="mai14c-babylon"></i></p>
     </div>
     <div class="tw"><table>
       <thead><tr><th>Verfahren</th><th>Voraussetzung</th><th>Konvergenz</th><th>Sicherheit</th></tr></thead>
       <tbody>
-        <tr><td>Bisektion</td><td>Vorzeichenwechsel</td><td>linear</td><td>garantiert</td></tr>
-        <tr><td>Banach</td><td>|g′| ≤ K &lt; 1</td><td>linear (Faktor K)</td><td>garantiert im Intervall</td></tr>
-        <tr><td>Newton</td><td>f′ ≠ 0, guter Startwert</td><td><strong>quadratisch</strong></td><td>nur lokal</td></tr>
+        <tr><td>Bisektion<i class="sk" data-sk="mai14c-bisekt"></i></td><td>Vorzeichenwechsel</td><td>linear</td><td>garantiert</td></tr>
+        <tr><td>Banach<i class="sk" data-sk="mai14c-gstrich"></i></td><td>|g′| ≤ K &lt; 1</td><td>linear (Faktor K)</td><td>garantiert im Intervall</td></tr>
+        <tr><td>Newton<i class="sk" data-sk="mai14c-newton"></i></td><td>f′ ≠ 0, guter Startwert</td><td><strong>quadratisch</strong></td><td>nur lokal</td></tr>
       </tbody>
     </table></div>
-    <p><strong>Praxis:</strong> Erst mit ein paar Bisektionsschritten einen guten Startwert einkreisen, dann mit Newton schnell auf die gewünschte Genauigkeit gehen.</p>
+    <p><strong>Praxis:</strong><i class="sk" data-sk="mai14c-konvvgl"></i> Erst mit ein paar Bisektionsschritten einen guten Startwert einkreisen, dann mit Newton schnell auf die gewünschte Genauigkeit gehen.</p>
   </div>
 </section>
 
@@ -483,18 +483,18 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Von einer Funktion sind nur einzelne Werte bekannt – aus einer Messreihe oder als Stellvertreter einer bekannten Funktion. Gesucht ist eine Funktion, die an genau diesen Stellen dieselben Werte annimmt.</p>
 
     <div class="box def">
-      <span class="lbl">Definition 3.1 – das Interpolationsproblem</span>
+      <span class="lbl">Definition 3.1 – das Interpolationsproblem<i class="sk" data-sk="mai14c-interp"></i></span>
       <p>Gegeben sind (n+1) <strong>Stützstellen</strong> x₀ &lt; x₁ &lt; … &lt; x<sub>n</sub> und ebenso viele <strong>Stützwerte</strong> f₀, f₁, …, f<sub>n</sub>. Gesucht ist eine Funktion P(x) mit</p>
-      <p class="formula">P(x<sub>i</sub>) = f<sub>i</sub>&nbsp;&nbsp;für i = 0, 1, …, n</p>
+      <p class="formula">P(x<sub>i</sub>) = f<sub>i</sub>&nbsp;&nbsp;für i = 0, 1, …, n<i class="sk" data-sk="mai14c-interp"></i></p>
       <p>Sie heißt <strong>Interpolationsfunktion</strong> oder <strong>Interpolierende</strong>. Dass die Stützstellen der Größe nach sortiert sind, ist nur bequem – wichtig ist allein, dass sie <strong>paarweise verschieden</strong> sind.</p>
     </div>
     <p>Der Lösungsweg: Man setzt die Interpolierende als <strong>Linearkombination</strong> von n+1 Ansatzfunktionen Φ<sub>k</sub>(x) an,</p>
-    <p class="formula">P(x) = ∑<sub>k=0</sub><sup>n</sup> c<sub>k</sub>·Φ<sub>k</sub>(x)</p>
+    <p class="formula">P(x) = ∑<sub>k=0</sub><sup>n</sup> c<sub>k</sub>·Φ<sub>k</sub>(x)<i class="sk" data-sk="mai14c-ansatz"></i></p>
     <p>und bestimmt die Koeffizienten c<sub>k</sub> aus dem linearen Gleichungssystem ∑ c<sub>k</sub>Φ<sub>k</sub>(x<sub>i</sub>) = f<sub>i</sub>. Der ganze Aufwand hängt davon ab, <strong>wie geschickt die Ansatzfunktionen gewählt</strong> sind. Die mit Abstand häufigste Wahl ist die Klasse der Polynome.</p>
 
     <h4>3.2 Polynominterpolation</h4>
     <div class="box def">
-      <span class="lbl">Satz 3.1 – Existenz und Eindeutigkeit</span>
+      <span class="lbl">Satz 3.1 – Existenz und Eindeutigkeit<i class="sk" data-sk="mai14c-eindeutig"></i></span>
       <p>Zu (n+1) Stützstellen mit beliebigen Stützwerten gibt es <strong>genau ein</strong> Polynom n-ten Grades P<sub>n</sub>(x) mit P<sub>n</sub>(x<sub>i</sub>) = f<sub>i</sub>.</p>
       <p><em>Warum eindeutig:</em> Gäbe es zwei, so wäre ihre Differenz ein Polynom vom Grad n mit n+1 Nullstellen – unmöglich, denn ein Polynom n-ten Grades hat höchstens n Nullstellen.</p>
       <p><strong>Folgerung für die Klausur:</strong> Lagrange- und Newton-Verfahren liefern <em>dasselbe</em> Polynom, nur in anderer Darstellung. Sie unterscheiden sich im Rechenaufwand, nicht im Ergebnis.</p>
@@ -502,36 +502,36 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p>Der naheliegende Ansatz mit den <strong>Monomen</strong> p<sub>k</sub>(x) = x<sup>k</sup> führt auf ein Gleichungssystem mit der Vandermonde-Matrix – lösbar, aber aufwendig und numerisch heikel. Die beiden folgenden Ansätze sind besser.</p>
 
     <div class="box def">
-      <span class="lbl">3.2.1 Lagrange (Def. 3.2, Sätze 3.2 / 3.3)</span>
+      <span class="lbl">3.2.1 Lagrange (Def. 3.2, Sätze 3.2 / 3.3)<i class="sk" data-sk="mai14c-lagsum"></i></span>
       <p class="formula">L<sub>k</sub>(x) = ∏<sub>i≠k</sub> (x − x<sub>i</sub>)/(x<sub>k</sub> − x<sub>i</sub>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>n</sub>(x) = ∑<sub>k=0</sub><sup>n</sup> f<sub>k</sub>·L<sub>k</sub>(x)</p>
       <p>Die <strong>Lagrange-Polynome</strong> sind Polynome n-ten Grades (der Nenner ist nur eine Konstante) mit der entscheidenden Eigenschaft</p>
-      <p class="formula">L<sub>k</sub>(x<sub>i</sub>) = 1 für i = k&nbsp;&nbsp;und&nbsp;&nbsp;L<sub>k</sub>(x<sub>i</sub>) = 0 für i ≠ k</p>
+      <p class="formula">L<sub>k</sub>(x<sub>i</sub>) = 1 für i = k&nbsp;&nbsp;und&nbsp;&nbsp;L<sub>k</sub>(x<sub>i</sub>) = 0 für i ≠ k<i class="sk" data-sk="mai14c-lagrange"></i></p>
       <p>Damit „schaltet“ jeder Summand genau an seiner Stützstelle den Wert f<sub>k</sub> ein – und die Interpolationsbedingung ist ohne jedes Gleichungssystem erfüllt.</p>
       <p><em>Beispiel mit x₀ = −2, x₁ = 0, x₂ = 1:</em></p>
-      <p class="formula">L₀(x) = x(x−1)/6&nbsp;&nbsp;·&nbsp;&nbsp;L₁(x) = (x+2)(x−1)/(−2)&nbsp;&nbsp;·&nbsp;&nbsp;L₂(x) = (x+2)x/3</p>
+      <p class="formula">L₀(x) = x(x−1)/6&nbsp;&nbsp;·&nbsp;&nbsp;L₁(x) = (x+2)(x−1)/(−2)&nbsp;&nbsp;·&nbsp;&nbsp;L₂(x) = (x+2)x/3<i class="sk" data-sk="mai14c-lagrange"></i></p>
       <p><strong>Nachteil:</strong> Kommt eine Stützstelle hinzu, muss alles neu gerechnet werden.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">3.2.2 Newton mit dividierten Differenzen (Def. 3.3, Sätze 3.4 / 3.5)</span>
+      <span class="lbl">3.2.2 Newton mit dividierten Differenzen (Def. 3.3, Sätze 3.4 / 3.5)<i class="sk" data-sk="mai14c-newtonform"></i></span>
       <p class="formula">P<sub>n</sub>(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + … + c<sub>n</sub>(x−x₀)···(x−x<sub>n−1</sub>)</p>
       <p>Die Koeffizienten sind die <strong>dividierten Differenzen</strong> c<sub>k</sub> = f[x₀,…,x<sub>k</sub>], rekursiv berechnet:</p>
       <p class="formula">f[x<sub>i</sub>] = f<sub>i</sub><br>f[x<sub>i</sub>, x<sub>i+1</sub>] = (f<sub>i+1</sub> − f<sub>i</sub>) / (x<sub>i+1</sub> − x<sub>i</sub>)<br>f[x<sub>i</sub>,…,x<sub>i+m</sub>] = ( f[x<sub>i+1</sub>,…,x<sub>i+m</sub>] − f[x<sub>i</sub>,…,x<sub>i+m−1</sub>] ) / (x<sub>i+m</sub> − x<sub>i</sub>)</p>
-      <p>Im <strong>Differenzenschema</strong> ist c<sub>k</sub> jeweils der oberste Eintrag der k-ten Spalte. Die Argumente sind <strong>vertauschbar</strong>, die Reihenfolge der Stützstellen also gleichgültig.</p>
+      <p>Im <strong>Differenzenschema</strong><i class="sk" data-sk="mai14c-diffschema"></i> ist c<sub>k</sub> jeweils der oberste Eintrag der k-ten Spalte. Die Argumente sind <strong>vertauschbar</strong>, die Reihenfolge der Stützstellen also gleichgültig.</p>
       <p><strong>Großer Vorteil:</strong> Eine zusätzliche Stützstelle fügt nur einen weiteren Summanden an – alles Bisherige bleibt gültig.</p>
     </div>
 
     <div class="box warn">
-      <span class="lbl">Satz 3.6 – Interpolationsfehler (Restglied)</span>
+      <span class="lbl">Satz 3.6 – Interpolationsfehler (Restglied)<i class="sk" data-sk="mai14c-restglied"></i></span>
       <p>Ist f (n+1)-mal differenzierbar, so gilt für jedes x ∈ [x₀, x<sub>n</sub>]</p>
       <p class="formula">f(x) − P<sub>n</sub>(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · (x−x₀)(x−x₁)···(x−x<sub>n</sub>)</p>
       <p>ξ hängt von x ab und lässt sich nicht explizit angeben – man weiß nur, dass es <strong>zwischen x₀ und x<sub>n</sub></strong> liegt. Für eine Fehlerabschätzung setzt man daher das Maximum von |f<sup>(n+1)</sup>| auf dem Intervall ein.</p>
     </div>
 
     <h4>3.3 Interpolation mit Splinefunktionen</h4>
-    <p>Bei der Polynominterpolation kann die Interpolierende mit <strong>steigender Zahl von Stützstellen</strong> besonders an den Rändern des Intervalls große <strong>Überschwünge</strong> zeigen. Genau dieses Problem umgehen Splines: Sie sind auf jedem Teilintervall ein Polynom <em>niedrigen</em> Grades.</p>
+    <p>Bei der Polynominterpolation kann die Interpolierende mit <strong>steigender Zahl von Stützstellen</strong> besonders an den Rändern des Intervalls große <strong>Überschwünge</strong><i class="sk" data-sk="mai14c-runge"></i> zeigen. Genau dieses Problem umgehen Splines: Sie sind auf jedem Teilintervall ein Polynom <em>niedrigen</em> Grades.</p>
     <div class="box def">
-      <span class="lbl">Definition 3.4 – Spline vom Grad m</span>
+      <span class="lbl">Definition 3.4 – Spline vom Grad m<i class="sk" data-sk="mai14c-spline"></i></span>
       <p>Eine auf [x₀, x<sub>n</sub>] definierte Funktion s<sub>m</sub>(x) heißt <strong>Spline vom Grad m</strong> zu den Knoten x₀,…,x<sub>n</sub>, wenn sie</p>
       <p><strong>1)</strong> auf jedem Teilintervall [x<sub>i</sub>, x<sub>i+1</sub>] ein Polynom höchstens m-ten Grades ist – im Allgemeinen <em>nicht</em> überall dasselbe – und<br>
       <strong>2)</strong> auf dem Gesamtintervall <strong>(m−1)-mal stetig differenzierbar</strong> ist.</p>
@@ -540,29 +540,29 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Splinetyp</th><th>Grad je Stück</th><th>stetig bis</th><th>zusätzlich nötige Angaben</th></tr></thead>
       <tbody>
-        <tr><td><strong>linear</strong> (S₁)</td><td>1 – Geradenstücke</td><td>Funktionswert</td><td>keine – direkt hinschreibbar</td></tr>
-        <tr><td><strong>quadratisch</strong> (S₂)</td><td>2</td><td>s′</td><td><strong>eine</strong>, z.&nbsp;B. s′(x₀) (Satz 3.7)</td></tr>
-        <tr><td><strong>kubisch</strong> (S₃)</td><td>3</td><td>s′ und s″</td><td><strong>zwei</strong> Randbedingungen (Satz 3.8)</td></tr>
+        <tr><td><strong>linear</strong> (S₁)<i class="sk" data-sk="mai14c-splinetypen"></i></td><td>1 – Geradenstücke</td><td>Funktionswert</td><td>keine – direkt hinschreibbar</td></tr>
+        <tr><td><strong>quadratisch</strong> (S₂)<i class="sk" data-sk="mai14c-splinetypen"></i></td><td>2</td><td>s′</td><td><strong>eine</strong>, z.&nbsp;B. s′(x₀) (Satz 3.7)</td></tr>
+        <tr><td><strong>kubisch</strong> (S₃)<i class="sk" data-sk="mai14c-splinetypen"></i></td><td>3</td><td>s′ und s″</td><td><strong>zwei</strong> Randbedingungen (Satz 3.8)</td></tr>
       </tbody>
     </table></div>
     <p>Der <strong>lineare Spline</strong> ist der Polygonzug durch die Punkte. Der <strong>kubische</strong> ist der Standardfall, weil er kleinen Polynomgrad mit schöner Glattheit verbindet. Auf [x<sub>i</sub>, x<sub>i+1</sub>] schreibt man ihn als Taylor-Entwicklung um x<sub>i</sub>:</p>
-    <p class="formula">p<sub>i</sub>(x) = f<sub>i</sub> + f′<sub>i</sub>(x−x<sub>i</sub>) + f″<sub>i</sub>/2 · (x−x<sub>i</sub>)² + f‴<sub>i</sub>/6 · (x−x<sub>i</sub>)³</p>
+    <p class="formula">p<sub>i</sub>(x) = f<sub>i</sub> + f′<sub>i</sub>(x−x<sub>i</sub>) + f″<sub>i</sub>/2 · (x−x<sub>i</sub>)² + f‴<sub>i</sub>/6 · (x−x<sub>i</sub>)³<i class="sk" data-sk="mai14c-taylorstueck"></i></p>
     <p>Die f′<sub>i</sub>, f″<sub>i</sub>, f‴<sub>i</sub> sind so zu bestimmen, dass der Spline samt seinen ersten beiden Ableitungen in den Stützstellen stetig ist. Das führt auf ein <strong>lineares Gleichungssystem</strong> mit Tridiagonalgestalt für die f″<sub>i</sub>; die restlichen Größen folgen daraus.</p>
 
     <div class="box def">
-      <span class="lbl">Definition 3.5 – die drei Standard-Randbedingungen</span>
+      <span class="lbl">Definition 3.5 – die drei Standard-Randbedingungen<i class="sk" data-sk="mai14c-randbed"></i></span>
       <p><strong>a) natürliche kubische Splinefunktion:</strong>&nbsp; s″(x₀) = 0 und s″(x<sub>n</sub>) = 0<br>
       <strong>b) periodische kubische Splinefunktion:</strong>&nbsp; s(x₀) = s(x<sub>n</sub>), s′(x₀) = s′(x<sub>n</sub>) und s″(x₀) = s″(x<sub>n</sub>)<br>
       <strong>c) not-a-knot-Randbedingung:</strong>&nbsp; auch die dritte Ableitung ist in x₁ und x<sub>n−1</sub> stetig</p>
       <p>Entscheidet man sich für einen dieser Typen, hat man die beiden fehlenden Bedingungen „automatisch“ gefordert. Beim <strong>natürlichen</strong> Spline bedeutet das schlicht f″₀ = 0 und f″<sub>n</sub> = 0 – damit wird das System eindeutig lösbar.</p>
     </div>
     <div class="box">
-      <span class="lbl">Rechenrezept natürlicher kubischer Spline (äquidistant, h = 1)</span>
+      <span class="lbl">Rechenrezept natürlicher kubischer Spline (äquidistant, h = 1)<i class="sk" data-sk="mai14c-tridiag"></i></span>
       <p>Mit M<sub>i</sub> = s″(x<sub>i</sub>), M₀ = M<sub>n</sub> = 0 lautet das System für i = 1,…,n−1</p>
-      <p class="formula">M<sub>i−1</sub> + 4M<sub>i</sub> + M<sub>i+1</sub> = 6·(f<sub>i−1</sub> − 2f<sub>i</sub> + f<sub>i+1</sub>)</p>
+      <p class="formula">M<sub>i−1</sub> + 4M<sub>i</sub> + M<sub>i+1</sub> = 6·(f<sub>i−1</sub> − 2f<sub>i</sub> + f<sub>i+1</sub>)<i class="sk" data-sk="mai14c-tridiag"></i></p>
       <p>Bei ungleichen Abständen h<sub>i</sub> = x<sub>i+1</sub> − x<sub>i</sub>:</p>
       <p class="formula">h<sub>i−1</sub>M<sub>i−1</sub> + 2(h<sub>i−1</sub>+h<sub>i</sub>)M<sub>i</sub> + h<sub>i</sub>M<sub>i+1</sub> = 6·[ (f<sub>i+1</sub>−f<sub>i</sub>)/h<sub>i</sub> − (f<sub>i</sub>−f<sub>i−1</sub>)/h<sub>i−1</sub> ]</p>
-      <p>Danach je Teilintervall: p<sub>i</sub>(x) = f<sub>i</sub> + b<sub>i</sub>(x−x<sub>i</sub>) + (M<sub>i</sub>/2)(x−x<sub>i</sub>)² + ((M<sub>i+1</sub>−M<sub>i</sub>)/(6h<sub>i</sub>))(x−x<sub>i</sub>)³ &nbsp;mit&nbsp; b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>)/h<sub>i</sub> − h<sub>i</sub>(2M<sub>i</sub>+M<sub>i+1</sub>)/6.</p>
+      <p>Danach je Teilintervall: p<sub>i</sub>(x) = f<sub>i</sub> + b<sub>i</sub>(x−x<sub>i</sub>) + (M<sub>i</sub>/2)(x−x<sub>i</sub>)² + ((M<sub>i+1</sub>−M<sub>i</sub>)/(6h<sub>i</sub>))(x−x<sub>i</sub>)³ &nbsp;mit&nbsp; b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>)/h<sub>i</sub> − h<sub>i</sub>(2M<sub>i</sub>+M<sub>i+1</sub>)/6.<i class="sk" data-sk="mai14c-taylorstueck"></i></p>
     </div>
   </div>
 </section>
@@ -586,53 +586,53 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <h4>4.1 Begriffe</h4>
     <p>Behandelt werden Anfangswertprobleme mit einer Differenzialgleichung erster Ordnung in <strong>expliziter Form</strong>:</p>
-    <p class="formula">y′ = f(x, y),&nbsp;&nbsp;&nbsp;y(x₀) = y₀</p>
+    <p class="formula">y′ = f(x, y),&nbsp;&nbsp;&nbsp;y(x₀) = y₀<i class="sk" data-sk="mai14c-richtfeld"></i></p>
     <p>Die Differenzialgleichung ordnet jedem Punkt der (x,y)-Ebene eine <strong>Richtung</strong> zu – anschaulich ein Richtungsfeld, in das sich die Lösungskurve einpasst.</p>
     <div class="box def">
-      <span class="lbl">Satz 4.1 – Existenz- und Eindeutigkeitssatz von Picard und Lindelöf</span>
+      <span class="lbl">Satz 4.1 – Existenz- und Eindeutigkeitssatz von Picard und Lindelöf<i class="sk" data-sk="mai14c-picard"></i></span>
       <p>Ist f in einer Umgebung von (x₀, y₀) stetig und genügt dort einer <strong>Lipschitz-Bedingung</strong> bezüglich y, so besitzt das Anfangswertproblem dort <strong>genau eine</strong> Lösung.</p>
       <p>Das zugehörige Verfahren – die sukzessive Approximation über die äquivalente Integralgleichung y(x) = y₀ + ∫<sub>x₀</sub><sup>x</sup> f(t, y(t))dt – liefert den Beweis <em>und</em> ein (theoretisches) Näherungsverfahren.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">4.2.1 Das Euler-Polygonzug-Verfahren</span>
+      <span class="lbl">4.2.1 Das Euler-Polygonzug-Verfahren<i class="sk" data-sk="mai14c-euler"></i></span>
       <p><strong>Grundannahme:</strong> Die im Punkt (x<sub>i</sub>, y<sub>i</sub>) berechnete Richtung bleibt über eine Schrittweite h konstant. Damit ergibt sich</p>
-      <p class="formula">x<sub>i+1</sub> = x<sub>i</sub> + h<br>y<sub>i+1</sub> = y<sub>i</sub> + h·f(x<sub>i</sub>, y<sub>i</sub>)</p>
+      <p class="formula">x<sub>i+1</sub> = x<sub>i</sub> + h<br>y<sub>i+1</sub> = y<sub>i</sub> + h·f(x<sub>i</sub>, y<sub>i</sub>)<i class="sk" data-sk="mai14c-euler"></i></p>
       <p>Verbindet man die berechneten Punkte durch Geradenstücke, entsteht ein <strong>Polygonzug</strong> – daher der Name (auch Euler-Cauchy-Polygonzug-Verfahren). y<sub>n</sub> ist die Näherung an y(x<sub>n</sub>), ebenso jeder Zwischenwert.</p>
-      <p><strong>Konvergenzordnung O(h)</strong> – halbe Schrittweite, halber Fehler.</p>
+      <p><strong>Konvergenzordnung O(h)</strong><i class="sk" data-sk="mai14c-ordnung"></i> – halbe Schrittweite, halber Fehler.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">4.2.2 Runge-Kutta-Verfahren – die Grundidee</span>
+      <span class="lbl">4.2.2 Runge-Kutta-Verfahren – die Grundidee<i class="sk" data-sk="mai14c-rkidee"></i></span>
       <p>Man behält die Form der Iterationsvorschrift bei, ersetzt aber f durch eine geschicktere Funktion Φ:</p>
-      <p class="formula">y<sub>i+1</sub> = y<sub>i</sub> + h·Φ(x<sub>i</sub>, y<sub>i</sub>, h)</p>
+      <p class="formula">y<sub>i+1</sub> = y<sub>i</sub> + h·Φ(x<sub>i</sub>, y<sub>i</sub>, h)<i class="sk" data-sk="mai14c-rkidee"></i></p>
       <p>Statt höhere Ableitungen von f heranzuziehen (die Taylor-Variante wird schon für p = 2 unhandlich), setzt man Φ nach Runge und Kutta als <strong>gewichtete Summe von Hilfssteigungen</strong> k<sub>r</sub> an und wählt die Gewichte so, dass die Taylor-Entwicklung möglichst weit übereinstimmt.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Die zweistufige Familie – Konvergenzordnung O(h²)</span>
-      <p class="formula">k₁ = f(x, y)<br>k₂ = f( x + h/(2α) , y + h/(2α)·k₁ )<br>Φ = (1−α)·k₁ + α·k₂</p>
+      <span class="lbl">Die zweistufige Familie – Konvergenzordnung O(h²)<i class="sk" data-sk="mai14c-zweistufig"></i></span>
+      <p class="formula">k₁ = f(x, y)<br>k₂ = f( x + h/(2α) , y + h/(2α)·k₁ )<br>Φ = (1−α)·k₁ + α·k₂<i class="sk" data-sk="mai14c-zweistufig"></i></p>
       <p>Für jedes α &gt; 0 entsteht ein Verfahren <strong>zweiter Ordnung</strong> – eine Größenordnung schneller als Euler. Zwei Spezialfälle haben eigene Namen (Def. 4.1):</p>
       <div class="tw"><table>
         <thead><tr><th>Wahl</th><th>Name</th><th>Vorschrift</th></tr></thead>
         <tbody>
-          <tr><td>α = 1</td><td><strong>Mittelpunktverfahren</strong></td><td>y<sub>i+1</sub> = y<sub>i</sub> + h·f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·f(x<sub>i</sub>,y<sub>i</sub>) )</td></tr>
-          <tr><td>α = ¾</td><td><strong>Heun-Verfahren</strong></td><td>y<sub>i+1</sub> = y<sub>i</sub> + h·[ ¼·f(x<sub>i</sub>,y<sub>i</sub>) + ¾·f( x<sub>i</sub> + 2h/3 , y<sub>i</sub> + (2h/3)·f(x<sub>i</sub>,y<sub>i</sub>) ) ]</td></tr>
+          <tr><td>α = 1</td><td><strong>Mittelpunktverfahren</strong><i class="sk" data-sk="mai14c-mittelheun"></i></td><td>y<sub>i+1</sub> = y<sub>i</sub> + h·f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·f(x<sub>i</sub>,y<sub>i</sub>) )</td></tr>
+          <tr><td>α = ¾</td><td><strong>Heun-Verfahren</strong><i class="sk" data-sk="mai14c-mittelheun"></i></td><td>y<sub>i+1</sub> = y<sub>i</sub> + h·[ ¼·f(x<sub>i</sub>,y<sub>i</sub>) + ¾·f( x<sub>i</sub> + 2h/3 , y<sub>i</sub> + (2h/3)·f(x<sub>i</sub>,y<sub>i</sub>) ) ]</td></tr>
         </tbody>
       </table></div>
-      <p><strong>Kuriosität mit Prüfungswert:</strong> Für jede Differenzialgleichung der Form f(x,y) = c₁x + c₂y + c₃ liefern <em>alle</em> Verfahren dieser Familie – unabhängig von α – <strong>identische Ergebnisse</strong>. Erst bei nichtlinearen Gleichungen unterscheiden sie sich.</p>
+      <p><strong>Kuriosität mit Prüfungswert:</strong><i class="sk" data-sk="mai14c-mittelheun"></i> Für jede Differenzialgleichung der Form f(x,y) = c₁x + c₂y + c₃ liefern <em>alle</em> Verfahren dieser Familie – unabhängig von α – <strong>identische Ergebnisse</strong>. Erst bei nichtlinearen Gleichungen unterscheiden sie sich.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Das klassische Runge-Kutta-Verfahren vierter Ordnung</span>
+      <span class="lbl">Das klassische Runge-Kutta-Verfahren vierter Ordnung<i class="sk" data-sk="mai14c-rk4"></i></span>
       <p>Das bekannteste und gebräuchlichste Verfahren – oft schlicht „<em>das</em> Runge-Kutta-Verfahren“ genannt:</p>
-      <p class="formula">k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>k₂ = f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·k₁ )<br>k₃ = f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·k₂ )<br>k₄ = f( x<sub>i</sub> + h , y<sub>i</sub> + h·k₃ )<br><br>y<sub>i+1</sub> = y<sub>i</sub> + h·( ⅙k₁ + ⅓k₂ + ⅓k₃ + ⅙k₄ )</p>
-      <p>Gleichwertige Schreibweise: y<sub>i+1</sub> = y<sub>i</sub> + (h/6)(k₁ + 2k₂ + 2k₃ + k₄). <strong>Konvergenzordnung O(h⁴)</strong>: Halbierte Schrittweite senkt den Fehler auf ein <strong>Sechzehntel</strong>.</p>
+      <p class="formula">k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>k₂ = f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·k₁ )<br>k₃ = f( x<sub>i</sub> + h/2 , y<sub>i</sub> + (h/2)·k₂ )<br>k₄ = f( x<sub>i</sub> + h , y<sub>i</sub> + h·k₃ )<br><br>y<sub>i+1</sub> = y<sub>i</sub> + h·( ⅙k₁ + ⅓k₂ + ⅓k₃ + ⅙k₄ )<i class="sk" data-sk="mai14c-rk4"></i></p>
+      <p>Gleichwertige Schreibweise: y<sub>i+1</sub> = y<sub>i</sub> + (h/6)(k₁ + 2k₂ + 2k₃ + k₄). <strong>Konvergenzordnung O(h⁴)</strong><i class="sk" data-sk="mai14c-ordnung"></i>: Halbierte Schrittweite senkt den Fehler auf ein <strong>Sechzehntel</strong>.</p>
     </div>
     <div class="tw"><table>
       <thead><tr><th>Verfahren</th><th>Auswertungen je Schritt</th><th>Ordnung</th></tr></thead>
       <tbody>
-        <tr><td>Euler-Polygonzug</td><td>1</td><td>O(h)</td></tr>
-        <tr><td>Mittelpunkt- / Heun-Verfahren</td><td>2</td><td>O(h²)</td></tr>
-        <tr><td>Runge-Kutta klassisch</td><td>4</td><td>O(h⁴)</td></tr>
+        <tr><td>Euler-Polygonzug<i class="sk" data-sk="mai14c-euler"></i></td><td>1</td><td>O(h)</td></tr>
+        <tr><td>Mittelpunkt- / Heun-Verfahren<i class="sk" data-sk="mai14c-mittelheun"></i></td><td>2</td><td>O(h²)</td></tr>
+        <tr><td>Runge-Kutta klassisch<i class="sk" data-sk="mai14c-ordnung"></i></td><td>4</td><td>O(h⁴)</td></tr>
       </tbody>
     </table></div>
     <p>Im Beispiel des Hefts liegt der Fehler des klassischen Verfahrens bei Schrittweite h selbst nach vielen Schritten noch in der Größenordnung 10<sup>−5</sup> – während der Euler-Polygonzug bei gleicher Schrittweite deutlich sichtbar danebenliegt.</p>
@@ -1084,34 +1084,34 @@ Vorzeichen:    Der Term −x·y bremst mit wachsendem x zunehmend,
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <h4>Fehler</h4>
-    <p class="formula">Δx = |x̃ − x|&nbsp;&nbsp;·&nbsp;&nbsp;δx = |x̃ − x| / |x|<br>Δz ≈ |∂f/∂x|·Δx + |∂f/∂y|·Δy<br><br>Addition → absolute Fehler addieren<br>Multiplikation → relative Fehler addieren<br>Gleitpunkt: y = sign · a · 10<sup>e</sup> mit 0,1 ≤ a &lt; 1</p>
+    <p class="formula">Δx = |x̃ − x|&nbsp;&nbsp;·&nbsp;&nbsp;δx = |x̃ − x| / |x|<i class="sk" data-sk="mai14c-absrel"></i><br>Δz ≈ |∂f/∂x|·Δx + |∂f/∂y|·Δy<i class="sk" data-sk="mai14c-fortpfl"></i><br><br>Addition → absolute Fehler addieren<br>Multiplikation → relative Fehler addieren<i class="sk" data-sk="mai14c-addmult"></i><br>Gleitpunkt: y = sign · a · 10<sup>e</sup> mit 0,1 ≤ a &lt; 1<i class="sk" data-sk="mai14c-gleitpunkt"></i></p>
 
     <h4>Nullstellen und Fixpunkte</h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>Verfahren</th><th>Vorschrift</th><th>Ordnung</th></tr></thead>
       <tbody>
-        <tr><td>Bisektion</td><td>m = (a+b)/2, Teilintervall mit Vorzeichenwechsel</td><td>linear, Fehler ≤ (b−a)/2ⁿ</td></tr>
-        <tr><td>Banach</td><td>x<sub>n+1</sub> = g(x<sub>n</sub>), |g′| ≤ K &lt; 1</td><td>linear</td></tr>
-        <tr><td>Newton</td><td>x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f′(x<sub>n</sub>)</td><td>quadratisch</td></tr>
-        <tr><td>Wurzel aus a</td><td>x<sub>n+1</sub> = ½(x<sub>n</sub> + a/x<sub>n</sub>)</td><td>quadratisch</td></tr>
+        <tr><td>Bisektion<i class="sk" data-sk="mai14c-bisekt"></i></td><td>m = (a+b)/2, Teilintervall mit Vorzeichenwechsel</td><td>linear, Fehler ≤ (b−a)/2ⁿ</td></tr>
+        <tr><td>Banach<i class="sk" data-sk="mai14c-spinnen"></i></td><td>x<sub>n+1</sub> = g(x<sub>n</sub>), |g′| ≤ K &lt; 1</td><td>linear</td></tr>
+        <tr><td>Newton<i class="sk" data-sk="mai14c-newton"></i></td><td>x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f′(x<sub>n</sub>)</td><td>quadratisch</td></tr>
+        <tr><td>Wurzel aus a<i class="sk" data-sk="mai14c-babylon"></i></td><td>x<sub>n+1</sub> = ½(x<sub>n</sub> + a/x<sub>n</sub>)</td><td>quadratisch</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">Schrittzahl der Bisektion für Genauigkeit ε:&nbsp; n ≥ log₂((b−a)/ε)</p>
+    <p class="formula">Schrittzahl der Bisektion für Genauigkeit ε:&nbsp; n ≥ log₂((b−a)/ε)<i class="sk" data-sk="mai14c-bisfehler"></i></p>
 
     <h4>Interpolation</h4>
-    <p class="formula">Lagrange:&nbsp; P(x) = ∑ f<sub>k</sub>·L<sub>k</sub>(x),&nbsp;&nbsp;L<sub>k</sub>(x) = ∏<sub>i≠k</sub> (x−x<sub>i</sub>)/(x<sub>k</sub>−x<sub>i</sub>)<br><br>Newton:&nbsp;&nbsp; P(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + …<br>&nbsp;&nbsp;c<sub>k</sub> = f[x₀,…,x<sub>k</sub>] = oberster Eintrag der k-ten Spalte<br>&nbsp;&nbsp;f[x<sub>i</sub>,…,x<sub>i+m</sub>] = (f[x<sub>i+1</sub>,…,x<sub>i+m</sub>] − f[x<sub>i</sub>,…,x<sub>i+m−1</sub>])/(x<sub>i+m</sub> − x<sub>i</sub>)<br><br>Fehler:&nbsp;&nbsp; f(x) − P<sub>n</sub>(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · ∏(x − x<sub>i</sub>)</p>
+    <p class="formula">Lagrange:&nbsp; P(x) = ∑ f<sub>k</sub>·L<sub>k</sub>(x)<i class="sk" data-sk="mai14c-lagsum"></i>,&nbsp;&nbsp;L<sub>k</sub>(x) = ∏<sub>i≠k</sub> (x−x<sub>i</sub>)/(x<sub>k</sub>−x<sub>i</sub>)<i class="sk" data-sk="mai14c-lagrange"></i><br><br>Newton:&nbsp;&nbsp; P(x) = c₀ + c₁(x−x₀) + c₂(x−x₀)(x−x₁) + …<i class="sk" data-sk="mai14c-newtonform"></i><br>&nbsp;&nbsp;c<sub>k</sub> = f[x₀,…,x<sub>k</sub>] = oberster Eintrag der k-ten Spalte<i class="sk" data-sk="mai14c-diffschema"></i><br>&nbsp;&nbsp;f[x<sub>i</sub>,…,x<sub>i+m</sub>] = (f[x<sub>i+1</sub>,…,x<sub>i+m</sub>] − f[x<sub>i</sub>,…,x<sub>i+m−1</sub>])/(x<sub>i+m</sub> − x<sub>i</sub>)<br><br>Fehler:&nbsp;&nbsp; f(x) − P<sub>n</sub>(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · ∏(x − x<sub>i</sub>)<i class="sk" data-sk="mai14c-restglied"></i></p>
     <div class="tw"><table>
       <thead><tr><th>Spline vom Grad m</th><th>stetig bis</th><th>Zusatzbedingungen</th></tr></thead>
       <tbody>
         <tr><td>linear</td><td>Funktionswert</td><td>keine</td></tr>
         <tr><td>quadratisch</td><td>s′</td><td>eine (z. B. s′(x₀))</td></tr>
-        <tr><td>kubisch</td><td>s′ und s″</td><td>zwei: natürlich · periodisch · not-a-knot</td></tr>
+        <tr><td>kubisch<i class="sk" data-sk="mai14c-splinetypen"></i></td><td>s′ und s″</td><td>zwei: natürlich · periodisch · not-a-knot<i class="sk" data-sk="mai14c-randbed"></i></td></tr>
       </tbody>
     </table></div>
-    <p class="formula">natürlicher kubischer Spline:&nbsp; M₀ = M<sub>n</sub> = 0&nbsp; mit&nbsp; M<sub>i</sub> = s″(x<sub>i</sub>)<br><br>h äquidistant:&nbsp; M<sub>i−1</sub> + 4M<sub>i</sub> + M<sub>i+1</sub> = (6/h²)(f<sub>i−1</sub> − 2f<sub>i</sub> + f<sub>i+1</sub>)<br><br>Teilstück:&nbsp; p<sub>i</sub>(x) = f<sub>i</sub> + b<sub>i</sub>(x−x<sub>i</sub>) + (M<sub>i</sub>/2)(x−x<sub>i</sub>)² + ((M<sub>i+1</sub>−M<sub>i</sub>)/(6h))(x−x<sub>i</sub>)³<br>&nbsp;&nbsp;b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>)/h − h(2M<sub>i</sub>+M<sub>i+1</sub>)/6</p>
+    <p class="formula">natürlicher kubischer Spline:&nbsp; M₀ = M<sub>n</sub> = 0&nbsp; mit&nbsp; M<sub>i</sub> = s″(x<sub>i</sub>)<i class="sk" data-sk="mai14c-tridiag"></i><br><br>h äquidistant:&nbsp; M<sub>i−1</sub> + 4M<sub>i</sub> + M<sub>i+1</sub> = (6/h²)(f<sub>i−1</sub> − 2f<sub>i</sub> + f<sub>i+1</sub>)<br><br>Teilstück:<i class="sk" data-sk="mai14c-taylorstueck"></i>&nbsp; p<sub>i</sub>(x) = f<sub>i</sub> + b<sub>i</sub>(x−x<sub>i</sub>) + (M<sub>i</sub>/2)(x−x<sub>i</sub>)² + ((M<sub>i+1</sub>−M<sub>i</sub>)/(6h))(x−x<sub>i</sub>)³<br>&nbsp;&nbsp;b<sub>i</sub> = (f<sub>i+1</sub>−f<sub>i</sub>)/h − h(2M<sub>i</sub>+M<sub>i+1</sub>)/6</p>
 
     <h4>Numerische DGL (y′ = f(x,y), y(x₀) = y₀)</h4>
-    <p class="formula">Euler:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h·f(x<sub>i</sub>, y<sub>i</sub>)&nbsp;&nbsp;&nbsp;O(h)<br><br>2-stufig:&nbsp;&nbsp;&nbsp;k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>i</sub> + h/(2α), y<sub>i</sub> + (h/(2α))k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h[(1−α)k₁ + αk₂]&nbsp;&nbsp;&nbsp;O(h²)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;α = 1 → Mittelpunkt,&nbsp; α = ¾ → Heun<br><br>RK4:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>i</sub>+h/2, y<sub>i</sub>+(h/2)k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₃ = f(x<sub>i</sub>+h/2, y<sub>i</sub>+(h/2)k₂)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₄ = f(x<sub>i</sub>+h, y<sub>i</sub>+h·k₃)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h(⅙k₁ + ⅓k₂ + ⅓k₃ + ⅙k₄)&nbsp;&nbsp;&nbsp;O(h⁴)</p>
+    <p class="formula">Euler:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h·f(x<sub>i</sub>, y<sub>i</sub>)&nbsp;&nbsp;&nbsp;O(h)<i class="sk" data-sk="mai14c-euler"></i><br><br>2-stufig:&nbsp;&nbsp;&nbsp;k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>i</sub> + h/(2α), y<sub>i</sub> + (h/(2α))k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h[(1−α)k₁ + αk₂]&nbsp;&nbsp;&nbsp;O(h²)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;α = 1 → Mittelpunkt,&nbsp; α = ¾ → Heun<i class="sk" data-sk="mai14c-zweistufig"></i><br><br>RK4:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₁ = f(x<sub>i</sub>, y<sub>i</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₂ = f(x<sub>i</sub>+h/2, y<sub>i</sub>+(h/2)k₁)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₃ = f(x<sub>i</sub>+h/2, y<sub>i</sub>+(h/2)k₂)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k₄ = f(x<sub>i</sub>+h, y<sub>i</sub>+h·k₃)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i+1</sub> = y<sub>i</sub> + h(⅙k₁ + ⅓k₂ + ⅓k₃ + ⅙k₄)&nbsp;&nbsp;&nbsp;O(h⁴)<i class="sk" data-sk="mai14c-rk4"></i></p>
   </div>
 </section>
 

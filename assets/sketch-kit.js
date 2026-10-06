@@ -183,5 +183,60 @@
     return K.rect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0), Math.abs(y1 - y0), o.stroke || c, { fill: o.fill || "fa", rx: 1, w: 1.2 });
   };
 
+  /* ---------- Graphen, Bäume, Automaten ---------- */
+  /* Kreisknoten mit Beschriftung. o: {r, fill, w, s (Schriftgröße), tc (Textfarbe), it} */
+  K.node = function(x, y, label, c, o){
+    o = o || {};
+    var r = o.r || 18;
+    return K.circ(x, y, r, c || "a", { fill: o.fill || "p", w: o.w || 2 }) +
+      (label !== undefined && label !== "" ? K.t(x, y + 1, label, o.tc || c || "i", { s: o.s || 14, b: true, it: o.it, halo: false }) : "");
+  };
+  /* Rechteckknoten (Speicherzelle, Listenelement, Kasten). o: {w, h, fill, s, tc} */
+  K.cell = function(x, y, label, c, o){
+    o = o || {};
+    var w = o.w || 44, h = o.h || 34;
+    return K.rect(x - w / 2, y - h / 2, w, h, c || "a", { fill: o.fill || "p", rx: o.rx === undefined ? 3 : o.rx, w: o.bw || 1.6 }) +
+      (label !== undefined && label !== "" ? K.t(x, y + 1, label, o.tc || "i", { s: o.s || 14, b: true, halo: false, it: o.it }) : "");
+  };
+  /* Automatenzustand: o.start → Eingangspfeil von links, o.final → Doppelkreis */
+  K.state = function(x, y, label, o){
+    o = o || {};
+    var r = o.r || 22, c = o.c || "a", s = "";
+    if(o.start) s += K.arrow(x - r - 34, y, x - r - 1, y, "i", { w: 2, head: 10 });
+    s += K.circ(x, y, r, c, { fill: o.fill || "p", w: 2.2 });
+    if(o.final) s += K.circ(x, y, r - 5, c, { w: 1.8 });
+    return s + K.t(x, y + 1, label, o.tc || "i", { s: o.s || 15, b: true, halo: false });
+  };
+  /* Kante zwischen zwei Kreisen (Mittelpunkte, Radien r1/r2). o: {bend (Pixel, + = links gekrümmt), r1, r2, c, w, dash, lab (Text), lo (Abstand Label), noarrow} */
+  K.edge = function(x1, y1, x2, y2, o){
+    o = o || {};
+    var r1 = o.r1 === undefined ? 22 : o.r1, r2 = o.r2 === undefined ? 22 : o.r2, c = o.c || "s", bend = o.bend || 0;
+    var dx = x2 - x1, dy = y2 - y1, L = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / L, uy = dy / L, px = uy, py = -ux;
+    var mx = (x1 + x2) / 2 + px * bend, my = (y1 + y2) / 2 + py * bend, s = "";
+    function toward(ax, ay, bx, by, r){ var ex = bx - ax, ey = by - ay, l = Math.sqrt(ex * ex + ey * ey) || 1; return [ax + ex / l * r, ay + ey / l * r]; }
+    var A = bend ? toward(x1, y1, mx, my, r1) : [x1 + ux * r1, y1 + uy * r1], B = bend ? toward(x2, y2, mx, my, r2) : [x2 - ux * r2, y2 - uy * r2];
+    if(bend){
+      var cx = 2 * mx - (A[0] + B[0]) / 2, cy = 2 * my - (A[1] + B[1]) / 2;
+      s += K.path("M" + n(A[0]) + " " + n(A[1]) + " Q" + n(cx) + " " + n(cy) + " " + n(B[0]) + " " + n(B[1]), c, { w: o.w || 1.8, dash: o.dash });
+      if(!o.noarrow){ var hx = B[0] - cx, hy = B[1] - cy, hl = Math.sqrt(hx * hx + hy * hy) || 1; s += K.arrow(B[0] - hx / hl * 2, B[1] - hy / hl * 2, B[0], B[1], c, { w: o.w || 1.8, head: 10 }); }
+    } else {
+      s += o.noarrow ? K.line(A[0], A[1], B[0], B[1], c, { w: o.w || 1.8, dash: o.dash }) : K.arrow(A[0], A[1], B[0], B[1], c, { w: o.w || 1.8, head: 10, dash: o.dash });
+    }
+    if(o.lab !== undefined){ var lo = o.lo === undefined ? 12 : o.lo, sg = bend < 0 ? -1 : 1; s += K.t(mx + px * lo * sg, my + py * lo * sg, o.lab, o.lc || c, { s: o.ls || 13.5, b: true }); }
+    return s;
+  };
+  /* Schleife an einem Zustand (Winkel in Grad, 90 = oben). o: {r, c, lab} */
+  K.loop = function(x, y, ang, o){
+    o = o || {};
+    var r = o.r || 22, c = o.c || "s", a = (ang === undefined ? 90 : ang) * Math.PI / 180, sp = 0.5;
+    var p1 = [x + r * Math.cos(a - sp), y - r * Math.sin(a - sp)], p2 = [x + r * Math.cos(a + sp), y - r * Math.sin(a + sp)];
+    var d = r * 2.9, c1 = [x + d * Math.cos(a - sp * 1.6), y - d * Math.sin(a - sp * 1.6)], c2 = [x + d * Math.cos(a + sp * 1.6), y - d * Math.sin(a + sp * 1.6)];
+    var s = K.path("M" + n(p1[0]) + " " + n(p1[1]) + " C" + n(c1[0]) + " " + n(c1[1]) + " " + n(c2[0]) + " " + n(c2[1]) + " " + n(p2[0]) + " " + n(p2[1]), c, { w: o.w || 1.8 });
+    var hx = p2[0] - c2[0], hy = p2[1] - c2[1], hl = Math.sqrt(hx * hx + hy * hy) || 1;
+    s += K.arrow(p2[0] - hx / hl * 2, p2[1] - hy / hl * 2, p2[0], p2[1], c, { w: o.w || 1.8, head: 10 });
+    if(o.lab !== undefined) s += K.t(x + (d + 10) * Math.cos(a), y - (d + 10) * Math.sin(a), o.lab, o.lc || c, { s: o.ls || 13.5, b: true });
+    return s;
+  };
+
   window.SK = K;
 })();

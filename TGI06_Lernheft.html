@@ -347,27 +347,27 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Formale Sprachen abstrahieren von natürlichen und Programmiersprachen auf ihr mathematisches Gerüst: Zeichen, Wörter und Mengen von Wörtern. Auf diesem Fundament bauen Grammatiken, Sprachübersetzer und Automaten der folgenden Kapitel auf.</p>
 
     <div class="box def">
-      <span class="lbl">Alphabet Σ</span>
+      <span class="lbl">Alphabet Σ<i class="sk" data-sk="tgi06-alphabet"></i></span>
       <p>Ein <strong>Alphabet</strong> Σ ist eine endliche, nichtleere Menge von Zeichen. Beispiele: Σ = {0, 1} (Binäralphabet) oder Σ = {a, b, c}.</p>
     </div>
 
-    <h4>Wort, Wortlänge, Verkettung</h4>
+    <h4>Wort, Wortlänge, Verkettung<i class="sk" data-sk="tgi06-wort"></i></h4>
     <p>Ein <strong>Wort</strong> ist eine endliche Folge von Zeichen aus Σ. Die <strong>Wortlänge</strong> |w| gibt die Anzahl der Zeichen in w an. Das <strong>leere Wort</strong> ε enthält kein einziges Zeichen: |ε| = 0.</p>
     <div class="tw"><table class="mono">
       <thead><tr><th>Begriff</th><th>Notation</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td>Wortlänge</td><td>|w|</td><td>Anzahl Zeichen in w</td></tr>
-        <tr><td>Leeres Wort</td><td>ε</td><td>Wort ohne Zeichen, |ε| = 0</td></tr>
-        <tr><td>Verkettung</td><td>u ∘ v = uv</td><td>Hintereinanderschreiben zweier Wörter</td></tr>
-        <tr><td>Potenz</td><td>wⁿ</td><td>w n-mal verkettet</td></tr>
+        <tr><td>Wortlänge<i class="sk" data-sk="tgi06-wort"></i></td><td>|w|</td><td>Anzahl Zeichen in w</td></tr>
+        <tr><td>Leeres Wort<i class="sk" data-sk="tgi06-wort"></i></td><td>ε</td><td>Wort ohne Zeichen, |ε| = 0</td></tr>
+        <tr><td>Verkettung<i class="sk" data-sk="tgi06-konkat"></i></td><td>u ∘ v = uv</td><td>Hintereinanderschreiben zweier Wörter</td></tr>
+        <tr><td>Potenz<i class="sk" data-sk="tgi06-potenz"></i></td><td>wⁿ</td><td>w n-mal verkettet</td></tr>
       </tbody>
     </table></div>
 
     <h4>Wortmenge und Sprache</h4>
-    <p>Σ* bezeichnet die Menge <strong>aller</strong> Wörter über Σ, einschliesslich des leeren Worts ε. Lässt man ε weg, erhält man Σ⁺ = Σ* \ {ε}. Eine <strong>Sprache</strong> L ist eine beliebige Teilmenge von Σ* (L ⊆ Σ*) – sie kann endlich sein (z. B. L = {a, ab, abc}) oder unendlich (z. B. L = {aⁿ | n ≥ 0}).</p>
+    <p>Σ* bezeichnet die Menge <strong>aller</strong> Wörter über Σ, einschliesslich des leeren Worts ε. Lässt man ε weg, erhält man Σ⁺ = Σ* \ {ε}<i class="sk" data-sk="tgi06-sigmastern"></i>. Eine <strong>Sprache</strong> L ist eine beliebige Teilmenge von Σ* (L ⊆ Σ*)<i class="sk" data-sk="tgi06-sprache"></i> – sie kann endlich sein (z. B. L = {a, ab, abc}) oder unendlich (z. B. L = {aⁿ | n ≥ 0}).</p>
 
     <div class="box warn">
-      <span class="lbl">Prüfungsfalle</span>
+      <span class="lbl">Prüfungsfalle<i class="sk" data-sk="tgi06-sprache"></i></span>
       <p>Σ* ist – sobald Σ nicht leer ist – selbst immer unendlich gross, aber nicht jede Sprache L ⊆ Σ* muss unendlich sein. Nicht verwechseln: Σ* ist für ein gegebenes Alphabet <em>immer dieselbe</em> Menge aller denkbaren Wörter; eine Sprache L ist eine <em>konkret gewählte</em> Teilmenge davon mit einer bestimmten Bedeutung.</p>
     </div>
   </div>
@@ -391,7 +391,7 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Eine Grammatik ist die Bauanleitung für eine Sprache: Ausgehend von einem Startsymbol erzeugen Ersetzungsregeln systematisch alle Wörter der Sprache. Wie stark man diese Regeln einschränkt, sortiert Grammatiken – und die Sprachen, die sie erzeugen – in die berühmte <strong>Chomsky-Hierarchie</strong>.</p>
 
     <div class="box def">
-      <span class="lbl">Grammatik G = (N, T, P, s)</span>
+      <span class="lbl">Grammatik G = (N, T, P, s)<i class="sk" data-sk="tgi06-grammatik"></i></span>
       <ul>
         <li><strong>N</strong> – Nichtterminale (Variablen, Hilfszeichen)</li>
         <li><strong>T</strong> – Terminale (das Alphabet der erzeugten Sprache)</li>
@@ -401,33 +401,33 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     </div>
 
     <h4>Ableitung</h4>
-    <p>Eine <strong>Ableitung</strong> wendet Produktionsregeln wiederholt auf das Startsymbol an, bis nur noch Terminale übrig sind: S ⇒ αAβ ⇒ αγβ (wenn A → γ ∈ P eine Regel ist, wird das Nichtterminal A im Kontext αAβ durch γ ersetzt). Die Menge aller so erzeugbaren Wörter ist die von G erzeugte Sprache:</p>
-    <p class="formula">L(G) = {w ∈ T* | S ⇒* w}</p>
+    <p>Eine <strong>Ableitung</strong><i class="sk" data-sk="tgi06-ableitung"></i> wendet Produktionsregeln wiederholt auf das Startsymbol an, bis nur noch Terminale übrig sind: S ⇒ αAβ ⇒ αγβ (wenn A → γ ∈ P eine Regel ist, wird das Nichtterminal A im Kontext αAβ durch γ ersetzt). Die Menge aller so erzeugbaren Wörter ist die von G erzeugte Sprache:</p>
+    <p class="formula">L(G) = {w ∈ T* | S ⇒* w}<i class="sk" data-sk="tgi06-lg"></i></p>
     <p>(S ⇒* w bedeutet: w ist in null oder mehr Ableitungsschritten aus S erreichbar.)</p>
 
     <h4>Ableitungsbaum und Mehrdeutigkeit</h4>
-    <p>Der <strong>Ableitungsbaum</strong> stellt eine Ableitung grafisch dar: Die Wurzel trägt das Startsymbol, jeder innere Knoten steht für eine angewandte Regel, und die Blätter ergeben – von links nach rechts gelesen – das abgeleitete Wort aus Terminalen. Eine Grammatik heisst <strong>mehrdeutig</strong>, wenn für mindestens ein Wort ihrer Sprache mehrere verschiedene Ableitungsbäume existieren.</p>
+    <p>Der <strong>Ableitungsbaum</strong><i class="sk" data-sk="tgi06-baum"></i> stellt eine Ableitung grafisch dar: Die Wurzel trägt das Startsymbol, jeder innere Knoten steht für eine angewandte Regel, und die Blätter ergeben – von links nach rechts gelesen – das abgeleitete Wort aus Terminalen. Eine Grammatik heisst <strong>mehrdeutig</strong><i class="sk" data-sk="tgi06-mehrdeutig"></i>, wenn für mindestens ein Wort ihrer Sprache mehrere verschiedene Ableitungsbäume existieren.</p>
 
-    <h4>Die Chomsky-Hierarchie</h4>
+    <h4>Die Chomsky-Hierarchie<i class="sk" data-sk="tgi06-chomsky"></i></h4>
     <p>Noam Chomsky ordnete Grammatiken nach der Form ihrer Regeln in vier Typen, die zugleich vier Sprachklassen und vier Automatenklassen entsprechen:</p>
     <div class="tw"><table>
       <thead><tr><th>Typ</th><th>Name</th><th>Regelform</th><th>Automat</th><th>Beispielsprache</th></tr></thead>
       <tbody>
-        <tr><td><strong>Typ 0</strong></td><td>Rekursiv aufzählbar</td><td>α → β (keine Einschränkung)</td><td>Turingmaschine</td><td>–</td></tr>
-        <tr><td><strong>Typ 1</strong></td><td>Kontextsensitiv</td><td>|α| ≤ |β| (Längenmonotonie)</td><td>Linear beschränkter Automat</td><td>{aⁿbⁿcⁿ}</td></tr>
-        <tr><td><strong>Typ 2</strong></td><td>Kontextfrei (kfG)</td><td>A → β (links: einzelnes Nichtterminal)</td><td>Kellerautomat</td><td>{aⁿbⁿ}</td></tr>
-        <tr><td><strong>Typ 3</strong></td><td>Regulär</td><td>A → aB oder A → a (rechtslinear)</td><td>Endlicher Automat (DEA/NEA)</td><td>{aⁿ}</td></tr>
+        <tr><td><strong>Typ 0</strong><i class="sk" data-sk="tgi06-typ0"></i></td><td>Rekursiv aufzählbar</td><td>α → β (keine Einschränkung)</td><td>Turingmaschine</td><td>–</td></tr>
+        <tr><td><strong>Typ 1</strong><i class="sk" data-sk="tgi06-typ1"></i></td><td>Kontextsensitiv</td><td>|α| ≤ |β| (Längenmonotonie)</td><td>Linear beschränkter Automat</td><td>{aⁿbⁿcⁿ}</td></tr>
+        <tr><td><strong>Typ 2</strong><i class="sk" data-sk="tgi06-typ2"></i></td><td>Kontextfrei (kfG)</td><td>A → β (links: einzelnes Nichtterminal)</td><td>Kellerautomat</td><td>{aⁿbⁿ}</td></tr>
+        <tr><td><strong>Typ 3</strong><i class="sk" data-sk="tgi06-typ3"></i></td><td>Regulär</td><td>A → aB oder A → a (rechtslinear)</td><td>Endlicher Automat (DEA/NEA)</td><td>{aⁿ}</td></tr>
       </tbody>
     </table></div>
 
     <div class="box">
-      <span class="lbl">Hierarchie und Merksatz</span>
+      <span class="lbl">Hierarchie und Merksatz<i class="sk" data-sk="tgi06-chomsky"></i></span>
       <p>Die vier Typen sind ineinander geschachtelt: <strong>Typ 3 ⊂ Typ 2 ⊂ Typ 1 ⊂ Typ 0</strong>. Merksatz: <em>Jede reguläre Sprache ist kontextfrei, jede kontextfreie ist kontextsensitiv, jede kontextsensitive ist rekursiv aufzählbar.</em> Je kleiner die Typnummer, desto weniger einschränkend die Regelform und desto mächtiger der zugehörige Automat.</p>
     </div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p><strong>ε-Regeln</strong> (S → ε) sind nur für das Startsymbol erlaubt – und auch dort nur mit einer Sonderregelung, damit die Typklasse nicht verletzt wird. Das <strong>Wortproblem</strong> („Gehört ein gegebenes Wort w zu L(G)?") ist für die Typen 1 bis 3 stets entscheidbar, für Typ 0 im Allgemeinen <strong>nicht</strong>.</p>
+      <p><strong>ε-Regeln</strong><i class="sk" data-sk="tgi06-epsregel"></i> (S → ε) sind nur für das Startsymbol erlaubt – und auch dort nur mit einer Sonderregelung, damit die Typklasse nicht verletzt wird. Das <strong>Wortproblem</strong><i class="sk" data-sk="tgi06-wortproblem"></i> („Gehört ein gegebenes Wort w zu L(G)?") ist für die Typen 1 bis 3 stets entscheidbar, für Typ 0 im Allgemeinen <strong>nicht</strong>.</p>
     </div>
   </div>
 </section>
@@ -449,23 +449,23 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
   <div class="body">
     <p class="lead">Damit ein in einer formalen Sprache geschriebenes Programm auf einem Rechner läuft, muss es übersetzt werden. Zwei grundsätzliche Übersetzungsstrategien und zwei Übersetzerbausteine prägen dieses Kapitel – und schliessen den Bogen zur Chomsky-Hierarchie aus Kapitel 2.</p>
 
-    <h4>Compiler vs. Interpreter</h4>
+    <h4>Compiler vs. Interpreter<i class="sk" data-sk="tgi06-compint"></i></h4>
     <div class="tw"><table>
       <thead><tr><th>Übersetzer</th><th>Arbeitsweise</th><th>Konsequenz</th></tr></thead>
       <tbody>
         <tr><td><strong>Compiler</strong></td><td>übersetzt das gesamte Programm vor der Ausführung in Zielcode</td><td>schneller zur Laufzeit, da die Übersetzung nur einmal vorab erfolgt</td></tr>
-        <tr><td><strong>Interpreter</strong></td><td>führt das Programm Zeile für Zeile direkt aus</td><td>langsamer bei Schleifen, da jede Wiederholung erneut interpretiert wird</td></tr>
+        <tr><td><strong>Interpreter</strong><i class="sk" data-sk="tgi06-compint"></i></td><td>führt das Programm Zeile für Zeile direkt aus</td><td>langsamer bei Schleifen, da jede Wiederholung erneut interpretiert wird</td></tr>
       </tbody>
     </table></div>
 
     <div class="box def">
-      <span class="lbl">Scanner und Parser</span>
+      <span class="lbl">Scanner und Parser<i class="sk" data-sk="tgi06-scanpars"></i></span>
       <p>Der <strong>Scanner</strong> (Lexer) erkennt <strong>Tokens</strong> (Schlüsselwörter, Bezeichner, Zahlen) im Quelltext – er basiert auf regulären Ausdrücken bzw. endlichen Automaten. Der <strong>Parser</strong> prüft anschliessend anhand einer Grammatik die syntaktische Korrektheit der Tokenfolge – er basiert auf kontextfreien Grammatiken.</p>
     </div>
-    <p>Die Zuordnung ist kein Zufall: Tokens wie Bezeichner oder Zahlen lassen sich mit regulären (Typ-3-)Ausdrücken beschreiben, deshalb genügt dem Scanner ein endlicher Automat. Die Schachtelungsstruktur eines Programms (Klammern, Blöcke, verschachtelte Anweisungen) ist dagegen nicht mehr regulär, sondern kontextfrei (Typ 2) – dafür braucht der Parser die stärkere Grammatikklasse.</p>
+    <p>Die Zuordnung ist kein Zufall: Tokens wie Bezeichner oder Zahlen lassen sich mit regulären (Typ-3-)Ausdrücken beschreiben, deshalb genügt dem Scanner ein endlicher Automat. Die Schachtelungsstruktur eines Programms<i class="sk" data-sk="tgi06-klammern"></i> (Klammern, Blöcke, verschachtelte Anweisungen) ist dagegen nicht mehr regulär, sondern kontextfrei (Typ 2) – dafür braucht der Parser die stärkere Grammatikklasse.</p>
 
     <h4>T-Diagramm</h4>
-    <p>Das <strong>T-Diagramm</strong> modelliert Übersetzungsprozesse in drei Feldern: <strong>Quellsprache</strong> (in welcher Sprache das zu übersetzende Programm geschrieben ist) | <strong>Implementierungssprache</strong> (in welcher Sprache der Übersetzer selbst läuft) | <strong>Zielsprache</strong> (in welche Sprache übersetzt wird).</p>
+    <p>Das <strong>T-Diagramm</strong><i class="sk" data-sk="tgi06-tdiag"></i> modelliert Übersetzungsprozesse in drei Feldern: <strong>Quellsprache</strong> (in welcher Sprache das zu übersetzende Programm geschrieben ist) | <strong>Implementierungssprache</strong> (in welcher Sprache der Übersetzer selbst läuft) | <strong>Zielsprache</strong> (in welche Sprache übersetzt wird).</p>
   </div>
 </section>
 
@@ -487,66 +487,66 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Reguläre Sprachen (Typ 3) sind die schwächste, aber praktisch wichtigste Klasse der Chomsky-Hierarchie – sie lassen sich vollständig durch endliche Automaten erkennen und durch reguläre Ausdrücke beschreiben. Dieses Kapitel liefert das Handwerkszeug: DEA und NEA konstruieren, ineinander umwandeln und mit regulären Ausdrücken verbinden.</p>
 
     <div class="box def">
-      <span class="lbl">Deterministischer endlicher Automat (DEA)</span>
+      <span class="lbl">Deterministischer endlicher Automat (DEA)<i class="sk" data-sk="tgi06-deadef"></i></span>
       <p>M = (Q, Σ, δ, q₀, F) mit:</p>
       <ul>
         <li><strong>Q</strong> – endliche Zustandsmenge</li>
         <li><strong>Σ</strong> – Eingabealphabet</li>
-        <li><strong>δ: Q × Σ → Q</strong> – Übergangsfunktion, liefert zu jedem Zustand und Zeichen <strong>genau einen</strong> Folgezustand</li>
+        <li><strong>δ: Q × Σ → Q</strong> – Übergangsfunktion, liefert zu jedem Zustand und Zeichen <strong>genau einen</strong> Folgezustand<i class="sk" data-sk="tgi06-delta"></i></li>
         <li><strong>q₀ ∈ Q</strong> – Startzustand</li>
         <li><strong>F ⊆ Q</strong> – Menge der Endzustände (akzeptierende Zustände)</li>
       </ul>
-      <p>Ein Wort w wird akzeptiert, wenn der Automat, beginnend in q₀, w zeichenweise verarbeitet und dabei in einem Zustand aus F endet.</p>
+      <p>Ein Wort w wird akzeptiert, wenn der Automat, beginnend in q₀, w zeichenweise verarbeitet und dabei in einem Zustand aus F endet.<i class="sk" data-sk="tgi06-dealauf"></i></p>
     </div>
 
     <div class="box def">
-      <span class="lbl">Nichtdeterministischer endlicher Automat (NEA)</span>
-      <p>Gleicher Aufbau wie der DEA, aber mit <strong>δ: Q × Σ → P(Q)</strong> – zu einem Zustand und Zeichen ist eine <strong>Menge</strong> von Folgezuständen erlaubt: mehrere gleichzeitig mögliche oder auch keiner. Ein Wort wird akzeptiert, wenn <strong>mindestens ein</strong> möglicher Berechnungspfad in einem Endzustand endet.</p>
+      <span class="lbl">Nichtdeterministischer endlicher Automat (NEA)<i class="sk" data-sk="tgi06-nea"></i></span>
+      <p>Gleicher Aufbau wie der DEA, aber mit <strong>δ: Q × Σ → P(Q)</strong> – zu einem Zustand und Zeichen ist eine <strong>Menge</strong> von Folgezuständen<i class="sk" data-sk="tgi06-delta"></i> erlaubt: mehrere gleichzeitig mögliche oder auch keiner. Ein Wort wird akzeptiert, wenn <strong>mindestens ein</strong> möglicher Berechnungspfad in einem Endzustand endet.<i class="sk" data-sk="tgi06-nealauf"></i></p>
     </div>
 
     <div class="box warn">
       <span class="lbl">Prüfungsfalle</span>
-      <p>NEA wirken mit weniger Zuständen eleganter, sind aber <strong>nicht mächtiger</strong> als DEA – zu jedem NEA existiert ein äquivalenter DEA. Der Preis: Der DEA kann im ungünstigsten Fall <strong>2ⁿ</strong> Zustände benötigen, wenn der NEA n Zustände hatte.</p>
+      <p>NEA wirken mit weniger Zuständen eleganter, sind aber <strong>nicht mächtiger</strong> als DEA – zu jedem NEA existiert ein äquivalenter DEA. Der Preis: Der DEA kann im ungünstigsten Fall <strong>2ⁿ</strong> Zustände benötigen<i class="sk" data-sk="tgi06-dea2n"></i>, wenn der NEA n Zustände hatte.</p>
     </div>
 
-    <h4>NEA → DEA: Potenzmengenkonstruktion</h4>
+    <h4>NEA → DEA: Potenzmengenkonstruktion<i class="sk" data-sk="tgi06-pmk"></i></h4>
     <ol>
       <li>Startzustand des DEA = {q₀} des NEA (einelementige Menge mit dem NEA-Startzustand).</li>
-      <li>Für jeden neuen DEA-Zustand (= Menge von NEA-Zuständen) und jedes Zeichen aus Σ: die Vereinigung aller NEA-Folgezustände dieser Menge berechnen – das ergibt den nächsten DEA-Zustand.</li>
-      <li>Ein DEA-Zustand ist Endzustand, wenn die zugehörige Menge <strong>mindestens einen</strong> NEA-Endzustand enthält.</li>
-      <li>Nicht erreichbare Zustände (Teilmengen, die nie als Folgezustand auftauchen) werden weggelassen.</li>
+      <li>Für jeden neuen DEA-Zustand (= Menge von NEA-Zuständen) und jedes Zeichen aus Σ: die Vereinigung aller NEA-Folgezustände dieser Menge berechnen<i class="sk" data-sk="tgi06-pmk"></i> – das ergibt den nächsten DEA-Zustand.</li>
+      <li>Ein DEA-Zustand ist Endzustand, wenn die zugehörige Menge <strong>mindestens einen</strong> NEA-Endzustand enthält.<i class="sk" data-sk="tgi06-pmkdea"></i></li>
+      <li>Nicht erreichbare Zustände (Teilmengen, die nie als Folgezustand auftauchen) werden weggelassen.<i class="sk" data-sk="tgi06-dea2n"></i></li>
     </ol>
-    <p>Enthält der NEA <strong>ε-Übergänge</strong> (Zustandswechsel ohne Eingabezeichen), berechnet man vor der Konstruktion für jeden Zustand die <strong>ε-Hülle</strong> (epsilon closure – alle über beliebig viele ε-Übergänge erreichbaren Zustände) und bezieht sie in die Übergangsbildung ein.</p>
+    <p>Enthält der NEA <strong>ε-Übergänge</strong> (Zustandswechsel ohne Eingabezeichen), berechnet man vor der Konstruktion für jeden Zustand die <strong>ε-Hülle</strong><i class="sk" data-sk="tgi06-epshuelle"></i> (epsilon closure – alle über beliebig viele ε-Übergänge erreichbaren Zustände) und bezieht sie in die Übergangsbildung ein.</p>
 
     <h4>Minimalautomat</h4>
-    <p>Der <strong>Minimalautomat</strong> ist der DEA mit der kleinstmöglichen Zustandszahl für eine gegebene reguläre Sprache. Man findet ihn, indem man <strong>äquivalente Zustände</strong> zu einem einzigen zusammenfasst: Zwei Zustände sind äquivalent, wenn sie für <strong>jede</strong> mögliche Eingabefortsetzung zum gleichen Akzeptanzergebnis führen.</p>
+    <p>Der <strong>Minimalautomat</strong><i class="sk" data-sk="tgi06-minimal"></i> ist der DEA mit der kleinstmöglichen Zustandszahl für eine gegebene reguläre Sprache. Man findet ihn, indem man <strong>äquivalente Zustände</strong><i class="sk" data-sk="tgi06-minimal"></i> zu einem einzigen zusammenfasst: Zwei Zustände sind äquivalent, wenn sie für <strong>jede</strong> mögliche Eingabefortsetzung zum gleichen Akzeptanzergebnis führen.</p>
 
-    <h4>Reguläre Grammatik → DEA</h4>
+    <h4>Reguläre Grammatik → DEA<i class="sk" data-sk="tgi06-gram2dea"></i></h4>
     <p>Jede reguläre (Typ-3-)Grammatik lässt sich direkt in einen DEA übersetzen:</p>
     <div class="tw"><table class="mono">
       <thead><tr><th>Grammatik</th><th>Automat</th></tr></thead>
       <tbody>
         <tr><td>Nichtterminale</td><td>= Zustände</td></tr>
-        <tr><td>Regel A → aB</td><td>Übergang δ(A, a) = B</td></tr>
-        <tr><td>Regel A → a</td><td>Übergang δ(A, a) = Endzustand</td></tr>
+        <tr><td>Regel A → aB<i class="sk" data-sk="tgi06-gram2dea"></i></td><td>Übergang δ(A, a) = B</td></tr>
+        <tr><td>Regel A → a</td><td>Übergang δ(A, a) = Endzustand<i class="sk" data-sk="tgi06-gram2dea"></i></td></tr>
       </tbody>
     </table></div>
 
     <h4>Reguläre Ausdrücke</h4>
-    <p>Reguläre Ausdrücke beschreiben reguläre Sprachen algebraisch, ohne Zustände zu zeichnen. Basisfälle: <strong>∅</strong> (leere Menge), <strong>ε</strong> (leeres Wort) und <strong>a</strong> (einzelnes Zeichen) sind reguläre Ausdrücke. Daraus lassen sich mit drei Operatoren beliebig komplexere Ausdrücke bilden:</p>
+    <p>Reguläre Ausdrücke beschreiben reguläre Sprachen algebraisch, ohne Zustände zu zeichnen.<i class="sk" data-sk="tgi06-rxnea"></i> Basisfälle: <strong>∅</strong> (leere Menge), <strong>ε</strong> (leeres Wort) und <strong>a</strong> (einzelnes Zeichen) sind reguläre Ausdrücke.<i class="sk" data-sk="tgi06-rxbasis"></i> Daraus lassen sich mit drei Operatoren beliebig komplexere Ausdrücke bilden:</p>
     <div class="tw"><table>
       <thead><tr><th>Ausdruck</th><th>Bedeutung</th><th>Beispiel über {a,b}</th></tr></thead>
       <tbody>
-        <tr><td>u·v (bzw. uv)</td><td>Verkettung: erst u, dann v</td><td>ab → {ab}</td></tr>
-        <tr><td>u|v</td><td>Alternative (Union): u oder v</td><td>a|b → {a, b}</td></tr>
-        <tr><td>u*</td><td>Kleene-Stern: 0 oder mehr Wiederholungen von u</td><td>a* → {ε, a, aa, aaa, …}</td></tr>
-        <tr><td>u⁺</td><td>1 oder mehr Wiederholungen (= u·u*)</td><td>a⁺ → {a, aa, aaa, …}</td></tr>
-        <tr><td>(a|b)*</td><td>beliebige Wörter über {a,b}</td><td>= Σ*</td></tr>
+        <tr><td>u·v (bzw. uv)<i class="sk" data-sk="tgi06-rxops"></i></td><td>Verkettung: erst u, dann v</td><td>ab → {ab}</td></tr>
+        <tr><td>u|v<i class="sk" data-sk="tgi06-rxops"></i></td><td>Alternative (Union): u oder v</td><td>a|b → {a, b}</td></tr>
+        <tr><td>u*<i class="sk" data-sk="tgi06-rxstern"></i></td><td>Kleene-Stern: 0 oder mehr Wiederholungen von u</td><td>a* → {ε, a, aa, aaa, …}</td></tr>
+        <tr><td>u⁺<i class="sk" data-sk="tgi06-rxplus"></i></td><td>1 oder mehr Wiederholungen (= u·u*)</td><td>a⁺ → {a, aa, aaa, …}</td></tr>
+        <tr><td>(a|b)*<i class="sk" data-sk="tgi06-rxsigma"></i></td><td>beliebige Wörter über {a,b}</td><td>= Σ*</td></tr>
       </tbody>
     </table></div>
 
     <div class="box def">
-      <span class="lbl">Äquivalenz der Beschreibungsmittel</span>
+      <span class="lbl">Äquivalenz der Beschreibungsmittel<i class="sk" data-sk="tgi06-aequiv"></i></span>
       <p><strong>DEA ↔ NEA ↔ NEA mit ε-Übergängen ↔ reguläre Grammatik ↔ regulärer Ausdruck</strong> – alle fünf Formalismen definieren exakt dieselbe Sprachklasse: die regulären Sprachen (Typ 3). Für jede Darstellung existiert ein Konstruktionsverfahren in eine der anderen; welche man in einer Aufgabe wählt, ist reine Zweckmässigkeit.</p>
     </div>
   </div>
@@ -731,28 +731,28 @@ q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
   </div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
-    <h4>Chomsky-Hierarchie</h4>
+    <h4>Chomsky-Hierarchie<i class="sk" data-sk="tgi06-chomsky"></i></h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>Typ</th><th>Sprache</th><th>Regelform</th><th>Automat</th></tr></thead>
       <tbody>
-        <tr><td>0</td><td>Rek. aufzählbar</td><td>α → β</td><td>Turingmaschine</td></tr>
-        <tr><td>1</td><td>Kontextsensitiv</td><td>|α| ≤ |β|</td><td>Linear beschr. Automat</td></tr>
-        <tr><td>2</td><td>Kontextfrei</td><td>A → β</td><td>Kellerautomat</td></tr>
-        <tr><td>3</td><td>Regulär</td><td>A → aB | a</td><td>Endlicher Automat</td></tr>
+        <tr><td>0</td><td>Rek. aufzählbar<i class="sk" data-sk="tgi06-typ0"></i></td><td>α → β</td><td>Turingmaschine</td></tr>
+        <tr><td>1</td><td>Kontextsensitiv<i class="sk" data-sk="tgi06-typ1"></i></td><td>|α| ≤ |β|</td><td>Linear beschr. Automat</td></tr>
+        <tr><td>2</td><td>Kontextfrei<i class="sk" data-sk="tgi06-typ2"></i></td><td>A → β</td><td>Kellerautomat</td></tr>
+        <tr><td>3</td><td>Regulär<i class="sk" data-sk="tgi06-typ3"></i></td><td>A → aB | a</td><td>Endlicher Automat</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">Hierarchie: Typ 3 ⊂ Typ 2 ⊂ Typ 1 ⊂ Typ 0</p>
+    <p class="formula">Hierarchie: Typ 3 ⊂ Typ 2 ⊂ Typ 1 ⊂ Typ 0<i class="sk" data-sk="tgi06-chomsky"></i></p>
 
     <h4>Reguläre Ausdrücke</h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>Zeichen</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td>∅</td><td>leere Sprache</td></tr>
-        <tr><td>ε</td><td>leeres Wort</td></tr>
-        <tr><td>a·b</td><td>Verkettung</td></tr>
-        <tr><td>a|b</td><td>Alternative</td></tr>
-        <tr><td>a*</td><td>Kleene-Stern (0+ Wiederholungen)</td></tr>
-        <tr><td>a⁺</td><td>= a·a* (1+ Wiederholungen)</td></tr>
+        <tr><td>∅</td><td>leere Sprache<i class="sk" data-sk="tgi06-rxbasis"></i></td></tr>
+        <tr><td>ε</td><td>leeres Wort<i class="sk" data-sk="tgi06-rxbasis"></i></td></tr>
+        <tr><td>a·b</td><td>Verkettung<i class="sk" data-sk="tgi06-rxops"></i></td></tr>
+        <tr><td>a|b</td><td>Alternative<i class="sk" data-sk="tgi06-rxops"></i></td></tr>
+        <tr><td>a*</td><td>Kleene-Stern (0+ Wiederholungen)<i class="sk" data-sk="tgi06-rxstern"></i></td></tr>
+        <tr><td>a⁺</td><td>= a·a* (1+ Wiederholungen)<i class="sk" data-sk="tgi06-rxplus"></i></td></tr>
       </tbody>
     </table></div>
 
@@ -760,9 +760,9 @@ q₁ →b→ q₂     (Schluss-b, Endzustand)</div>
     <div class="tw"><table class="mono">
       <thead><tr><th>Automat</th><th>Übergangsfunktion</th></tr></thead>
       <tbody>
-        <tr><td>DEA</td><td>δ: Q × Σ → Q (eindeutig)</td></tr>
-        <tr><td>NEA</td><td>δ: Q × Σ → P(Q) (Menge von Zuständen)</td></tr>
-        <tr><td>NEA → DEA</td><td>Potenzmengenkonstruktion</td></tr>
+        <tr><td>DEA</td><td>δ: Q × Σ → Q (eindeutig)<i class="sk" data-sk="tgi06-delta"></i></td></tr>
+        <tr><td>NEA</td><td>δ: Q × Σ → P(Q) (Menge von Zuständen)<i class="sk" data-sk="tgi06-nea"></i></td></tr>
+        <tr><td>NEA → DEA</td><td>Potenzmengenkonstruktion<i class="sk" data-sk="tgi06-pmk"></i></td></tr>
       </tbody>
     </table></div>
   </div>

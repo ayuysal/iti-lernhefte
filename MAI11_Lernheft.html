@@ -347,43 +347,43 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Zwei Zufallsgrößen gleichzeitig betrachten: gemeinsame Verteilung, Randverteilungen – und die Frage, ob sie zusammenhängen.</p>
 
     <div class="box def">
-      <span class="lbl">Gemeinsame Verteilung und Randverteilungen</span>
+      <span class="lbl">Gemeinsame Verteilung und Randverteilungen<i class="sk" data-sk="mai11-tabelle"></i></span>
       <p>Eine zweidimensionale Zufallsgröße (X, Y) wird im diskreten Fall durch die <strong>Verteilungstabelle</strong> P(X = x<sub>i</sub>, Y = y<sub>j</sub>) beschrieben. Die <strong>Randverteilungen</strong> entstehen durch Aufsummieren:</p>
-      <p class="formula">P(X = x<sub>i</sub>) = ∑<sub>j</sub> P(X = x<sub>i</sub>, Y = y<sub>j</sub>)&nbsp;&nbsp;&nbsp;(Zeilensumme)<br>P(Y = y<sub>j</sub>) = ∑<sub>i</sub> P(X = x<sub>i</sub>, Y = y<sub>j</sub>)&nbsp;&nbsp;&nbsp;(Spaltensumme)</p>
-      <p><strong>Unabhängigkeit:</strong> X und Y sind unabhängig, wenn für <em>alle</em> Paare gilt<br>P(X = x<sub>i</sub>, Y = y<sub>j</sub>) = P(X = x<sub>i</sub>) · P(Y = y<sub>j</sub>). Ein einziges Gegenbeispiel genügt zur Widerlegung.</p>
+      <p class="formula">P(X = x<sub>i</sub>) = ∑<sub>j</sub> P(X = x<sub>i</sub>, Y = y<sub>j</sub>)&nbsp;&nbsp;&nbsp;(Zeilensumme)<br>P(Y = y<sub>j</sub>) = ∑<sub>i</sub> P(X = x<sub>i</sub>, Y = y<sub>j</sub>)&nbsp;&nbsp;&nbsp;(Spaltensumme)<i class="sk" data-sk="mai11-tabelle"></i></p>
+      <p><strong>Unabhängigkeit:</strong> X und Y sind unabhängig, wenn für <em>alle</em> Paare gilt<br>P(X = x<sub>i</sub>, Y = y<sub>j</sub>) = P(X = x<sub>i</sub>) · P(Y = y<sub>j</sub>). Ein einziges Gegenbeispiel genügt zur Widerlegung.<i class="sk" data-sk="mai11-unabh"></i></p>
     </div>
     <p>Aus dem Vektor (X, Y) macht man mit einer Funktion g(x, y) wieder eine <em>Zahl</em> – erst dann sind Erwartungswert und Varianz sinnvoll (Def. 1.6, Satz 1.4):</p>
-    <p class="formula">E(g(X,Y)) = ∑<sub>i,j</sub> g(x<sub>i</sub>, y<sub>j</sub>) · P(X = x<sub>i</sub>, Y = y<sub>j</sub>)</p>
+    <p class="formula">E(g(X,Y)) = ∑<sub>i,j</sub> g(x<sub>i</sub>, y<sub>j</sub>) · P(X = x<sub>i</sub>, Y = y<sub>j</sub>)<i class="sk" data-sk="mai11-eg"></i></p>
 
     <div class="box def">
       <span class="lbl">Rechenregeln für Erwartungswert und Varianz</span>
-      <p class="formula">E(X + Y) = E(X) + E(Y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>immer</strong> (Satz 1.5)<br>V(X) = E(X²) − (E(X))²&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Verschiebungssatz<br>V(aX) = a²·V(X)<br>V(X + Y) = V(X) + V(Y) + 2·cov(X,Y)<br>V(X₁ + … + Xₙ) = V(X₁) + … + V(Xₙ)&nbsp;&nbsp;<strong>nur bei Unabhängigkeit</strong> (Satz 1.11)</p>
+      <p class="formula">E(X + Y) = E(X) + E(Y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>immer</strong> (Satz 1.5)<i class="sk" data-sk="mai11-eadd"></i><br>V(X) = E(X²) − (E(X))²&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Verschiebungssatz<i class="sk" data-sk="mai11-versch"></i><br>V(aX) = a²·V(X)<i class="sk" data-sk="mai11-lin"></i><br>V(X + Y) = V(X) + V(Y) + 2·cov(X,Y)<i class="sk" data-sk="mai11-vsum"></i><br>V(X₁ + … + Xₙ) = V(X₁) + … + V(Xₙ)&nbsp;&nbsp;<strong>nur bei Unabhängigkeit</strong> (Satz 1.11)<i class="sk" data-sk="mai11-vsumn"></i></p>
       <p><strong>Merksatz:</strong> Erwartungswerte darf man immer addieren, Varianzen nur bei Unabhängigkeit (genauer: bei Unkorreliertheit).</p>
     </div>
 
     <h4>1.2 Kovarianz und Korrelationskoeffizient</h4>
     <div class="box def">
       <span class="lbl">Definitionen</span>
-      <p class="formula">cov(X, Y) = E[(X − E(X))·(Y − E(Y))] = E(X·Y) − E(X)·E(Y)<br><br>ρ(X, Y) = cov(X, Y) / ( √V(X) · √V(Y) )</p>
+      <p class="formula">cov(X, Y) = E[(X − E(X))·(Y − E(Y))] = E(X·Y) − E(X)·E(Y)<i class="sk" data-sk="mai11-cov"></i><br><br>ρ(X, Y) = cov(X, Y) / ( √V(X) · √V(Y) )<i class="sk" data-sk="mai11-rho"></i></p>
       <p>Der <strong>Korrelationskoeffizient</strong> ρ liegt immer zwischen <strong>−1 und +1</strong>. |ρ| = 1 bedeutet exakten linearen Zusammenhang, ρ = 0 heißt <strong>unkorreliert</strong>.</p>
     </div>
     <div class="box warn">
-      <span class="lbl">Die zentrale Asymmetrie</span>
+      <span class="lbl">Die zentrale Asymmetrie<i class="sk" data-sk="mai11-unkorr"></i></span>
       <p><strong>Unabhängig ⟹ unkorreliert.</strong> Die Umkehrung gilt <strong>nicht</strong>: Unkorreliertheit misst nur den <em>linearen</em> Zusammenhang. Zwei Größen können unkorreliert und trotzdem stark (nichtlinear) voneinander abhängig sein.</p>
     </div>
 
     <h4>1.3 Der Zentrale Grenzwertsatz</h4>
     <div class="box def">
-      <span class="lbl">Satz 1.12</span>
+      <span class="lbl">Satz 1.12<i class="sk" data-sk="mai11-zgws"></i></span>
       <p>Sind X₁, X₂, … unabhängig und <strong>identisch verteilt</strong> mit Erwartungswert μ und Varianz σ², so gilt für die Summe</p>
-      <p class="formula">P( (∑<sub>i=1</sub><sup>n</sup> X<sub>i</sub> − n·μ) / (σ·√n) ≤ x ) → Φ(x)&nbsp;&nbsp;&nbsp;für n → ∞</p>
+      <p class="formula">P( (∑<sub>i=1</sub><sup>n</sup> X<sub>i</sub> − n·μ) / (σ·√n) ≤ x ) → Φ(x)&nbsp;&nbsp;&nbsp;für n → ∞<i class="sk" data-sk="mai11-stand"></i></p>
       <p>Die Summe verhält sich also <strong>näherungsweise normalverteilt</strong> – ganz gleich, wie die einzelnen X<sub>i</sub> verteilt sind. Sie müssen nur denselben Erwartungswert und dieselbe Varianz haben.</p>
-      <p>Dabei ist E(∑X<sub>i</sub>) = n·μ und V(∑X<sub>i</sub>) = n·σ², die Standardabweichung der Summe also <strong>σ·√n</strong>.</p>
+      <p>Dabei ist E(∑X<sub>i</sub>) = n·μ und V(∑X<sub>i</sub>) = n·σ², die Standardabweichung der Summe also <strong>σ·√n</strong><i class="sk" data-sk="mai11-vsumn"></i>.</p>
     </div>
-    <p><strong>Kochrezept:</strong> Ereignis „∑X<sub>i</sub> ≤ a“ standardisieren, indem man auf <em>beiden</em> Seiten n·μ abzieht und durch σ·√n teilt; dann Φ-Tabelle ablesen.</p>
+    <p><strong>Kochrezept:</strong><i class="sk" data-sk="mai11-stand"></i> Ereignis „∑X<sub>i</sub> ≤ a“ standardisieren, indem man auf <em>beiden</em> Seiten n·μ abzieht und durch σ·√n teilt; dann Φ-Tabelle ablesen.</p>
     <p><em>Beispiel (100 Würfelwürfe):</em> μ = 3,5 · E(X²) = 91/6 = 15,167 · σ² = 15,167 − 12,25 = 2,917 · σ = 1,708.</p>
-    <p class="formula">P(∑X<sub>i</sub> ≤ 400) = P( (∑X<sub>i</sub> − 350)/(10·1,708) ≤ 2,927 ) ≈ Φ(2,927) = 0,9985</p>
-    <p>Nützlich: Φ(−x) = 1 − Φ(x), und P(a ≤ Z ≤ b) = Φ(b) − Φ(a).</p>
+    <p class="formula">P(∑X<sub>i</sub> ≤ 400) = P( (∑X<sub>i</sub> − 350)/(10·1,708) ≤ 2,927 ) ≈ Φ(2,927) = 0,9985<i class="sk" data-sk="mai11-stand"></i></p>
+    <p>Nützlich: Φ(−x) = 1 − Φ(x), und P(a ≤ Z ≤ b) = Φ(b) − Φ(a).<i class="sk" data-sk="mai11-phi"></i></p>
   </div>
 </section>
 
@@ -406,31 +406,31 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <div class="box def">
       <span class="lbl">Grundbegriffe</span>
-      <p><strong>Grundgesamtheit</strong> = alle Objekte, über die eine Aussage getroffen werden soll. <strong>Stichprobe</strong> = die tatsächlich untersuchte Teilmenge, <strong>n</strong> = Stichprobenumfang. <strong>Merkmal</strong> = die erhobene Eigenschaft, <strong>Merkmalsausprägung</strong> = ihr konkreter Wert.</p>
-      <p><strong>Skalenniveaus:</strong> <em>nominal</em> (nur unterscheidbar, z.&nbsp;B. Farbe) · <em>ordinal</em> (zusätzlich Rangfolge, z.&nbsp;B. Schulnote) · <em>metrisch/kardinal</em> (Abstände sinnvoll, z.&nbsp;B. Körpergröße). Mittelwerte setzen <strong>metrische</strong> Daten voraus.</p>
+      <p><strong>Grundgesamtheit</strong> = alle Objekte, über die eine Aussage getroffen werden soll. <strong>Stichprobe</strong><i class="sk" data-sk="mai11-grund"></i> = die tatsächlich untersuchte Teilmenge, <strong>n</strong> = Stichprobenumfang. <strong>Merkmal</strong> = die erhobene Eigenschaft, <strong>Merkmalsausprägung</strong> = ihr konkreter Wert.</p>
+      <p><strong>Skalenniveaus:</strong><i class="sk" data-sk="mai11-skalen"></i> <em>nominal</em> (nur unterscheidbar, z.&nbsp;B. Farbe) · <em>ordinal</em> (zusätzlich Rangfolge, z.&nbsp;B. Schulnote) · <em>metrisch/kardinal</em> (Abstände sinnvoll, z.&nbsp;B. Körpergröße). Mittelwerte setzen <strong>metrische</strong> Daten voraus.</p>
     </div>
-    <p><strong>Darstellungsmethoden (2.2):</strong> absolute Häufigkeit h<sub>i</sub>, relative Häufigkeit f<sub>i</sub> = h<sub>i</sub>/n (Summe = 1), kumulierte Häufigkeiten, Klassenbildung sowie Säulen-, Balken-, Kreis- und Histogramm-Darstellungen.</p>
+    <p><strong>Darstellungsmethoden (2.2):</strong><i class="sk" data-sk="mai11-haeuf"></i> absolute Häufigkeit h<sub>i</sub>, relative Häufigkeit f<sub>i</sub> = h<sub>i</sub>/n (Summe = 1), kumulierte Häufigkeiten, Klassenbildung sowie Säulen-, Balken-, Kreis- und Histogramm-Darstellungen.</p>
 
     <div class="box def">
       <span class="lbl">2.3 Lage- und Streumaße</span>
-      <p class="formula"><strong>arithmetisches Mittel:</strong>&nbsp; x̄ = (1/n)·∑ x<sub>i</sub><br><strong>Median:</strong>&nbsp; mittlerer Wert der geordneten Liste (bei geradem n: Mittel der beiden mittleren)<br><strong>Modus:</strong>&nbsp; häufigste Ausprägung<br><br><strong>empirische Varianz:</strong>&nbsp; s² = (1/(n−1))·∑ (x<sub>i</sub> − x̄)²<br><strong>empirische Standardabweichung:</strong>&nbsp; s = √s²<br><strong>Spannweite:</strong>&nbsp; R = x<sub>max</sub> − x<sub>min</sub></p>
-      <p><strong>Wichtig:</strong> Bei der empirischen Varianz steht <strong>n − 1</strong> im Nenner, nicht n – nur so ist die Schätzung erwartungstreu (siehe Kapitel 3). Der Median ist <strong>robust</strong> gegen Ausreißer, das arithmetische Mittel nicht.</p>
+      <p class="formula"><strong>arithmetisches Mittel:</strong>&nbsp; x̄ = (1/n)·∑ x<sub>i</sub><i class="sk" data-sk="mai11-schwer"></i><br><strong>Median:</strong>&nbsp; mittlerer Wert der geordneten Liste (bei geradem n: Mittel der beiden mittleren)<i class="sk" data-sk="mai11-median"></i><br><strong>Modus:</strong>&nbsp; häufigste Ausprägung<i class="sk" data-sk="mai11-modus"></i><br><br><strong>empirische Varianz:</strong>&nbsp; s² = (1/(n−1))·∑ (x<sub>i</sub> − x̄)²<i class="sk" data-sk="mai11-varianz"></i><br><strong>empirische Standardabweichung:</strong>&nbsp; s = √s²<br><strong>Spannweite:</strong>&nbsp; R = x<sub>max</sub> − x<sub>min</sub><i class="sk" data-sk="mai11-spann"></i></p>
+      <p><strong>Wichtig:</strong> Bei der empirischen Varianz steht <strong>n − 1</strong> im Nenner, nicht n – nur so ist die Schätzung erwartungstreu (siehe Kapitel 3)<i class="sk" data-sk="mai11-n1"></i>. Der Median ist <strong>robust</strong> gegen Ausreißer, das arithmetische Mittel nicht.<i class="sk" data-sk="mai11-robust"></i></p>
     </div>
 
     <h4>2.4 Korrelation und Regression</h4>
     <div class="box def">
       <span class="lbl">Empirische Kennzahlen einer zweidimensionalen Stichprobe</span>
-      <p class="formula">s<sub>xy</sub> = (1/(n−1))·∑ (x<sub>i</sub> − x̄)(y<sub>i</sub> − ȳ)&nbsp;&nbsp;&nbsp;(empirische Kovarianz)<br><br>r = s<sub>xy</sub> / (s<sub>x</sub>·s<sub>y</sub>)&nbsp;&nbsp;&nbsp;(empirischer Korrelationskoeffizient, −1 ≤ r ≤ 1)</p>
-      <p>Praktische Rechenform: ∑(x<sub>i</sub> − x̄)(y<sub>i</sub> − ȳ) = ∑x<sub>i</sub>y<sub>i</sub> − n·x̄·ȳ – man braucht also nur ∑x, ∑y, ∑x², ∑y², ∑xy.</p>
+      <p class="formula">s<sub>xy</sub> = (1/(n−1))·∑ (x<sub>i</sub> − x̄)(y<sub>i</sub> − ȳ)&nbsp;&nbsp;&nbsp;(empirische Kovarianz)<i class="sk" data-sk="mai11-cov"></i><br><br>r = s<sub>xy</sub> / (s<sub>x</sub>·s<sub>y</sub>)&nbsp;&nbsp;&nbsp;(empirischer Korrelationskoeffizient, −1 ≤ r ≤ 1)<i class="sk" data-sk="mai11-rho"></i></p>
+      <p>Praktische Rechenform: ∑(x<sub>i</sub> − x̄)(y<sub>i</sub> − ȳ) = ∑x<sub>i</sub>y<sub>i</sub> − n·x̄·ȳ – man braucht also nur ∑x, ∑y, ∑x², ∑y², ∑xy.<i class="sk" data-sk="mai11-rechen"></i></p>
     </div>
     <div class="box def">
-      <span class="lbl">Regressionsgerade (Methode der kleinsten Quadrate)</span>
-      <p class="formula"><strong>y auf x:</strong>&nbsp; ŷ = a + b·x&nbsp;&nbsp;mit&nbsp;&nbsp;b = s<sub>xy</sub>/s<sub>x</sub>²&nbsp;&nbsp;und&nbsp;&nbsp;a = ȳ − b·x̄<br><br><strong>x auf y:</strong>&nbsp; x̂ = c + d·y&nbsp;&nbsp;mit&nbsp;&nbsp;d = s<sub>xy</sub>/s<sub>y</sub>²&nbsp;&nbsp;und&nbsp;&nbsp;c = x̄ − d·ȳ</p>
-      <p><strong>Es gibt zwei verschiedene Regressionsgeraden</strong> – welche gefragt ist, steht in der Aufgabe („X in Abhängigkeit von Y“ heißt: x auf y, also durch s<sub>y</sub>² teilen). Beide gehen durch den <strong>Schwerpunkt (x̄, ȳ)</strong>. Es gilt b·d = r².</p>
+      <span class="lbl">Regressionsgerade (Methode der kleinsten Quadrate)<i class="sk" data-sk="mai11-regr"></i></span>
+      <p class="formula"><strong>y auf x:</strong>&nbsp; ŷ = a + b·x&nbsp;&nbsp;mit&nbsp;&nbsp;b = s<sub>xy</sub>/s<sub>x</sub>²&nbsp;&nbsp;und&nbsp;&nbsp;a = ȳ − b·x̄<i class="sk" data-sk="mai11-regr"></i><br><br><strong>x auf y:</strong>&nbsp; x̂ = c + d·y&nbsp;&nbsp;mit&nbsp;&nbsp;d = s<sub>xy</sub>/s<sub>y</sub>²&nbsp;&nbsp;und&nbsp;&nbsp;c = x̄ − d·ȳ<i class="sk" data-sk="mai11-zwei"></i></p>
+      <p><strong>Es gibt zwei verschiedene Regressionsgeraden</strong> – welche gefragt ist, steht in der Aufgabe („X in Abhängigkeit von Y“ heißt: x auf y, also durch s<sub>y</sub>² teilen). Beide gehen durch den <strong>Schwerpunkt (x̄, ȳ)</strong>. Es gilt b·d = r².<i class="sk" data-sk="mai11-zwei"></i></p>
     </div>
     <div class="box warn">
-      <span class="lbl">Korrelation ist keine Kausalität</span>
-      <p>Ein hoher Betrag von r belegt einen <strong>linearen Zusammenhang</strong> in den Daten – keine Ursache-Wirkung-Beziehung. Und r misst <em>nur</em> Linearität: Ein perfekter parabolischer Zusammenhang kann r ≈ 0 liefern.</p>
+      <span class="lbl">Korrelation ist keine Kausalität<i class="sk" data-sk="mai11-kausal"></i></span>
+      <p>Ein hoher Betrag von r belegt einen <strong>linearen Zusammenhang</strong> in den Daten – keine Ursache-Wirkung-Beziehung. Und r misst <em>nur</em> Linearität: Ein perfekter parabolischer Zusammenhang kann r ≈ 0 liefern.<i class="sk" data-sk="mai11-unkorr"></i></p>
     </div>
   </div>
 </section>
@@ -453,44 +453,44 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Von der Stichprobe zurück auf die Grundgesamtheit – mit ehrlicher Angabe der Unsicherheit.</p>
 
     <div class="box def">
-      <span class="lbl">3.1 Schätzfunktionen und ihre Güte</span>
+      <span class="lbl">3.1 Schätzfunktionen und ihre Güte<i class="sk" data-sk="mai11-treu"></i></span>
       <p><strong>erwartungstreu (unverzerrt):</strong> E(Θ̂) = Θ – im Mittel trifft die Schätzung den wahren Wert.<br>
-      <strong>konsistent:</strong> Die Schätzung wird mit wachsendem n immer genauer (V(Θ̂) → 0).<br>
+      <strong>konsistent:</strong> Die Schätzung wird mit wachsendem n immer genauer (V(Θ̂) → 0).<i class="sk" data-sk="mai11-konsistent"></i><br>
       <strong>effizient:</strong> unter allen erwartungstreuen Schätzern die kleinste Varianz.</p>
-      <p>Die Standardschätzer: <strong>x̄</strong> für μ und <strong>s²</strong> (mit n−1!) für σ². Genau der Nenner n−1 macht s² erwartungstreu.</p>
+      <p>Die Standardschätzer: <strong>x̄</strong> für μ und <strong>s²</strong> (mit n−1!) für σ². Genau der Nenner n−1 macht s² erwartungstreu.<i class="sk" data-sk="mai11-n1"></i></p>
     </div>
-    <p><strong>Satz 3.4/3.5:</strong> Die Summe normalverteilter Größen ist wieder normalverteilt; für X̄ gilt E(X̄) = μ und <strong>V(X̄) = σ²/n</strong>, die Standardabweichung des Mittelwerts ist also <strong>σ/√n</strong>. Standardisiert ergibt das U = (X̄ − μ)/(σ/√n), standardnormalverteilt.</p>
+    <p><strong>Satz 3.4/3.5:</strong> Die Summe normalverteilter Größen ist wieder normalverteilt; für X̄ gilt E(X̄) = μ und <strong>V(X̄) = σ²/n</strong><i class="sk" data-sk="mai11-xbar"></i>, die Standardabweichung des Mittelwerts ist also <strong>σ/√n</strong>. Standardisiert ergibt das U = (X̄ − μ)/(σ/√n), standardnormalverteilt.</p>
 
     <h4>3.2 Vertrauensintervalle (Konfidenzintervalle)</h4>
     <div class="tw"><table>
       <thead><tr><th>Situation</th><th>Intervall</th><th>Verteilung</th></tr></thead>
       <tbody>
-        <tr><td>μ, <strong>σ bekannt</strong></td><td>x̄ ± c · σ/√n</td><td>Standardnormal­verteilung, c aus 2Φ(c) − 1 = γ</td></tr>
-        <tr><td>μ, <strong>σ unbekannt</strong></td><td>x̄ ± t · s/√n</td><td><strong>t-Verteilung</strong> mit n−1 Freiheitsgraden</td></tr>
-        <tr><td>σ² (μ unbekannt)</td><td>[ (n−1)s² / χ²<sub>o</sub> , (n−1)s² / χ²<sub>u</sub> ]</td><td><strong>χ²-Verteilung</strong> mit n−1 Freiheitsgraden</td></tr>
+        <tr><td>μ, <strong>σ bekannt</strong></td><td>x̄ ± c · σ/√n<i class="sk" data-sk="mai11-ki"></i></td><td>Standardnormal­verteilung, c aus 2Φ(c) − 1 = γ</td></tr>
+        <tr><td>μ, <strong>σ unbekannt</strong></td><td>x̄ ± t · s/√n<i class="sk" data-sk="mai11-tvert"></i></td><td><strong>t-Verteilung</strong> mit n−1 Freiheitsgraden</td></tr>
+        <tr><td>σ² (μ unbekannt)</td><td>[ (n−1)s² / χ²<sub>o</sub> , (n−1)s² / χ²<sub>u</sub> ]<i class="sk" data-sk="mai11-chi"></i></td><td><strong>χ²-Verteilung</strong> mit n−1 Freiheitsgraden</td></tr>
       </tbody>
     </table></div>
-    <p>Gängige Quantile der Standardnormalverteilung: γ = 0,90 → 1,645 · γ = 0,95 → <strong>1,96</strong> · γ = 0,99 → 2,576.</p>
+    <p>Gängige Quantile der Standardnormalverteilung: γ = 0,90 → 1,645 · γ = 0,95 → <strong>1,96</strong> · γ = 0,99 → 2,576.<i class="sk" data-sk="mai11-quant"></i></p>
     <div class="box warn">
-      <span class="lbl">Zwei Fallen</span>
+      <span class="lbl">Zwei Fallen<i class="sk" data-sk="mai11-chi"></i></span>
       <p><strong>1.</strong> Beim Varianzintervall stehen die Quantile <strong>über Kreuz</strong>: Das <em>obere</em> χ²-Quantil steht im Nenner der <em>unteren</em> Grenze. Das Intervall ist deshalb <strong>nicht symmetrisch</strong>.<br>
-      <strong>2.</strong> Interpretation: Ein 95-%-Intervall bedeutet, dass bei unendlich vielen Stichproben etwa 95&nbsp;% der so berechneten Intervalle den wahren Wert enthalten. Für das <em>eine</em> konkrete Intervall gilt: Der wahre Wert liegt darin oder nicht – es ist ein Maß der Unsicherheit, keine Wahrscheinlichkeitsaussage über μ.</p>
+      <strong>2.</strong> Interpretation: Ein 95-%-Intervall bedeutet, dass bei unendlich vielen Stichproben etwa 95&nbsp;% der so berechneten Intervalle den wahren Wert enthalten. Für das <em>eine</em> konkrete Intervall gilt: Der wahre Wert liegt darin oder nicht – es ist ein Maß der Unsicherheit, keine Wahrscheinlichkeitsaussage über μ.<i class="sk" data-sk="mai11-kideut"></i></p>
     </div>
 
     <h4>3.3 Hypothesentests</h4>
     <div class="box def">
-      <span class="lbl">Regel 3.1 – zweiseitiger Test des Erwartungswerts</span>
+      <span class="lbl">Regel 3.1 – zweiseitiger Test des Erwartungswerts<i class="sk" data-sk="mai11-test"></i></span>
       <p><strong>H₀: μ = μ₀</strong> gegen <strong>H₁: μ ≠ μ₀</strong>. Irrtumswahrscheinlichkeit α wählen, γ = 1 − α, Quantil c bestimmen. <strong>Annahmebereich:</strong></p>
-      <p class="formula">μ₀ − c·σ/√n&nbsp; ≤&nbsp; x̄&nbsp; ≤&nbsp; μ₀ + c·σ/√n</p>
+      <p class="formula">μ₀ − c·σ/√n&nbsp; ≤&nbsp; x̄&nbsp; ≤&nbsp; μ₀ + c·σ/√n<i class="sk" data-sk="mai11-test"></i></p>
       <p>Liegt x̄ darin, wird H₀ <strong>beibehalten</strong> (nicht: bewiesen!) – man hat keinen Grund zur Ablehnung. Liegt x̄ außerhalb, wird H₀ zugunsten von H₁ <strong>abgelehnt</strong>.</p>
-      <p><strong>Gleichwertig:</strong> Prüfen, ob μ₀ im Vertrauensintervall [x̄ ± c·σ/√n] liegt. Beide Wege führen zur selben Entscheidung.</p>
+      <p><strong>Gleichwertig:</strong> Prüfen, ob μ₀ im Vertrauensintervall [x̄ ± c·σ/√n] liegt. Beide Wege führen zur selben Entscheidung.<i class="sk" data-sk="mai11-aequiv"></i></p>
     </div>
-    <p><strong>Warum „Irrtumswahrscheinlichkeit“?</strong> Bei α = 0,05 landet der Stichprobenmittelwert in 5&nbsp;% der Fälle <em>selbst bei korrekter H₀</em> außerhalb des Annahmebereichs – man lehnt eine richtige Hypothese ab. Das ist der <strong>Fehler 1. Art</strong>; der <strong>Fehler 2. Art</strong> ist umgekehrt das Beibehalten einer falschen H₀.</p>
+    <p><strong>Warum „Irrtumswahrscheinlichkeit“?</strong> Bei α = 0,05 landet der Stichprobenmittelwert in 5&nbsp;% der Fälle <em>selbst bei korrekter H₀</em> außerhalb des Annahmebereichs – man lehnt eine richtige Hypothese ab. Das ist der <strong>Fehler 1. Art</strong>; der <strong>Fehler 2. Art</strong> ist umgekehrt das Beibehalten einer falschen H₀.<i class="sk" data-sk="mai11-fehler"></i></p>
     <div class="box">
-      <span class="lbl">Ein- oder zweiseitig?</span>
+      <span class="lbl">Ein- oder zweiseitig?<i class="sk" data-sk="mai11-einseit"></i></span>
       <p><strong>Zweiseitig</strong> (H₁: μ ≠ μ₀), wenn Abweichungen in <em>beide</em> Richtungen kritisch sind – der Ablehnungsbereich liegt dann je zur Hälfte an beiden Rändern (Quantil zu 1 − α/2). <strong>Einseitig</strong> (H₁: μ &gt; μ₀ oder μ &lt; μ₀), wenn nur eine Richtung interessiert – dann liegt das gesamte α an einem Rand (Quantil zu 1 − α).</p>
     </div>
-    <p>Ist σ <strong>unbekannt</strong>, tritt an die Stelle von σ die empirische Standardabweichung s und an die Stelle der Normalverteilung die <strong>t-Verteilung mit n−1 Freiheitsgraden</strong> – genau wie beim Vertrauensintervall.</p>
+    <p>Ist σ <strong>unbekannt</strong>, tritt an die Stelle von σ die empirische Standardabweichung s und an die Stelle der Normalverteilung die <strong>t-Verteilung mit n−1 Freiheitsgraden</strong> – genau wie beim Vertrauensintervall.<i class="sk" data-sk="mai11-tvert"></i></p>
   </div>
 </section>
 
@@ -803,18 +803,18 @@ Intervall für σ²:  [67,5 ; 296,4]</div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <h4>Zufallsgrößen</h4>
-    <p class="formula">E(X) = ∑ x<sub>i</sub>·P(X = x<sub>i</sub>)&nbsp;&nbsp;·&nbsp;&nbsp;V(X) = E(X²) − (E(X))²<br>E(X+Y) = E(X) + E(Y)&nbsp;&nbsp;·&nbsp;&nbsp;E(aX+b) = a·E(X) + b&nbsp;&nbsp;·&nbsp;&nbsp;V(aX+b) = a²·V(X)<br>V(X+Y) = V(X) + V(Y) + 2cov(X,Y)<br><br>cov(X,Y) = E(XY) − E(X)E(Y)&nbsp;&nbsp;·&nbsp;&nbsp;ρ = cov(X,Y)/(σ<sub>X</sub>·σ<sub>Y</sub>)<br><br>ZGWS:&nbsp; (∑X<sub>i</sub> − nμ)/(σ√n) ≈ standardnormalverteilt<br>Φ(−x) = 1 − Φ(x)</p>
+    <p class="formula">E(X) = ∑ x<sub>i</sub>·P(X = x<sub>i</sub>)&nbsp;&nbsp;·&nbsp;&nbsp;V(X) = E(X²) − (E(X))²<i class="sk" data-sk="mai11-versch"></i><br>E(X+Y) = E(X) + E(Y)<i class="sk" data-sk="mai11-eadd"></i>&nbsp;&nbsp;·&nbsp;&nbsp;E(aX+b) = a·E(X) + b&nbsp;&nbsp;·&nbsp;&nbsp;V(aX+b) = a²·V(X)<i class="sk" data-sk="mai11-lin"></i><br>V(X+Y) = V(X) + V(Y) + 2cov(X,Y)<i class="sk" data-sk="mai11-vsum"></i><br><br>cov(X,Y) = E(XY) − E(X)E(Y)<i class="sk" data-sk="mai11-cov"></i>&nbsp;&nbsp;·&nbsp;&nbsp;ρ = cov(X,Y)/(σ<sub>X</sub>·σ<sub>Y</sub>)<i class="sk" data-sk="mai11-rho"></i><br><br>ZGWS:&nbsp; (∑X<sub>i</sub> − nμ)/(σ√n) ≈ standardnormalverteilt<i class="sk" data-sk="mai11-zgws"></i><br>Φ(−x) = 1 − Φ(x)<i class="sk" data-sk="mai11-phi"></i></p>
 
     <h4>Deskriptive Statistik</h4>
-    <p class="formula">x̄ = (1/n)∑x<sub>i</sub><br>s² = (1/(n−1))·∑(x<sub>i</sub> − x̄)² = (∑x<sub>i</sub>² − n·x̄²)/(n−1)<br>s<sub>xy</sub> = (∑x<sub>i</sub>y<sub>i</sub> − n·x̄·ȳ)/(n−1)<br>r = s<sub>xy</sub>/(s<sub>x</sub>·s<sub>y</sub>)<br><br>Regression y auf x:&nbsp; ŷ = a + bx,&nbsp; b = s<sub>xy</sub>/s<sub>x</sub>²,&nbsp; a = ȳ − b·x̄<br>Regression x auf y:&nbsp; x̂ = c + dy,&nbsp; d = s<sub>xy</sub>/s<sub>y</sub>²,&nbsp; c = x̄ − d·ȳ</p>
+    <p class="formula">x̄ = (1/n)∑x<sub>i</sub><i class="sk" data-sk="mai11-schwer"></i><br>s² = (1/(n−1))·∑(x<sub>i</sub> − x̄)² = (∑x<sub>i</sub>² − n·x̄²)/(n−1)<i class="sk" data-sk="mai11-varianz"></i><br>s<sub>xy</sub> = (∑x<sub>i</sub>y<sub>i</sub> − n·x̄·ȳ)/(n−1)<i class="sk" data-sk="mai11-rechen"></i><br>r = s<sub>xy</sub>/(s<sub>x</sub>·s<sub>y</sub>)<br><br>Regression y auf x:&nbsp; ŷ = a + bx,&nbsp; b = s<sub>xy</sub>/s<sub>x</sub>²,&nbsp; a = ȳ − b·x̄<i class="sk" data-sk="mai11-regr"></i><br>Regression x auf y:&nbsp; x̂ = c + dy,&nbsp; d = s<sub>xy</sub>/s<sub>y</sub>²,&nbsp; c = x̄ − d·ȳ<i class="sk" data-sk="mai11-zwei"></i></p>
 
     <h4>Vertrauensintervalle (Niveau γ)</h4>
     <div class="tw"><table>
       <thead><tr><th>gesucht</th><th>Voraussetzung</th><th>Intervall</th></tr></thead>
       <tbody>
-        <tr><td>μ</td><td>σ bekannt</td><td>x̄ ± c·σ/√n&nbsp;&nbsp;(c aus Normalverteilung)</td></tr>
-        <tr><td>μ</td><td>σ unbekannt</td><td>x̄ ± t<sub>n−1;(1+γ)/2</sub>·s/√n</td></tr>
-        <tr><td>σ²</td><td>—</td><td>[ (n−1)s²/χ²<sub>n−1;(1+γ)/2</sub> ; (n−1)s²/χ²<sub>n−1;(1−γ)/2</sub> ]</td></tr>
+        <tr><td>μ</td><td>σ bekannt</td><td>x̄ ± c·σ/√n&nbsp;&nbsp;(c aus Normalverteilung)<i class="sk" data-sk="mai11-ki"></i></td></tr>
+        <tr><td>μ</td><td>σ unbekannt</td><td>x̄ ± t<sub>n−1;(1+γ)/2</sub>·s/√n<i class="sk" data-sk="mai11-tvert"></i></td></tr>
+        <tr><td>σ²</td><td>—</td><td>[ (n−1)s²/χ²<sub>n−1;(1+γ)/2</sub> ; (n−1)s²/χ²<sub>n−1;(1−γ)/2</sub> ]<i class="sk" data-sk="mai11-chi"></i></td></tr>
       </tbody>
     </table></div>
     <div class="tw"><table class="mono">
@@ -822,14 +822,14 @@ Intervall für σ²:  [67,5 ; 296,4]</div>
       <tbody>
         <tr><td>0,80</td><td>1,282</td></tr>
         <tr><td>0,90</td><td>1,645</td></tr>
-        <tr><td>0,95</td><td>1,960</td></tr>
+        <tr><td>0,95<i class="sk" data-sk="mai11-quant"></i></td><td>1,960</td></tr>
         <tr><td>0,99</td><td>2,576</td></tr>
       </tbody>
     </table></div>
 
     <h4>Hypothesentest (zweiseitig, μ)</h4>
-    <p class="formula">H₀: μ = μ₀&nbsp;&nbsp;gegen&nbsp;&nbsp;H₁: μ ≠ μ₀,&nbsp;&nbsp;γ = 1 − α<br><br>Annahmebereich:&nbsp; μ₀ − c·σ/√n ≤ x̄ ≤ μ₀ + c·σ/√n<br>gleichwertig:&nbsp; liegt μ₀ im Vertrauensintervall [x̄ ± c·σ/√n]?<br><br>σ unbekannt → c durch t<sub>n−1</sub> und σ durch s ersetzen</p>
-    <p><strong>Fehler 1. Art:</strong> H₀ ablehnen, obwohl sie stimmt (Wahrscheinlichkeit α). <strong>Fehler 2. Art:</strong> H₀ beibehalten, obwohl sie falsch ist.</p>
+    <p class="formula">H₀: μ = μ₀&nbsp;&nbsp;gegen&nbsp;&nbsp;H₁: μ ≠ μ₀,&nbsp;&nbsp;γ = 1 − α<br><br>Annahmebereich:&nbsp; μ₀ − c·σ/√n ≤ x̄ ≤ μ₀ + c·σ/√n<i class="sk" data-sk="mai11-test"></i><br>gleichwertig:&nbsp; liegt μ₀ im Vertrauensintervall [x̄ ± c·σ/√n]?<i class="sk" data-sk="mai11-aequiv"></i><br><br>σ unbekannt → c durch t<sub>n−1</sub> und σ durch s ersetzen<i class="sk" data-sk="mai11-tvert"></i></p>
+    <p><strong>Fehler 1. Art:</strong> H₀ ablehnen, obwohl sie stimmt (Wahrscheinlichkeit α). <strong>Fehler 2. Art:</strong> H₀ beibehalten, obwohl sie falsch ist.<i class="sk" data-sk="mai11-fehler"></i></p>
   </div>
 </section>
 

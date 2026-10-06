@@ -72,7 +72,7 @@
       s += K.v(e1[0] + 22, e1[1] + 8, "e₁", "i", { s: 16 }) + K.v(e2[0] - 4, e2[1] - 14, "e₂", "i", { s: 16 }) + K.v(e3[0] - 18, e3[1] + 6, "e₃", "i", { s: 16 });
       s += K.dot(A[0], A[1], "m");
       s += K.f(440, 40, "a = a₁e₁ + a₂e₂ + a₃e₃", "m", { fill: "fm" });
-      return K.svg(600, 370, s);
+      return K.svg(600, 385, s);
     });
 
   add("neg", "Negativer Vektor −a (antiparallel)",
@@ -234,8 +234,8 @@
     "a₁ und a₂ spannen ein schiefes Gitter auf. Man erreicht a, indem man <b>2 Schritte entlang a₁</b> und <b>1,5 Schritte entlang a₂</b> geht – also a = 2·a₁ + 1,5·a₂. Die gesuchten Faktoren λ findet man rechnerisch über ein <b>LGS</b>.",
     function(K){
       var O = [80, 300], u = [110, -20], v = [40, -90], s = "";
-      for(var i = 0; i <= 4; i++) s += K.line(O[0] + i * u[0], O[1] + i * u[1], O[0] + i * u[0] + 3 * v[0], O[1] + i * u[1] + 3 * v[1], "r", { w: 1 });
-      for(var j = 0; j <= 3; j++) s += K.line(O[0] + j * v[0], O[1] + j * v[1], O[0] + j * v[0] + 4 * u[0], O[1] + j * v[1] + 4 * u[1], "r", { w: 1 });
+      for(var i = 0; i <= 4; i++) s += K.line(O[0] + i * u[0], O[1] + i * u[1], O[0] + i * u[0] + 2 * v[0], O[1] + i * u[1] + 2 * v[1], "r", { w: 1 });
+      for(var j = 0; j <= 2; j++) s += K.line(O[0] + j * v[0], O[1] + j * v[1], O[0] + j * v[0] + 4 * u[0], O[1] + j * v[1] + 4 * u[1], "r", { w: 1 });
       var p1 = [O[0] + u[0], O[1] + u[1]], p2 = [O[0] + 2 * u[0], O[1] + 2 * u[1]], p3 = [p2[0] + v[0], p2[1] + v[1]], X = [p2[0] + 1.5 * v[0], p2[1] + 1.5 * v[1]];
       s += K.arrow(O[0], O[1], p1[0], p1[1], "a", { w: 3 }) + K.arrow(p1[0], p1[1], p2[0], p2[1], "a", { w: 3 });
       s += K.arrow(p2[0], p2[1], p3[0], p3[1], "c4", { w: 3 }) + K.arrow(p3[0], p3[1], X[0], X[1], "c4", { w: 3 });
@@ -386,7 +386,7 @@
         s += K.poly3(P, [[0, 0, 0], a, plus(a, b), b], "r", { fill: "fa", w: 0.8 });
         s += K.arrow(Oo[0], Oo[1], Pa[0], Pa[1], "a", { w: 3 }) + K.arrow(Oo[0], Oo[1], Pb[0], Pb[1], "c4", { w: 3 }) + K.arrow(Oo[0], Oo[1], Pc[0], Pc[1], "m", { w: 3.4 });
         s += K.v(Pa[0] - 12, Pa[1] + 6, "a", "a") + K.v(Pb[0] + 2, Pb[1] - 16, "b", "c4");
-        s += cf[0] ? K.v(Oo[0] + 12, Pc[1] - 4, "b × a", "m", { s: 16, a: "start" }) : K.v(Oo[0] - 40, (Oo[1] + Pc[1]) / 2, "a × b", "m", { s: 16 });
+        s += cf[0] ? K.v(Oo[0] + 12, (Oo[1] + Pc[1]) / 2 + 8, "b × a", "m", { s: 16, a: "start" }) : K.v(Oo[0] - 40, (Oo[1] + Pc[1]) / 2, "a × b", "m", { s: 16 });
         var q1 = P(1.4, 0.3, 0), q2 = P(0, 1.4, 0), mid = P(0.9, 0.9, 0);
         var from = cf[0] ? q2 : q1, to = cf[0] ? q1 : q2;
         s += K.path("M" + from[0] + " " + from[1] + " Q" + (mid[0] + 10) + " " + (mid[1] + 14) + " " + to[0] + " " + to[1], "i", { w: 1.6, dash: "4 3" });
@@ -512,7 +512,7 @@
       s += K.v(nn[0] - 18, nn[1] + 8, "n", "m") + K.t((a[0] + x[0]) / 2 + 4, (a[1] + x[1]) / 2 + 22, "X − P", "c4", { s: 14, b: true });
       s += K.t(440, 238, "E", "a", { it: true, b: true, s: 18 });
       s += K.f(470, 50, "⟨n, X − P⟩ = 0", "s", { fill: "p" }) + K.f(470, 92, "⟨n, X⟩ = ⟨n, P⟩", "s", { fill: "p" }) + K.f(470, 134, "n₁x + n₂y + n₃z = D", "m", { fill: "fm" });
-      return K.svg(640, 320, s);
+      return K.svg(640, 372, s);
     });
 
   add("p2k", "Parameterform → parameterfreie Form (3 Schritte)",
@@ -528,7 +528,7 @@
       s += K.v(pu[0] + 2, pu[1] - 16, "u", "c4") + K.v(pv[0] - 16, pv[1] + 4, "v", "c3") + K.v(pn[0] + 34, pn[1] + 8, "n = u × v", "m", { s: 16 });
       s += K.f(495, 60, "① n = u × v", "m", { fill: "fm", w: 200 }) + K.f(495, 105, "② D = ⟨n, P₁⟩", "a", { w: 200 }) + K.f(495, 150, "③ ax + by + cz = D", "a", { w: 200 });
       s += K.t(495, 182, "mit n = (a, b, c)ᵀ", "s", { s: 12.5 });
-      return K.svg(640, 320, s);
+      return K.svg(640, 375, s);
     });
 
   add("achsen", "Parameterfrei → Parameterform: Spurpunkte",
@@ -543,7 +543,7 @@
       s += K.t(py[0] - 6, py[1] + 22, "(0 | 6 | 0):  x = z = 0", "i", { a: "middle", s: 12.5 });
       s += K.t(pz[0] + 12, pz[1] - 8, "(0 | 0 | 3):  x = y = 0", "i", { a: "start", s: 12.5 });
       s += K.f(470, 40, "E: 3x + 2y + 4z = 12", "m", { fill: "fm" });
-      return K.svg(640, 380, s);
+      return K.svg(640, 400, s);
     });
 
   add("dreip", "Drei Punkte bestimmen eine Ebene – wenn sie nicht auf einer Geraden liegen",
@@ -679,6 +679,6 @@
       s += K.dot(f[0], f[1], "m", 5.5) + K.t(f[0] + 14, f[1] + 12, "F (Lotfußpunkt)", "m", { a: "start", s: 14, b: true });
       s += K.v(q[0] + 20, (q[1] + f[1]) / 2 + 18, "g", "c4");
       s += K.f(480, 60, "g: x = P + t·n", "m", { fill: "fm" }) + K.t(480, 92, "F = g ∩ E", "s", { s: 14 });
-      return K.svg(640, 340, s);
+      return K.svg(640, 362, s);
     });
 })();

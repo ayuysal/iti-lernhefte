@@ -70,7 +70,7 @@
         }
       }
       s += K.f(420, 50, "q = lim |aᵢ₊₁ / aᵢ| = 0,6 < 1", "m", { fill: "fm" }) + K.t(420, 82, "⇒ schrumpft wie eine geometrische Reihe ⇒ konvergent", "s", { s: 12.5 });
-      return K.svg(620, 300, s);
+      return K.svg(620, 312, s);
     });
 
   add("wurzel", "Wurzelkriterium",
@@ -80,7 +80,7 @@
       s += hline(K, M, 1, 0, 20.5, "m", "Grenze 1", { dx: -4, dy: -14, a: "end" }) + hline(K, M, 0.5, 0, 20.5, "a", "q = ½", { dx: -4, dy: 14, a: "end" });
       for(var i = 1; i <= 20; i++) s += K.dot(M.X(i), M.Y(Math.pow((i + 1) / Math.pow(2, i), 1 / i)), "c4", 4.5);
       s += K.f(400, 40, "q = lim ⁱ√|aᵢ| < 1 ⇒ konvergent", "a");
-      return K.svg(620, 300, s);
+      return K.svg(620, 312, s);
     });
 
   add("leibniz", "Leibniz-Kriterium für alternierende Reihen",
@@ -138,7 +138,7 @@
       var poly = function(arr){ return "M" + arr.map(function(q){ return q[0] + " " + q[1]; }).join(" L"); };
       s += K.path(poly(pb), "m", { w: 2.4 }) + K.path(poly(pa), "a", { w: 2 });
       s += K.t(M.X(29), M.Y(b) - 16, "∑ |aᵢ| = ∑ 1/i → ∞", "m", { a: "end", s: 13, b: true }) + K.t(M.X(29), M.Y(Math.LN2) + 22, "∑ (−1)ⁱ⁺¹/i → ln 2", "a", { a: "end", s: 13, b: true });
-      return K.svg(620, 310, s);
+      return K.svg(620, 320, s);
     });
 
   add("vergleich", "Majoranten- und Minorantenkriterium",
@@ -169,7 +169,7 @@
         s += K.path(d, cf[1], { w: 2.6 });
       });
       s += K.t(M.X(13), M.Y(4.4), "α = ½", "m", { s: 14, b: true }) + K.t(M.X(36), M.Y(3.55), "α = 1", "c3", { s: 14, b: true }) + K.t(M.X(30), M.Y(1.645) + 18, "α = 2", "a", { s: 14, b: true });
-      return K.svg(620, 310, s);
+      return K.svg(620, 320, s);
     });
 
   /* ═════════ Kapitel 2: Potenz- und Taylorreihen ═════════ */
@@ -225,11 +225,11 @@
     function(K){
       var M = K.map(380, 290, 90, 38), s = K.axes(380, 290, 340, 230, 270, 20, "x", "y");
       var T = function(n){ return function(x){ var t = 0; for(var k = 0; k <= n; k++) t += Math.pow(x, k) / fact(k); return t; }; };
-      [[0, "f"], [1, "c3"], [2, "c4"], [3, "m"]].forEach(function(cf){ s += K.plot(T(cf[0]), -3.7, 2.3, M, cf[1], { ymin: -1, ymax: 7, w: 1.8 }); });
+      [[0, "f"], [1, "c3"], [2, "c4"], [3, "m"]].forEach(function(cf){ s += K.plot(T(cf[0]), -3.7, 2.3, M, cf[1], { ymin: -0.6, ymax: 7, w: 1.8 }); });
       s += K.plot(Math.exp, -3.7, 1.95, M, "a", { w: 3.2 });
       s += K.t(M.X(1.85), M.Y(6.9), "eˣ", "a", { s: 15, b: true }) + K.t(M.X(-3.5), M.Y(1) - 12, "T₀", "f", { s: 13, b: true });
-      s += K.t(M.X(2.3), M.Y(3.3), "T₁", "c3", { s: 13, b: true }) + K.t(M.X(-3.4), M.Y(3.9), "T₂", "c4", { s: 13, b: true }) + K.t(M.X(-1.9), M.Y(-0.85), "T₃", "m", { s: 13, b: true });
-      return K.svg(640, 310, s);
+      s += K.t(M.X(2.3), M.Y(3.3), "T₁", "c3", { s: 13, b: true }) + K.t(M.X(-3.4), M.Y(3.9), "T₂", "c4", { s: 13, b: true }) + K.t(M.X(-1.25), M.Y(-0.75), "T₃", "m", { s: 13, b: true });
+      return K.svg(640, 325, s);
     });
 
   add("lnr", "ln(1 + x): Konvergenzradius 1",
@@ -243,7 +243,7 @@
       [[2, "c3"], [5, "c4"], [10, "m"]].forEach(function(cf){ s += K.plot(T(cf[0]), -0.97, 2.4, M, cf[1], { ymin: -2.7, ymax: 2.7, w: 1.8 }); });
       s += K.plot(function(x){ return Math.log(1 + x); }, -0.93, 2.4, M, "a", { ymin: -2.7, w: 3.2 });
       s += K.t(M.X(2.35), M.Y(Math.log(3.35)) - 16, "ln(1+x)", "a", { a: "end", s: 14, b: true });
-      s += K.t(M.X(0), 32, "|x| < 1 (plus Rand x = 1)", "a", { s: 13, b: true }) + K.t(560, 300, "Grad 2, 5, 10", "s", { a: "end", s: 12 });
+      s += K.t(M.X(0) + 70, 34, "|x| < 1 (plus Rand x = 1)", "a", { s: 13, b: true }) + K.t(560, 300, "Grad 2, 5, 10", "s", { a: "end", s: 12 });
       return K.svg(640, 340, s);
     });
 
@@ -273,7 +273,7 @@
       s += K.line(M.X(x), M.Y(y1), M.X(x), M.Y(y2), "m", { w: 5 }) + K.t(M.X(x) + 12, M.Y((y1 + y2) / 2), "R₂(x)", "m", { a: "start", s: 15, b: true });
       s += K.dot(M.X(x), M.Y(y1), "a", 5) + K.dot(M.X(x), M.Y(y2), "c4", 5) + K.t(M.X(x), M.Y(0) + 16, "x", "i", { it: true, b: true });
       s += K.dot(M.X(0), M.Y(1), "i", 5) + K.t(M.X(0) - 10, M.Y(0) + 16, "x₀ = 0", "i", { a: "start", s: 13, b: true });
-      s += K.t(M.X(1.85), M.Y(6.3), "f = eˣ", "a", { s: 14, b: true }) + K.t(M.X(2.05), M.Y(T2(2.05)) + 22, "T₂", "c4", { s: 14, b: true });
+      s += K.t(M.X(1.72) - 10, M.Y(5.7), "f = eˣ", "a", { s: 14, b: true }) + K.t(M.X(2.05), M.Y(T2(2.05)) + 22, "T₂", "c4", { s: 14, b: true });
       return K.svg(620, 310, s);
     });
 
@@ -463,13 +463,13 @@
   add("ableit", "Ableitungssatz: die Anfangswerte stecken drin",
     "Beim Transformieren einer Ableitung tauchen <b>Startwert f(0)</b> (Punkt) und bei f″ zusätzlich die <b>Startsteigung f′(0)</b> (Tangente) auf: ℒ{f′} = s·F(s) − f(0). Darum braucht man beim Lösen eines Anfangswertproblems keine Konstanten mehr nachträglich zu bestimmen.",
     function(K){
-      var y = function(t){ return 3 * Math.exp(-t) - Math.exp(-4 * t); }, M = K.map(70, 270, 90, 100), s = K.axes(70, 270, 5, 530, 250, 5, "t", "f");
+      var y = function(t){ return 3 * Math.exp(-t) - Math.exp(-4 * t); }, M = K.map(70, 270, 90, 80), s = K.axes(70, 270, 5, 530, 250, 5, "t", "f");
       s += K.plot(y, 0, 5.6, M, "a", { w: 3 });
-      s += K.line(M.X(-0.25), M.Y(2 - 0.25), M.X(1.1), M.Y(2 + 1.1), "m", { w: 2.2, dash: "7 4" });
+      s += K.line(M.X(-0.25), M.Y(2 - 0.25), M.X(0.9), M.Y(2 + 0.9), "m", { w: 2.2, dash: "7 4" });
       s += K.dot(M.X(0), M.Y(2), "m", 7) + K.t(M.X(0) - 12, M.Y(2), "f(0) = 2", "m", { a: "end", s: 14, b: true });
-      s += K.t(M.X(1.1) + 8, M.Y(3.1), "Steigung f′(0) = 1", "m", { a: "start", s: 14, b: true });
+      s += K.t(M.X(0.9) + 8, M.Y(2.9), "Steigung f′(0) = 1", "m", { a: "start", s: 14, b: true });
       s += K.f(410, 150, "ℒ{f′} = s·F(s) − f(0)", "a") + K.f(410, 195, "ℒ{f″} = s²F − s·f(0) − f′(0)", "a");
-      return K.svg(620, 290, s);
+      return K.svg(620, 300, s);
     });
 
   add("awp", "Lösung des Beispiels: y = 3e^(−t) − e^(−4t)",

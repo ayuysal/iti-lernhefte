@@ -347,35 +347,35 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Vier Sortierverfahren, die über das einfache Sortieren aus TGI01 (Bubble-, Selection-, InsertionSort) hinausgehen – von der in der Praxis meist schnellsten Variante (QuickSort) bis zum einzigen hier behandelten nicht-vergleichsbasierten Verfahren (RadixSort).</p>
 
     <div class="tw"><table class="mono">
-      <thead><tr><th>Algorithmus</th><th>Prinzip</th><th>Worst Case</th><th>Average</th><th>Best</th><th>Stabil?</th><th>In-situ?</th></tr></thead>
+      <thead><tr><th>Algorithmus</th><th>Prinzip</th><th>Worst Case</th><th>Average</th><th>Best</th><th>Stabil?<i class="sk" data-sk="tgi02-stabil"></i></th><th>In-situ?</th></tr></thead>
       <tbody>
-        <tr><td><strong>QuickSort</strong></td><td>Pivot wählen, partitionieren (kleiner/grösser), rekursiv</td><td><strong>O(n²)</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td><strong>MergeSort</strong></td><td>Teilen bis Einzelelemente, dann sortiert zusammenführen (Merge)</td><td><strong>O(n log n)</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>Ja</td><td>Nein (extra Speicher)</td></tr>
-        <tr><td><strong>HeapSort</strong></td><td>Max-Heap aufbauen, Maximum entnehmen, durchsickern</td><td><strong>O(n log n)</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td><strong>RadixSort</strong></td><td>Nicht-vergleichsbasiert, verteilt nach Ziffern in Boxen</td><td><strong>O(n)</strong></td><td>O(n)</td><td>O(n)</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td><strong>QuickSort</strong><i class="sk" data-sk="tgi02-quick"></i></td><td>Pivot wählen, partitionieren (kleiner/grösser), rekursiv</td><td><strong>O(n²)</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td><strong>MergeSort</strong><i class="sk" data-sk="tgi02-merge"></i></td><td>Teilen bis Einzelelemente, dann sortiert zusammenführen (Merge)</td><td><strong>O(n log n)</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>Ja</td><td>Nein (extra Speicher)</td></tr>
+        <tr><td><strong>HeapSort</strong><i class="sk" data-sk="tgi02-heapsort"></i></td><td>Max-Heap aufbauen, Maximum entnehmen, durchsickern</td><td><strong>O(n log n)</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td><strong>RadixSort</strong><i class="sk" data-sk="tgi02-radix"></i></td><td>Nicht-vergleichsbasiert, verteilt nach Ziffern in Boxen</td><td><strong>O(n)</strong></td><td>O(n)</td><td>O(n)</td><td>Ja</td><td>Nein</td></tr>
       </tbody>
     </table></div>
 
-    <h4>QuickSort</h4>
+    <h4>QuickSort<i class="sk" data-sk="tgi02-quick"></i></h4>
     <p>Ablauf: <strong>(1)</strong> Pivot-Element wählen (z. B. das erste Element). <strong>(2)</strong> Partitionierung: Elemente &lt; Pivot nach links, Elemente ≥ Pivot nach rechts. <strong>(3)</strong> Rekursiv auf beide Teillisten anwenden.</p>
 
     <div class="box warn">
-      <span class="lbl">Prüfungsfalle: Worst Case</span>
+      <span class="lbl">Prüfungsfalle: Worst Case<i class="sk" data-sk="tgi02-quickworst"></i></span>
       <p>Der Worst Case O(n²) tritt bei einer <strong>bereits sortierten Liste</strong> auf, wenn der Pivot immer der Extremwert der (Teil-)Liste ist – z. B. wenn stets das erste Element gewählt wird. Dann zerfällt jede Partition nicht in zwei etwa gleich grosse Hälften, sondern in „ein Element + Rest“: Die Rekursionstiefe wächst auf n statt log n, und es entstehen n Ebenen mit je O(n) Vergleichsaufwand.</p>
     </div>
 
-    <h4>MergeSort</h4>
-    <p>Ablauf: <strong>(1)</strong> Liste so lange halbieren, bis nur noch Einzelelemente übrig sind. <strong>(2)</strong> Merge: zwei bereits sortierte Teillisten durch fortlaufenden Vergleich der jeweils ersten (kleinsten) Elemente zu einer sortierten Liste zusammenführen. Dadurch ist die Laufzeit <strong>immer</strong> O(n log n) – unabhängig von der Eingabereihenfolge –, allerdings wird O(n) zusätzlicher Speicher für die Merge-Schritte benötigt.</p>
+    <h4>MergeSort<i class="sk" data-sk="tgi02-merge"></i></h4>
+    <p>Ablauf: <strong>(1)</strong> Liste so lange halbieren, bis nur noch Einzelelemente übrig sind. <strong>(2)</strong> Merge:<i class="sk" data-sk="tgi02-mergeschritt"></i> zwei bereits sortierte Teillisten durch fortlaufenden Vergleich der jeweils ersten (kleinsten) Elemente zu einer sortierten Liste zusammenführen. Dadurch ist die Laufzeit <strong>immer</strong> O(n log n) – unabhängig von der Eingabereihenfolge –, allerdings wird O(n) zusätzlicher Speicher für die Merge-Schritte benötigt.</p>
 
-    <h4>HeapSort</h4>
+    <h4>HeapSort<i class="sk" data-sk="tgi02-heapsort"></i></h4>
     <p>Ablauf: <strong>(1)</strong> Aus dem Array einen Max-Heap aufbauen (Durchsickern von unten nach oben, ab dem letzten inneren Knoten). <strong>(2)</strong> Maximum (Wurzel) entnehmen, letztes Blatt wird neue Wurzel und durchsickert nach unten. <strong>(3)</strong> Schritt 2 wiederholen, bis der Heap leer ist.</p>
 
     <div class="box def">
-      <span class="lbl">Heap</span>
-      <p>Ein <strong>Heap</strong> ist ein vollständiger Binärbaum, in dem jeder Knoten grösser-gleich seinen Kindern ist (<strong>Max-Heap</strong>; beim Min-Heap gilt die umgekehrte Ordnung). <strong>Durchsickern (Heapify)</strong>: Ein Element wird so lange mit seinem grösseren Kind vertauscht, bis die Heap-Eigenschaft an dieser Stelle wieder erfüllt ist. Im Array-Speicher hat der Knoten an Index i die Kinder bei <strong>2i+1</strong> und <strong>2i+2</strong>, sein Elternknoten liegt bei <strong>⌊(i−1)/2⌋</strong>.</p>
+      <span class="lbl">Heap<i class="sk" data-sk="tgi02-heap"></i></span>
+      <p>Ein <strong>Heap</strong> ist ein vollständiger Binärbaum, in dem jeder Knoten grösser-gleich seinen Kindern ist (<strong>Max-Heap</strong>; beim Min-Heap gilt die umgekehrte Ordnung). <strong>Durchsickern (Heapify)</strong><i class="sk" data-sk="tgi02-heapify"></i>: Ein Element wird so lange mit seinem grösseren Kind vertauscht, bis die Heap-Eigenschaft an dieser Stelle wieder erfüllt ist. Im Array-Speicher hat der Knoten an Index i die Kinder bei <strong>2i+1</strong> und <strong>2i+2</strong>, sein Elternknoten liegt bei <strong>⌊(i−1)/2⌋</strong>.</p>
     </div>
 
-    <p>RadixSort sortiert als einziges der vier Verfahren <strong>nicht-vergleichsbasiert</strong>: Die Elemente werden ziffernweise (z. B. von der niederwertigsten zur höchstwertigen Ziffer) in „Boxen“ (Buckets) verteilt und wieder eingesammelt. Dadurch wird lineare Zeit O(n) erreicht – allerdings nur für Schlüssel mit fester, begrenzter Stellenanzahl.</p>
+    <p>RadixSort sortiert als einziges der vier Verfahren <strong>nicht-vergleichsbasiert</strong><i class="sk" data-sk="tgi02-radix"></i>: Die Elemente werden ziffernweise (z. B. von der niederwertigsten zur höchstwertigen Ziffer) in „Boxen“ (Buckets) verteilt und wieder eingesammelt. Dadurch wird lineare Zeit O(n) erreicht – allerdings nur für Schlüssel mit fester, begrenzter Stellenanzahl.</p>
   </div>
 </section>
 
@@ -397,18 +397,18 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Neben dem vollständigen Sortieren gibt es Verfahren, die gezielt nur einzelne Elemente – das Minimum, das Maximum oder das k-kleinste Element – suchen und dabei oft schneller sind als ein kompletter Sortiervorgang.</p>
 
     <div class="box def">
-      <span class="lbl">Min-Max-Auswahl</span>
+      <span class="lbl">Min-Max-Auswahl<i class="sk" data-sk="tgi02-minmax"></i></span>
       <p>Werden Minimum und Maximum einer Liste <strong>gleichzeitig</strong> gesucht, genügen paarweise Vergleiche: Die Elemente werden zu Paaren zusammengefasst und paarintern verglichen (1 Vergleich pro Paar), danach wird nur noch der jeweilige Gewinner mit dem bisherigen Minimum bzw. der jeweilige Verlierer mit dem bisherigen Maximum verglichen. Damit kommt man mit <strong>⌈3n/2⌉ − 2</strong> Vergleichen aus, statt 2n − 2 Vergleichen bei getrennter Suche nach Minimum und Maximum.</p>
     </div>
 
-    <h4>QuickSelection</h4>
+    <h4>QuickSelection<i class="sk" data-sk="tgi02-quickselect"></i></h4>
     <p>Sucht gezielt das <strong>k-kleinste Element</strong> einer Liste. Arbeitet wie QuickSort mit Pivot-Wahl und Partitionierung, verfolgt danach aber <strong>nur die Teilliste weiter</strong>, in der das gesuchte Element liegen muss – die andere Hälfte wird verworfen. Dadurch entfällt die zweite Rekursionshälfte, was die erwartete Laufzeit gegenüber einem vollständigen Sortieren senkt (im Mittel linear).</p>
 
     <h4>Sich selbst anordnende Listen</h4>
     <p>Listen, die ihre interne Reihenfolge anhand des tatsächlichen Zugriffsmusters anpassen, um häufig gesuchte Elemente künftig schneller zu finden:</p>
     <ul>
-      <li><strong>Move-to-Front</strong>: Das gerade angefragte Element wird sofort an den Anfang der Liste verschoben.</li>
-      <li><strong>Zugriffshäufigkeitszähler</strong>: Jedes Element führt einen Zähler mit; die Liste wird absteigend nach Zugriffshäufigkeit sortiert gehalten.</li>
+      <li><strong>Move-to-Front</strong><i class="sk" data-sk="tgi02-selbst"></i>: Das gerade angefragte Element wird sofort an den Anfang der Liste verschoben.</li>
+      <li><strong>Zugriffshäufigkeitszähler</strong><i class="sk" data-sk="tgi02-selbst"></i>: Jedes Element führt einen Zähler mit; die Liste wird absteigend nach Zugriffshäufigkeit sortiert gehalten.</li>
     </ul>
   </div>
 </section>
@@ -431,7 +431,7 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Hashing bildet Schlüssel über eine <strong>Hashfunktion</strong> direkt auf eine Speicheradresse ab und ermöglicht dadurch im Idealfall Zugriffszeiten von O(1) – schneller als jede Suche in einer sortierten Struktur.</p>
 
     <div class="box def">
-      <span class="lbl">Hashfunktion</span>
+      <span class="lbl">Hashfunktion<i class="sk" data-sk="tgi02-hashfkt"></i></span>
       <p>Eine Hashfunktion h bildet einen Schlüssel k auf einen Index (eine Speicheradresse) einer Hashtabelle der Grösse m ab: <strong>h: Schlüssel → Speicheradresse</strong>.</p>
     </div>
 
@@ -439,25 +439,25 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Verfahren</th><th>Formel</th><th>Anmerkung</th></tr></thead>
       <tbody>
-        <tr><td>Divisionsrestverfahren</td><td>h(k) = k mod m</td><td>m = Tabellengrösse, am besten eine Primzahl</td></tr>
-        <tr><td>Multiplikationsmethode</td><td>h(k) = ⌊m · (k·A mod 1)⌋</td><td>0 &lt; A &lt; 1</td></tr>
+        <tr><td>Divisionsrestverfahren</td><td>h(k) = k mod m<i class="sk" data-sk="tgi02-division"></i></td><td>m = Tabellengrösse, am besten eine Primzahl</td></tr>
+        <tr><td>Multiplikationsmethode</td><td>h(k) = ⌊m · (k·A mod 1)⌋<i class="sk" data-sk="tgi02-mult"></i></td><td>0 &lt; A &lt; 1</td></tr>
       </tbody>
     </table></div>
-    <p>Eine <strong>Primzahl als Tabellengrösse</strong> beim Divisionsrestverfahren verhindert, dass gemeinsame Faktoren zwischen Schlüsseln und m zu einer Häufung von Kollisionen an nur wenigen Adressen führen.</p>
+    <p>Eine <strong>Primzahl als Tabellengrösse</strong><i class="sk" data-sk="tgi02-division"></i> beim Divisionsrestverfahren verhindert, dass gemeinsame Faktoren zwischen Schlüsseln und m zu einer Häufung von Kollisionen an nur wenigen Adressen führen.</p>
 
     <h4>Kollisionsbehandlung</h4>
-    <p>Da unterschiedliche Schlüssel auf denselben Index abgebildet werden können (<strong>Kollision</strong>), braucht jede Hashtabelle eine Auflösungsstrategie:</p>
+    <p>Da unterschiedliche Schlüssel auf denselben Index abgebildet werden können (<strong>Kollision</strong><i class="sk" data-sk="tgi02-hashfkt"></i>), braucht jede Hashtabelle eine Auflösungsstrategie:</p>
     <div class="tw"><table>
       <thead><tr><th>Verfahren</th><th>Prinzip</th></tr></thead>
       <tbody>
-        <tr><td><strong>Geschlossenes Verfahren (Chaining)</strong></td><td>An jedem Tabellenplatz hängt eine verkettete Liste; kollidierende Schlüssel werden einfach angehängt.</td></tr>
-        <tr><td><strong>Offenes Verfahren (Open Addressing)</strong></td><td>Bei Kollision wird nach einer festen Regel der nächste freie Platz in der Tabelle selbst gesucht (lineares oder quadratisches Sondieren).</td></tr>
+        <tr><td><strong>Geschlossenes Verfahren (Chaining)</strong><i class="sk" data-sk="tgi02-chaining"></i></td><td>An jedem Tabellenplatz hängt eine verkettete Liste; kollidierende Schlüssel werden einfach angehängt.</td></tr>
+        <tr><td><strong>Offenes Verfahren (Open Addressing)</strong><i class="sk" data-sk="tgi02-sondieren"></i></td><td>Bei Kollision wird nach einer festen Regel der nächste freie Platz in der Tabelle selbst gesucht (lineares oder quadratisches Sondieren)<i class="sk" data-sk="tgi02-quadr"></i>.</td></tr>
       </tbody>
     </table></div>
 
     <div class="box warn">
-      <span class="lbl">Prüfungsfalle: Sondierreihenfolge</span>
-      <p>Beim <strong>linearen Sondieren</strong> wird ausgehend von h(k) Platz für Platz weitergezählt (h(k), h(k)+1, h(k)+2, … mod m), bis eine freie Adresse gefunden ist – auch wenn diese Adresse „eigentlich“ zu einem anderen Schlüssel gehören würde. Die <strong>Einfügereihenfolge beeinflusst das Ergebnis</strong>: Wer zuerst eingefügt wird, bekommt seinen Wunschplatz; spätere Kollisionen wandern immer weiter.</p>
+      <span class="lbl">Prüfungsfalle: Sondierreihenfolge<i class="sk" data-sk="tgi02-reihenfolge"></i></span>
+      <p>Beim <strong>linearen Sondieren</strong><i class="sk" data-sk="tgi02-sondieren"></i> wird ausgehend von h(k) Platz für Platz weitergezählt (h(k), h(k)+1, h(k)+2, … mod m), bis eine freie Adresse gefunden ist – auch wenn diese Adresse „eigentlich“ zu einem anderen Schlüssel gehören würde. Die <strong>Einfügereihenfolge beeinflusst das Ergebnis</strong>: Wer zuerst eingefügt wird, bekommt seinen Wunschplatz; spätere Kollisionen wandern immer weiter.</p>
     </div>
   </div>
 </section>
@@ -482,23 +482,23 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table class="mono">
       <thead><tr><th>Algorithmus</th><th>Prinzip</th><th>Komplexität</th></tr></thead>
       <tbody>
-        <tr><td><strong>Naives Matching</strong></td><td>Zeichen für Zeichen vergleichen, bei Fehler um 1 Position verschieben</td><td>O(n·m)</td></tr>
-        <tr><td><strong>KMP</strong> (Knuth-Morris-Pratt)</td><td>next[]-Tabelle: bei Mismatch intelligent zurückspringen statt neu zu beginnen</td><td>O(n+m)</td></tr>
-        <tr><td><strong>Boyer-Moore</strong></td><td>Von rechts nach links vergleichen, grosse Sprünge möglich</td><td>O(n/m) best</td></tr>
-        <tr><td><strong>Rabin-Karp</strong></td><td>Hashwert des Fensters berechnen, nur bei Match-Hash genau vergleichen</td><td>O(n+m) avg</td></tr>
+        <tr><td><strong>Naives Matching</strong><i class="sk" data-sk="tgi02-naiv"></i></td><td>Zeichen für Zeichen vergleichen, bei Fehler um 1 Position verschieben</td><td>O(n·m)</td></tr>
+        <tr><td><strong>KMP</strong><i class="sk" data-sk="tgi02-kmp"></i> (Knuth-Morris-Pratt)</td><td>next[]-Tabelle: bei Mismatch intelligent zurückspringen statt neu zu beginnen</td><td>O(n+m)</td></tr>
+        <tr><td><strong>Boyer-Moore</strong><i class="sk" data-sk="tgi02-bm"></i></td><td>Von rechts nach links vergleichen, grosse Sprünge möglich</td><td>O(n/m) best</td></tr>
+        <tr><td><strong>Rabin-Karp</strong><i class="sk" data-sk="tgi02-rabinkarp"></i></td><td>Hashwert des Fensters berechnen, nur bei Match-Hash genau vergleichen</td><td>O(n+m) avg</td></tr>
       </tbody>
     </table></div>
 
-    <h4>Naives Matching</h4>
+    <h4>Naives Matching<i class="sk" data-sk="tgi02-naiv"></i></h4>
     <p>Das Muster wird an jeder Position im Text angelegt und zeichenweise verglichen. Bei einem Mismatch rutscht das Muster nur um <strong>eine</strong> Position weiter – im schlimmsten Fall entstehen dadurch O(n·m) Vergleiche (z. B. Text „aaaa…a“, Muster „aaab“).</p>
 
     <h4>Knuth-Morris-Pratt (KMP)</h4>
-    <p>KMP vermeidet unnötige Rückschritte im Text: Aus dem Muster wird vorab eine <strong>next[]-Tabelle</strong> (Grenz- bzw. Präfixfunktion) berechnet, die bei einem Mismatch angibt, wie weit das Muster verschoben werden darf, ohne bereits gefundene Teilübereinstimmungen zu verlieren. Der Textzeiger läuft dabei nie zurück – Gesamtlaufzeit <strong>O(n+m)</strong>.</p>
+    <p>KMP vermeidet unnötige Rückschritte im Text: Aus dem Muster wird vorab eine <strong>next[]-Tabelle</strong><i class="sk" data-sk="tgi02-kmp"></i> (Grenz- bzw. Präfixfunktion) berechnet, die bei einem Mismatch angibt, wie weit das Muster verschoben werden darf, ohne bereits gefundene Teilübereinstimmungen zu verlieren. Der Textzeiger läuft dabei nie zurück – Gesamtlaufzeit <strong>O(n+m)</strong>.</p>
 
-    <h4>Boyer-Moore</h4>
+    <h4>Boyer-Moore<i class="sk" data-sk="tgi02-bm"></i></h4>
     <p>Vergleicht, anders als die übrigen Verfahren, das Muster mit dem Text <strong>von rechts nach links</strong>. Ein Mismatch am rechten Rand erlaubt oft grosse Sprünge (Bad-Character- und Good-Suffix-Heuristik), wodurch nicht jede Textposition einzeln betrachtet werden muss – im besten Fall <strong>O(n/m)</strong>.</p>
 
-    <h4>Rabin-Karp</h4>
+    <h4>Rabin-Karp<i class="sk" data-sk="tgi02-rabinkarp"></i></h4>
     <p>Berechnet für das Muster und für jedes gleich lange Textfenster einen <strong>Hashwert</strong>. Nur wenn die Hashwerte übereinstimmen, wird zusätzlich zeichenweise nachgeprüft (Schutz vor zufälligen Hash-Kollisionen). Der Hashwert des nächsten Fensters lässt sich aus dem vorherigen in konstanter Zeit fortschreiben (Rolling Hash) – average <strong>O(n+m)</strong>.</p>
 
     <div class="box">
@@ -526,16 +526,16 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Bevor ein Algorithmus in O-Notation klassifiziert werden kann, muss seine Laufzeit systematisch hergeleitet werden – diese vier Schritte sind das Handwerkszeug für praktisch jede Aufgabe in Kapitel 6.</p>
 
     <div class="box def">
-      <span class="lbl">Schritte der Analyse</span>
+      <span class="lbl">Schritte der Analyse<i class="sk" data-sk="tgi02-schritte"></i></span>
       <ol>
         <li><strong>Eingabegrösse n identifizieren</strong> – wovon hängt der Aufwand ab? (Länge eines Arrays, Anzahl Knoten, …)</li>
         <li><strong>Elementaroperationen zählen</strong> – Vergleiche, Zuweisungen, Grundrechenarten als Masseinheit des Aufwands.</li>
         <li><strong>Zeitfunktion T(n) aufstellen</strong> – Anzahl der Elementaroperationen in Abhängigkeit von n, meist über Schleifen oder Rekursion hergeleitet.</li>
-        <li><strong>Dominanten Term bestimmen → O-Notation</strong> – Konstanten und niedrigere Terme entfallen, es bleibt die Wachstumsordnung.</li>
+        <li><strong>Dominanten Term bestimmen → O-Notation</strong><i class="sk" data-sk="tgi02-dominant"></i> – Konstanten und niedrigere Terme entfallen, es bleibt die Wachstumsordnung.</li>
       </ol>
     </div>
 
-    <p>Bei geschachtelten Schleifen ergibt sich T(n) direkt aus der Multiplikation der Durchlaufzahlen (siehe C.13). Bei rekursiven Algorithmen liefern das <strong>Master-Theorem</strong> oder die <strong>Chip-and-Conquer-Methoden</strong> aus Kapitel 6 die passende O-Klasse.</p>
+    <p>Bei geschachtelten Schleifen ergibt sich T(n) direkt aus der Multiplikation der Durchlaufzahlen<i class="sk" data-sk="tgi02-schleifen"></i> (siehe C.13). Bei rekursiven Algorithmen liefern das <strong>Master-Theorem</strong><i class="sk" data-sk="tgi02-master"></i> oder die <strong>Chip-and-Conquer-Methoden</strong><i class="sk" data-sk="tgi02-chip"></i> aus Kapitel 6 die passende O-Klasse.</p>
   </div>
 </section>
 
@@ -557,38 +557,38 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Das Kernkapitel der Komplexitätstheorie: Wie vergleicht man Algorithmen unabhängig von Rechner und Programmiersprache? Die Antwort ist die <strong>O-Notation</strong> als obere Schranke des Wachstums – und darauf aufbauend die Einordnung ganzer Probleme in Komplexitätsklassen.</p>
 
     <div class="box def">
-      <span class="lbl">O-Notation (obere Schranke)</span>
-      <p class="formula">O(f) = {g | ∃ n₀, c &gt; 0 : ∀ n ≥ n₀: g(n) ≤ c · f(n)}</p>
+      <span class="lbl">O-Notation (obere Schranke)<i class="sk" data-sk="tgi02-onot"></i></span>
+      <p class="formula">O(f) = {g | ∃ n₀, c &gt; 0 : ∀ n ≥ n₀: g(n) ≤ c · f(n)}<i class="sk" data-sk="tgi02-onot"></i></p>
       <p>Eine Funktion g liegt in O(f), wenn sie ab einem gewissen n₀ nie schneller wächst als ein konstantes Vielfaches von f. O(f) beschreibt also eine <strong>obere Schranke</strong> für das Wachstum der Laufzeit – Konstanten und additive niedere Terme spielen dabei keine Rolle.</p>
     </div>
 
-    <h4>Wachstumsordnung</h4>
-    <p class="formula">O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!)</p>
-    <p>Von links (langsamstes Wachstum, „gut“) nach rechts (schnellstes Wachstum, „schlecht“). Alles ab O(2ⁿ) gilt als <strong>exponentiell</strong> und ist damit praktisch nicht mehr berechenbar für grosse n.</p>
+    <h4>Wachstumsordnung<i class="sk" data-sk="tgi02-wachstum"></i></h4>
+    <p class="formula">O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!)<i class="sk" data-sk="tgi02-explosion"></i></p>
+    <p>Von links (langsamstes Wachstum, „gut“) nach rechts (schnellstes Wachstum, „schlecht“). Alles ab O(2ⁿ) gilt als <strong>exponentiell</strong><i class="sk" data-sk="tgi02-explosion"></i> und ist damit praktisch nicht mehr berechenbar für grosse n.</p>
 
-    <h4>Master-Theorem</h4>
+    <h4>Master-Theorem<i class="sk" data-sk="tgi02-master"></i></h4>
     <p>Für rekursive Algorithmen der Form <strong>T(n) = a·T(n/b) + nᵏ</strong> (a Teilprobleme der Grösse n/b, plus nᵏ Aufwand fürs Kombinieren) liefert das Master-Theorem die O-Klasse direkt aus dem Vergleich von a mit bᵏ:</p>
 
     <div class="tw"><table class="mono">
       <thead><tr><th>Bedingung</th><th>Ergebnis</th></tr></thead>
       <tbody>
-        <tr><td>a &lt; bᵏ</td><td>T(n) = <strong>O(nᵏ)</strong></td></tr>
-        <tr><td>a = bᵏ</td><td>T(n) = <strong>O(nᵏ · log n)</strong></td></tr>
-        <tr><td>a &gt; bᵏ</td><td>T(n) = <strong>O(n^(log_b(a)))</strong></td></tr>
+        <tr><td>a &lt; bᵏ<i class="sk" data-sk="tgi02-master"></i></td><td>T(n) = <strong>O(nᵏ)</strong></td></tr>
+        <tr><td>a = bᵏ<i class="sk" data-sk="tgi02-mergebaum"></i></td><td>T(n) = <strong>O(nᵏ · log n)</strong></td></tr>
+        <tr><td>a &gt; bᵏ<i class="sk" data-sk="tgi02-master"></i></td><td>T(n) = <strong>O(n^(log_b(a)))</strong></td></tr>
       </tbody>
     </table></div>
 
-    <p><strong>Beispiel MergeSort:</strong> T(n) = 2·T(n/2) + n ⇒ a = 2, b = 2, k = 1. Da a = bᵏ (2 = 2¹) greift Fall 2: <strong>O(n log n)</strong>.</p>
+    <p><strong>Beispiel MergeSort:</strong><i class="sk" data-sk="tgi02-mergebaum"></i> T(n) = 2·T(n/2) + n ⇒ a = 2, b = 2, k = 1. Da a = bᵏ (2 = 2¹) greift Fall 2: <strong>O(n log n)</strong>.</p>
 
     <div class="box">
-      <span class="lbl">Chip-and-Conquer / Chip-and-Be-Conquered</span>
+      <span class="lbl">Chip-and-Conquer / Chip-and-Be-Conquered<i class="sk" data-sk="tgi02-chip"></i></span>
       <p>Für Rekursionen, die die Eingabe nicht in mehrere Teilprobleme aufspalten, sondern nur um eine Konstante c verkleinern, greift das Master-Theorem nicht – hier gelten stattdessen:</p>
-      <p class="formula">Chip-and-Conquer (b=1): T(n) = T(n−c) + f(n)  →  T(n) = O(∫f(x)dx)</p>
-      <p class="formula">Chip-and-Be-Conquered (b&gt;1): T(n) = b·T(n−c) + f(n)  →  T(n) = O(b^(n/c)) — exponentiell!</p>
-      <p><strong>Beispiel QuickSort Worst Case:</strong> T(n) = T(n−1) + n ist Chip-and-Conquer (b=1) mit f(n)=n: ∫n dx = n²/2 ⇒ <strong>O(n²)</strong>.</p>
+      <p class="formula">Chip-and-Conquer (b=1): T(n) = T(n−c) + f(n)  →  T(n) = O(∫f(x)dx)<i class="sk" data-sk="tgi02-chip"></i></p>
+      <p class="formula">Chip-and-Be-Conquered (b&gt;1): T(n) = b·T(n−c) + f(n)  →  T(n) = O(b^(n/c)) — exponentiell!<i class="sk" data-sk="tgi02-chipbe"></i></p>
+      <p><strong>Beispiel QuickSort Worst Case:</strong><i class="sk" data-sk="tgi02-chip"></i> T(n) = T(n−1) + n ist Chip-and-Conquer (b=1) mit f(n)=n: ∫n dx = n²/2 ⇒ <strong>O(n²)</strong>.</p>
     </div>
 
-    <h4>Komplexitätsklassen</h4>
+    <h4>Komplexitätsklassen<i class="sk" data-sk="tgi02-klassen"></i></h4>
     <p>Nicht nur einzelne Algorithmen, auch <strong>Probleme</strong> lassen sich klassifizieren – nach dem Aufwand, den der <em>beste bekannte</em> Algorithmus dafür braucht:</p>
 
     <div class="tw"><table>
@@ -596,19 +596,19 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
       <tbody>
         <tr><td><strong>LOGSPACE</strong></td><td>Platzbedarf O(log n)</td><td>Erreichbarkeit in Graphen</td></tr>
         <tr><td><strong>P</strong></td><td>Zeitbedarf polynomial O(nᵏ)</td><td>Primzahltest</td></tr>
-        <tr><td><strong>NP</strong></td><td>Lösung in Polynomialzeit verifizierbar</td><td>Rucksackproblem</td></tr>
+        <tr><td><strong>NP</strong><i class="sk" data-sk="tgi02-verify"></i></td><td>Lösung in Polynomialzeit verifizierbar</td><td>Rucksackproblem</td></tr>
         <tr><td><strong>PSPACE</strong></td><td>Platzbedarf polynomial</td><td>Gewinnstrategie bei Tic-Tac-Toe</td></tr>
         <tr><td><strong>EXPTIME</strong></td><td>Zeitbedarf exponentiell O(2ⁿ)</td><td>Gewinnstrategie bei Go</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">LOGSPACE ⊆ P ⊆ NP ⊆ PSPACE ⊆ EXPTIME</p>
+    <p class="formula">LOGSPACE ⊆ P ⊆ NP ⊆ PSPACE ⊆ EXPTIME<i class="sk" data-sk="tgi02-klassen"></i></p>
 
     <div class="box warn">
-      <span class="lbl">P vs. NP</span>
+      <span class="lbl">P vs. NP<i class="sk" data-sk="tgi02-pnp"></i></span>
       <p>Die grosse offene Frage der Informatik: Ist <strong>P = NP</strong>? Vermutet wird <strong>nein</strong> – bewiesen ist es bis heute nicht. <strong>NP-vollständige</strong> Probleme (z. B. Rucksackproblem, Traveling-Salesman-Problem) gelten als die „schwersten“ Probleme in NP: Fände man für eines von ihnen einen Polynomialzeit-Algorithmus, liesse sich daraus einer für <em>alle</em> NP-Probleme konstruieren.</p>
     </div>
 
-    <p>Eine wichtige <strong>untere Schranke</strong>: Vergleichsbasiertes Sortieren (wie QuickSort, MergeSort, HeapSort) kann grundsätzlich nicht besser als <strong>O(n log n)</strong> sein – nur nicht-vergleichsbasierte Verfahren wie RadixSort können mit O(n) darunterliegen.</p>
+    <p>Eine wichtige <strong>untere Schranke</strong><i class="sk" data-sk="tgi02-vergleichsbaum"></i>: Vergleichsbasiertes Sortieren (wie QuickSort, MergeSort, HeapSort) kann grundsätzlich nicht besser als <strong>O(n log n)</strong> sein – nur nicht-vergleichsbasierte Verfahren wie RadixSort können mit O(n) darunterliegen.</p>
   </div>
 </section>
 
@@ -883,30 +883,30 @@ Verfahren. Erst am Textende „einmal“ stimmen alle drei Zeichen überein
   <div class="body">
 
     <h4>Komplexitätsanalyse</h4>
-    <p class="formula">O(f) = {g | ∃ c, n₀: g(n) ≤ c·f(n) für alle n ≥ n₀}</p>
-    <p><strong>Master-Theorem</strong> für T(n) = a·T(n/b) + nᵏ:</p>
+    <p class="formula">O(f) = {g | ∃ c, n₀: g(n) ≤ c·f(n) für alle n ≥ n₀}<i class="sk" data-sk="tgi02-onot"></i></p>
+    <p><strong>Master-Theorem</strong> für T(n) = a·T(n/b) + nᵏ:<i class="sk" data-sk="tgi02-master"></i></p>
     <div class="tw"><table class="mono">
       <thead><tr><th>Bedingung</th><th>Ergebnis</th></tr></thead>
       <tbody>
         <tr><td>a &lt; bᵏ</td><td>O(nᵏ)</td></tr>
-        <tr><td>a = bᵏ</td><td>O(nᵏ · log n)</td></tr>
+        <tr><td>a = bᵏ<i class="sk" data-sk="tgi02-mergebaum"></i></td><td>O(nᵏ · log n)</td></tr>
         <tr><td>a &gt; bᵏ</td><td>O(n^(log_b(a)))</td></tr>
       </tbody>
     </table></div>
-    <p class="formula">Chip &amp; Conquer: T(n) = T(n−c) + f(n) → O(∫f(x)dx)</p>
-    <p class="formula">Chip &amp; Be Conquered: T(n) = b·T(n−c) + f(n) (b&gt;1) → O(b^(n/c))</p>
+    <p class="formula">Chip &amp; Conquer: T(n) = T(n−c) + f(n) → O(∫f(x)dx)<i class="sk" data-sk="tgi02-chip"></i></p>
+    <p class="formula">Chip &amp; Be Conquered: T(n) = b·T(n−c) + f(n) (b&gt;1) → O(b^(n/c))<i class="sk" data-sk="tgi02-chipbe"></i></p>
 
     <h4>Sortieralgorithmen – Komplexitäten</h4>
     <div class="tw"><table class="mono">
-      <thead><tr><th>Algorithmus</th><th>Best</th><th>Average</th><th>Worst</th><th>Stabil?</th><th>In-situ?</th></tr></thead>
+      <thead><tr><th>Algorithmus</th><th>Best</th><th>Average</th><th>Worst</th><th>Stabil?<i class="sk" data-sk="tgi02-stabil"></i></th><th>In-situ?</th></tr></thead>
       <tbody>
-        <tr><td>BubbleSort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
-        <tr><td>SelectionSort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td>InsertionSort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
-        <tr><td>QuickSort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td>MergeSort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Ja</td><td>Nein</td></tr>
-        <tr><td>HeapSort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
-        <tr><td>RadixSort</td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>BubbleSort<i class="sk" data-sk="tgi02-einfach"></i></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
+        <tr><td>SelectionSort<i class="sk" data-sk="tgi02-einfach"></i></td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td>InsertionSort<i class="sk" data-sk="tgi02-einfach"></i></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>Ja</td><td>Ja</td></tr>
+        <tr><td>QuickSort<i class="sk" data-sk="tgi02-quick"></i></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td>MergeSort<i class="sk" data-sk="tgi02-merge"></i></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Ja</td><td>Nein</td></tr>
+        <tr><td>HeapSort<i class="sk" data-sk="tgi02-heapsort"></i></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>Nein</td><td>Ja</td></tr>
+        <tr><td>RadixSort<i class="sk" data-sk="tgi02-radix"></i></td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>Ja</td><td>Nein</td></tr>
       </tbody>
     </table></div>
 
@@ -914,8 +914,8 @@ Verfahren. Erst am Textende „einmal“ stimmen alle drei Zeichen überein
     <div class="tw"><table class="mono">
       <thead><tr><th>Verfahren</th><th>Formel</th></tr></thead>
       <tbody>
-        <tr><td>Divisionsrest</td><td>h(k) = k mod m</td></tr>
-        <tr><td>Multiplikation</td><td>h(k) = ⌊m · (k·A mod 1)⌋</td></tr>
+        <tr><td>Divisionsrest<i class="sk" data-sk="tgi02-division"></i></td><td>h(k) = k mod m</td></tr>
+        <tr><td>Multiplikation<i class="sk" data-sk="tgi02-mult"></i></td><td>h(k) = ⌊m · (k·A mod 1)⌋</td></tr>
       </tbody>
     </table></div>
 
