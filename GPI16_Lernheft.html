@@ -248,6 +248,34 @@ summary:hover{background:var(--mark-soft)}
 .abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
 .abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
 
+/* ---------- Skizzen: kleines Icon neben Formel/Definition, Großansicht per Klick ---------- */
+:root{--sk-3:#A86412;--sk-4:#5B4AA6;--sk-fill:rgba(14,95,99,.10);--sk-fill2:rgba(142,36,54,.10)}
+html[data-theme="dark"]{--sk-3:#E2A65A;--sk-4:#AFA2F2;--sk-fill:rgba(84,195,198,.14);--sk-fill2:rgba(227,130,148,.14)}
+i.sk{display:none}
+button.sk{display:inline-flex;align-items:center;justify-content:center;width:1.55em;height:1.35em;margin:0 .15em 0 .35em;padding:0;vertical-align:-.22em;
+  background:var(--paper-raised);color:var(--accent);border:1px solid var(--rule);border-radius:3px;cursor:pointer;font-size:1rem;line-height:1;transition:.15s;letter-spacing:0;text-transform:none}
+button.sk svg{width:1.05em;height:.95em;display:block}
+button.sk:hover,button.sk:focus-visible{background:var(--accent);color:var(--paper-raised);border-color:var(--accent);outline:none}
+.formula button.sk,td button.sk,.lbl button.sk{font-size:.9rem}
+.skm{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(10,14,12,.55);backdrop-filter:blur(2px)}
+.skm.on{display:flex}
+.skm-p{background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule);border-radius:6px;box-shadow:0 18px 50px var(--shadow);width:min(820px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden}
+.skm-h{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem .6rem;border-bottom:1px solid var(--rule-soft)}
+.skm-k{font-family:var(--font-ui);font-size:.62rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.skm-t{font-family:var(--font-ui);font-size:1.02rem;font-weight:700;margin-top:.15rem}
+.skm-x{margin-left:auto;flex:0 0 auto;font:600 1.3rem/1 var(--font-ui);width:2rem;height:2rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink-soft);cursor:pointer}
+.skm-x:hover{color:var(--mark);border-color:var(--mark)}
+.skm-b{overflow:auto;padding:.6rem 1rem 1rem}
+.skm-svg{background:var(--paper);border:1px solid var(--rule-soft);border-radius:4px;padding:.4rem}
+.skm-svg svg{display:block;width:100%;height:auto;max-height:58vh}
+.skm-c{font-size:.92rem;line-height:1.55;margin:.75rem 0 0;color:var(--ink)}
+.skm-c b{color:var(--accent)}
+.skm-f{display:flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-top:1px solid var(--rule-soft);font-family:var(--font-ui);font-size:.74rem;color:var(--ink-faint)}
+.skm-f button{font:650 .76rem var(--font-ui);padding:.38rem .7rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);cursor:pointer}
+.skm-f button:hover{border-color:var(--accent);color:var(--accent)}
+.skm-f .sp{flex:1 1 auto;text-align:center}
+@media (max-width:560px){.skm{padding:8px}.skm-f .sp{display:none}.skm-f{justify-content:space-between}}
+
 footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
 </style>
 <script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("gpi16:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
@@ -1243,6 +1271,65 @@ a[10] = 1;      // Fehlermeldung statt stiller Speicherverletzung</div>
       });
       box.appendChild(b);
     });
+  })();
+
+  /* ---------- Skizzen: <i class="sk" data-sk="id"> → Icon-Button, Großansicht im Overlay ----------
+     Daten kommen aus assets/sketches/<heft>.js (window.ITI_SKETCHES), Zeichenhilfen aus assets/sketch-kit.js. */
+  (function(){
+    var marks = document.querySelectorAll("i.sk[data-sk]");
+    if(!marks.length) return;
+    var code = KEY.split(":")[0];
+    var ICON = '<svg viewBox="0 0 20 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16 L17 16"/><path d="M2 16 L2 2"/><path d="M3 15 L13 5"/><path d="M13 5 l-4 .4 M13 5 l-.4 4"/><path d="M7 15 a4.5 4.5 0 0 0 -1.4 -3.2"/></svg>';
+    function load(src, cb){ var s = document.createElement("script"); s.src = src; s.onload = cb; s.onerror = cb; document.head.appendChild(s); }
+    load("assets/sketch-kit.js", function(){ load("assets/sketches/" + code + ".js", init); });
+
+    function init(){
+      var data = window.ITI_SKETCHES || {};
+      var order = [], btns = [];
+      Array.prototype.forEach.call(marks, function(m){
+        var id = m.getAttribute("data-sk"), d = data[id];
+        if(!d) return;
+        if(order.indexOf(id) < 0) order.push(id);
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "sk"; b.setAttribute("data-sk", id);
+        b.title = "Skizze: " + d.t; b.setAttribute("aria-label", "Skizze öffnen: " + d.t);
+        b.innerHTML = ICON;
+        m.parentNode.replaceChild(b, m);
+        btns.push(b);
+      });
+      if(!order.length) return;
+
+      var ov = document.createElement("div");
+      ov.className = "skm"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-labelledby", "skmT");
+      ov.innerHTML = '<div class="skm-p"><div class="skm-h"><div><div class="skm-k" id="skmK"></div><div class="skm-t" id="skmT"></div></div>' +
+        '<button class="skm-x" type="button" aria-label="Schließen">×</button></div>' +
+        '<div class="skm-b"><div class="skm-svg" id="skmS"></div><p class="skm-c" id="skmC"></p></div>' +
+        '<div class="skm-f"><button type="button" data-d="-1">‹ Vorherige</button><span class="sp">Pfeiltasten blättern · Esc schließt</span><button type="button" data-d="1">Nächste ›</button></div></div>';
+      document.body.appendChild(ov);
+      var cur = 0, opener = null;
+      function show(i){
+        cur = (i + order.length) % order.length;
+        var d = data[order[cur]];
+        document.getElementById("skmK").textContent = "Skizze " + (cur + 1) + " / " + order.length;
+        document.getElementById("skmT").textContent = d.t;
+        var svg = typeof d.svg === "function" ? d.svg(window.SK) : d.svg;
+        document.getElementById("skmS").innerHTML = svg;
+        document.getElementById("skmC").innerHTML = d.c || "";
+      }
+      function open(id, btn){ opener = btn; show(order.indexOf(id)); ov.classList.add("on"); ov.querySelector(".skm-x").focus(); }
+      function close(){ ov.classList.remove("on"); if(opener) opener.focus(); }
+      btns.forEach(function(b){ b.addEventListener("click", function(){ open(b.getAttribute("data-sk"), b); }); });
+      ov.addEventListener("click", function(e){
+        if(e.target === ov || e.target.closest(".skm-x")) return close();
+        var nb = e.target.closest("[data-d]"); if(nb) show(cur + Number(nb.getAttribute("data-d")));
+      });
+      document.addEventListener("keydown", function(e){
+        if(!ov.classList.contains("on")) return;
+        if(e.key === "Escape"){ e.preventDefault(); close(); }
+        else if(e.key === "ArrowRight"){ e.preventDefault(); show(cur + 1); }
+        else if(e.key === "ArrowLeft"){ e.preventDefault(); show(cur - 1); }
+      });
+    }
   })();
 
   /* ---------- Inhaltsverzeichnis aufbauen ---------- */

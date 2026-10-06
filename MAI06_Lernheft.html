@@ -248,6 +248,34 @@ summary:hover{background:var(--mark-soft)}
 .abbr-row dt{font-family:var(--font-mono);font-weight:700;color:var(--accent);flex:0 0 4.6rem;font-size:.82rem}
 .abbr-row dd{margin:0;color:var(--ink-soft);flex:1 1 auto}
 
+/* ---------- Skizzen: kleines Icon neben Formel/Definition, Großansicht per Klick ---------- */
+:root{--sk-3:#A86412;--sk-4:#5B4AA6;--sk-fill:rgba(14,95,99,.10);--sk-fill2:rgba(142,36,54,.10)}
+html[data-theme="dark"]{--sk-3:#E2A65A;--sk-4:#AFA2F2;--sk-fill:rgba(84,195,198,.14);--sk-fill2:rgba(227,130,148,.14)}
+i.sk{display:none}
+button.sk{display:inline-flex;align-items:center;justify-content:center;width:1.55em;height:1.35em;margin:0 .15em 0 .35em;padding:0;vertical-align:-.22em;
+  background:var(--paper-raised);color:var(--accent);border:1px solid var(--rule);border-radius:3px;cursor:pointer;font-size:1rem;line-height:1;transition:.15s;letter-spacing:0;text-transform:none}
+button.sk svg{width:1.05em;height:.95em;display:block}
+button.sk:hover,button.sk:focus-visible{background:var(--accent);color:var(--paper-raised);border-color:var(--accent);outline:none}
+.formula button.sk,td button.sk,.lbl button.sk{font-size:.9rem}
+.skm{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(10,14,12,.55);backdrop-filter:blur(2px)}
+.skm.on{display:flex}
+.skm-p{background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule);border-radius:6px;box-shadow:0 18px 50px var(--shadow);width:min(820px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden}
+.skm-h{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem .6rem;border-bottom:1px solid var(--rule-soft)}
+.skm-k{font-family:var(--font-ui);font-size:.62rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.skm-t{font-family:var(--font-ui);font-size:1.02rem;font-weight:700;margin-top:.15rem}
+.skm-x{margin-left:auto;flex:0 0 auto;font:600 1.3rem/1 var(--font-ui);width:2rem;height:2rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink-soft);cursor:pointer}
+.skm-x:hover{color:var(--mark);border-color:var(--mark)}
+.skm-b{overflow:auto;padding:.6rem 1rem 1rem}
+.skm-svg{background:var(--paper);border:1px solid var(--rule-soft);border-radius:4px;padding:.4rem}
+.skm-svg svg{display:block;width:100%;height:auto;max-height:58vh}
+.skm-c{font-size:.92rem;line-height:1.55;margin:.75rem 0 0;color:var(--ink)}
+.skm-c b{color:var(--accent)}
+.skm-f{display:flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-top:1px solid var(--rule-soft);font-family:var(--font-ui);font-size:.74rem;color:var(--ink-faint)}
+.skm-f button{font:650 .76rem var(--font-ui);padding:.38rem .7rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);cursor:pointer}
+.skm-f button:hover{border-color:var(--accent);color:var(--accent)}
+.skm-f .sp{flex:1 1 auto;text-align:center}
+@media (max-width:560px){.skm{padding:8px}.skm-f .sp{display:none}.skm-f{justify-content:space-between}}
+
 footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);line-height:1.6}
 </style>
 <script>try{var s=JSON.parse((window.localStorage&&localStorage.getItem("mai06:state"))||"{}");if(s.theme==="dark"||s.theme==="light")document.documentElement.dataset.theme=s.theme;if(typeof s.base==="number"&&s.base>=15&&s.base<=26)document.documentElement.style.setProperty("--base",s.base+"px");}catch(e){}</script>
@@ -319,61 +347,61 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Vektoren sind gerichtete Strecken. Erst grafisch, dann in Koordinaten – und am Ende der zentrale Begriff der linearen Algebra: die lineare Unabhängigkeit.</p>
 
     <div class="box def">
-      <span class="lbl">Vektor und Gleichheit (Def. 1.1 / 1.2)</span>
+      <span class="lbl">Vektor und Gleichheit (Def. 1.1 / 1.2)<i class="sk" data-sk="mai06-vektor"></i></span>
       <p>Ein <strong>Vektor</strong> <span class="mono">a = AE</span> mit Anfangspunkt A und Endpunkt E ist die gerichtete Strecke von A nach E.</p>
       <p><strong>Zwei Vektoren sind gleich, wenn sie in Länge und Richtung übereinstimmen</strong> – auf Anfangs- und Endpunkt kommt es <em>nicht</em> an. Verschieben ändert den Vektor also nicht.</p>
     </div>
     <div class="tw"><table>
       <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
       <tbody>
-        <tr><td><strong>Betrag</strong> |a|</td><td>die Länge des Vektors – eine reelle Zahl</td></tr>
-        <tr><td><strong>Repräsentant</strong></td><td>jede durch Verschieben erzeugte Kopie desselben Vektors</td></tr>
-        <tr><td><strong>Ortsvektor</strong></td><td>der Repräsentant, dessen Anfangspunkt der Koordinatenursprung ist</td></tr>
-        <tr><td><strong>Einheitsvektor</strong> e</td><td>Vektor mit Betrag 1; e<sub>a</sub> = Einheitsvektor in Richtung von a</td></tr>
-        <tr><td><strong>Standard-Einheitsvektoren</strong></td><td>e₁, e₂, e₃ – zeigen in Richtung der x-, y- bzw. z-Achse</td></tr>
-        <tr><td><strong>antiparallel</strong></td><td>gleiche Länge, parallel, aber entgegengesetzte Richtung → <em>nicht</em> gleich</td></tr>
+        <tr><td><strong>Betrag</strong> |a|<i class="sk" data-sk="mai06-pyth"></i></td><td>die Länge des Vektors – eine reelle Zahl</td></tr>
+        <tr><td><strong>Repräsentant</strong><i class="sk" data-sk="mai06-repr"></i></td><td>jede durch Verschieben erzeugte Kopie desselben Vektors</td></tr>
+        <tr><td><strong>Ortsvektor</strong><i class="sk" data-sk="mai06-ortsv"></i></td><td>der Repräsentant, dessen Anfangspunkt der Koordinatenursprung ist</td></tr>
+        <tr><td><strong>Einheitsvektor</strong> e<i class="sk" data-sk="mai06-einheit"></i></td><td>Vektor mit Betrag 1; e<sub>a</sub> = Einheitsvektor in Richtung von a</td></tr>
+        <tr><td><strong>Standard-Einheitsvektoren</strong><i class="sk" data-sk="mai06-basis"></i></td><td>e₁, e₂, e₃ – zeigen in Richtung der x-, y- bzw. z-Achse</td></tr>
+        <tr><td><strong>antiparallel</strong><i class="sk" data-sk="mai06-neg"></i></td><td>gleiche Länge, parallel, aber entgegengesetzte Richtung → <em>nicht</em> gleich</td></tr>
       </tbody>
     </table></div>
 
     <h4>1.1.2 Grafisches Rechnen</h4>
     <ul>
-      <li><strong>Addition</strong> (Def. 1.3): a₂ so verschieben, dass sein Anfangspunkt auf dem Endpunkt von a₁ liegt; die Summe reicht vom Anfang von a₁ zum Ende von a₂.</li>
-      <li><strong>Negativer Vektor</strong> (Def. 1.4): −a vertauscht Anfangs- und Endpunkt – gleiche Länge, entgegengesetzte Richtung.</li>
-      <li><strong>Subtraktion</strong> (Def. 1.5): <span class="mono">a − b = a + (−b)</span>.</li>
-      <li><strong>Nullvektor</strong> (Def. 1.6): Anfangs- und Endpunkt identisch, Länge 0, per Definition <em>jede beliebige</em> Richtung. Er ist das <strong>neutrale Element</strong>: a + 0 = a.</li>
+      <li><strong>Addition</strong> (Def. 1.3)<i class="sk" data-sk="mai06-add"></i>: a₂ so verschieben, dass sein Anfangspunkt auf dem Endpunkt von a₁ liegt; die Summe reicht vom Anfang von a₁ zum Ende von a₂.</li>
+      <li><strong>Negativer Vektor</strong> (Def. 1.4)<i class="sk" data-sk="mai06-neg"></i>: −a vertauscht Anfangs- und Endpunkt – gleiche Länge, entgegengesetzte Richtung.</li>
+      <li><strong>Subtraktion</strong> (Def. 1.5)<i class="sk" data-sk="mai06-sub"></i>: <span class="mono">a − b = a + (−b)</span>.</li>
+      <li><strong>Nullvektor</strong> (Def. 1.6)<i class="sk" data-sk="mai06-null"></i>: Anfangs- und Endpunkt identisch, Länge 0, per Definition <em>jede beliebige</em> Richtung. Er ist das <strong>neutrale Element</strong>: a + 0 = a.</li>
       <li><strong>Eine Division durch Vektoren gibt es nicht.</strong></li>
     </ul>
     <div class="box def">
       <span class="lbl">Rechenregeln (Sätze 1.1–1.3)</span>
-      <p class="formula">a₁ + a₂ = a₂ + a₁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Kommutativgesetz)<br>(a₁ + a₂) + a₃ = a₁ + (a₂ + a₃)&nbsp;&nbsp;(Assoziativgesetz)<br><br>λ·(μ·a) = (λ·μ)·a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Assoziativgesetz)<br>(λ + μ)·a = λ·a + μ·a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1. Distributivgesetz)<br>λ·(a + b) = λ·a + λ·b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2. Distributivgesetz)</p>
-      <p><strong>Skalare Multiplikation</strong> (Def. 1.7): |λ·a| = |λ|·|a|; Richtung bleibt für λ &gt; 0, kehrt sich um für λ &lt; 0, und für λ = 0 entsteht der Nullvektor. Anschaulich: strecken (|λ| &gt; 1) oder stauchen, bei negativem λ zusätzlich umdrehen.</p>
+      <p class="formula">a₁ + a₂ = a₂ + a₁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Kommutativgesetz)<i class="sk" data-sk="mai06-komm"></i><br>(a₁ + a₂) + a₃ = a₁ + (a₂ + a₃)&nbsp;&nbsp;(Assoziativgesetz)<i class="sk" data-sk="mai06-assoz"></i><br><br>λ·(μ·a) = (λ·μ)·a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Assoziativgesetz)<i class="sk" data-sk="mai06-skalar"></i><br>(λ + μ)·a = λ·a + μ·a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1. Distributivgesetz)<br>λ·(a + b) = λ·a + λ·b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2. Distributivgesetz)<i class="sk" data-sk="mai06-distrib"></i></p>
+      <p><strong>Skalare Multiplikation</strong> (Def. 1.7)<i class="sk" data-sk="mai06-skalar"></i>: |λ·a| = |λ|·|a|; Richtung bleibt für λ &gt; 0, kehrt sich um für λ &lt; 0, und für λ = 0 entsteht der Nullvektor. Anschaulich: strecken (|λ| &gt; 1) oder stauchen, bei negativem λ zusätzlich umdrehen.</p>
     </div>
 
     <h4>1.2 Koordinatendarstellung</h4>
     <p>Ein Vektor wird als einspaltige Matrix geschrieben; seine Einträge heißen <strong>Koordinaten</strong> oder <strong>Komponenten</strong>. In der Ebene zwei, im Raum drei, allgemein n im ℝⁿ.</p>
     <div class="box def">
       <span class="lbl">Die vier Grundformeln</span>
-      <p class="formula">Vektor aus zwei Punkten (Satz 1.4):&nbsp;&nbsp;AE = E − A&nbsp;&nbsp;(Koordinaten von A abziehen)<br><br>Addition (Satz 1.5):&nbsp;&nbsp;a + b = (a₁+b₁, a₂+b₂, …, aₙ+bₙ)ᵀ&nbsp;&nbsp;— komponentenweise<br>Skalare Mult.:&nbsp;&nbsp;λ·a = (λa₁, λa₂, …, λaₙ)ᵀ<br><br>Betrag (Satz 1.6):&nbsp;&nbsp;|a| = √(a₁² + a₂² + … + aₙ²)&nbsp;&nbsp;— das ist Pythagoras</p>
+      <p class="formula">Vektor aus zwei Punkten (Satz 1.4):&nbsp;&nbsp;AE = E − A&nbsp;&nbsp;(Koordinaten von A abziehen)<i class="sk" data-sk="mai06-ab"></i><br><br>Addition (Satz 1.5):&nbsp;&nbsp;a + b = (a₁+b₁, a₂+b₂, …, aₙ+bₙ)ᵀ&nbsp;&nbsp;— komponentenweise<i class="sk" data-sk="mai06-addk"></i><br>Skalare Mult.:&nbsp;&nbsp;λ·a = (λa₁, λa₂, …, λaₙ)ᵀ<i class="sk" data-sk="mai06-skalar"></i><br><br>Betrag (Satz 1.6):&nbsp;&nbsp;|a| = √(a₁² + a₂² + … + aₙ²)&nbsp;&nbsp;— das ist Pythagoras<i class="sk" data-sk="mai06-pyth"></i></p>
       <p>Addiert werden dürfen nur Vektoren <strong>derselben Dimension</strong>.</p>
     </div>
     <p><strong>Beispiel:</strong> |(3, 4)ᵀ| = √(9+16) = 5 &nbsp;·&nbsp; |(−1, 3, −2)ᵀ| = √(1+9+4) = √14 &nbsp;·&nbsp; |e₁| = 1 ✓</p>
 
     <div class="box def">
-      <span class="lbl">Linearkombination (Def. 1.9)</span>
+      <span class="lbl">Linearkombination (Def. 1.9)<i class="sk" data-sk="mai06-linkomb"></i></span>
       <p>Jeder Vektor der Form <span class="mono">a = λ₁a₁ + λ₂a₂ + … + λ<sub>k</sub>a<sub>k</sub></span> heißt <strong>Linearkombination</strong> von a₁,…,a<sub>k</sub>.</p>
       <p>Ob ein Vektor eine Linearkombination gegebener Vektoren ist, führt immer auf ein <strong>lineares Gleichungssystem</strong>: Ansatz aufstellen, komponentenweise lesen, lösen. Ist das System unlösbar (Widerspruch wie „−1 = 0“), ist er keine.</p>
     </div>
 
     <h4>1.3 Lineare Unabhängigkeit</h4>
     <div class="box def">
-      <span class="lbl">Definition 1.10</span>
+      <span class="lbl">Definition 1.10<i class="sk" data-sk="mai06-linunab"></i></span>
       <p>{a₁,…,a<sub>k</sub>} heißt <strong>linear unabhängig</strong>, wenn sich der Nullvektor <strong>nur trivial</strong> darstellen lässt:</p>
       <p class="formula">λ₁a₁ + λ₂a₂ + … + λ<sub>k</sub>a<sub>k</sub> = 0&nbsp;&nbsp;⟹&nbsp;&nbsp;λ₁ = λ₂ = … = λ<sub>k</sub> = 0</p>
       <p>Gibt es eine Darstellung, bei der <strong>nicht alle</strong> Koeffizienten null sind, heißt die Menge <strong>linear abhängig</strong>.</p>
       <p><strong>Gleichwertig und anschaulicher:</strong> Linear abhängig heißt, dass sich <strong>mindestens einer</strong> der Vektoren als Linearkombination der übrigen schreiben lässt.</p>
     </div>
     <div class="box warn">
-      <span class="lbl">Satz 1.8 – der Zeitsparer</span>
+      <span class="lbl">Satz 1.8 – der Zeitsparer<i class="sk" data-sk="mai06-kgtn"></i></span>
       <p>Ist die <strong>Anzahl k der Vektoren größer als die Dimension n</strong>, so sind sie <strong>stets linear abhängig</strong>. Vier Vektoren im ℝ³ sind also ohne jede Rechnung linear abhängig.</p>
     </div>
     <p><strong>Standardverfahren</strong>, wenn man es nicht ansieht: Ansatz λ₁a₁ + λ₂a₂ + λ₃a₃ = 0 aufstellen, das entstehende homogene LGS mit dem <strong>Gauß-Algorithmus</strong> lösen. Eindeutige Lösung λ = 0 → unabhängig; unendlich viele Lösungen → abhängig.</p>
@@ -400,17 +428,17 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <h4>2.1 Skalarprodukt</h4>
     <div class="box def">
       <span class="lbl">Definition 2.1 und Satz 2.3 – die zwei Formeln</span>
-      <p class="formula">geometrisch:&nbsp;&nbsp;⟨a, b⟩ = |a| · |b| · cos φ<br>in Koordinaten:&nbsp;&nbsp;⟨a, b⟩ = a₁b₁ + a₂b₂ + a₃b₃</p>
+      <p class="formula">geometrisch:&nbsp;&nbsp;⟨a, b⟩ = |a| · |b| · cos φ<i class="sk" data-sk="mai06-skp"></i><br>in Koordinaten:&nbsp;&nbsp;⟨a, b⟩ = a₁b₁ + a₂b₂ + a₃b₃<i class="sk" data-sk="mai06-skpk"></i></p>
       <p>Das Ergebnis ist eine <strong>reelle Zahl</strong> (ein „Skalar“) – daher der Name. In Koordinaten also: paarweise multiplizieren und aufsummieren.</p>
     </div>
     <p><strong>Rechenregeln (Satz 2.1):</strong> ⟨a,b⟩ = ⟨b,a⟩ (kommutativ) · ⟨r·a, b⟩ = r·⟨a,b⟩ · ⟨a, b+c⟩ = ⟨a,b⟩ + ⟨a,c⟩ (linear).</p>
     <div class="box warn">
-      <span class="lbl">Satz 2.2 – Orthogonalitätskriterium</span>
+      <span class="lbl">Satz 2.2 – Orthogonalitätskriterium<i class="sk" data-sk="mai06-orth"></i></span>
       <p>Zwei vom Nullvektor verschiedene Vektoren stehen <strong>genau dann senkrecht aufeinander, wenn ⟨a, b⟩ = 0</strong> ist.</p>
       <p><em>Warum:</em> Bei Vektoren ≠ 0 sind beide Beträge ungleich null, also wird das Produkt genau dann null, wenn cos φ = 0 ist – und das heißt φ = 90° = π/2.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Satz 2.4 – Winkel zwischen zwei Vektoren</span>
+      <span class="lbl">Satz 2.4 – Winkel zwischen zwei Vektoren<i class="sk" data-sk="mai06-winkel"></i></span>
       <p class="formula">cos φ = ⟨a, b⟩ / (|a| · |b|)&nbsp;&nbsp;&nbsp;&nbsp;⟹&nbsp;&nbsp;φ = arccos( ⟨a,b⟩ / (|a|·|b|) )</p>
       <p>Der Zähler wird dabei <strong>in Koordinaten</strong> berechnet – sonst wäre die Formel zwar richtig, aber sinnlos. Beide Vektoren müssen ≠ 0 sein, sonst würde durch null dividiert.</p>
       <p><strong>Beispiel:</strong> a = (1, 1, −1)ᵀ, b = (2, 0, 3)ᵀ → ⟨a,b⟩ = 2 + 0 − 3 = −1, |a| = √3, |b| = √13 → cos φ = −1/(√3·√13) ≈ −0,160 → φ ≈ 99,2°.</p>
@@ -418,14 +446,14 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <h4>2.2 Vektorprodukt (Kreuzprodukt)</h4>
     <div class="box def">
-      <span class="lbl">Definition 2.2 – existiert nur im ℝ³</span>
-      <p class="formula">a × b = ( a₂b₃ − a₃b₂ ,&nbsp; a₃b₁ − a₁b₃ ,&nbsp; a₁b₂ − a₂b₁ )ᵀ</p>
+      <span class="lbl">Definition 2.2 – existiert nur im ℝ³<i class="sk" data-sk="mai06-kreuz"></i></span>
+      <p class="formula">a × b = ( a₂b₃ − a₃b₂ ,&nbsp; a₃b₁ − a₁b₃ ,&nbsp; a₁b₂ − a₂b₁ )ᵀ<i class="sk" data-sk="mai06-kreuzschema"></i></p>
       <p>Das Ergebnis ist ein <strong>Vektor</strong>. Im ℝ² gibt es kein Vektorprodukt.</p>
       <p><strong>Beispiel:</strong> a = (2, −2, 1)ᵀ, b = (3, 2, 6)ᵀ → a × b = (−2·6 − 1·2, 1·3 − 2·6, 2·2 − (−2)·3)ᵀ = (−14, −9, 10)ᵀ</p>
     </div>
-    <p><strong>Rechenregeln (Satz 2.5):</strong> a × b = −(b × a) – <strong>nicht kommutativ, sondern antikommutativ</strong> · (r·a) × b = a × (r·b) = r·(a × b) · a × (b + c) = a×b + a×c (linear).</p>
+    <p><strong>Rechenregeln (Satz 2.5):</strong><i class="sk" data-sk="mai06-antikomm"></i> a × b = −(b × a) – <strong>nicht kommutativ, sondern antikommutativ</strong> · (r·a) × b = a × (r·b) = r·(a × b) · a × (b + c) = a×b + a×c (linear).</p>
     <div class="box warn">
-      <span class="lbl">Satz 2.6 – die entscheidende Eigenschaft</span>
+      <span class="lbl">Satz 2.6 – die entscheidende Eigenschaft<i class="sk" data-sk="mai06-parallel0"></i></span>
       <p>Für a, b ≠ 0 mit c = a × b gilt:<br>
       <strong>a)</strong> Sind a und b <strong>parallel</strong> (a = λb), so ist c = <strong>0</strong>.<br>
       <strong>b)</strong> Sind sie nicht parallel, so steht c <strong>senkrecht auf a und auf b</strong>.</p>
@@ -434,18 +462,18 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <h4>2.3 Spatprodukt</h4>
     <div class="box def">
-      <span class="lbl">Definition 2.3 und Satz 2.7</span>
+      <span class="lbl">Definition 2.3 und Satz 2.7<i class="sk" data-sk="mai06-spat"></i></span>
       <p class="formula">⟨a b c⟩ = ⟨a, b × c⟩&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V = |⟨a b c⟩|</p>
       <p>Kombination aus Vektor- und Skalarprodukt, deshalb nur im ℝ³. Der <strong>Betrag</strong> ist das Volumen des von a, b, c aufgespannten <strong>Spats</strong> (Parallelepiped).</p>
     </div>
     <div class="box warn">
-      <span class="lbl">Satz 2.8 – wann das Spatprodukt null ist</span>
+      <span class="lbl">Satz 2.8 – wann das Spatprodukt null ist<i class="sk" data-sk="mai06-spat0"></i></span>
       <p>a) wenn einer der Vektoren der Nullvektor ist,<br>
       b) wenn die drei Vektoren <strong>in einer gemeinsamen Ebene liegen</strong> – also linear abhängig sind.</p>
       <p>Anschaulich: Das Spat hat dann die Höhe null, also auch das Volumen null. Damit ist <strong>⟨a b c⟩ = 0 ein Test auf lineare Abhängigkeit</strong> dreier Vektoren im Raum.</p>
     </div>
     <p><strong>Beispiel:</strong> a = (1,2,3)ᵀ, b = (−3,0,2)ᵀ, c = (−1,3,2)ᵀ → b × c = (−6, 4, −9)ᵀ … ⟨a, b×c⟩ = −18, also V = 18. Für a = (1,2,3)ᵀ, b = (−3,0,2)ᵀ, c = (1,6,4)ᵀ ergibt sich 0 – und tatsächlich gilt 2a − b = c, die drei sind linear abhängig.</p>
-    <p>Alternativ berechnet Satz 2.9 das Spatprodukt <strong>als Determinante</strong> der aus a, b, c gebildeten 3×3-Matrix (Regel von Sarrus).</p>
+    <p>Alternativ berechnet Satz 2.9 das Spatprodukt <strong>als Determinante</strong> der aus a, b, c gebildeten 3×3-Matrix (Regel von Sarrus).<i class="sk" data-sk="mai06-sarrus"></i></p>
   </div>
 </section>
 
@@ -468,30 +496,30 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <div class="box def">
       <span class="lbl">Die drei Darstellungsformen</span>
-      <p class="formula">Gerade (Def. 3.1):&nbsp;&nbsp;g: x = P₁ + t·(P₂ − P₁),&nbsp;&nbsp;t ∈ ℝ<br><br>Ebene, Parameterform (Def. 3.2):<br>&nbsp;&nbsp;E: x = P₁ + t·(P₂ − P₁) + s·(P₃ − P₁),&nbsp;&nbsp;t, s ∈ ℝ<br><br>Ebene, parameterfreie Form (Def. 3.3):<br>&nbsp;&nbsp;E: ax + by + cz = D</p>
+      <p class="formula">Gerade (Def. 3.1):&nbsp;&nbsp;g: x = P₁ + t·(P₂ − P₁),&nbsp;&nbsp;t ∈ ℝ<i class="sk" data-sk="mai06-gerade"></i><br><br>Ebene, Parameterform (Def. 3.2):<br>&nbsp;&nbsp;E: x = P₁ + t·(P₂ − P₁) + s·(P₃ − P₁),&nbsp;&nbsp;t, s ∈ ℝ<i class="sk" data-sk="mai06-ebene"></i><br><br>Ebene, parameterfreie Form (Def. 3.3):<br>&nbsp;&nbsp;E: ax + by + cz = D<i class="sk" data-sk="mai06-normale"></i></p>
     </div>
     <ul>
-      <li>(P₂ − P₁) ist der <strong>Richtungsvektor</strong> – berechnet als Koordinatendifferenz.</li>
+      <li>(P₂ − P₁) ist der <strong>Richtungsvektor</strong> – berechnet als Koordinatendifferenz.<i class="sk" data-sk="mai06-gerade"></i></li>
       <li>Der Richtungsvektor ist <strong>nicht eindeutig</strong>: Jedes Vielfache ≠ 0 tut es ebenso. Auch als Aufpunkt taugt jeder Punkt der Geraden. Deshalb spricht man korrekt von <em>einer</em>, nicht von <em>der</em> Geradengleichung.</li>
-      <li>Für die Ebene dürfen die drei Punkte <strong>nicht auf einer gemeinsamen Geraden</strong> liegen – nur dann ist sie eindeutig (deshalb wackelt ein dreibeiniger Tisch nicht).</li>
+      <li>Für die Ebene dürfen die drei Punkte <strong>nicht auf einer gemeinsamen Geraden</strong> liegen<i class="sk" data-sk="mai06-dreip"></i> – nur dann ist sie eindeutig (deshalb wackelt ein dreibeiniger Tisch nicht).</li>
       <li><strong>Punktprobe:</strong> Punkt einsetzen und prüfen, ob es ein passendes t (bzw. t und s) gibt – bei der parameterfreien Form einfach die Koordinaten einsetzen.</li>
     </ul>
 
     <div class="box def">
-      <span class="lbl">Satz 3.1 – Normalenvektor und parameterfreie Form</span>
+      <span class="lbl">Satz 3.1 – Normalenvektor und parameterfreie Form<i class="sk" data-sk="mai06-normale"></i></span>
       <p>Ist n ein Vektor senkrecht auf E (<strong>Normalenvektor</strong>) und P ein Punkt auf E, so gilt</p>
       <p class="formula">E:&nbsp; n₁x + n₂y + n₃z = ⟨n, P⟩</p>
       <p>Die Komponenten des Normalenvektors sind also die <strong>Koeffizienten</strong> der Gleichung, die rechte Seite ist das Skalarprodukt aus n und einem Punkt der Ebene.</p>
     </div>
     <div class="box">
-      <span class="lbl">Algorithmus: Parameterform → parameterfreie Form</span>
+      <span class="lbl">Algorithmus: Parameterform → parameterfreie Form<i class="sk" data-sk="mai06-p2k"></i></span>
       <p><strong>1.</strong> Normalenvektor als Vektorprodukt der beiden Richtungsvektoren berechnen: n = u × v<br>
       <strong>2.</strong> D = ⟨n, P₁⟩ berechnen<br>
       <strong>3.</strong> mit n = (a, b, c)ᵀ die Gleichung ax + by + cz = D hinschreiben</p>
       <p><strong>Probe:</strong> Einige Punkte aus der Parameterform berechnen und in die parameterfreie Gleichung einsetzen.</p>
     </div>
     <div class="box">
-      <span class="lbl">Umgekehrt: parameterfrei → Parameterform</span>
+      <span class="lbl">Umgekehrt: parameterfrei → Parameterform<i class="sk" data-sk="mai06-achsen"></i></span>
       <p>Nicht mit ausgefeilten Algorithmen aufhalten – die einfache Methode genügt: <strong>Drei Punkte der Ebene bestimmen</strong>, die nicht auf einer Geraden liegen (z.&nbsp;B. jeweils zwei Koordinaten null setzen und nach der dritten auflösen), und daraus die Parameterform bilden.</p>
       <p><em>Beispiel</em> E: x − y + z = −3 → P₁ = (0,0,−3)ᵀ, P₂ = (−3,0,0)ᵀ, P₃ = (0,3,0)ᵀ → E: x = (0,0,−3)ᵀ + t·(−1,0,1)ᵀ + s·(0,1,1)ᵀ (Richtungsvektoren dürfen gekürzt werden).</p>
     </div>
@@ -500,16 +528,16 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Fall</th><th>Vorgehen</th><th>mögliche Ergebnisse</th></tr></thead>
       <tbody>
-        <tr><td><strong>Gerade ∩ Gerade</strong></td><td>beide Parameterformen gleichsetzen → LGS in t und s</td><td>Schnittpunkt · parallel (unlösbar) · identisch · <strong>windschief</strong></td></tr>
-        <tr><td><strong>Gerade ∩ Ebene</strong></td><td>Komponenten x, y, z der Geraden in die parameterfreie Ebenengleichung einsetzen → eine Gleichung in t</td><td>genau ein Durchstoßpunkt · keiner (Widerspruch wie „2 = −1“) · Gerade liegt in der Ebene (Identität)</td></tr>
-        <tr><td><strong>Ebene ∩ Ebene</strong></td><td>Parameterform der einen in die parameterfreie der anderen einsetzen</td><td>Schnittgerade · parallel (Widerspruch „1 = 2“) · identisch (wahre Aussage „1 = 1“)</td></tr>
+        <tr><td><strong>Gerade ∩ Gerade</strong><i class="sk" data-sk="mai06-gg"></i></td><td>beide Parameterformen gleichsetzen → LGS in t und s</td><td>Schnittpunkt · parallel (unlösbar) · identisch · <strong>windschief</strong></td></tr>
+        <tr><td><strong>Gerade ∩ Ebene</strong><i class="sk" data-sk="mai06-ge"></i></td><td>Komponenten x, y, z der Geraden in die parameterfreie Ebenengleichung einsetzen → eine Gleichung in t</td><td>genau ein Durchstoßpunkt · keiner (Widerspruch wie „2 = −1“) · Gerade liegt in der Ebene (Identität)</td></tr>
+        <tr><td><strong>Ebene ∩ Ebene</strong><i class="sk" data-sk="mai06-ee"></i></td><td>Parameterform der einen in die parameterfreie der anderen einsetzen</td><td>Schnittgerade · parallel (Widerspruch „1 = 2“) · identisch (wahre Aussage „1 = 1“)</td></tr>
       </tbody>
     </table></div>
-    <p><em>Beispiel Durchstoßpunkt:</em> E: 21x + 15y + 8z = 89 und g: x = (1,0,0)ᵀ + t·(2,0,−1)ᵀ. Einsetzen von x = 1+2t, y = 0, z = −t liefert 21(1+2t) − 8t = 89 → t = 2 → S = (5, 0, −2)ᵀ.</p>
+    <p><em>Beispiel Durchstoßpunkt:</em><i class="sk" data-sk="mai06-ge"></i> E: 21x + 15y + 8z = 89 und g: x = (1,0,0)ᵀ + t·(2,0,−1)ᵀ. Einsetzen von x = 1+2t, y = 0, z = −t liefert 21(1+2t) − 8t = 89 → t = 2 → S = (5, 0, −2)ᵀ.</p>
 
     <div class="box def">
       <span class="lbl">Winkel – für die Einsendeaufgabe</span>
-      <p class="formula">Gerade/Gerade:&nbsp;&nbsp;cos φ = |⟨r₁, r₂⟩| / (|r₁|·|r₂|)&nbsp;&nbsp;(Richtungsvektoren)<br>Ebene/Ebene:&nbsp;&nbsp;&nbsp;&nbsp;cos φ = |⟨n₁, n₂⟩| / (|n₁|·|n₂|)&nbsp;&nbsp;(Normalenvektoren)<br>Gerade/Ebene:&nbsp;&nbsp;&nbsp;<strong>sin φ = |⟨r, n⟩| / (|r|·|n|)</strong></p>
+      <p class="formula">Gerade/Gerade:&nbsp;&nbsp;cos φ = |⟨r₁, r₂⟩| / (|r₁|·|r₂|)&nbsp;&nbsp;(Richtungsvektoren)<i class="sk" data-sk="mai06-wgg"></i><br>Ebene/Ebene:&nbsp;&nbsp;&nbsp;&nbsp;cos φ = |⟨n₁, n₂⟩| / (|n₁|·|n₂|)&nbsp;&nbsp;(Normalenvektoren)<i class="sk" data-sk="mai06-wee"></i><br>Gerade/Ebene:&nbsp;&nbsp;&nbsp;<strong>sin φ = |⟨r, n⟩| / (|r|·|n|)</strong><i class="sk" data-sk="mai06-wge"></i></p>
       <p>Beim Schnittwinkel zwischen Gerade und Ebene steht der <strong>Sinus</strong>, weil der Normalenvektor senkrecht zur Ebene zeigt – der über das Skalarprodukt berechnete Winkel ist also das Komplement zum gesuchten. Der Betrag im Zähler sorgt für den spitzen Winkel.</p>
     </div>
   </div>
@@ -847,34 +875,34 @@ g: x = (1,1,2)ᵀ + t·(5, 3, 2)ᵀ</div>
     <p class="lead">Alles Rechenbare auf einen Blick – das gehört auf den Spickzettel für die Klausur (erlaubt ist alles Gedruckte und Handgeschriebene).</p>
 
     <h4>Vektoren</h4>
-    <p class="formula">AB = B − A<br>|a| = √(a₁² + a₂² + a₃²)<br>e_a = a / |a|<br>a + b = (a₁+b₁, a₂+b₂, a₃+b₃)ᵀ&nbsp;&nbsp;·&nbsp;&nbsp;λ·a = (λa₁, λa₂, λa₃)ᵀ</p>
+    <p class="formula">AB = B − A<i class="sk" data-sk="mai06-ab"></i><br>|a| = √(a₁² + a₂² + a₃²)<i class="sk" data-sk="mai06-pyth"></i><br>e_a = a / |a|<i class="sk" data-sk="mai06-einheit"></i><br>a + b = (a₁+b₁, a₂+b₂, a₃+b₃)ᵀ<i class="sk" data-sk="mai06-addk"></i>&nbsp;&nbsp;·&nbsp;&nbsp;λ·a = (λa₁, λa₂, λa₃)ᵀ<i class="sk" data-sk="mai06-skalar"></i></p>
 
     <h4>Produkte</h4>
-    <p class="formula">⟨a, b⟩ = a₁b₁ + a₂b₂ + a₃b₃ = |a|·|b|·cos φ<br><br>a × b = ( a₂b₃ − a₃b₂ ,  a₃b₁ − a₁b₃ ,  a₁b₂ − a₂b₁ )ᵀ<br><br>⟨a b c⟩ = ⟨a, b × c⟩&nbsp;&nbsp;&nbsp;&nbsp;V_Spat = |⟨a b c⟩|</p>
+    <p class="formula">⟨a, b⟩ = a₁b₁ + a₂b₂ + a₃b₃ = |a|·|b|·cos φ<i class="sk" data-sk="mai06-skp"></i><br><br>a × b = ( a₂b₃ − a₃b₂ ,  a₃b₁ − a₁b₃ ,  a₁b₂ − a₂b₁ )ᵀ<i class="sk" data-sk="mai06-kreuzschema"></i><br><br>⟨a b c⟩ = ⟨a, b × c⟩&nbsp;&nbsp;&nbsp;&nbsp;V_Spat = |⟨a b c⟩|<i class="sk" data-sk="mai06-spat"></i></p>
     <div class="tw"><table>
       <thead><tr><th>Test</th><th>Kriterium</th></tr></thead>
       <tbody>
-        <tr><td>a ⊥ b</td><td>⟨a, b⟩ = 0</td></tr>
-        <tr><td>a ∥ b</td><td>a × b = 0 &nbsp;bzw.&nbsp; a = λb</td></tr>
-        <tr><td>a, b, c komplanar (linear abhängig)</td><td>⟨a b c⟩ = 0</td></tr>
-        <tr><td>k Vektoren im ℝⁿ mit k &gt; n</td><td>immer linear abhängig</td></tr>
+        <tr><td>a ⊥ b<i class="sk" data-sk="mai06-orth"></i></td><td>⟨a, b⟩ = 0</td></tr>
+        <tr><td>a ∥ b<i class="sk" data-sk="mai06-parallel0"></i></td><td>a × b = 0 &nbsp;bzw.&nbsp; a = λb</td></tr>
+        <tr><td>a, b, c komplanar (linear abhängig)<i class="sk" data-sk="mai06-spat0"></i></td><td>⟨a b c⟩ = 0</td></tr>
+        <tr><td>k Vektoren im ℝⁿ mit k &gt; n<i class="sk" data-sk="mai06-kgtn"></i></td><td>immer linear abhängig</td></tr>
       </tbody>
     </table></div>
 
     <h4>Winkel</h4>
-    <p class="formula">Vektor / Vektor:&nbsp;&nbsp;cos φ = ⟨a,b⟩ / (|a|·|b|)<br>Gerade / Gerade:&nbsp;&nbsp;cos φ = |⟨r₁,r₂⟩| / (|r₁|·|r₂|)<br>Ebene / Ebene:&nbsp;&nbsp;&nbsp;&nbsp;cos φ = |⟨n₁,n₂⟩| / (|n₁|·|n₂|)<br>Gerade / Ebene:&nbsp;&nbsp;&nbsp;sin φ = |⟨r,n⟩| / (|r|·|n|)</p>
+    <p class="formula">Vektor / Vektor:&nbsp;&nbsp;cos φ = ⟨a,b⟩ / (|a|·|b|)<i class="sk" data-sk="mai06-winkel"></i><br>Gerade / Gerade:&nbsp;&nbsp;cos φ = |⟨r₁,r₂⟩| / (|r₁|·|r₂|)<i class="sk" data-sk="mai06-wgg"></i><br>Ebene / Ebene:&nbsp;&nbsp;&nbsp;&nbsp;cos φ = |⟨n₁,n₂⟩| / (|n₁|·|n₂|)<i class="sk" data-sk="mai06-wee"></i><br>Gerade / Ebene:&nbsp;&nbsp;&nbsp;sin φ = |⟨r,n⟩| / (|r|·|n|)<i class="sk" data-sk="mai06-wge"></i></p>
 
     <h4>Geraden und Ebenen</h4>
-    <p class="formula">g: x = P + t·r<br>E: x = P + t·u + s·v&nbsp;&nbsp;&nbsp;(Parameterform)<br>E: ax + by + cz = D&nbsp;&nbsp;&nbsp;&nbsp;(parameterfrei, n = (a,b,c)ᵀ, D = ⟨n,P⟩)</p>
+    <p class="formula">g: x = P + t·r<i class="sk" data-sk="mai06-gerade"></i><br>E: x = P + t·u + s·v<i class="sk" data-sk="mai06-ebene"></i>&nbsp;&nbsp;&nbsp;(Parameterform)<br>E: ax + by + cz = D&nbsp;&nbsp;&nbsp;&nbsp;(parameterfrei, n = (a,b,c)ᵀ, D = ⟨n,P⟩)<i class="sk" data-sk="mai06-normale"></i></p>
     <div class="tw"><table>
       <thead><tr><th>Aufgabe</th><th>Rezept</th></tr></thead>
       <tbody>
-        <tr><td>Ebene aus 3 Punkten</td><td>u = B−A, v = C−A, n = u×v, D = ⟨n,A⟩</td></tr>
-        <tr><td>parameterfrei → Parameterform</td><td>drei Punkte bestimmen (je zwei Koordinaten = 0 setzen)</td></tr>
-        <tr><td>Lot auf E durch P</td><td>g: x = P + t·n</td></tr>
-        <tr><td>Durchstoßpunkt g ∩ E</td><td>x, y, z aus g in E einsetzen, nach t auflösen, in g einsetzen</td></tr>
-        <tr><td>g ∩ g</td><td>Parameterformen gleichsetzen; keine Lösung + nicht parallel = windschief</td></tr>
-        <tr><td>E ∩ E</td><td>Parameterform in parameterfreie einsetzen; „1 = 2“ → parallel, „1 = 1“ → identisch</td></tr>
+        <tr><td>Ebene aus 3 Punkten<i class="sk" data-sk="mai06-p2k"></i></td><td>u = B−A, v = C−A, n = u×v, D = ⟨n,A⟩</td></tr>
+        <tr><td>parameterfrei → Parameterform<i class="sk" data-sk="mai06-achsen"></i></td><td>drei Punkte bestimmen (je zwei Koordinaten = 0 setzen)</td></tr>
+        <tr><td>Lot auf E durch P<i class="sk" data-sk="mai06-lot"></i></td><td>g: x = P + t·n</td></tr>
+        <tr><td>Durchstoßpunkt g ∩ E<i class="sk" data-sk="mai06-ge"></i></td><td>x, y, z aus g in E einsetzen, nach t auflösen, in g einsetzen</td></tr>
+        <tr><td>g ∩ g<i class="sk" data-sk="mai06-gg"></i></td><td>Parameterformen gleichsetzen; keine Lösung + nicht parallel = windschief</td></tr>
+        <tr><td>E ∩ E<i class="sk" data-sk="mai06-ee"></i></td><td>Parameterform in parameterfreie einsetzen; „1 = 2“ → parallel, „1 = 1“ → identisch</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -963,6 +991,65 @@ g: x = (1,1,2)ᵀ + t·(5, 3, 2)ᵀ</div>
       });
       box.appendChild(b);
     });
+  })();
+
+  /* ---------- Skizzen: <i class="sk" data-sk="id"> → Icon-Button, Großansicht im Overlay ----------
+     Daten kommen aus assets/sketches/<heft>.js (window.ITI_SKETCHES), Zeichenhilfen aus assets/sketch-kit.js. */
+  (function(){
+    var marks = document.querySelectorAll("i.sk[data-sk]");
+    if(!marks.length) return;
+    var code = KEY.split(":")[0];
+    var ICON = '<svg viewBox="0 0 20 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16 L17 16"/><path d="M2 16 L2 2"/><path d="M3 15 L13 5"/><path d="M13 5 l-4 .4 M13 5 l-.4 4"/><path d="M7 15 a4.5 4.5 0 0 0 -1.4 -3.2"/></svg>';
+    function load(src, cb){ var s = document.createElement("script"); s.src = src; s.onload = cb; s.onerror = cb; document.head.appendChild(s); }
+    load("assets/sketch-kit.js", function(){ load("assets/sketches/" + code + ".js", init); });
+
+    function init(){
+      var data = window.ITI_SKETCHES || {};
+      var order = [], btns = [];
+      Array.prototype.forEach.call(marks, function(m){
+        var id = m.getAttribute("data-sk"), d = data[id];
+        if(!d) return;
+        if(order.indexOf(id) < 0) order.push(id);
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "sk"; b.setAttribute("data-sk", id);
+        b.title = "Skizze: " + d.t; b.setAttribute("aria-label", "Skizze öffnen: " + d.t);
+        b.innerHTML = ICON;
+        m.parentNode.replaceChild(b, m);
+        btns.push(b);
+      });
+      if(!order.length) return;
+
+      var ov = document.createElement("div");
+      ov.className = "skm"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-labelledby", "skmT");
+      ov.innerHTML = '<div class="skm-p"><div class="skm-h"><div><div class="skm-k" id="skmK"></div><div class="skm-t" id="skmT"></div></div>' +
+        '<button class="skm-x" type="button" aria-label="Schließen">×</button></div>' +
+        '<div class="skm-b"><div class="skm-svg" id="skmS"></div><p class="skm-c" id="skmC"></p></div>' +
+        '<div class="skm-f"><button type="button" data-d="-1">‹ Vorherige</button><span class="sp">Pfeiltasten blättern · Esc schließt</span><button type="button" data-d="1">Nächste ›</button></div></div>';
+      document.body.appendChild(ov);
+      var cur = 0, opener = null;
+      function show(i){
+        cur = (i + order.length) % order.length;
+        var d = data[order[cur]];
+        document.getElementById("skmK").textContent = "Skizze " + (cur + 1) + " / " + order.length;
+        document.getElementById("skmT").textContent = d.t;
+        var svg = typeof d.svg === "function" ? d.svg(window.SK) : d.svg;
+        document.getElementById("skmS").innerHTML = svg;
+        document.getElementById("skmC").innerHTML = d.c || "";
+      }
+      function open(id, btn){ opener = btn; show(order.indexOf(id)); ov.classList.add("on"); ov.querySelector(".skm-x").focus(); }
+      function close(){ ov.classList.remove("on"); if(opener) opener.focus(); }
+      btns.forEach(function(b){ b.addEventListener("click", function(){ open(b.getAttribute("data-sk"), b); }); });
+      ov.addEventListener("click", function(e){
+        if(e.target === ov || e.target.closest(".skm-x")) return close();
+        var nb = e.target.closest("[data-d]"); if(nb) show(cur + Number(nb.getAttribute("data-d")));
+      });
+      document.addEventListener("keydown", function(e){
+        if(!ov.classList.contains("on")) return;
+        if(e.key === "Escape"){ e.preventDefault(); close(); }
+        else if(e.key === "ArrowRight"){ e.preventDefault(); show(cur + 1); }
+        else if(e.key === "ArrowLeft"){ e.preventDefault(); show(cur - 1); }
+      });
+    }
   })();
 
   /* ---------- Inhaltsverzeichnis aufbauen ---------- */
