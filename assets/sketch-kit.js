@@ -110,7 +110,7 @@
   /* 2D-Achsenkreuz mit Ursprung (ox,oy); Ausdehnung in Pixeln */
   K.axes = function(ox, oy, left, right, up, down, lx, ly){
     return K.arrow(ox - left, oy, ox + right, oy, "s", { w: 1.3, head: 9 }) + K.arrow(ox, oy + down, ox, oy - up, "s", { w: 1.3, head: 9 }) +
-      K.t(ox + right - 4, oy + 16, lx || "x", "s", { it: true, s: 15 }) + K.t(ox - 14, oy - up + 6, ly || "y", "s", { it: true, s: 15 });
+      K.t(ox + right - 4, oy + 16, lx === undefined ? "x" : lx, "s", { it: true, s: 15 }) + K.t(ox - 14, oy - up + 6, ly === undefined ? "y" : ly, "s", { it: true, s: 15 });
   };
   /* Skalenstriche auf den Achsen */
   K.ticks = function(ox, oy, st, nx, ny, labels){
@@ -148,6 +148,39 @@
     return K.rect(x0, y - h / 2, w, h, c || "a", { fill: o.fill || "fa", rx: 4, w: 1 }) +
       '<text x="' + n(x0 + w / 2) + '" y="' + n(y) + '" text-anchor="middle" dominant-baseline="middle" style="font-family:var(--font-mono);font-size:' + (o.s || 14) +
       'px;font-weight:600;fill:' + col(c || "a") + '">' + esc(s) + '</text>';
+  };
+
+  /* ---------- Funktionsgraphen ----------
+     M = K.map(ox, oy, sx, sy): Ursprung (ox,oy) in Pixeln, sx/sy Pixel pro Einheit. */
+  K.map = function(ox, oy, sx, sy){
+    return { X: function(v){ return ox + v * sx; }, Y: function(v){ return oy - v * sy; }, ox: ox, oy: oy, sx: sx, sy: sy };
+  };
+  /* Graph von f auf [a,b]. o: {n, ymin, ymax (Abschneiden), jump (Sprung in y-Einheiten → Lücke), w, dash} */
+  K.plot = function(f, a, b, M, c, o){
+    o = o || {};
+    var N = o.n || 260, d = "", pen = false, prev = null;
+    for(var i = 0; i <= N; i++){
+      var x = a + (b - a) * i / N, y = f(x);
+      var ok = isFinite(y) && (o.ymin === undefined || y >= o.ymin) && (o.ymax === undefined || y <= o.ymax);
+      if(ok && pen && o.jump && prev !== null && Math.abs(y - prev) > o.jump) pen = false;
+      if(ok){ d += (pen ? " L" : " M") + n(M.X(x)) + " " + n(M.Y(y)); pen = true; prev = y; }
+      else { pen = false; prev = null; }
+    }
+    return d ? K.path(d.trim(), c || "a", { w: o.w || 2.4, dash: o.dash }) : "";
+  };
+  /* Fläche zwischen f und der x-Achse auf [a,b] */
+  K.area = function(f, a, b, M, c, o){
+    o = o || {};
+    var N = o.n || 200, d = "M" + n(M.X(a)) + " " + n(M.Y(0));
+    for(var i = 0; i <= N; i++){ var x = a + (b - a) * i / N; d += " L" + n(M.X(x)) + " " + n(M.Y(f(x))); }
+    d += " L" + n(M.X(b)) + " " + n(M.Y(0)) + " Z";
+    return '<path d="' + d + '" style="fill:' + col(c || "fa") + ';stroke:none"/>';
+  };
+  /* Säule von y=0 bis y=v an Stelle x (Breite w in Einheiten) */
+  K.bar = function(x, v, w, M, c, o){
+    o = o || {};
+    var x0 = M.X(x - w / 2), x1 = M.X(x + w / 2), y0 = M.Y(0), y1 = M.Y(v);
+    return K.rect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0), Math.abs(y1 - y0), o.stroke || c, { fill: o.fill || "fa", rx: 1, w: 1.2 });
   };
 
   window.SK = K;

@@ -347,14 +347,14 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Eine Reihe ist der Grenzwert ihrer Partialsummen. Die Kriterien sagen, <em>ob</em> sie konvergiert – <em>wogegen</em>, muss man selbst herausfinden.</p>
 
     <div class="box def">
-      <span class="lbl">Definition 1.1</span>
+      <span class="lbl">Definition 1.1<i class="sk" data-sk="mai09-partial"></i></span>
       <p>Ist (a<sub>i</sub>) eine Zahlenfolge, so heißt die Reihe konvergent gegen den <strong>Summenwert (Reihenwert) S</strong>, wenn die Folge der Partialsummen konvergiert:</p>
       <p class="formula">∑<sub>i=1</sub><sup>∞</sup> a<sub>i</sub> := lim<sub>p→∞</sub> ∑<sub>i=1</sub><sup>p</sup> a<sub>i</sub> = S</p>
       <p>Existiert dieser Grenzwert nicht, <strong>divergiert</strong> die Reihe. Die Schreibweise mit ∞ ist <strong>nur eine Kurzform</strong> für den Grenzwert der Partialsummen.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">Die geometrische Reihe – der wichtigste Baustein</span>
+      <span class="lbl">Die geometrische Reihe – der wichtigste Baustein<i class="sk" data-sk="mai09-geom"></i></span>
       <p class="formula">∑<sub>i=0</sub><sup>p</sup> qⁱ = (q<sup>p+1</sup> − 1)/(q − 1)&nbsp;&nbsp;&nbsp;(endlich, q ≠ 1)<br><br>∑<sub>i=0</sub><sup>∞</sup> qⁱ = 1/(1 − q)&nbsp;&nbsp;&nbsp;<strong>für |q| &lt; 1</strong></p>
       <p><em>Beispiel:</em> q = ¾ → ∑ = 1/(1 − ¾) = 4. &nbsp; q = ½ → ∑<sub>i=0</sub><sup>∞</sup>(½)ⁱ = 2, also ∑<sub>i=1</sub><sup>∞</sup>(½)ⁱ = 1 („Schokoladenhalbierung“).</p>
       <p>Dagegen divergiert ∑ i, denn die geschlossene Form p(p+1)/2 geht gegen ∞.</p>
@@ -364,14 +364,14 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Kriterium</th><th>Prüfgröße</th><th>Aussage</th></tr></thead>
       <tbody>
-        <tr><td><strong>Quotienten</strong></td><td>q = lim<sub>i→∞</sub> |a<sub>i+1</sub> / a<sub>i</sub>|</td><td>q &lt; 1 → konvergent · q &gt; 1 → divergent · <strong>q = 1 → keine Aussage</strong></td></tr>
-        <tr><td><strong>Wurzel</strong></td><td>q = lim<sub>i→∞</sub> <sup>i</sup>√|a<sub>i</sub>|</td><td>ebenso: q &lt; 1 konvergent, q &gt; 1 divergent, q = 1 keine Aussage</td></tr>
-        <tr><td><strong>Leibniz</strong></td><td>alternierende Reihe ∑(−1)<sup>i</sup>b<sub>i</sub></td><td>konvergiert, wenn b<sub>i</sub> <strong>monoton fallend</strong> ist <strong>und</strong> gegen 0 geht</td></tr>
-        <tr><td><strong>notwendiges Kriterium</strong></td><td>lim<sub>i→∞</sub> a<sub>i</sub></td><td>≠ 0 → Reihe divergiert. <strong>= 0 beweist nichts</strong></td></tr>
+        <tr><td><strong>Quotienten</strong><i class="sk" data-sk="mai09-quot"></i></td><td>q = lim<sub>i→∞</sub> |a<sub>i+1</sub> / a<sub>i</sub>|</td><td>q &lt; 1 → konvergent · q &gt; 1 → divergent · <strong>q = 1 → keine Aussage</strong></td></tr>
+        <tr><td><strong>Wurzel</strong><i class="sk" data-sk="mai09-wurzel"></i></td><td>q = lim<sub>i→∞</sub> <sup>i</sup>√|a<sub>i</sub>|</td><td>ebenso: q &lt; 1 konvergent, q &gt; 1 divergent, q = 1 keine Aussage</td></tr>
+        <tr><td><strong>Leibniz</strong><i class="sk" data-sk="mai09-leibniz"></i></td><td>alternierende Reihe ∑(−1)<sup>i</sup>b<sub>i</sub></td><td>konvergiert, wenn b<sub>i</sub> <strong>monoton fallend</strong> ist <strong>und</strong> gegen 0 geht</td></tr>
+        <tr><td><strong>notwendiges Kriterium</strong><i class="sk" data-sk="mai09-notw"></i></td><td>lim<sub>i→∞</sub> a<sub>i</sub></td><td>≠ 0 → Reihe divergiert. <strong>= 0 beweist nichts</strong></td></tr>
       </tbody>
     </table></div>
     <div class="box warn">
-      <span class="lbl">Die harmonische Reihe ∑ 1/i</span>
+      <span class="lbl">Die harmonische Reihe ∑ 1/i<i class="sk" data-sk="mai09-harm"></i></span>
       <p>Das Standardbeispiel für q = 1: Quotienten- <em>und</em> Wurzelkriterium liefern 1 – <strong>keine Aussage</strong>. Die Glieder gehen gegen 0, das notwendige Kriterium ist also erfüllt. Trotzdem <strong>divergiert</strong> sie. Merksatz: <strong>a<sub>i</sub> → 0 ist notwendig, aber nicht hinreichend.</strong></p>
     </div>
     <p><strong>Rechentrick beim Quotientenkriterium:</strong> Fakultäten kürzen über (i+1)! = i!·(i+1); danach entscheidet der <strong>Grad</strong> von Zähler und Nenner. Beispiel ∑ i¹⁷/i! → Quotient = (i+1)¹⁶/i¹⁷ → 0 &lt; 1, also konvergent. Beispiel ∑ 2ⁱ → Quotient = 2 &gt; 1, divergent.</p>
@@ -380,12 +380,12 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <div class="tw"><table>
       <thead><tr><th>Begriff</th><th>Inhalt</th></tr></thead>
       <tbody>
-        <tr><td><strong>absolut konvergent</strong></td><td>∑|a<sub>i</sub>| konvergiert. Daraus folgt Konvergenz von ∑a<sub>i</sub> – <strong>die Umkehrung gilt nicht</strong></td></tr>
-        <tr><td><strong>Majorantenkriterium</strong></td><td>Gilt |a<sub>i</sub>| ≤ b<sub>i</sub> und konvergiert ∑b<sub>i</sub>, so konvergiert ∑a<sub>i</sub> (absolut)</td></tr>
-        <tr><td><strong>Minorantenkriterium</strong></td><td>Gilt a<sub>i</sub> ≥ c<sub>i</sub> ≥ 0 und divergiert ∑c<sub>i</sub>, so divergiert ∑a<sub>i</sub></td></tr>
+        <tr><td><strong>absolut konvergent</strong><i class="sk" data-sk="mai09-absolut"></i></td><td>∑|a<sub>i</sub>| konvergiert. Daraus folgt Konvergenz von ∑a<sub>i</sub> – <strong>die Umkehrung gilt nicht</strong></td></tr>
+        <tr><td><strong>Majorantenkriterium</strong><i class="sk" data-sk="mai09-vergleich"></i></td><td>Gilt |a<sub>i</sub>| ≤ b<sub>i</sub> und konvergiert ∑b<sub>i</sub>, so konvergiert ∑a<sub>i</sub> (absolut)</td></tr>
+        <tr><td><strong>Minorantenkriterium</strong><i class="sk" data-sk="mai09-vergleich"></i></td><td>Gilt a<sub>i</sub> ≥ c<sub>i</sub> ≥ 0 und divergiert ∑c<sub>i</sub>, so divergiert ∑a<sub>i</sub></td></tr>
       </tbody>
     </table></div>
-    <p>Als Vergleichsreihen dienen fast immer die <strong>geometrische Reihe</strong> (konvergent für |q| &lt; 1), die <strong>harmonische Reihe</strong> ∑1/i (divergent) und die Reihen ∑1/i<sup>α</sup> (konvergent für α &gt; 1).</p>
+    <p>Als Vergleichsreihen dienen fast immer die <strong>geometrische Reihe</strong> (konvergent für |q| &lt; 1), die <strong>harmonische Reihe</strong> ∑1/i (divergent) und die Reihen ∑1/i<sup>α</sup> (konvergent für α &gt; 1).<i class="sk" data-sk="mai09-alpha"></i></p>
   </div>
 </section>
 
@@ -407,25 +407,25 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Reihen, deren Glieder von x abhängen – und die Frage, für welche x sie konvergieren.</p>
 
     <div class="box def">
-      <span class="lbl">Potenzreihe (Def. 2.1) und Konvergenzradius (Def. 2.2)</span>
+      <span class="lbl">Potenzreihe (Def. 2.1) und Konvergenzradius (Def. 2.2)<i class="sk" data-sk="mai09-radius"></i></span>
       <p class="formula">P(x) = ∑<sub>k=0</sub><sup>∞</sup> a<sub>k</sub>·(x − x₀)<sup>k</sup></p>
       <p>Es gibt ein <strong>r ≥ 0</strong> (den <strong>Konvergenzradius</strong>), sodass die Reihe für |x − x₀| &lt; r <strong>absolut konvergiert</strong> und für |x − x₀| &gt; r divergiert. Über die <strong>Randpunkte</strong> |x − x₀| = r sagt der Radius nichts – sie müssen einzeln geprüft werden. Der <strong>Konvergenzbereich</strong> ist das Intervall inklusive der konvergenten Randpunkte.</p>
     </div>
     <div class="box def">
-      <span class="lbl">Berechnung des Konvergenzradius (Sätze 2.1 / 2.2)</span>
+      <span class="lbl">Berechnung des Konvergenzradius (Sätze 2.1 / 2.2)<i class="sk" data-sk="mai09-geomrad"></i></span>
       <p class="formula">r = lim<sub>k→∞</sub> | a<sub>k</sub> / a<sub>k+1</sub> |&nbsp;&nbsp;&nbsp;&nbsp;(aus dem Quotientenkriterium)<br>r = 1 / lim<sub>k→∞</sub> <sup>k</sup>√|a<sub>k</sub>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(aus dem Wurzelkriterium)</p>
       <p>Für x₀ ≠ 0 verschiebt sich nur der Mittelpunkt: Konvergenz für x ∈ (x₀ − r, x₀ + r).</p>
     </div>
-    <p><strong>Operationen (Sätze 2.3/2.4):</strong> Innerhalb des Konvergenzbereichs darf man Potenzreihen <strong>gliedweise addieren, differenzieren und integrieren</strong>; der Konvergenzradius bleibt dabei erhalten.</p>
+    <p><strong>Operationen (Sätze 2.3/2.4):</strong><i class="sk" data-sk="mai09-gliedweise"></i> Innerhalb des Konvergenzbereichs darf man Potenzreihen <strong>gliedweise addieren, differenzieren und integrieren</strong>; der Konvergenzradius bleibt dabei erhalten.</p>
 
     <div class="box def">
-      <span class="lbl">Taylorreihe und Taylorpolynom (Def. 2.3)</span>
+      <span class="lbl">Taylorreihe und Taylorpolynom (Def. 2.3)<i class="sk" data-sk="mai09-taylor"></i></span>
       <p class="formula">T(x) = ∑<sub>k=0</sub><sup>∞</sup> f<sup>(k)</sup>(x₀)/k! · (x − x₀)<sup>k</sup></p>
       <p>Das <strong>Taylorpolynom n-ten Grades</strong> ist die endliche Summe bis k = n – die beste polynomiale Näherung von f in der Nähe von x₀. Für x₀ = 0 spricht man von der <strong>MacLaurin-Reihe</strong>.</p>
     </div>
     <p><strong>Die wichtigsten Reihenentwicklungen (x₀ = 0):</strong></p>
-    <p class="formula">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>sin x = x − x³/3! + x⁵/5! − …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>cos x = 1 − x²/2! + x⁴/4! − …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>1/(1−x) = 1 + x + x² + x³ + …&nbsp;&nbsp;&nbsp;&nbsp;(r = 1)<br>ln(1+x) = x − x²/2 + x³/3 − …&nbsp;&nbsp;&nbsp;&nbsp;(r = 1)</p>
-    <p>Die Sätze 2.5 und 2.6 klären, wann die Taylorreihe die Funktion <strong>tatsächlich darstellt</strong>: genau dann, wenn das <strong>Restglied</strong> für n → ∞ gegen null geht.</p>
+    <p class="formula">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + …<i class="sk" data-sk="mai09-exp"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>sin x = x − x³/3! + x⁵/5! − …<i class="sk" data-sk="mai09-taylor"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>cos x = 1 − x²/2! + x⁴/4! − …&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r = ∞)<br>1/(1−x) = 1 + x + x² + x³ + …<i class="sk" data-sk="mai09-geomrad"></i>&nbsp;&nbsp;&nbsp;&nbsp;(r = 1)<br>ln(1+x) = x − x²/2 + x³/3 − …<i class="sk" data-sk="mai09-lnr"></i>&nbsp;&nbsp;&nbsp;&nbsp;(r = 1)</p>
+    <p>Die Sätze 2.5 und 2.6 klären, wann die Taylorreihe die Funktion <strong>tatsächlich darstellt</strong>: genau dann, wenn das <strong>Restglied</strong> für n → ∞ gegen null geht.<i class="sk" data-sk="mai09-rest"></i></p>
   </div>
 </section>
 
@@ -447,24 +447,24 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Periodische Funktionen als Summe von Sinus- und Cosinusschwingungen – auch dann, wenn die Funktion Sprünge hat.</p>
 
     <div class="box def">
-      <span class="lbl">Definition 3.2 – Fourierreihe einer 2π-periodischen Funktion</span>
-      <p class="formula">F<sub>f</sub>(x) = a₀/2 + ∑<sub>n=1</sub><sup>∞</sup> ( a<sub>n</sub>·cos(nx) + b<sub>n</sub>·sin(nx) )<br><br>a<sub>n</sub> = (1/π) ∫<sub>0</sub><sup>2π</sup> f(x)·cos(nx) dx&nbsp;&nbsp;&nbsp;(n = 0, 1, 2, …)<br>b<sub>n</sub> = (1/π) ∫<sub>0</sub><sup>2π</sup> f(x)·sin(nx) dx&nbsp;&nbsp;&nbsp;(n = 1, 2, …)</p>
-      <p><strong>Achtung:</strong> a₀ wird in der Reihe <strong>halbiert</strong> – a₀/2 ist der Mittelwert der Funktion über eine Periode.</p>
+      <span class="lbl">Definition 3.2 – Fourierreihe einer 2π-periodischen Funktion<i class="sk" data-sk="mai09-fourier"></i></span>
+      <p class="formula">F<sub>f</sub>(x) = a₀/2 + ∑<sub>n=1</sub><sup>∞</sup> ( a<sub>n</sub>·cos(nx) + b<sub>n</sub>·sin(nx) )<i class="sk" data-sk="mai09-bausteine"></i><br><br>a<sub>n</sub> = (1/π) ∫<sub>0</sub><sup>2π</sup> f(x)·cos(nx) dx&nbsp;&nbsp;&nbsp;(n = 0, 1, 2, …)<br>b<sub>n</sub> = (1/π) ∫<sub>0</sub><sup>2π</sup> f(x)·sin(nx) dx&nbsp;&nbsp;&nbsp;(n = 1, 2, …)</p>
+      <p><strong>Achtung:</strong> a₀ wird in der Reihe <strong>halbiert</strong> – a₀/2 ist der Mittelwert der Funktion über eine Periode.<i class="sk" data-sk="mai09-mittel"></i></p>
     </div>
     <div class="box">
-      <span class="lbl">Symmetrie spart die halbe Arbeit</span>
+      <span class="lbl">Symmetrie spart die halbe Arbeit<i class="sk" data-sk="mai09-symm"></i></span>
       <p>Ist f <strong>gerade</strong> (achsensymmetrisch), so sind <strong>alle b<sub>n</sub> = 0</strong> → reine Cosinusreihe.<br>
       Ist f <strong>ungerade</strong> (punktsymmetrisch), so sind <strong>alle a<sub>n</sub> = 0</strong> → reine Sinusreihe.<br>
       Vor dem Integrieren also immer erst auf Symmetrie prüfen.</p>
     </div>
     <div class="box warn">
-      <span class="lbl">Satz 3.1 – wann stellt die Reihe die Funktion dar?</span>
+      <span class="lbl">Satz 3.1 – wann stellt die Reihe die Funktion dar?<i class="sk" data-sk="mai09-sprung"></i></span>
       <p><strong>Voraussetzungen:</strong> (1) [0, 2π] lässt sich in <em>endlich viele</em> Teilintervalle zerlegen, auf denen f stetig und monoton ist; (2) an jeder Unstetigkeitsstelle existieren links- und rechtsseitiger Grenzwert.</p>
       <p><strong>Dann gilt:</strong> Überall, wo f <strong>stetig</strong> ist, ist F<sub>f</sub>(x) = f(x). An jeder <strong>Sprungstelle</strong> liefert die Reihe das <strong>arithmetische Mittel</strong> der einseitigen Grenzwerte:</p>
-      <p class="formula">F<sub>f</sub>(x) = ( f⁻(x) + f⁺(x) ) / 2</p>
+      <p class="formula">F<sub>f</sub>(x) = ( f⁻(x) + f⁺(x) ) / 2<i class="sk" data-sk="mai09-sprung"></i></p>
       <p>Das ist mehr, als Taylorreihen leisten: Die Funktion muss nicht einmal überall stetig sein.</p>
     </div>
-    <p>Für Funktionen mit der <strong>Periode T</strong> statt 2π (Def. 3.3, Satz 3.2) ersetzt man nx durch nωx mit <strong>ω = 2π/T</strong> und integriert über eine volle Periode, mit dem Vorfaktor 2/T statt 1/π.</p>
+    <p>Für Funktionen mit der <strong>Periode T</strong> statt 2π (Def. 3.3, Satz 3.2) ersetzt man nx durch nωx mit <strong>ω = 2π/T</strong><i class="sk" data-sk="mai09-periode"></i> und integriert über eine volle Periode, mit dem Vorfaktor 2/T statt 1/π.</p>
   </div>
 </section>
 
@@ -486,15 +486,15 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
     <p class="lead">Von der Zeitfunktion zur Bildfunktion – und zurück. Die Laplacetransformation macht aus einer Differenzialgleichung eine algebraische Gleichung.</p>
 
     <h4>4.1 Fouriertransformation</h4>
-    <p>Verallgemeinert die Fourierreihe auf <strong>nichtperiodische</strong> Funktionen: Aus der Summe über diskrete Frequenzen wird ein Integral über ein kontinuierliches Spektrum. Die <strong>Rücktransformation</strong> ist hier oft schwierig – genau das macht die Laplacetransformation attraktiver.</p>
+    <p>Verallgemeinert die Fourierreihe auf <strong>nichtperiodische</strong> Funktionen: Aus der Summe über diskrete Frequenzen wird ein Integral über ein kontinuierliches Spektrum.<i class="sk" data-sk="mai09-spektrum"></i> Die <strong>Rücktransformation</strong> ist hier oft schwierig – genau das macht die Laplacetransformation attraktiver.</p>
 
     <div class="box def">
-      <span class="lbl">Definition 4.3 – Laplacetransformation</span>
+      <span class="lbl">Definition 4.3 – Laplacetransformation<i class="sk" data-sk="mai09-laplace"></i></span>
       <p class="formula">F(s) = ℒ{f(t)} = ∫<sub>0</sub><sup>∞</sup> f(t)·e<sup>−st</sup> dt</p>
       <p>f heißt <strong>Originalfunktion</strong> oder <strong>Zeitfunktion</strong>, F die <strong>Bildfunktion</strong>. Formal ist s komplex mit positivem Realteil – in der Praxis und in diesem Heft genügt <strong>s &gt; 0 reell</strong>. Das uneigentliche Integral muss existieren.</p>
     </div>
 
-    <h4>Korrespondenztabelle</h4>
+    <h4>Korrespondenztabelle<i class="sk" data-sk="mai09-korr"></i></h4>
     <div class="tw"><table class="mono">
       <thead><tr><th>f(t)</th><th>F(s) = ℒ{f(t)}</th></tr></thead>
       <tbody>
@@ -511,24 +511,24 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
 
     <div class="box def">
       <span class="lbl">Die vier Sätze (4.4–4.7)</span>
-      <p class="formula"><strong>Linearität:</strong>&nbsp;&nbsp;ℒ{a₁f₁ + a₂f₂} = a₁·ℒ{f₁} + a₂·ℒ{f₂}<br><br><strong>Ähnlichkeitssatz:</strong>&nbsp;&nbsp;ℒ{f(at)} = (1/a)·F(s/a)&nbsp;&nbsp;&nbsp;(a &gt; 0)<br><br><strong>Verschiebungssatz:</strong>&nbsp;&nbsp;ℒ{f(t − a)} = e<sup>−as</sup>·F(s)&nbsp;&nbsp;&nbsp;(a &gt; 0, f(t−a) := 0 für t &lt; a)<br><br><strong>Dämpfungssatz:</strong>&nbsp;&nbsp;ℒ{e<sup>−at</sup>·f(t)} = F(s + a)</p>
+      <p class="formula"><strong>Linearität:</strong>&nbsp;&nbsp;ℒ{a₁f₁ + a₂f₂} = a₁·ℒ{f₁} + a₂·ℒ{f₂}<br><br><strong>Ähnlichkeitssatz:</strong>&nbsp;&nbsp;ℒ{f(at)} = (1/a)·F(s/a)<i class="sk" data-sk="mai09-aehnl"></i>&nbsp;&nbsp;&nbsp;(a &gt; 0)<br><br><strong>Verschiebungssatz:</strong>&nbsp;&nbsp;ℒ{f(t − a)} = e<sup>−as</sup>·F(s)<i class="sk" data-sk="mai09-versch"></i>&nbsp;&nbsp;&nbsp;(a &gt; 0, f(t−a) := 0 für t &lt; a)<br><br><strong>Dämpfungssatz:</strong>&nbsp;&nbsp;ℒ{e<sup>−at</sup>·f(t)} = F(s + a)<i class="sk" data-sk="mai09-daempf"></i></p>
       <p><em>Merkhilfe:</em> Verschiebung im <strong>Zeitbereich</strong> → Faktor e<sup>−as</sup> im Bildbereich. Dämpfung im Zeitbereich → <strong>Verschiebung im Bildbereich</strong>. Beispiel: ℒ{e<sup>−t</sup>cos t} = (s+1)/((s+1)²+1) = (s+1)/(s² + 2s + 2).</p>
     </div>
 
     <div class="box warn">
-      <span class="lbl">Satz 4.8 – Ableitungssatz (der Schlüssel zu den DGLen)</span>
+      <span class="lbl">Satz 4.8 – Ableitungssatz (der Schlüssel zu den DGLen)<i class="sk" data-sk="mai09-ableit"></i></span>
       <p class="formula">ℒ{f′(t)}&nbsp; = s·F(s) − f(0)<br>ℒ{f″(t)} = s²·F(s) − s·f(0) − f′(0)<br><br>allgemein: ℒ{f<sup>(n)</sup>} = sⁿF(s) − s<sup>n−1</sup>f(0) − s<sup>n−2</sup>f′(0) − … − f<sup>(n−1)</sup>(0)</p>
       <p>Die <strong>Anfangswerte stecken direkt in der Formel</strong> – deshalb löst die Laplacetransformation Anfangswertprobleme in einem Zug, ohne nachträgliche Konstantenbestimmung.</p>
     </div>
 
     <div class="box def">
-      <span class="lbl">Lösung eines linearen Anfangswertproblems – drei Schritte</span>
+      <span class="lbl">Lösung eines linearen Anfangswertproblems – drei Schritte<i class="sk" data-sk="mai09-umweg"></i></span>
       <p><strong>(i)</strong> Laplacetransformation auf beide Seiten der DGL anwenden, dabei Satz 4.8 für die Ableitungen benutzen.<br>
       <strong>(ii)</strong> Die entstehende <em>algebraische</em> Gleichung nach der Bildfunktion Y(s) auflösen.<br>
       <strong>(iii)</strong> Y(s) nötigenfalls per <strong>Partialbruchzerlegung</strong> in einfache rationale Terme zerlegen und mit der Korrespondenztabelle zurücktransformieren.</p>
     </div>
     <p><em>Beispiel:</em> y″ + 5y′ + 4y = 0 mit y(0) = 2, y′(0) = 1.</p>
-    <p class="formula">(s²Y − 2s − 1) + 5(sY − 2) + 4Y = 0<br>Y·(s² + 5s + 4) = 2s + 11<br>Y = (2s + 11)/((s+1)(s+4))<br>Partialbruch: Y = 3/(s+1) − 1/(s+4)<br><strong>y(t) = 3e<sup>−t</sup> − e<sup>−4t</sup></strong></p>
+    <p class="formula">(s²Y − 2s − 1) + 5(sY − 2) + 4Y = 0<br>Y·(s² + 5s + 4) = 2s + 11<br>Y = (2s + 11)/((s+1)(s+4))<br>Partialbruch: Y = 3/(s+1) − 1/(s+4)<br><strong>y(t) = 3e<sup>−t</sup> − e<sup>−4t</sup></strong><i class="sk" data-sk="mai09-awp"></i></p>
     <p>Probe: y(0) = 3 − 1 = 2 ✓ &nbsp;·&nbsp; y′(t) = −3e<sup>−t</sup> + 4e<sup>−4t</sup>, y′(0) = −3 + 4 = 1 ✓</p>
   </div>
 </section>
@@ -853,34 +853,34 @@ f(t) = 1/4 + (3/4)·e^(8t)</div>
   <div class="band">Zuletzt gelesen</div>
   <div class="body">
     <h4>Reihen</h4>
-    <p class="formula">geometrisch:&nbsp;&nbsp;∑<sub>i=0</sub><sup>∞</sup> qⁱ = 1/(1−q)&nbsp;&nbsp;für |q| &lt; 1<br>harmonisch:&nbsp;&nbsp;∑ 1/i&nbsp;&nbsp;divergiert&nbsp;&nbsp;·&nbsp;&nbsp;∑ 1/i<sup>α</sup> konvergiert für α &gt; 1<br>alternierend harmonisch:&nbsp;&nbsp;∑ (−1)ⁱ/i konvergiert (bedingt)</p>
+    <p class="formula">geometrisch:&nbsp;&nbsp;∑<sub>i=0</sub><sup>∞</sup> qⁱ = 1/(1−q)&nbsp;&nbsp;für |q| &lt; 1<i class="sk" data-sk="mai09-geom"></i><br>harmonisch:&nbsp;&nbsp;∑ 1/i&nbsp;&nbsp;divergiert<i class="sk" data-sk="mai09-harm"></i>&nbsp;&nbsp;·&nbsp;&nbsp;∑ 1/i<sup>α</sup> konvergiert für α &gt; 1<i class="sk" data-sk="mai09-alpha"></i><br>alternierend harmonisch:&nbsp;&nbsp;∑ (−1)ⁱ/i konvergiert (bedingt)<i class="sk" data-sk="mai09-absolut"></i></p>
     <div class="tw"><table>
       <thead><tr><th>Kriterium</th><th>Formel</th><th>konvergent</th></tr></thead>
       <tbody>
-        <tr><td>Quotient</td><td>q = lim |a<sub>i+1</sub>/a<sub>i</sub>|</td><td>q &lt; 1</td></tr>
-        <tr><td>Wurzel</td><td>q = lim <sup>i</sup>√|a<sub>i</sub>|</td><td>q &lt; 1</td></tr>
-        <tr><td>Leibniz</td><td>b<sub>i</sub> ↓ 0, alternierend</td><td>immer</td></tr>
-        <tr><td>notwendig</td><td>lim a<sub>i</sub></td><td>≠ 0 ⇒ divergent</td></tr>
+        <tr><td>Quotient<i class="sk" data-sk="mai09-quot"></i></td><td>q = lim |a<sub>i+1</sub>/a<sub>i</sub>|</td><td>q &lt; 1</td></tr>
+        <tr><td>Wurzel<i class="sk" data-sk="mai09-wurzel"></i></td><td>q = lim <sup>i</sup>√|a<sub>i</sub>|</td><td>q &lt; 1</td></tr>
+        <tr><td>Leibniz<i class="sk" data-sk="mai09-leibniz"></i></td><td>b<sub>i</sub> ↓ 0, alternierend</td><td>immer</td></tr>
+        <tr><td>notwendig<i class="sk" data-sk="mai09-notw"></i></td><td>lim a<sub>i</sub></td><td>≠ 0 ⇒ divergent</td></tr>
       </tbody>
     </table></div>
 
     <h4>Potenz- und Taylorreihen</h4>
-    <p class="formula">r = lim |a<sub>k</sub>/a<sub>k+1</sub>| = 1 / lim <sup>k</sup>√|a<sub>k</sub>|<br>Konvergenz für |x − x₀| &lt; r&nbsp;&nbsp;(Ränder einzeln prüfen!)<br><br>T(x) = ∑ f<sup>(k)</sup>(x₀)/k! · (x−x₀)<sup>k</sup><br><br>e<sup>x</sup> = ∑ xᵏ/k!&nbsp;·&nbsp;sin x = ∑ (−1)ᵏx<sup>2k+1</sup>/(2k+1)!&nbsp;·&nbsp;cos x = ∑ (−1)ᵏx<sup>2k</sup>/(2k)!</p>
+    <p class="formula">r = lim |a<sub>k</sub>/a<sub>k+1</sub>| = 1 / lim <sup>k</sup>√|a<sub>k</sub>|<i class="sk" data-sk="mai09-geomrad"></i><br>Konvergenz für |x − x₀| &lt; r&nbsp;&nbsp;(Ränder einzeln prüfen!)<i class="sk" data-sk="mai09-radius"></i><br><br>T(x) = ∑ f<sup>(k)</sup>(x₀)/k! · (x−x₀)<sup>k</sup><i class="sk" data-sk="mai09-taylor"></i><br><br>e<sup>x</sup> = ∑ xᵏ/k!<i class="sk" data-sk="mai09-exp"></i>&nbsp;·&nbsp;sin x = ∑ (−1)ᵏx<sup>2k+1</sup>/(2k+1)!&nbsp;·&nbsp;cos x = ∑ (−1)ᵏx<sup>2k</sup>/(2k)!</p>
 
     <h4>Fourierreihen (Periode 2π)</h4>
-    <p class="formula">F(x) = a₀/2 + ∑ (aₙcos nx + bₙ sin nx)<br>aₙ = (1/π)∫₀<sup>2π</sup> f(x)cos(nx)dx&nbsp;&nbsp;·&nbsp;&nbsp;bₙ = (1/π)∫₀<sup>2π</sup> f(x)sin(nx)dx<br><br>gerade Funktion → bₙ = 0&nbsp;&nbsp;·&nbsp;&nbsp;ungerade → aₙ = 0<br>Sprungstelle → F(x) = (f⁻(x) + f⁺(x))/2<br>Periode T: ω = 2π/T, Vorfaktor 2/T</p>
+    <p class="formula">F(x) = a₀/2 + ∑ (aₙcos nx + bₙ sin nx)<i class="sk" data-sk="mai09-bausteine"></i><br>aₙ = (1/π)∫₀<sup>2π</sup> f(x)cos(nx)dx&nbsp;&nbsp;·&nbsp;&nbsp;bₙ = (1/π)∫₀<sup>2π</sup> f(x)sin(nx)dx<br><br>gerade Funktion → bₙ = 0&nbsp;&nbsp;·&nbsp;&nbsp;ungerade → aₙ = 0<i class="sk" data-sk="mai09-symm"></i><br>Sprungstelle → F(x) = (f⁻(x) + f⁺(x))/2<i class="sk" data-sk="mai09-sprung"></i><br>Periode T: ω = 2π/T, Vorfaktor 2/T<i class="sk" data-sk="mai09-periode"></i></p>
     <p class="formula">Hilfsintegrale:<br>∫ x·cos(nx)dx = x·sin(nx)/n + cos(nx)/n²<br>∫ x·sin(nx)dx = −x·cos(nx)/n + sin(nx)/n²</p>
 
-    <h4>Laplacetransformation</h4>
-    <p class="formula">F(s) = ∫₀<sup>∞</sup> f(t)·e<sup>−st</sup> dt</p>
+    <h4>Laplacetransformation<i class="sk" data-sk="mai09-korr"></i></h4>
+    <p class="formula">F(s) = ∫₀<sup>∞</sup> f(t)·e<sup>−st</sup> dt<i class="sk" data-sk="mai09-laplace"></i></p>
     <div class="tw"><table class="mono">
       <thead><tr><th>Satz</th><th>Formel</th></tr></thead>
       <tbody>
         <tr><td>Linearität</td><td>ℒ{a₁f₁ + a₂f₂} = a₁F₁ + a₂F₂</td></tr>
-        <tr><td>Ähnlichkeit</td><td>ℒ{f(at)} = (1/a)F(s/a)</td></tr>
-        <tr><td>Verschiebung</td><td>ℒ{f(t−a)} = e<sup>−as</sup>F(s)</td></tr>
-        <tr><td>Dämpfung</td><td>ℒ{e<sup>−at</sup>f(t)} = F(s+a)</td></tr>
-        <tr><td>Ableitung</td><td>ℒ{f′} = sF(s) − f(0)</td></tr>
+        <tr><td>Ähnlichkeit<i class="sk" data-sk="mai09-aehnl"></i></td><td>ℒ{f(at)} = (1/a)F(s/a)</td></tr>
+        <tr><td>Verschiebung<i class="sk" data-sk="mai09-versch"></i></td><td>ℒ{f(t−a)} = e<sup>−as</sup>F(s)</td></tr>
+        <tr><td>Dämpfung<i class="sk" data-sk="mai09-daempf"></i></td><td>ℒ{e<sup>−at</sup>f(t)} = F(s+a)</td></tr>
+        <tr><td>Ableitung<i class="sk" data-sk="mai09-ableit"></i></td><td>ℒ{f′} = sF(s) − f(0)</td></tr>
         <tr><td></td><td>ℒ{f″} = s²F(s) − s·f(0) − f′(0)</td></tr>
       </tbody>
     </table></div>
