@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skizzen · WBH-Lernhefte</title>
+<style>
+:root{
+  --paper:#EFF2F0;--paper-raised:#F9FBFA;--paper-sunk:#E4E9E6;
+  --ink:#17201D;--ink-soft:#5A6663;--ink-faint:#8A9490;
+  --rule:#CBD4D0;--rule-soft:#DDE4E1;
+  --accent:#0E5F63;--accent-soft:#D5E6E5;--mark:#8E2436;--mark-soft:#F0DEE1;--mark-deep:#6E1A28;
+  --shadow:rgba(23,32,29,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;--base:19px;
+}
+html[data-theme="dark"]{
+  --paper:#121614;--paper-raised:#1B211E;--paper-sunk:#0C100E;
+  --ink:#E3EAE7;--ink-soft:#9FADA8;--ink-faint:#6F7C78;--rule:#2C3733;--rule-soft:#222B28;
+  --accent:#54C3C6;--accent-soft:#123033;--mark:#E38294;--mark-soft:#33191F;--mark-deep:#F0A6B3;--shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{font-size:var(--base)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:.55rem 1.1rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{font-family:var(--font-ui);font-size:.72rem;font-weight:650;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink-soft);border:1px solid var(--rule);border-radius:2px;padding:.38rem .6rem;line-height:1;transition:.15s;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem}
+.hero{padding:2.2rem 0 1.1rem;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:750;margin:0 0 .6rem}
+.hero h1{font-size:2.2rem;line-height:1.1;margin:0 0 .5rem;font-weight:600;letter-spacing:-.015em}
+.hero .sub{font-size:.95rem;color:var(--ink-soft);margin:0;max-width:70ch}
+.legend{display:flex;flex-wrap:wrap;gap:.45rem 1rem;margin:.9rem 0 0;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-soft)}
+.legend b{font-weight:750}
+
+/* Kennzahlen */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin:1.4rem 0 .4rem}
+@media(max-width:860px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.kpis{grid-template-columns:1fr}html{font-size:17px}.hero h1{font-size:1.8rem}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.card .th{height:110px}}
+.kpi{background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:.85rem .95rem;display:flex;gap:.8rem;align-items:center}
+.kpi svg{flex:0 0 auto}
+.kpi .n{font-family:var(--font-ui);font-size:1.35rem;font-weight:800;line-height:1.1}
+.kpi .n small{font-size:.75rem;color:var(--ink-faint);font-weight:650}
+.kpi .l{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-top:.15rem}
+.kpi .x{font-family:var(--font-ui);font-size:.7rem;color:var(--ink-soft);margin-top:.25rem}
+
+/* Lernen-Knöpfe */
+.learn{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 .2rem}
+.lbtn{font-family:var(--font-ui);font-size:.78rem;font-weight:700;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);border-radius:999px;padding:.5rem .9rem;display:inline-flex;gap:.45rem;align-items:center}
+.lbtn:hover{border-color:var(--accent);color:var(--accent)}
+.lbtn .c{font-weight:800;color:var(--paper-raised);background:var(--accent);border-radius:999px;padding:.1rem .45rem;font-size:.7rem}
+.lbtn.hot .c{background:var(--mark)}
+.lbtn[disabled]{opacity:.45;cursor:default}
+
+/* Heft-Tabelle */
+h2{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800;margin:2rem 0 .6rem;border-bottom:1px solid var(--rule);padding-bottom:.35rem}
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--paper-raised)}
+table{border-collapse:collapse;width:100%;font-family:var(--font-ui);font-size:.8rem}
+th,td{text-align:left;padding:.5rem .65rem;border-bottom:1px solid var(--rule-soft);vertical-align:middle;white-space:nowrap}
+thead th{font-size:.62rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);background:var(--paper-sunk);border-bottom:1px solid var(--rule)}
+tbody tr{cursor:pointer}tbody tr:hover{background:var(--paper-sunk)}
+tbody tr.sel{background:var(--accent-soft)}
+tr.fach td{background:var(--paper-sunk);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:800;cursor:default}
+.hcode{font-weight:800;color:var(--accent)}
+.htitle{color:var(--ink-soft);white-space:normal;min-width:12rem}
+.sbar{display:flex;width:150px;height:9px;border-radius:5px;overflow:hidden;background:var(--rule-soft)}
+.sbar i{display:block;height:100%}
+.sbar .s{background:var(--sk-ok)}.sbar .v{background:var(--accent)}.sbar .u{background:var(--sk-3)}.sbar .g{background:color-mix(in srgb,var(--accent) 30%,var(--rule-soft))}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.relc{color:var(--mark);font-weight:700}
+
+/* Filter */
+.fbar{position:sticky;top:2.95rem;z-index:40;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--rule-soft);font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint)}
+.chips{display:flex;flex-wrap:wrap;gap:.25rem;align-items:center}
+.chip{font-size:.72rem;font-weight:650;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink-soft);border-radius:999px;padding:.3rem .62rem;line-height:1}
+.chip.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.chip.rel.on{border-color:var(--mark);color:var(--mark);background:var(--mark-soft)}
+select.btn{padding-right:.4rem}
+.count{margin-left:auto;font-weight:700;color:var(--ink-soft)}
+
+/* Karten */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem;margin:1rem 0 2rem}
+.card{position:relative;background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:.15s;text-align:left;padding:0;font:inherit;color:inherit}
+.card:hover{border-color:var(--accent);box-shadow:0 6px 18px var(--shadow);transform:translateY(-1px)}
+.card{content-visibility:auto;contain-intrinsic-size:auto 240px}
+.card .th{background:var(--paper);border-bottom:1px solid var(--rule-soft);height:150px;display:flex;align-items:center;justify-content:center;padding:.4rem}
+.card .th svg{width:100%;height:100%}
+.card .bd{padding:.55rem .7rem .65rem;display:flex;flex-direction:column;gap:.3rem;flex:1 1 auto}
+.card .tt{font-family:var(--font-ui);font-size:.8rem;font-weight:700;line-height:1.3}
+.card .mt{display:flex;flex-wrap:wrap;gap:.3rem .5rem;align-items:center;font-family:var(--font-ui);font-size:.66rem;color:var(--ink-faint);margin-top:auto}
+.tag{font-weight:800;letter-spacing:.06em;color:var(--accent)}
+.relb{position:absolute;top:.45rem;left:.45rem;font-family:var(--font-ui);font-size:.62rem;font-weight:800;color:var(--paper-raised);background:var(--mark);border-radius:3px;padding:.15rem .4rem;letter-spacing:.04em}
+.stb{position:absolute;top:.45rem;right:.45rem;font-family:var(--font-ui);font-size:.64rem;font-weight:800;border-radius:999px;padding:.15rem .5rem;border:1px solid}
+.stb.u{color:var(--sk-3);border-color:var(--sk-3);background:var(--paper-raised)}
+.stb.v{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.stb.s{color:var(--sk-ok);border-color:var(--sk-ok);background:var(--sk-ok-soft)}
+.views{font-weight:750;color:var(--ink-soft)}
+.views.zero{color:var(--ink-faint);font-weight:600}
+.empty{font-family:var(--font-ui);color:var(--ink-faint);font-style:italic;padding:2rem 0;grid-column:1/-1}
+footer{border-top:1px solid var(--rule);margin-top:2rem;padding:1.3rem 0 3rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint)}
+footer a{color:var(--accent)}
+</style>
+<script>try{var u=JSON.parse(localStorage.getItem("skizzen:ui")||"{}");if(u.theme==="dark"||u.theme==="light")document.documentElement.dataset.theme=u.theme;else if(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)document.documentElement.dataset.theme="dark";}catch(e){}</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Skizzen <span>· WMAPS · TGI</span></div>
+    <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
+    <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
+    <div class="topbar-spacer"></div>
+    <div class="ctl" style="display:flex;gap:.3rem;align-items:center"><button class="btn" id="themeBtn">◐ Dunkel</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Skizzen-Statistik</p>
+    <h1>Deine Skizzen</h1>
+    <p class="sub">Alle Skizzen aus den Heften der Weiterführenden Mathematik und der Theoretischen Grundlagen der Informatik – wie oft du welche angesehen hast, wie weit du bist und welche besonders prüfungsrelevant sind. Klick auf eine Skizze öffnet sie groß; mit „Nächste“ blätterst du durch die aktuelle Auswahl.</p>
+    <div class="legend">
+      <span><b style="color:var(--mark)">◆ prüfungsrelevant</b> – kommt so in Übungen, Einsendeaufgaben oder Schnellcheck vor</span>
+      <span><b>Aufruf</b> = Skizze mindestens 2 s offen (auch über „Nächste“)</span>
+      <span><b style="color:var(--sk-3)">? unklar</b> · <b style="color:var(--accent)">✓ verstanden</b> · <b style="color:var(--sk-ok)">✓✓ sitzt</b> – setzt du selbst (Tasten 1/2/3)</span>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+  <div class="learn" id="learn"></div>
+
+  <h2>Nach Heft</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Heft</th><th></th><th>Fortschritt</th><th class="num">Skizzen</th><th class="num">angesehen</th><th class="num">✓ / ✓✓</th><th class="num">◆ sitzt</th><th class="num">Aufrufe</th><th class="num">Zeit</th></tr></thead>
+    <tbody id="htab"></tbody>
+  </table></div>
+
+  <h2>Alle Skizzen</h2>
+  <div class="fbar">
+    <div class="chips" id="fFach"></div>
+    <select class="btn" id="fHeft" aria-label="Heft"></select>
+    <div class="chips"><button class="chip rel" id="fRel" type="button">◆ nur prüfungsrelevant</button></div>
+    <div class="chips" id="fSt"></div>
+    <select class="btn" id="fSort" aria-label="Sortierung">
+      <option value="heft">Reihenfolge im Heft</option>
+      <option value="most">meist angesehen</option>
+      <option value="least">am wenigsten angesehen</option>
+      <option value="recent">zuletzt angesehen</option>
+      <option value="time">längste Zeit</option>
+    </select>
+    <span class="count" id="fCount"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <footer>Aufrufe und Lernstand werden lokal gespeichert und – wenn du angemeldet bist – mit deinen anderen Geräten synchronisiert. · <a href="index.html">Zur Heftübersicht</a></footer>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/sketch-kit.js"></script>
+<script src="assets/sketch-stats.js"></script>
+<script src="assets/sketch-relevanz.js"></script>
+<script src="assets/sketch-viewer.js"></script>
+<script src="assets/sketches/mai06.js"></script>
+<script src="assets/sketches/mai09.js"></script>
+<script src="assets/sketches/mai11.js"></script>
+<script src="assets/sketches/mai13.js"></script>
+<script src="assets/sketches/mai14c.js"></script>
+<script src="assets/sketches/gdi01.js"></script>
+<script src="assets/sketches/tgi01.js"></script>
+<script src="assets/sketches/tgi02.js"></script>
+<script src="assets/sketches/tgi06.js"></script>
+<script src="assets/sketches/tgi07.js"></script>
+<script>
+(function(){
+  "use strict";
+  var V = window.SketchViewer, SKS = window.SketchStats, DATA = window.ITI_SKETCHES || {}, REL = window.ITI_RELEVANZ || {};
+  V.ensureCss();
+
+  /* ---------- Bedienzustand (nur lokal) ---------- */
+  var ui = { theme: document.documentElement.dataset.theme || "light", fach: "alle", heft: "alle", rel: false, st: "alle", sort: "heft" };
+  try { var saved = JSON.parse(localStorage.getItem("skizzen:ui") || "{}"); for(var k in saved) if(k in ui) ui[k] = saved[k]; } catch(e) {}
+  function saveUi(){ try { localStorage.setItem("skizzen:ui", JSON.stringify(ui)); } catch(e) {} }
+
+  /* ---------- Alle Skizzen in Heft-Reihenfolge ---------- */
+  var ALL = [], ORDER = {}, HEFTCODES = [];
+  V.HEFTE.forEach(function(g){ g.list.forEach(function(h){ HEFTCODES.push(h[0]); }); });
+  HEFTCODES.forEach(function(code){
+    Object.keys(DATA).forEach(function(id){ if(V.heftOf(id) === code){ ORDER[id] = ALL.length; ALL.push(id); } });
+  });
+  var THUMB = {};
+  function thumb(id){ if(!THUMB[id]){ var d = DATA[id]; THUMB[id] = typeof d.svg === "function" ? d.svg(window.SK) : d.svg; } return THUMB[id]; }
+
+  /* ---------- Kennzahlen ---------- */
+  function ring(p, col){
+    var r = 22, c = 2 * Math.PI * r, o = c * (1 - p);
+    return '<svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="' + r + '" fill="none" stroke="var(--rule-soft)" stroke-width="6"/>' +
+      '<circle cx="28" cy="28" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + o.toFixed(1) + '" transform="rotate(-90 28 28)"/>' +
+      '<text x="28" y="32" text-anchor="middle" style="font:800 12px var(--font-ui);fill:var(--ink)">' + Math.round(p * 100) + '%</text></svg>';
+  }
+  function statsFor(ids, S){
+    var o = { n: ids.length, seen: 0, u: 0, v: 0, s: 0, views: 0, secs: 0, rel: 0, relS: 0, relSeen: 0 };
+    ids.forEach(function(id){
+      var v = S.v[id], st = S.s[id];
+      if(v){ o.seen++; o.views += v[0]; o.secs += v[1]; }
+      if(st) o[st]++;
+      if(REL[id]){ o.rel++; if(st === "s") o.relS++; if(v) o.relSeen++; }
+    });
+    return o;
+  }
+
+  function renderKpis(S){
+    var a = statsFor(ALL, S);
+    var top = ALL.filter(function(id){ return S.v[id]; }).sort(function(x, y){ return S.v[y][0] - S.v[x][0]; })[0];
+    document.getElementById("kpis").innerHTML =
+      '<div class="kpi">' + ring(a.n ? a.seen / a.n : 0, "var(--accent)") + '<div><div class="n">' + a.seen + ' <small>/ ' + a.n + '</small></div><div class="l">angesehen</div><div class="x">' + (a.n - a.seen) + ' noch nie geöffnet</div></div></div>' +
+      '<div class="kpi">' + ring(a.n ? (a.v + a.s) / a.n : 0, "var(--sk-ok)") + '<div><div class="n">' + (a.v + a.s) + ' <small>/ ' + a.n + '</small></div><div class="l">verstanden oder sitzt</div><div class="x">✓✓ ' + a.s + ' sitzen · ? ' + a.u + ' unklar</div></div></div>' +
+      '<div class="kpi">' + ring(a.rel ? a.relS / a.rel : 0, "var(--mark)") + '<div><div class="n">' + a.relS + ' <small>/ ' + a.rel + '</small></div><div class="l">◆ prüfungsrelevant sitzt</div><div class="x">' + a.relSeen + ' davon schon angesehen</div></div></div>' +
+      '<div class="kpi"><div><div class="n">' + a.views + ' <small>Aufrufe</small></div><div class="l">Gesamtzeit ' + V.fmtDur(a.secs) + '</div><div class="x">' +
+        (top ? 'am häufigsten: ' + V.esc(DATA[top].t.slice(0, 38)) + (DATA[top].t.length > 38 ? '…' : '') + ' (' + S.v[top][0] + '×)' : 'noch keine Aufrufe') + '</div></div></div>';
+
+    var relOpen = ALL.filter(function(id){ return REL[id] && S.s[id] !== "s"; });
+    var never = ALL.filter(function(id){ return !S.v[id]; }).sort(function(x, y){ return (REL[y] ? 1 : 0) - (REL[x] ? 1 : 0); });
+    var unklar = ALL.filter(function(id){ return S.s[id] === "u"; });
+    var weak = ALL.filter(function(id){ return S.v[id] && !S.s[id]; });
+    function lb(key, label, arr, hot){ return '<button class="lbtn' + (hot ? ' hot' : '') + '" data-learn="' + key + '"' + (arr.length ? '' : ' disabled') + '>▶ ' + label + ' <span class="c">' + arr.length + '</span></button>'; }
+    LEARN = { rel: relOpen, never: never, unklar: unklar, weak: weak };
+    document.getElementById("learn").innerHTML = lb("rel", "◆ Prüfungsrelevante, die noch nicht sitzen", relOpen, true) + lb("never", "Noch nie angesehen", never) +
+      lb("unklar", "Als unklar markiert", unklar) + lb("weak", "Angesehen, aber noch ohne Stand", weak);
+  }
+  var LEARN = {};
+  document.getElementById("learn").addEventListener("click", function(e){
+    var b = e.target.closest("[data-learn]"); if(!b || b.disabled) return;
+    var arr = LEARN[b.getAttribute("data-learn")].slice();
+    if(arr.length) V.open(arr, 0, b, { showHeft: true, onState: rerender, onClose: rerender });
+  });
+
+  /* ---------- Heft-Tabelle ---------- */
+  function renderTable(S){
+    var h = "";
+    V.HEFTE.forEach(function(g){
+      h += '<tr class="fach"><td colspan="9">' + V.esc(g.fachName) + '</td></tr>';
+      g.list.forEach(function(x){
+        var ids = ALL.filter(function(id){ return V.heftOf(id) === x[0]; }), o = statsFor(ids, S), n = o.n || 1;
+        var g1 = Math.max(0, o.seen - o.u - o.v - o.s);
+        h += '<tr data-heft="' + x[0] + '"' + (ui.heft === x[0] ? ' class="sel"' : '') + '><td class="hcode">' + x[1] + '</td><td class="htitle">' + V.esc(x[2]) + '</td>' +
+          '<td><div class="sbar" title="✓✓ sitzt · ✓ verstanden · ? unklar · angesehen"><i class="s" style="width:' + (o.s / n * 100) + '%"></i><i class="v" style="width:' + (o.v / n * 100) + '%"></i><i class="u" style="width:' + (o.u / n * 100) + '%"></i><i class="g" style="width:' + (g1 / n * 100) + '%"></i></div></td>' +
+          '<td class="num">' + o.n + '</td><td class="num">' + o.seen + '</td><td class="num">' + o.v + ' / ' + o.s + '</td><td class="num relc">' + o.relS + ' / ' + o.rel + '</td><td class="num">' + o.views + '</td><td class="num">' + V.fmtDur(o.secs) + '</td></tr>';
+      });
+    });
+    document.getElementById("htab").innerHTML = h;
+  }
+  document.getElementById("htab").addEventListener("click", function(e){
+    var tr = e.target.closest("tr[data-heft]"); if(!tr) return;
+    ui.heft = ui.heft === tr.getAttribute("data-heft") ? "alle" : tr.getAttribute("data-heft");
+    ui.fach = "alle"; saveUi(); rerender();
+    document.querySelector(".fbar").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* ---------- Filter ---------- */
+  var ST = [["alle", "alle"], ["nie", "nie angesehen"], ["u", "? unklar"], ["v", "✓ verstanden"], ["s", "✓✓ sitzt"], ["ohne", "ohne Stand"]];
+  function renderFilters(){
+    document.getElementById("fFach").innerHTML = [["alle", "Alle Fächer"], ["WMAPS", "WMAPS"], ["TGI", "TGI"]].map(function(f){ return '<button type="button" class="chip' + (ui.fach === f[0] ? ' on' : '') + '" data-fach="' + f[0] + '">' + f[1] + '</button>'; }).join("");
+    var o = '<option value="alle">alle Hefte</option>';
+    V.HEFTE.forEach(function(g){ if(ui.fach !== "alle" && ui.fach !== g.fach) return; o += '<optgroup label="' + g.fach + '">' + g.list.map(function(x){ return '<option value="' + x[0] + '"' + (ui.heft === x[0] ? ' selected' : '') + '>' + x[1] + ' – ' + V.esc(x[2]) + '</option>'; }).join("") + '</optgroup>'; });
+    document.getElementById("fHeft").innerHTML = o;
+    document.getElementById("fRel").classList.toggle("on", ui.rel);
+    document.getElementById("fSt").innerHTML = ST.map(function(f){ return '<button type="button" class="chip' + (ui.st === f[0] ? ' on' : '') + '" data-st="' + f[0] + '">' + f[1] + '</button>'; }).join("");
+    document.getElementById("fSort").value = ui.sort;
+  }
+  document.getElementById("fFach").addEventListener("click", function(e){ var b = e.target.closest("[data-fach]"); if(!b) return; ui.fach = b.getAttribute("data-fach"); if(ui.heft !== "alle" && ui.fach !== "alle" && V.heftInfo(ui.heft).fach !== ui.fach) ui.heft = "alle"; saveUi(); rerender(); });
+  document.getElementById("fHeft").addEventListener("change", function(){ ui.heft = this.value; saveUi(); rerender(); });
+  document.getElementById("fRel").addEventListener("click", function(){ ui.rel = !ui.rel; saveUi(); rerender(); });
+  document.getElementById("fSt").addEventListener("click", function(e){ var b = e.target.closest("[data-st]"); if(!b) return; ui.st = b.getAttribute("data-st"); saveUi(); rerender(); });
+  document.getElementById("fSort").addEventListener("change", function(){ ui.sort = this.value; saveUi(); rerender(); });
+
+  function filtered(S){
+    var arr = ALL.filter(function(id){
+      var h = V.heftInfo(V.heftOf(id)), st = S.s[id], v = S.v[id];
+      if(ui.fach !== "alle" && h.fach !== ui.fach) return false;
+      if(ui.heft !== "alle" && h.code !== ui.heft) return false;
+      if(ui.rel && !REL[id]) return false;
+      if(ui.st === "nie" && v) return false;
+      if(ui.st === "ohne" && st) return false;
+      if((ui.st === "u" || ui.st === "v" || ui.st === "s") && st !== ui.st) return false;
+      return true;
+    });
+    var cnt = function(id){ return S.v[id] ? S.v[id][0] : 0; };
+    if(ui.sort === "most") arr.sort(function(a, b){ return cnt(b) - cnt(a) || ORDER[a] - ORDER[b]; });
+    else if(ui.sort === "least") arr.sort(function(a, b){ return cnt(a) - cnt(b) || (REL[b] ? 1 : 0) - (REL[a] ? 1 : 0) || ORDER[a] - ORDER[b]; });
+    else if(ui.sort === "recent") arr.sort(function(a, b){ return (S.v[b] ? S.v[b][2] : 0) - (S.v[a] ? S.v[a][2] : 0) || ORDER[a] - ORDER[b]; });
+    else if(ui.sort === "time") arr.sort(function(a, b){ return (S.v[b] ? S.v[b][1] : 0) - (S.v[a] ? S.v[a][1] : 0) || ORDER[a] - ORDER[b]; });
+    return arr;
+  }
+
+  /* ---------- Karten ---------- */
+  var CUR = [];
+  function renderGrid(S){
+    CUR = filtered(S);
+    document.getElementById("fCount").textContent = CUR.length + " von " + ALL.length + " Skizzen";
+    if(!CUR.length){ document.getElementById("grid").innerHTML = '<div class="empty">Keine Skizze passt zu diesem Filter.</div>'; return; }
+    document.getElementById("grid").innerHTML = CUR.map(function(id, i){
+      var d = DATA[id], h = V.heftInfo(V.heftOf(id)), v = S.v[id], st = S.s[id], STI = SKS.STATUS[st];
+      return '<button type="button" class="card" data-i="' + i + '" title="' + V.esc(d.t) + (REL[id] ? ' · ◆ ' + V.esc(REL[id]) : '') + '">' +
+        (REL[id] ? '<span class="relb">◆ Prüfung</span>' : '') + (STI ? '<span class="stb ' + st + '">' + STI.icon + ' ' + STI.label + '</span>' : '') +
+        '<div class="th" data-id="' + id + '"></div><div class="bd"><div class="tt">' + V.esc(d.t) + '</div>' +
+        '<div class="mt"><span class="tag">' + h.label + '</span><span class="views' + (v ? '' : ' zero') + '">' + (v ? '👁 ' + v[0] + '× · ' + V.fmtDur(v[1]) : 'noch nicht angesehen') + '</span>' +
+        (v ? '<span>' + V.fmtWhen(v[2]) + '</span>' : '') + '</div></div></button>';
+    }).join("");
+    lazyThumbs();
+  }
+  var IO = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ var el = e.target; el.innerHTML = thumb(el.getAttribute('data-id')); IO.unobserve(el); } });
+  }, { rootMargin: '300px 0px' }) : null;
+  function lazyThumbs(){
+    Array.prototype.forEach.call(document.querySelectorAll('#grid .th[data-id]'), function(el){ if(IO) IO.observe(el); else el.innerHTML = thumb(el.getAttribute('data-id')); });
+  }
+  document.getElementById("grid").addEventListener("click", function(e){
+    var c = e.target.closest(".card"); if(!c) return;
+    V.open(CUR.slice(), Number(c.getAttribute("data-i")), c, { showHeft: true, onState: softRender, onClose: rerender });
+  });
+
+  /* Während die Großansicht offen ist, nur Zahlen auffrischen (Kartenreihenfolge bleibt stabil) */
+  var pending = false;
+  function softRender(){ if(pending) return; pending = true; setTimeout(function(){ pending = false; var S = SKS.get(); renderKpis(S); renderTable(S); }, 50); }
+  function rerender(){ var S = SKS.get(); renderKpis(S); renderTable(S); renderFilters(); renderGrid(S); }
+
+  /* ---------- Hell/Dunkel ---------- */
+  var tb = document.getElementById("themeBtn");
+  function applyTheme(){ document.documentElement.dataset.theme = ui.theme; tb.textContent = ui.theme === "dark" ? "◑ Hell" : "◐ Dunkel"; }
+  tb.addEventListener("click", function(){ ui.theme = ui.theme === "dark" ? "light" : "dark"; applyTheme(); saveUi(); });
+  applyTheme();
+
+  SKS.onChange(function(){ if(document.querySelector(".skm.on")) softRender(); else rerender(); });
+  rerender();
+})();
+</script>
+<script src="assets/auth-ui.js"></script>
+</body>
+</html>
