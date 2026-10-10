@@ -130,9 +130,12 @@
   function markPending(k, on) { if (on) pending[k] = 1; else delete pending[k]; jset("sync:pending", pending); }
 
   /* ---------- Zustand / Ereignisse ---------- */
-  var CLOUD = "lh-sync-7c3e91a4d2b85f60";               // fester gemeinsamer Datensatz aller Geräte
+  /* Datensatz-Schlüssel kommt aus der Anmeldung (assets/gate.js): sha256(Benutzer|Passwort) – steht nirgends im Code */
+  var CLOUD = (window.LHGate && window.LHGate.code && window.LHGate.code()) || null;
+  var OLD_CLOUD = "lh-sync-7c3e91a4d2b85f60";            // bis 10.10.2026 öffentlich bekannt → einmalig übernehmen, danach geleert
+  var ACTIVE = HAS_CFG && !!CLOUD;
   var listeners = [], baseMap = {};
-  var st = { mode: HAS_CFG ? "sync" : "off", last: parseInt(lsGet("sync:last") || "0", 10) || 0, error: "" };
+  var st = { mode: ACTIVE ? "sync" : (HAS_CFG ? "locked" : "off"), last: parseInt(lsGet("sync:last") || "0", 10) || 0, error: "" };
   function emit() { listeners.forEach(function (cb) { try { cb(); } catch (e) {} }); }
   function setMode(m, err) { if (st.mode === m && st.error === (err || "")) return; st.mode = m; st.error = err || ""; emit(); }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
@@ -166,7 +169,7 @@
 
   /* ---------- Einmalige Übernahme der alten, anmeldungsgebundenen Cloud-Zeilen ---------- */
   function legacyRescue() {
-    if (lsGet("sync:legacyDone") || !HAS_CFG) return Promise.resolve();
+    if (lsGet("sync:legacyDone") || !ACTIVE) return Promise.resolve();
     var tok = null;
     try {
       for (var i = 0; LS && i < LS.length; i++) { var k = LS.key(i); if (/^sb-.*-auth-token$/.test(k)) tok = JSON.parse(LS.getItem(k)); }
@@ -191,15 +194,24 @@
     }).catch(function () { lsSet("sync:legacyDone", "1"); });
   }
 
+  /* Einmalig: Inhalt des alten, öffentlich bekannten Datensatzes in die lokalen Stände mischen */
+  function migrateOld() {
+    if (lsGet("sync:oldMoved")) return Promise.resolve();
+    return rpc("iti21_get", { p_code: OLD_CLOUD }).then(function (d) {
+      if (d && d.k && Object.keys(d.k).length) absorb(d);
+      lsSet("sync:oldSeen", "1");
+    }, function () {});
+  }
+
   /* ---------- Abgleich: lesen → mischen → (falls nötig) schreiben → nachprüfen ---------- */
   var running = null, again = false, lastRun = 0, recheckTimer = null;
   function recheck() { if (!recheckTimer) recheckTimer = setTimeout(function () { recheckTimer = null; syncAll(); }, 2500); }
   function syncAll() {
-    if (!HAS_CFG) return Promise.resolve();
+    if (!ACTIVE) return Promise.resolve();
     if (running) { again = true; return running; }
     lastRun = Date.now();
     if (Object.keys(pending).length) setMode("sync");
-    running = legacyRescue().then(function () {
+    running = legacyRescue().then(migrateOld).then(function () {
       var tries = 0;
       function round() {
         tries++;
@@ -221,6 +233,9 @@
       running = null; st.last = Date.now(); lsSet("sync:last", String(st.last));
       var n = Object.keys(pending).length;
       setMode(n ? "error" : "ok", n ? "noch nicht alles hochgeladen" : "");
+      if (!n && lsGet("sync:oldSeen") && !lsGet("sync:oldMoved")) {   // alles sicher im neuen Datensatz → alten leeren
+        rpc("iti21_save", { p_code: OLD_CLOUD, p_data: { v: 3, k: {}, moved: Date.now() } }).then(function () { lsSet("sync:oldMoved", "1"); }, function () {});
+      }
       if (again) { again = false; return syncAll(); }
     }, function (e) {
       running = null; again = false;
@@ -231,7 +246,7 @@
 
   var resolveFirst, firstSync = new Promise(function (r) { resolveFirst = r; });
   setTimeout(function () { resolveFirst(); }, 3500);     // nie länger als 3,5 s auf die Cloud warten
-  if (HAS_CFG) syncAll().then(resolveFirst, resolveFirst); else resolveFirst();
+  if (ACTIVE) syncAll().then(resolveFirst, resolveFirst); else resolveFirst();
 
   var pushTimer = null;
   function schedulePush(ms) { clearTimeout(pushTimer); pushTimer = setTimeout(syncAll, ms == null ? 400 : ms); }
@@ -263,8 +278,7 @@
       if (!any) return Promise.resolve();
       if (putF(key, F) && lsGet(key) !== valueString) emit();   // Seite kennt Änderungen anderer Geräte noch nicht → neu einlesen
       markPending(key, true);
-      setMode("sync");
-      schedulePush();
+      if (ACTIVE) { setMode("sync"); schedulePush(); }
       return Promise.resolve();
     },
     listAll: function () {

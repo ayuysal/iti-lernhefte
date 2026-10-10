@@ -34,6 +34,7 @@
   }
   function info() {
     var x = S.status();
+    if (x.mode === "locked") return { b: "☁ <span class='warn'>🔒</span>", t: "Nicht angemeldet.", warn: true };
     if (x.mode === "off") return { b: "☁ lokal", t: "Cloud nicht eingerichtet – Fortschritt nur auf diesem Gerät.", warn: true };
     if (x.mode === "sync") return { b: "☁ <span class='spin'>⟳</span>", t: "Abgleich mit der Cloud läuft …" };
     if (x.mode === "ok") return { b: "☁ <span class='ok'>✓</span>", t: "Synchron – alles ist in der Cloud (" + ago(x.last) + ")." };
@@ -47,10 +48,13 @@
   function renderPop() {
     var i = info(), x = S.status();
     pop.innerHTML = "<h4>Cloud-Abgleich</h4><p class='st'>" + i.t + "</p>" +
-      "<p>Automatisch auf allen Geräten – ohne Anmeldung. Jede Markierung geht sofort in die Cloud; beim Öffnen und alle 30 s wird abgeglichen. Einträge werden zusammengeführt, nie überschrieben.</p>" +
+      "<p>Automatisch auf allen Geräten, auf denen du einmal angemeldet bist. Jede Markierung geht sofort in die Cloud; beim Öffnen und alle 30 s wird abgeglichen. Einträge werden zusammengeführt, nie überschrieben.</p>" +
       "<p style='color:var(--ink-faint)'>Letzter Abgleich: " + ago(x.last) + (x.pending ? " · ausstehend: " + x.pending : "") + "</p>" +
-      "<button type='button' id='syncNowBtn'>Jetzt abgleichen</button>";
+      "<button type='button' id='syncNowBtn'>Jetzt abgleichen</button>" +
+      (window.LHGate ? " <button type='button' id='logoutBtn' style='background:transparent;color:var(--ink-soft);border-color:var(--rule)'>Abmelden</button>" : "");
     pop.querySelector("#syncNowBtn").onclick = function () { S.syncNow(); };
+    var lo = pop.querySelector("#logoutBtn");
+    if (lo) lo.onclick = function () { if (confirm("Auf diesem Gerät abmelden? Dein Lernstand bleibt in der Cloud erhalten.")) window.LHGate.logout(); };
   }
   function place() {
     var r = btn.getBoundingClientRect();
