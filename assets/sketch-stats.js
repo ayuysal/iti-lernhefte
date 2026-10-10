@@ -1,5 +1,5 @@
 /* Skizzen-Statistik: Aufrufe, Verweildauer und eigener Lernstand je Skizze (window.SketchStats).
-   Gespeichert unter "skizzen:state" – lokal sofort, geräteübergreifend über ITISync (falls angemeldet).
+   Gespeichert unter "skizzen:state" – lokal sofort, geräteübergreifend automatisch über ITISync (ohne Login).
    Format: { v: { id: [aufrufe, sekunden, zuletztMs] }, s: { id: "u"|"v"|"s" } }
    Jede Änderung liest den aktuellen Stand neu ein und ergänzt nur das Delta → mehrere offene Tabs überschreiben sich nicht. */
 (function(){
