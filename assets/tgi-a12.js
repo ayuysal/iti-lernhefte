@@ -262,4 +262,5 @@
   };
 
   P._test = { relProps: relProps, OPS: OPS, EIG: EIG, TEXTE: TEXTE, DEFS: DEFS };
+  P._defs = { list: DEFS, html: defsHtml, init: initDefs };   // für weitere Aufgaben (a5 …)
 })();

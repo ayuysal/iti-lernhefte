@@ -101,6 +101,15 @@ details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;fo
 .ynr label.okk{border-color:var(--sk-ok);background:var(--sk-ok-soft)}.ynr label.badd{border-color:var(--mark);background:var(--mark-soft)}
 .ynr select{font-family:var(--font-ui);font-size:.85rem;padding:.2rem;background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule);border-radius:3px}
 pre.txtb{white-space:pre-wrap;font-family:var(--font-mono);font-size:.82rem;background:var(--paper);border:1px solid var(--rule-soft);border-radius:5px;padding:.5rem .6rem;margin:.4rem 0}
+table.ktab{border-collapse:collapse;width:100%;max-width:720px;font-size:.84rem;margin:.3rem 0 .6rem}
+table.ktab th{font-family:var(--font-ui);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-align:left;border-bottom:2px solid var(--ink);padding:.3rem .45rem}
+table.ktab td{border:1px solid var(--rule-soft);padding:.28rem .45rem;vertical-align:top}
+table.ktab td:first-child{width:2.4rem;color:var(--ink-faint);font-family:var(--font-ui)}
+table.ktab td:last-child{width:13rem;font-family:var(--font-mono);font-size:.8rem;color:var(--accent)}
+table.ktab tr.kh td{background:var(--paper-sunk)}
+table.ktab code{font-family:var(--font-mono);white-space:pre}
+p.dv{font-size:.92rem;line-height:1.65;background:var(--paper);border-left:3px solid var(--accent);padding:.35rem .7rem;margin:.5rem 0}
+.go.rok{background:var(--sk-ok);color:#fff;border-color:var(--sk-ok);opacity:1}.go.rbad{background:var(--mark);color:#fff;border-color:var(--mark);opacity:1}
 h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin:1.2rem 0 .3rem}
 .go:disabled{opacity:.5;cursor:default}
 @media print{.tabs,.gen,.plan{display:none!important} .pane{display:block!important}}
@@ -134,6 +143,7 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
 <script src="assets/sync.js"></script>
 <script src="assets/tgi-algo.js"></script>
 <script src="assets/tgi-a12.js"></script>
+<script src="assets/tgi-a5.js"></script>
 <script>
 (function(){
   "use strict";
@@ -152,7 +162,7 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
     { n: 2, t: "Algorithmusbegriff", s: "Definition, Eigenschaften, „ist das ein Algorithmus?“", id: "a2" },
     { n: 3, t: "Algorithmen I", s: "Sortieren", id: "a3" },
     { n: 4, t: "Algorithmen II", s: "Hashing, Turnier, Boyer-Moore", id: "a4" },
-    { n: 5, t: "Algorithmus-Analyse", s: "Kostentabelle, Zeitfunktion, O" },
+    { n: 5, t: "Algorithmus-Analyse", s: "Kostentabelle, Zeitfunktion, O", id: "a5" },
     { n: 6, t: "Berechenbarkeit", s: "Chomsky-Klasse zuordnen + beweisen" },
     { n: 7, t: "Formale Sprachen", s: "Automaten lesen, bauen, minimieren" },
     { n: 8, t: "Parsing", s: "Chomsky-NF, LL(1), Hierarchie" }
@@ -377,8 +387,8 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
   function getDef(id){ var v = gst["def:" + id]; return v || 0; }
   function setDef(id, v){ gst["def:" + id] = v; gsave(); }
   var UI = { esc: esc, glog: glog, gscore: gscore, getDef: getDef, setDef: setDef };
-  ["a1", "a2"].forEach(function(k){ if(PARTS[k]) P[k] = PARTS[k].html(UI); });
-  var TABS = [["a1", "1 · Relationen & Operationen"], ["a2", "2 · Algorithmusbegriff"], ["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"]].filter(function(t){ return P[t[0]]; }), cur = "a1";
+  ["a1", "a2", "a5"].forEach(function(k){ if(PARTS[k]) P[k] = PARTS[k].html(UI); });
+  var TABS = [["a1", "1 · Relationen & Operationen"], ["a2", "2 · Algorithmusbegriff"], ["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"], ["a5", "5 · Analyse"]].filter(function(t){ return P[t[0]]; }), cur = "a1";
   try { cur = localStorage.getItem("tgi:tab") || "a1"; } catch(e) {}
   if(location.hash && P[location.hash.slice(1)]) cur = location.hash.slice(1);
   document.getElementById("panes").innerHTML = TABS.map(function(t){ return '<div class="pane" data-p="' + t[0] + '">' + P[t[0]] + '</div>'; }).join("");
@@ -390,7 +400,7 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
   document.getElementById("tabs").addEventListener("click", function(e){ var b = e.target.closest("[data-t]"); if(b){ show(b.getAttribute("data-t")); window.scrollTo({ top: document.getElementById("tabs").offsetTop - 60, behavior: "smooth" }); } });
   document.getElementById("plan").addEventListener("click", function(e){ var a = e.target.closest("[data-go]"); if(a){ e.preventDefault(); show(a.getAttribute("data-go")); document.getElementById("tabs").scrollIntoView({ behavior: "smooth" }); } else if(e.target.closest("a")) e.preventDefault(); });
   show(cur);
-  gload().then(function(){ renderGen("a3"); renderGen("a4"); ["a1", "a2"].forEach(function(k){ if(PARTS[k]) PARTS[k].init(document.querySelector('.pane[data-p="' + k + '"]'), UI); }); });
+  gload().then(function(){ renderGen("a3"); renderGen("a4"); ["a1", "a2", "a5"].forEach(function(k){ if(PARTS[k]) PARTS[k].init(document.querySelector('.pane[data-p="' + k + '"]'), UI); }); });
   if(store && store.onChange) store.onChange(function(){ gload().then(function(){ Array.prototype.forEach.call(document.querySelectorAll(".gen"), function(box){ var k = box.getAttribute("data-g"), s = box.querySelector(".score"); if(s) s.textContent = gscore(k); }); }); });
 
   var tb = document.getElementById("themeBtn"), th = "light";
