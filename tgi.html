@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/gate.js"></script>
+<title>TGI-Klausurtrainer</title>
+<link rel="stylesheet" href="assets/ordner.css">
+<style>
+.wrap{max-width:1000px;margin:0 auto;padding:0 1.1rem 4rem}
+.hero{padding:1.6rem 0 .6rem}
+.hero .ey{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:800;margin:0 0 .5rem}
+.hero h1{font-size:2rem;margin:0 0 .4rem;font-weight:600}
+.hero p{color:var(--ink-soft);margin:0 0 .4rem;max-width:74ch}
+.info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.8rem 0;font-family:var(--font-ui);font-size:.78rem}
+@media(max-width:760px){.info{grid-template-columns:1fr}}
+.info div{background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:.5rem .65rem}
+.info b{display:block;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.15rem}
+.plan{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem;margin:.8rem 0 1.4rem}
+@media(max-width:760px){.plan{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plan a{display:block;text-decoration:none;color:var(--ink);background:var(--paper-raised);border:1px solid var(--rule);border-top:4px solid var(--rule);border-radius:6px;padding:.5rem .6rem;font-family:var(--font-ui);font-size:.78rem}
+.plan a.on{border-top-color:var(--accent)}
+.plan a b{display:block;font-size:1.05rem}
+.plan a small{color:var(--ink-faint)}
+.plan a.on small{color:var(--sk-ok);font-weight:700}
+.tabs{display:flex;gap:.3rem;flex-wrap:wrap;position:sticky;top:3.2rem;background:var(--paper);padding:.5rem 0;z-index:5;border-bottom:1px solid var(--rule)}
+.tab{font-family:var(--font-ui);font-size:.8rem;font-weight:800;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink-soft);border-radius:5px;padding:.42rem .8rem;cursor:pointer}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.sec{margin:1.4rem 0}
+.sec>h2{font-family:var(--font-ui);font-size:1.25rem;margin:0 0 .2rem}
+.sec>h2 small{font-size:.75rem;color:var(--ink-faint);font-weight:600}
+.blk{background:var(--paper-raised);border:1px solid var(--rule);border-radius:7px;padding:.8rem 1rem;margin:.7rem 0}
+.blk h3{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin:0 0 .5rem}
+.blk.aw{border-left:5px solid var(--mark)}
+.blk.aw h3{color:var(--mark)}
+.blk p{margin:.3rem 0}
+.q{font-size:.88rem;border-left:3px solid var(--rule);padding:.15rem .6rem;margin:.35rem 0;color:var(--ink-soft)}
+.q i{font-style:normal;font-family:var(--font-ui);font-size:.68rem;font-weight:800;color:var(--ink-faint);margin-right:.35rem}
+.merk{font-size:.95rem;line-height:1.55}
+.merk b{color:var(--accent)}
+ul.pts{margin:.2rem 0;padding-left:1.15rem}ul.pts li{margin:.15rem 0}
+.algo{display:flex;gap:.4rem;flex-wrap:wrap;margin:.3rem 0 .6rem}
+.cells{display:inline-flex;gap:3px;vertical-align:middle;flex-wrap:wrap}
+.cells span{display:inline-flex;align-items:center;justify-content:center;min-width:2.05rem;height:1.9rem;border:1px solid var(--rule);border-radius:3px;background:var(--paper);font-family:var(--font-mono);font-size:.86rem;padding:0 .2rem}
+.cells span.fix{background:var(--sk-ok-soft);border-color:var(--sk-ok)}
+.cells span.hl{background:var(--accent-soft);border-color:var(--accent);font-weight:800}
+.cells span.pv{background:var(--mark-soft);border-color:var(--mark);font-weight:800}
+.cells span.mm{background:var(--mark-soft);border-color:var(--mark)}
+.cells span.ok{background:var(--sk-ok-soft);border-color:var(--sk-ok)}
+.cells span.e{color:var(--ink-faint)}
+.cells span.ix{border:0;background:transparent;color:var(--ink-faint);font-size:.68rem;height:1rem}
+.cells span.gap{border:0;background:transparent;min-width:.5rem}
+.tr{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:.5rem;align-items:center;margin:.3rem 0;font-size:.84rem}
+@media(max-width:600px){.tr{grid-template-columns:1fr}}
+.tr .l{font-family:var(--font-ui);font-size:.74rem;color:var(--ink-soft)}
+.tr .r small{display:block;color:var(--ink-faint);font-size:.74rem;margin-top:.15rem}
+.qs{font-size:.84rem;margin:.25rem 0}
+.qs .d{display:inline-block}
+.res{font-family:var(--font-ui);font-weight:800;margin:.5rem 0 0}
+.res b{color:var(--sk-ok)}
+.claim{border:1px solid var(--rule);border-radius:6px;padding:.55rem .75rem;margin:.5rem 0;background:var(--paper)}
+.claim .c{font-weight:700}
+.claim .v{font-family:var(--font-ui);font-size:.72rem;font-weight:900;letter-spacing:.06em;border-radius:3px;padding:.05rem .35rem;margin-right:.35rem;color:#fff}
+.claim .v.w{background:var(--sk-ok)}.claim .v.f{background:var(--mark)}.claim .v.d{background:var(--sk-3)}
+details.sol{margin:.4rem 0}
+details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;font-weight:800;color:var(--accent)}
+.gen{border:2px solid var(--accent);border-radius:8px;padding:.8rem 1rem;margin:.7rem 0;background:var(--paper-raised)}
+.gen h3{font-family:var(--font-ui);font-size:.85rem;margin:0 0 .4rem}
+.gen .ask{margin:.4rem 0;font-size:.95rem}
+.gen input{font-family:var(--font-mono);font-size:.95rem;padding:.4rem .55rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);width:100%;max-width:420px}
+.gen .row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;align-items:center}
+.gen .fbk{margin-top:.6rem;border-radius:6px;padding:.55rem .75rem;font-size:.88rem}
+.gen .fbk.ok{background:var(--sk-ok-soft);border:1px solid var(--sk-ok)}
+.gen .fbk.bad{background:var(--mark-soft);border:1px solid var(--mark)}
+.gen .score{font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);margin-left:auto}
+.htab{display:grid;grid-template-columns:repeat(var(--m),minmax(2.1rem,1fr));gap:3px;max-width:640px}
+.htab div{text-align:center;font-family:var(--font-ui);font-size:.66rem;color:var(--ink-faint)}
+.htab input{width:100%;max-width:none;text-align:center;padding:.3rem .1rem;font-size:.85rem}
+.go{font-family:var(--font-ui);font-weight:800;font-size:.82rem;border:0;border-radius:5px;padding:.5rem .95rem;background:var(--accent);color:#fff;cursor:pointer}
+.go.sec{background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule)}
+.bm{font-family:var(--font-mono);font-size:.85rem;line-height:1.35;white-space:pre;overflow-x:auto;background:var(--paper);border:1px solid var(--rule-soft);border-radius:5px;padding:.5rem .6rem}
+.bm .m{color:var(--sk-ok);font-weight:800}.bm .x{color:var(--mark);font-weight:800;text-decoration:underline}
+.later{color:var(--ink-faint);font-family:var(--font-ui);font-size:.85rem}
+@media print{.tabs,.gen,.plan{display:none!important} .pane{display:block!important}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">TGI-Klausurtrainer <span>· TIIAPS · 24.10.</span></div>
+    <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="skizzen.html">◩ Skizzen</a>
+    <div class="topbar-spacer"></div>
+    <div class="ctl"><button class="btn" id="themeBtn">◐ Dunkel</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero"><p class="ey">Theoretische Grundlagen der Informatik · ohne Unterlagen</p><h1>TGI-Klausurtrainer</h1>
+    <p>Gebaut aus den Übungsklausuren 2017 und 2020 (alle vom selben Prüfer): Die Klausur folgt immer derselben Gliederung in acht Aufgaben – oft sogar mit denselben Zahlen. Pro Aufgabe: was gefragt wird, was du auswendig können musst, Musterlösungen in der Variante der Hefte und ein Generator, der dir beliebig viele neue Aufgaben mit Kontrolle stellt.</p></div>
+  <div class="info">
+    <div><b>Prüfungsrelevant</b>GDI01 · TGI01 · TGI02 · TGI06 · TGI07</div>
+    <div><b>Kernthemen</b>Algorithmen · Formale Sprachen · Hashing · O-Symbolik · Bäume &amp; Graphen · Datentypen · LL(k)/LR(k) · Relationen · Schaltungen · Zahlensysteme</div>
+    <div><b>Hilfsmittel</b>Nur wissenschaftlicher Taschenrechner – dein fx-991DE X ist erlaubt. 120 Minuten.</div>
+  </div>
+  <div class="plan" id="plan"></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="panes"></div>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/tgi-algo.js"></script>
+<script>
+(function(){
+  "use strict";
+  var A = window.TGIAlgo, store = window.ITISync, SKEY = "tgi:gen";
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function cells(arr, cls){ return '<span class="cells">' + arr.map(function(v, i){ var c = typeof cls === "function" ? cls(v, i) : (cls || ""); return '<span class="' + c + '">' + (v === null || v === undefined ? "" : esc(v)) + '</span>'; }).join("") + '</span>'; }
+  function L(a){ return "[" + a.join(", ") + "]"; }
+  function rnd(n){ return Math.floor(Math.random() * n); }
+  function randList(n, max){ var a = []; for(var i = 0; i < n; i++) a.push(1 + rnd(max)); return a; }
+  function parseList(s){ return (s.match(/-?\d+/g) || []).map(Number); }
+  function same(a, b){ return a.length === b.length && a.every(function(x, i){ return x === b[i]; }); }
+
+  /* ---------- Gliederung der Klausur ---------- */
+  var AUFG = [
+    { n: 1, t: "Mathematische Grundlagen", s: "Relation, Operation, Eigenschaften" },
+    { n: 2, t: "Algorithmusbegriff", s: "Definition, Eigenschaften, „ist das ein Algorithmus?“" },
+    { n: 3, t: "Algorithmen I", s: "Sortieren", id: "a3" },
+    { n: 4, t: "Algorithmen II", s: "Hashing, Turnier, Boyer-Moore", id: "a4" },
+    { n: 5, t: "Algorithmus-Analyse", s: "Kostentabelle, Zeitfunktion, O" },
+    { n: 6, t: "Berechenbarkeit", s: "Chomsky-Klasse zuordnen + beweisen" },
+    { n: 7, t: "Formale Sprachen", s: "Automaten lesen, bauen, minimieren" },
+    { n: 8, t: "Parsing", s: "Chomsky-NF, LL(1), Hierarchie" }
+  ];
+  document.getElementById("plan").innerHTML = AUFG.map(function(a){
+    return '<a href="#' + (a.id || "") + '"' + (a.id ? ' class="on" data-go="' + a.id + '"' : '') + '><b>' + a.n + ' · ' + esc(a.t) + '</b>' + esc(a.s) + '<br><small>' + (a.id ? "✓ bereit" : "folgt") + '</small></a>';
+  }).join("");
+
+  /* ---------- Generator-Statistik (geräteübergreifend) ---------- */
+  var gst = {};
+  function gload(){ return (store ? store.get(SKEY) : Promise.resolve(null)).then(function(r){ try { gst = JSON.parse(r || "{}") || {}; } catch(e) { gst = {}; } }); }
+  function gsave(){ if(store) store.set(SKEY, JSON.stringify(gst)); }
+  function glog(k, ok){ var v = gst[k] || [0, 0]; v[1]++; if(ok) v[0]++; gst[k] = v; gsave(); }
+  function gscore(k){ var v = gst[k] || [0, 0]; return v[1] ? v[0] + " / " + v[1] + " richtig" : "noch nicht geübt"; }
+
+  /* ---------- Darstellung der Abläufe ---------- */
+  function bubbleHtml(a, detail){
+    var r = A.bubble(a), h = '<div class="tr"><div class="l">Start</div><div class="r">' + cells(a) + '</div></div>';
+    if(detail){
+      h += '<div class="tr"><div class="l">Durchlauf 1 im Detail</div><div class="r">' + r.passes[0].steps.map(function(s){
+        return '<div style="margin:.15rem 0">' + cells(s.state, function(v, i){ return i === s.j || i === s.j + 1 ? "hl" : ""; }) + ' <small style="display:inline;color:var(--ink-faint)">' + (s.swap ? "getauscht" : "kein Tausch") + '</small></div>'; }).join("") + '</div></div>';
+    }
+    r.passes.forEach(function(p, i){
+      h += '<div class="tr"><div class="l">nach Durchlauf ' + (i + 1) + '</div><div class="r">' + cells(p.state, function(v, j){ return j >= p.fixedFrom ? "fix" : ""; }) +
+        '<small>' + (p.swaps.length ? "Tausche: " + p.swaps.map(function(s){ return s[0] + "↔" + s[1]; }).join(", ") : "kein Tausch – Liste ist sortiert (die übrigen Durchläufe ändern nichts)") + '</small></div></div>';
+      if(!p.swaps.length && i < r.passes.length - 1 && !detail) { h += '<div class="tr"><div class="l">…</div><div class="r"><small>Durchläufe ' + (i + 2) + '–' + r.passes.length + ' ohne Tausch</small></div></div>'; return false; }
+    });
+    return h + '<p class="res">Sortiert: ' + cells(r.sorted, "fix") + ' · ' + r.cmp + ' Vergleiche, ' + r.swp + ' Vertauschungen</p>';
+  }
+  // forEach kann nicht abbrechen → eigene Schleife für die Kurzform
+  function bubbleShort(a){
+    var r = A.bubble(a), h = '<div class="tr"><div class="l">Start</div><div class="r">' + cells(a) + '</div></div>';
+    for(var i = 0; i < r.passes.length; i++){
+      var p = r.passes[i];
+      h += '<div class="tr"><div class="l">nach Durchlauf ' + (i + 1) + '</div><div class="r">' + cells(p.state, function(v, j){ return j >= p.fixedFrom ? "fix" : ""; }) +
+        '<small>' + (p.swaps.length ? "Tausche: " + p.swaps.map(function(s){ return s[0] + "↔" + s[1]; }).join(", ") : "kein Tausch mehr") + '</small></div></div>';
+      if(!p.swaps.length && i < r.passes.length - 1){ h += '<div class="tr"><div class="l">Durchlauf ' + (i + 2) + '–' + r.passes.length + '</div><div class="r"><small>ändern nichts mehr (im Heft-Algorithmus laufen sie trotzdem; grün = steht fest)</small></div></div>'; break; }
+    }
+    return h + '<p class="res">Sortiert: ' + cells(r.sorted, "fix") + ' · bubbleSort2: ' + r.cmp + ' Vergleiche, ' + r.swp + ' Vertauschungen</p>';
+  }
+  function insertionHtml(a){
+    var r = A.insertion(a), h = '<div class="tr"><div class="l">Eingabe</div><div class="r">' + cells(a) + '</div></div>';
+    r.steps.forEach(function(s, k){
+      h += '<div class="tr"><div class="l">' + (k + 1) + '. Element ' + s.x + '</div><div class="r">' + cells(s.sorted, function(v, i){ return i === s.pos ? "hl" : "fix"; }) + (s.rest.length ? '<span class="cells"><span class="gap"></span></span>' + cells(s.rest, "e") : '') +
+        '<small>' + (k === 0 ? "erstes Element: einfach übernehmen" : s.cmp + " Vergleich" + (s.cmp === 1 ? "" : "e") + " von links → " + (s.pos === s.sorted.length - 1 ? "kein größeres gefunden: ans Ende" : "vor " + s.sorted[s.pos + 1] + " eingefügt")) + '</small></div></div>';
+    });
+    return h + '<p class="res">Sortiert: ' + cells(r.sorted, "fix") + ' · ' + r.cmp + ' Vergleiche</p>';
+  }
+  function quickHtml(a){
+    var r = A.quick(a), h = "";
+    r.calls.forEach(function(c){
+      var pad = 'style="margin-left:' + (c.depth * 1.6) + 'rem"';
+      if(c.leaf) h += '<div class="qs" ' + pad + '>' + (c.list.length ? cells(c.list, "fix") : '<small style="color:var(--ink-faint)">[ ] leer</small>') + ' <small style="color:var(--ink-faint)">≤ 1 Element → fertig</small></div>';
+      else h += '<div class="qs" ' + pad + '>' + cells(c.list, function(v, i){ return i === c.pi ? "pv" : ""; }) + ' <small>pivot = Index ⌊' + c.list.length + '/2⌋ = ' + c.pi + ' → <b>' + c.pivot + '</b> · A1 (≤) = ' + L(c.A1) + ' · A2 (&gt;) = ' + L(c.A2) + '</small></div>';
+    });
+    return h + '<p class="res">Zusammensetzen QS(A1) + pivot + QS(A2): ' + cells(r.sorted, "fix") + '</p>';
+  }
+  function selectionHtml(a){
+    var r = A.selection(a), h = '<div class="tr"><div class="l">Start</div><div class="r">' + cells(a) + '</div></div>';
+    r.passes.forEach(function(p, i){
+      h += '<div class="tr"><div class="l">Durchlauf ' + (i + 1) + '</div><div class="r">' + cells(p.state, function(v, j){ return j <= p.i ? "fix" : ""; }) + '<small>Minimum des Rests = ' + p.min + (p.from === p.i ? " (steht schon an Platz " + (p.i + 1) + ")" : " → mit Platz " + (p.i + 1) + " getauscht") + '</small></div></div>';
+    });
+    return h;
+  }
+  function hashHtml(keys, m, hf, probe, hdesc){
+    var r = A.hashing(keys, m, hf, probe), h = "";
+    r.log.forEach(function(e){
+      var t = e.tries.map(function(x, i){ return i === 0 ? "Zelle " + x.p + (x.frei ? " frei" : " belegt (" + x.belegt + ")") : "+" + x.off + " → " + x.p + (x.frei ? " frei" : " belegt (" + x.belegt + ")"); }).join(" · ");
+      h += '<div class="tr"><div class="l">' + e.key + ': ' + hdesc(e.key, e.h) + '</div><div class="r">' + (e.tries.length > 1 ? '<b style="color:var(--mark)">Kollision</b> · ' : '') + esc(t) + ' → <b>Zelle ' + e.pos + '</b></div></div>';
+    });
+    var idx = []; for(var i = 0; i < m; i++) idx.push(i);
+    return h + '<div class="res" style="margin-top:.6rem">Hashtabelle:</div><div>' + cells(idx, "ix") + '</div><div>' + cells(r.table, function(v){ return v === null ? "e" : "ok"; }) + '</div>';
+  }
+  function turnierHtml(a){
+    var r = A.turnier(a), h = '<div class="tr"><div class="l">Liste</div><div class="r">' + cells(a) + '</div></div>';
+    r.rounds.forEach(function(g, i){
+      h += '<div class="tr"><div class="l">' + (i === r.rounds.length - 1 ? "Finale" : "Runde " + (i + 1)) + '</div><div class="r">' + g.map(function(x){ return x.bye !== undefined ? '<span style="color:var(--ink-faint)">' + x.bye + ' Freilos</span>' : x.a + ' : ' + x.b + ' → <b>' + x.w + '</b>'; }).join(" · ") + '</div></div>';
+    });
+    return h + '<div class="tr"><div class="l">Kandidaten</div><div class="r">alle, die gegen den Sieger <b>' + r.winner + '</b> verloren haben: ' + r.kandidaten.join(", ") + ' → kleinstes davon: <b>' + r.second + '</b></div></div>' +
+      '<p class="res">Kleinstes: <b>' + r.winner + '</b> · Zweitkleinstes: <b>' + r.second + '</b> · Vergleiche: ' + r.cmp1 + ' (Turnier, n − 1) + ' + r.cmp2 + ' (Kandidaten) = ' + (r.cmp1 + r.cmp2) + '</p>';
+  }
+  function bmHtml(text, pat, n){
+    var r = A.boyerMoore(text, pat, n), rows = "";
+    r.tries.forEach(function(t, k){
+      var line = "";
+      for(var j = 0; j < pat.length; j++){
+        var ch = pat[j], cls = "";
+        if(t.match) cls = "m"; else if(j > t.j) cls = "m"; else if(j === t.j) cls = "x";
+        line += cls ? '<span class="' + cls + '">' + esc(ch) + '</span>' : esc(ch);
+      }
+      rows += (k + 1) + ". " + " ".repeat(t.s) + line + "   " + (t.match ? "Treffer an Position " + t.s : "„" + t.q + "“ " + (t.last < 0 ? "kommt im Pattern nicht vor → um " + t.shift + " ganz vorbei" : t.last < t.j ? "letztes Vorkommen im Pattern an Index " + t.last + " → um " + t.shift + " schieben" : "kommt nur rechts davon vor → um 1 schieben")) + "\n";
+    });
+    return '<div class="bm">   ' + esc(text) + "\n" + rows + '</div>';
+  }
+
+  /* ---------- Inhalte ---------- */
+  var LK = [1, 19, 3, 8, 6, 8, 9];
+  var P = {};
+  P.a3 = '<div class="sec" id="a3"><h2>Aufgabe 3 · Algorithmen I – Sortieren <small>TGI01 Kap. 5.2 · TGI02 Kap. 1</small></h2>' +
+    '<div class="blk"><h3>So wird gefragt</h3>' +
+      '<div class="q"><i>2020/1</i>Erläutern Sie kurz, aber klar, BubbleSort. · Sortieren Sie L = [1, 19, 3, 8, 6, 8, 9] mittels BubbleSort, wesentliche Zwischenschritte zeigen. · Beweisen oder widerlegen: Bei BubbleSort wandert ein Minimum höchstens nach links, nie nach rechts.</div>' +
+      '<div class="q"><i>2020/2</i>Dasselbe mit InsertionSort, gleiche Liste. · Beweisen oder widerlegen: Ist die Liste schon sortiert, sortiert InsertionSort schneller.</div>' +
+      '<div class="q"><i>2020/3</i>Dasselbe mit QuickSort, gleiche Liste. · Beweisen oder widerlegen: Wann immer 3 und 11 in einer gemeinsamen Liste sind, steht die 3 links von der 11.</div>' +
+      '<div class="q"><i>2017</i>Sortieren Sie L1 = [13, 7, 4, 99, 34, 2, 8, 34, 5] mittels QuickSort und erläutern Sie Ihre Schritte.</div>' +
+      '<p style="font-size:.84rem;color:var(--ink-soft)">Muster: <b>erklären</b> (4 P.) → <b>von Hand sortieren</b> (Zwischenschritte!) → <b>Aussage beweisen/widerlegen</b>. Rechne damit, dass auch SelectionSort oder MergeSort kommen kann.</p></div>' +
+
+    '<div class="blk aw"><h3>Auswendig – „Erläutern Sie kurz, aber klar“</h3>' +
+      '<p class="merk"><b>BubbleSort:</b> Man geht (n − 1)-mal von links nach rechts durch die Liste und vergleicht jeweils <b>benachbarte</b> Elemente. Ist das linke größer als das rechte, werden sie getauscht. Nach jedem Durchlauf steht das größte noch unsortierte Element ganz rechts an seinem endgültigen Platz – der zu sortierende Bereich wird pro Durchlauf um 1 kürzer. Aufwand O(n²).</p>' +
+      '<p class="merk"><b>InsertionSort:</b> Die Elemente werden der Reihe nach aus der unsortierten Liste genommen und in eine (anfangs leere) <b>sortierte Liste an der richtigen Stelle eingefügt</b>: von links vergleichen, vor dem ersten größeren Element einfügen, der Rest rückt nach rechts. Die sortierte Teilliste ist dadurch immer sortiert; mit einer Trennmarke geht das auch in der Eingabeliste (in situ). Aufwand O(n²).</p>' +
+      '<p class="merk"><b>QuickSort:</b> Teile-und-Herrsche, rekursiv. Eine Liste mit höchstens einem Element ist sortiert. Sonst wird das <b>mittlere Element (Index ⌊n/2⌋) als Pivot</b> gewählt; alle übrigen Elemente ≤ Pivot kommen in A1, alle &gt; Pivot in A2 (split). A1 und A2 werden rekursiv sortiert und zusammengesetzt: QS(A1) + Pivot + QS(A2) (merge). Im Mittel O(n·log n), im schlechtesten Fall O(n²).</p>' +
+      '<p class="merk"><b>SelectionSort:</b> Im unsortierten Rest das <b>Minimum suchen</b> und mit dem ersten Element des Rests tauschen; der Rest wird pro Durchlauf um 1 kürzer, nach n − 1 Durchläufen sortiert. O(n²) Vergleiche, aber höchstens n − 1 Tausche.</p>' +
+      '<ul class="pts"><li>Vergleiche bubbleSort2: (n − 1) + (n − 2) + … + 1 = <b>n(n − 1)/2</b> · bubbleSort (ohne Verkürzung): (n − 1)·(n − 1)</li><li><b>stabil</b> = gleiche Werte behalten ihre Reihenfolge: BubbleSort und InsertionSort ja (Tausch/Einfügen nur bei echt größer), SelectionSort nein, QuickSort (Heft) nein</li></ul></div>' +
+
+    '<div class="blk"><h3>Musterlösung 2020/1 – BubbleSort, L = ' + L(LK) + '</h3>' + bubbleShort(LK) +
+      '<details class="sol"><summary>Durchlauf 1 Vergleich für Vergleich (so zeigt es das Heft)</summary>' + bubbleHtml(LK, true) + '</details></div>' +
+    '<div class="blk"><h3>Musterlösung 2020/2 – InsertionSort, gleiche Liste</h3>' + insertionHtml(LK) + '</div>' +
+    '<div class="blk"><h3>Musterlösung 2020/3 – QuickSort, gleiche Liste</h3><p style="font-size:.84rem;color:var(--ink-soft)">Rot = Pivot. Jede Zeile ist ein Aufruf; eingerückt = rekursiver Aufruf.</p>' + quickHtml(LK) + '</div>' +
+    '<div class="blk"><h3>Musterlösung 2017 – QuickSort, L1 = [13, 7, 4, 99, 34, 2, 8, 34, 5]</h3>' + quickHtml([13, 7, 4, 99, 34, 2, 8, 34, 5]) + '<p style="font-size:.82rem;color:var(--ink-soft)">Achtung: Die zweite 34 ist nicht größer als das Pivot 34 → sie kommt nach A1 (≤).</p></div>' +
+    '<div class="blk"><h3>Zum Vergleich: SelectionSort, gleiche Liste</h3>' + selectionHtml(LK) + '</div>' +
+
+    '<div class="blk aw"><h3>Beweisen oder widerlegen</h3>' +
+      '<p style="font-size:.88rem">Schema: Ist die Aussage <b>falsch</b>, genügt <b>ein Gegenbeispiel</b> (kleine Liste + Ablauf). Ist sie <b>wahr</b>, begründe sie <b>allgemein</b> mit der Regel des Algorithmus („weil … immer …“) – ein Beispiel allein beweist nichts.</p>' +
+      '<div class="claim"><span class="v w">WAHR</span><span class="c">Bei BubbleSort wandert ein Minimum höchstens nach links, nie nach rechts. (2020/1)</span><p>Ein Element wandert nur dann nach rechts, wenn es mit seinem rechten Nachbarn getauscht wird – und getauscht wird nur, wenn es <b>echt größer</b> als dieser Nachbar ist. Ein Minimum ist aber kleiner oder gleich allen anderen Elementen, also nie echt größer als sein Nachbar. Es wird daher nie nach rechts getauscht. Nach links kann es wandern (wenn sein linker Nachbar größer ist), und zwar höchstens eine Stelle pro Durchlauf. ∎</p></div>' +
+      '<div class="claim"><span class="v d">KOMMT DRAUF AN</span><span class="c">Ist die Liste schon sortiert, sortiert InsertionSort schneller. (2020/2)</span><p>Im Heft wird mit der sortierten Liste <b>von links</b> verglichen, bis ein größeres Element kommt. Bei einer schon sortierten Eingabe ist jedes neue Element das größte – es wird mit <b>allen</b> bisherigen verglichen: 0 + 1 + … + (n − 1) = n(n − 1)/2 Vergleiche, das ist der <b>schlechteste</b> Fall. Gegenbeispiel: [1, 2, 3, 4] braucht 6 Vergleiche, [4, 3, 2, 1] nur 3. → <b>Widerlegt</b> für die Heft-Variante.<br>Vergleicht man dagegen <b>von rechts</b> (übliche Lehrbuch-Variante), braucht jedes Element nur einen Vergleich: n − 1 Vergleiche, der beste Fall. In der Klausur beide Fälle kurz nennen und sagen, welche Variante du annimmst.</p></div>' +
+      '<div class="claim"><span class="v w">WAHR</span><span class="c">QuickSort, L = [… 3 … 11 …]: Wann immer 3 und 11 in einer gemeinsamen Liste sind, steht die 3 links von der 11. (2020/3)</span><p>Am Anfang steht die 3 links von der 11. Beim Aufteilen geht QuickSort die Liste <b>von links nach rechts</b> durch und hängt jedes Element hinten an A1 oder A2 an – die Reihenfolge innerhalb von A1 und von A2 bleibt also erhalten. Landen 3 und 11 in derselben Teilliste, steht die 3 dort weiter links (Induktion über die Rekursionstiefe). Ist eine der beiden das Pivot, trennen sie sich: Pivot 3 → 11 kommt nach A2 (rechts); Pivot 11 → 3 kommt nach A1 (links). Ab dann sind sie in keiner gemeinsamen Liste mehr, und im Ergebnis QS(A1) + Pivot + QS(A2) steht die 3 links. Sind sie in A1 und A2 getrennt, gilt dasselbe. ∎</p></div>' +
+      '<div class="claim"><span class="v w">WAHR</span><span class="c">Nach k Durchläufen von BubbleSort stehen die k größten Elemente ganz rechts an ihrem endgültigen Platz.</span><p>Im Durchlauf wird das größte Element des unsortierten Bereichs bei jedem Vergleich mitgetauscht, bis es am Ende des Bereichs steht; der Bereich wird danach um 1 kürzer. ∎</p></div>' +
+      '<div class="claim"><span class="v f">FALSCH</span><span class="c">SelectionSort ist stabil.</span><p>Gegenbeispiel [2a, 2b, 1]: Minimum 1 wird mit 2a getauscht → [1, 2b, 2a]. Die beiden 2 haben ihre Reihenfolge getauscht.</p></div>' +
+      '<div class="claim"><span class="v f">FALSCH</span><span class="c">QuickSort (wie im Heft) ist stabil.</span><p>Gegenbeispiel [3, 2a, 2b]: Pivot = Index 1 = 2a; 2b ≤ 2a → A1 = [2b], A2 = [3] → Ergebnis [2b, 2a, 3].</p></div></div>' +
+
+    '<div id="gen-a3"></div></div>';
+
+  P.a4 = '<div class="sec" id="a4"><h2>Aufgabe 4 · Algorithmen II – Hashing, Turnier, Boyer-Moore <small>TGI02 Kap. 2–4</small></h2>' +
+    '<div class="blk"><h3>So wird gefragt</h3>' +
+      '<div class="q"><i>2020/1</i>Hashspeicher mit 11 Zellen, h(x) = x % 11. Speichern Sie L = [10, 324, 120, 0, 21]; bei Kollision offenes Verfahren mit quadratischer Schrittweite. · Hashfunktionen sollten surjektiv sein – erläutern Sie das am Beispiel.</div>' +
+      '<div class="q"><i>2020/2</i>Gleiche Werte, 11 Zellen, Multiplikationsmethode h(x) = ⌊(1,33·x − ⌊1,3·x⌋)·11⌋, offenes Verfahren Ihrer Wahl. · Welche Eigenschaften müssen Hashfunktionen aufweisen?</div>' +
+      '<div class="q"><i>2020/3</i>L = [1, 4, 9, 11, 2, 19, 27, 46, 3, 8, 4]: kleinstes und zweitkleinstes Element mit der Turniermethode.</div>' +
+      '<div class="q"><i>2017</i>Turnier: billigste und zweitbilligste Bestellung · Boyer-Moore: T = „Quantität und Qualität“, p = „tat“, die ersten 4 Matchversuche · Hashing 13, 27, 4, 33 mit h(n) = n % 10, Array der Länge 10, Kollision nennen und offen lösen.</div></div>' +
+
+    '<div class="blk aw"><h3>Auswendig – Hashing</h3>' +
+      '<p class="merk"><b>Hashfunktion:</b> eine Abbildung h: K → {0, 1, …, m − 1}, die jedem Schlüssel k einen Index h(k) der Hashtabelle (Größe m) zuordnet.</p>' +
+      '<p class="merk"><b>Eigenschaften einer guten Hashfunktion:</b> (1) bildet auf einen Index &lt; m ab, (2) <b>schnell berechenbar</b>, (3) <b>surjektiv</b> – jede Zelle der Tabelle wird von mindestens einem Schlüssel getroffen, die Tabelle wird voll ausgenutzt, (4) <b>verteilt gleichmäßig</b> → wenige Kollisionen.</p>' +
+      '<p class="merk"><b>Kollision:</b> zwei verschiedene Schlüssel k₁ ≠ k₂ mit h(k₁) = h(k₂). Nicht vermeidbar, weil es viel mehr Schlüssel als Zellen gibt (h ist nicht injektiv).</p>' +
+      '<ul class="pts"><li><b>Divisionsrestverfahren:</b> h(k) = k % m, m am besten eine <b>Primzahl</b> (nicht 10 oder 10ⁿ – dann zählt nur die letzte Ziffer)</li>' +
+      '<li><b>Multiplikationsmethode:</b> h(k) = ⌊m · (a·k − ⌊a·k⌋)⌋, a irrational (gut: nahe am Goldenen Schnitt) – Nachkommaanteil × m, abrunden</li>' +
+      '<li><b>Geschlossenes Verfahren</b> (Verkettung): bei Kollision Überlaufbereich außerhalb der Tabelle, lineare Liste über Zeiger</li>' +
+      '<li><b>Offenes Verfahren</b>: freie Zelle in der Tabelle suchen – <b>linear</b>: h, h+1, h+2, … · <b>quadratisch</b>: h, h+1, h+4, h+9, … (immer vom ursprünglichen h aus, mod m; am Ende vorne weiter). Quadratisch verhindert Klümpchenbildung.</li>' +
+      '<li>Taschenrechner: 324 % 11 → 324 ÷ 11 = 29,45… → 324 − 29·11 = <b>5</b> · Multiplikation: 1,33 × 324 = 430,92 → 0,92 × 11 = 10,12 → <b>10</b></li></ul></div>' +
+
+    '<div class="blk"><h3>Musterlösung 2020/1 – h(x) = x % 11, quadratisches Sondieren</h3>' + hashHtml([10, 324, 120, 0, 21], 11, A.hDiv(11), "quadratisch", function(k, h){ return k + " % 11 = " + h; }) +
+      '<div class="claim" style="margin-top:.7rem"><span class="c">Surjektiv am Beispiel:</span><p>h(x) = x % 11 kann jeden Wert 0 … 10 annehmen – z. B. liefern x = 0, 1, …, 10 genau die Zellen 0 bis 10. Jede Zelle der Tabelle ist also Bild mindestens eines Schlüssels; damit wird die ganze Tabelle genutzt. (Dass bei nur 5 Werten Zellen leer bleiben, widerspricht dem nicht – Surjektivität betrifft alle möglichen Schlüssel.) Nicht surjektiv wäre z. B. h(x) = 0 (nur Zelle 0 wird genutzt) oder h(x) = (x % 11) DIV 2 (nur Zellen 0 bis 5).</p></div></div>' +
+    '<div class="blk"><h3>Musterlösung 2020/2 – Multiplikationsmethode, lineares Sondieren</h3>' +
+      '<p style="font-size:.86rem">Achtung, Tippfehler in der Aufgabe: Wörtlich ⌊(1,33x − ⌊1,3x⌋)·11⌋ ergibt z. B. für 324: 430,92 − 421 = 9,92 → 109 – keine Zelle der Tabelle (das wäre keine Hashfunktion!). Gemeint ist ⌊(1,33x − ⌊<b>1,33</b>x⌋)·11⌋. Das in der Klausur kurz anmerken und so rechnen:</p>' +
+      hashHtml([10, 324, 120, 0, 21], 11, A.hMul(11, 1.33), "linear", function(k, h){ var ak = +(1.33 * k).toFixed(2); return "1,33·" + k + " = " + String(ak).replace(".", ",") + " → " + h; }) + '</div>' +
+    '<div class="blk"><h3>Musterlösung 2017 – h(n) = n % 10, lineares Sondieren</h3>' + hashHtml([13, 27, 4, 33], 10, A.hDiv(10), "linear", function(k, h){ return k + " % 10 = " + h; }) + '<p style="font-size:.84rem;color:var(--ink-soft)">Kollision: 33 trifft Zelle 3 (schon 13). Bonuspunkt: m = 10 ist ungünstig – nur die letzte Ziffer zählt; besser eine Primzahl.</p></div>' +
+
+    '<div class="blk aw"><h3>Auswendig – Turniermethode (Minimum und Zweitkleinstes)</h3>' +
+      '<ul class="pts"><li>Paare bilden (von links), jedes Paar „spielt“: der Kleinere kommt weiter. Bei ungerader Anzahl hat einer ein <b>Freilos</b>. Wiederholen bis zum Sieger = Minimum: <b>n − 1</b> Vergleiche.</li>' +
+      '<li>Zweitkleinstes kann nur sein, wer <b>direkt gegen den Sieger verloren</b> hat (irgendwann im Turnier). Das sind höchstens ⌈log₂ n⌉ Kandidaten → unter ihnen das Minimum suchen.</li>' +
+      '<li>Gesamt: n − 1 + ⌈log₂ n⌉ − 1 Vergleiche statt 2n − 3 bei zwei einfachen Suchläufen.</li></ul></div>' +
+    '<div class="blk"><h3>Musterlösung 2020/3 – Turnier</h3>' + turnierHtml([1, 4, 9, 11, 2, 19, 27, 46, 3, 8, 4]) + '</div>' +
+
+    '<div class="blk aw"><h3>Auswendig – Boyer-Moore</h3>' +
+      '<ul class="pts"><li>Pattern unter den Text legen und <b>von hinten</b> (rechts) vergleichen.</li><li>Nur bei einem Match gehen wir weiter rückwärts.</li>' +
+      '<li>Nach einem Mismatch mit dem Textzeichen q wird das Pattern so verschoben, dass das <b>letzte Vorkommen von q im Pattern</b> unter q steht. Kommt q im Pattern nicht vor → Pattern <b>ganz an q vorbei</b> schieben.</li>' +
+      '<li>Nach jedem Mismatch wieder von hinten anfangen. Läge das letzte Vorkommen rechts der Vergleichsstelle, um 1 schieben.</li></ul></div>' +
+    '<div class="blk"><h3>Musterlösung 2017 – T = „Quantität und Qualität“, p = „tat“</h3><p style="font-size:.84rem;color:var(--ink-soft)">Grün = Match, rot unterstrichen = Mismatch. Ein Matchversuch = eine Lage des Patterns.</p>' + bmHtml("Quantität und Qualität", "tat", 4) +
+      '<details class="sol"><summary>alle Matchversuche bis zum Ende</summary>' + bmHtml("Quantität und Qualität", "tat") + '<p style="font-size:.84rem">Kein Treffer: „tät“ ≠ „tat“ (ä ≠ a).</p></details></div>' +
+    '<div id="gen-a4"></div></div>';
+
+  /* ---------- Generatoren ---------- */
+  var GENS = {
+    a3: [
+      { k: "bubble", t: "BubbleSort: Zustand nach Durchlauf k", make: function(){ var a = randList(6 + rnd(2), 40), k = 1 + rnd(3); return { a: a, k: k, ask: "Liste " + L(a) + " – wie sieht sie nach Durchlauf " + k + " aus?", sol: A.bubble(a).passes[k - 1].state, how: function(){ return bubbleShort(a); } }; } },
+      { k: "insertion", t: "InsertionSort: sortierte Liste nach k eingefügten Elementen", make: function(){ var a = randList(6 + rnd(2), 40), k = 3 + rnd(3); return { a: a, ask: "Eingabe " + L(a) + " – sortierte Liste, nachdem die ersten " + k + " Elemente eingefügt sind?", sol: A.insertion(a).steps[k - 1].sorted, how: function(){ return insertionHtml(a); } }; } },
+      { k: "quick", t: "QuickSort: erster Split", make: function(){ var a = randList(6 + rnd(3), 40), c = A.quick(a).calls[0]; return { a: a, ask: "Liste " + L(a) + " – Pivot, A1 und A2 des ersten Aufrufs? Eingabe: pivot ; A1 ; A2 (z. B. 8 ; 1 3 6 ; 19 9)", multi: true, sol: [[c.pivot], c.A1, c.A2], how: function(){ return quickHtml(a); } }; } },
+      { k: "selection", t: "SelectionSort: Zustand nach Durchlauf k", make: function(){ var a = randList(6 + rnd(2), 40), k = 1 + rnd(3); return { a: a, ask: "Liste " + L(a) + " – wie sieht sie nach Durchlauf " + k + " aus?", sol: A.selection(a).passes[k - 1].state, how: function(){ return selectionHtml(a); } }; } }
+    ],
+    a4: [
+      { k: "hash", t: "Hashing: Tabelle füllen", make: function(){
+          var m = [7, 11, 13][rnd(3)], probe = Math.random() < .5 ? "linear" : "quadratisch", keys = [];
+          while(keys.length < 5){ var x = rnd(m === 7 ? 60 : 200); if(keys.indexOf(x) < 0) keys.push(x); }
+          // mindestens eine Kollision erzwingen
+          if(new Set(keys.map(function(k){ return k % m; })).size === keys.length) keys[4] = keys[0] + m * (1 + rnd(5));
+          var r = A.hashing(keys, m, A.hDiv(m), probe);
+          return { table: true, m: m, ask: "h(x) = x % " + m + ", " + m + " Zellen, offenes Verfahren " + probe + (probe === "quadratisch" ? " (h, h+1, h+4, h+9 …)" : " (h, h+1, h+2 …)") + ". Speichere " + L(keys) + " in dieser Reihenfolge.", sol: r.table, how: function(){ return hashHtml(keys, m, A.hDiv(m), probe, function(k, h){ return k + " % " + m + " = " + h; }); } }; } },
+      { k: "turnier", t: "Turnier: Zweitkleinstes und Kandidaten", make: function(){ var a = randList(8 + rnd(4), 60), r = A.turnier(a); return { a: a, ask: "Liste " + L(a) + " – Turnier (Paare von links, Freilos für den letzten). Gegen den Sieger verloren haben … und das Zweitkleinste ist …? Eingabe: Kandidaten ; Zweitkleinstes", multi: true, set0: true, sol: [r.kandidaten, [r.second]], how: function(){ return turnierHtml(a); } }; } },
+      { k: "bm", t: "Boyer-Moore: Lagen des Patterns", make: function(){
+          var W = [["ananas banane", "nan"], ["rotor motor", "tor"], ["abrakadabra", "dab"], ["mississippi", "ssi"], ["informatik formal", "mal"], ["hashtabelle tabelle", "bell"], ["sortieren sortiert", "tier"], ["kakaokanne", "kan"]], w = W[rnd(W.length)];
+          var r = A.boyerMoore(w[0], w[1], 5);
+          return { ask: "Text „" + w[0] + "“, Pattern „" + w[1] + "“ – an welchen Positionen (ab 0) liegt das Pattern bei den ersten " + r.tries.length + " Matchversuchen?", sol: r.tries.map(function(t){ return t.s; }), how: function(){ return bmHtml(w[0], w[1], 5); } }; } }
+    ]
+  };
+
+  function renderGen(sec){
+    var el = document.getElementById("gen-" + sec); if(!el) return;
+    el.innerHTML = '<div class="blk" style="border:0;background:transparent;padding:0"><h3 style="font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)">Üben mit neuen Zahlen – auf Papier rechnen, Ergebnis eintippen</h3></div>' +
+      GENS[sec].map(function(g){ return '<div class="gen" data-g="' + g.k + '"><h3>' + esc(g.t) + '</h3><div class="body"></div></div>'; }).join("");
+    GENS[sec].forEach(function(g){ newTask(el.querySelector('[data-g="' + g.k + '"]'), g); });
+  }
+  function newTask(box, g){
+    var t = g.make(), b = box.querySelector(".body");
+    var inp = t.table ? '<div class="htab" style="--m:' + t.m + '">' + t.sol.map(function(_, i){ return '<div>' + i + '<input data-i="' + i + '" inputmode="numeric" aria-label="Zelle ' + i + '"></div>'; }).join("") + '</div>' :
+      '<input class="ans" placeholder="' + (t.multi ? "z. B. 8 ; 1 3 6 ; 19 9" : "Zahlen mit Leerzeichen oder Komma") + '" inputmode="text">';
+    b.innerHTML = '<div class="ask">' + esc(t.ask) + '</div>' + inp + '<div class="row"><button class="go chk">Prüfen</button><button class="go sec shw">Lösungsweg</button><button class="go sec nw">Neue Aufgabe</button><span class="score">' + gscore(g.k) + '</span></div><div class="out"></div>';
+    var done = false;
+    function check(){
+      var ok;
+      if(t.table){ var vals = Array.prototype.map.call(b.querySelectorAll(".htab input"), function(x){ var v = x.value.trim(); return v === "" ? null : Number(v); }); ok = vals.every(function(v, i){ return v === t.sol[i]; }); }
+      else if(t.multi){ var parts = b.querySelector(".ans").value.split(";").map(parseList); ok = parts.length === t.sol.length && parts.every(function(p, i){ return t.set0 && i === 0 ? same(p.slice().sort(function(x, y){ return x - y; }), t.sol[i].slice().sort(function(x, y){ return x - y; })) : same(p, t.sol[i]); }); }
+      else ok = same(parseList(b.querySelector(".ans").value), t.sol);
+      if(!done){ glog(g.k, ok); done = true; b.querySelector(".score").textContent = gscore(g.k); }
+      b.querySelector(".out").innerHTML = '<div class="fbk ' + (ok ? "ok" : "bad") + '">' + (ok ? "✓ Richtig." : "✗ Noch nicht. Richtig wäre: " + (t.table ? "" : esc(t.multi ? t.sol.map(L).join(" ; ") : L(t.sol)))) + '</div>' + (ok ? "" : '<div style="margin-top:.5rem">' + t.how() + '</div>');
+    }
+    b.querySelector(".chk").onclick = check;
+    b.querySelector(".shw").onclick = function(){ b.querySelector(".out").innerHTML = '<div style="margin-top:.5rem">' + t.how() + '</div>'; if(!done){ glog(g.k, false); done = true; b.querySelector(".score").textContent = gscore(g.k); } };
+    b.querySelector(".nw").onclick = function(){ newTask(box, g); };
+    Array.prototype.forEach.call(b.querySelectorAll("input"), function(x){ x.addEventListener("keydown", function(e){ if(e.key === "Enter") check(); }); });
+  }
+
+  /* ---------- Reiter ---------- */
+  var TABS = [["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"]], cur = "a3";
+  try { cur = localStorage.getItem("tgi:tab") || "a3"; } catch(e) {}
+  if(location.hash && P[location.hash.slice(1)]) cur = location.hash.slice(1);
+  document.getElementById("panes").innerHTML = TABS.map(function(t){ return '<div class="pane" data-p="' + t[0] + '">' + P[t[0]] + '</div>'; }).join("");
+  function show(id){
+    cur = id; try { localStorage.setItem("tgi:tab", id); } catch(e) {}
+    document.getElementById("tabs").innerHTML = TABS.map(function(t){ return '<button class="tab' + (t[0] === id ? " on" : "") + '" data-t="' + t[0] + '">' + esc(t[1]) + '</button>'; }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll(".pane"), function(p){ p.style.display = p.getAttribute("data-p") === id ? "" : "none"; });
+  }
+  document.getElementById("tabs").addEventListener("click", function(e){ var b = e.target.closest("[data-t]"); if(b){ show(b.getAttribute("data-t")); window.scrollTo({ top: document.getElementById("tabs").offsetTop - 60, behavior: "smooth" }); } });
+  document.getElementById("plan").addEventListener("click", function(e){ var a = e.target.closest("[data-go]"); if(a){ e.preventDefault(); show(a.getAttribute("data-go")); document.getElementById("tabs").scrollIntoView({ behavior: "smooth" }); } else if(e.target.closest("a")) e.preventDefault(); });
+  show(cur);
+  gload().then(function(){ renderGen("a3"); renderGen("a4"); });
+  if(store && store.onChange) store.onChange(function(){ gload().then(function(){ Array.prototype.forEach.call(document.querySelectorAll(".gen"), function(box){ var k = box.getAttribute("data-g"), s = box.querySelector(".score"); if(s) s.textContent = gscore(k); }); }); });
+
+  var tb = document.getElementById("themeBtn"), th = "light";
+  try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); } catch(e) {}
+  function ap(){ document.documentElement.dataset.theme = th; tb.textContent = th === "dark" ? "◑ Hell" : "◐ Dunkel"; }
+  tb.addEventListener("click", function(){ th = th === "dark" ? "light" : "dark"; try { localStorage.setItem("ordner:theme", th); } catch(e) {} ap(); });
+  ap();
+})();
+</script>
+<script src="assets/auth-ui.js"></script>
+</body>
+</html>
