@@ -50,6 +50,45 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
 .idx .l{font-weight:900;font-size:1rem;color:var(--accent);margin-top:.5rem;border:0}
 .idx b{color:var(--hc)}
 .printhint{font-family:var(--font-ui);font-size:.78rem;background:var(--accent-soft);border:1px solid var(--rule);border-radius:5px;padding:.55rem .75rem;color:var(--ink)}
+.ww-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin:.6rem 0 1rem;font-family:var(--font-ui);font-size:.8rem}
+@media(max-width:700px){.ww-steps{grid-template-columns:1fr}}
+.ww-steps div{background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:.5rem .65rem}
+.ww-steps b{color:var(--accent);font-size:1.1rem;margin-right:.3rem}
+.ww-ord{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.35rem;margin:.3rem 0 1rem;font-family:var(--font-ui)}
+@media(max-width:700px){.ww-ord{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.ww-ord>div{border:1px solid var(--rule);border-radius:5px;background:var(--paper-raised);padding:.35rem .4rem;font-size:.7rem}
+.ww-ord .a{font-weight:900;font-size:1rem;color:var(--ink)}
+.ww-ord .h{display:flex;align-items:center;gap:.3rem;margin-top:.2rem}
+.ww-ord .h i{display:inline-block;height:.55rem;border-radius:2px;background:var(--hc)}
+.ww-ord .h span{color:var(--hc);font-weight:800}
+.ww-h{display:grid;grid-template-columns:150px minmax(0,1fr);gap:.6rem;margin:.55rem 0;align-items:stretch}
+@media(max-width:700px){.ww-h{grid-template-columns:1fr}}
+.ww-h .hl{background:var(--hc);color:#fff;border-radius:6px;padding:.5rem .6rem;font-family:var(--font-ui);font-size:.72rem;line-height:1.35}
+.ww-h .hl b{display:block;font-size:1.05rem;font-weight:900;margin-bottom:.2rem}
+.ww-fam{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.45rem}
+.ww-fam div{border:1px solid var(--rule);border-top:4px solid var(--hc);border-radius:5px;background:var(--paper-raised);padding:.4rem .5rem;font-size:.76rem;line-height:1.35}
+.ww-fam div b{font-family:var(--font-ui);font-size:.8rem;display:block;color:var(--ink)}
+.ww-fam div em{display:block;font-style:normal;color:var(--ink-soft);margin:.15rem 0}
+.ww-fam div .ks{font-family:var(--font-ui);font-weight:800;color:var(--hc);font-size:.74rem}
+.ww-vw td:first-child{width:22%;font-weight:700}
+.dv-fam{break-inside:avoid;margin:.5rem 0 .2rem}
+.dv-fam h4{margin:0;font-family:var(--font-ui);font-size:.82rem;color:var(--hc)}
+.dv-fam p{margin:.05rem 0 .2rem;font-size:.78rem;color:var(--ink-soft)}
+.divider .dv-grid{columns:2;column-gap:1.5rem}
+@media(max-width:700px){.divider .dv-grid{columns:1}}
+.divider .dv-fam ol{columns:1}
+@media print{
+  .ww-wrap{break-before:page}
+  .ww-wrap h2.sec{margin-top:0}
+  .ww-ord{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .ww-h{grid-template-columns:34mm minmax(0,1fr);margin:2mm 0;break-inside:avoid}
+  .ww-fam{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .ww-fam div{font-size:7.4pt;padding:1.4mm 1.8mm}
+  .ww-steps{grid-template-columns:repeat(3,minmax(0,1fr));font-size:8pt}
+  .ww-vw{font-size:8pt}
+  .ww-cont{display:block!important;break-before:page;margin-top:0!important}
+}
+.ww-cont{display:none}
 @media print{
   .wrap{display:block;padding:0}
   .deck{padding-top:0}
@@ -78,6 +117,7 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
   <aside class="side noprint">
     <input type="search" id="q" placeholder="Suchen: Begriff, Formel …" aria-label="Karten durchsuchen">
     <a href="#deckblatt">Deckblatt &amp; Anleitung</a>
+    <a href="#wegweiser">⌖ Wegweiser: Aufgabe → Karte</a>
     <a href="#casio">⌨ Casio-Grundlagen</a>
     <a href="#erkenner">◎ Aufgaben-Erkenner</a>
     <div id="sideList"></div>
@@ -110,12 +150,37 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
     '<p class="sub">' + nK + ' Rezeptkarten zu MAI06 · MAI09 · MAI11 · MAI13 · MAI14C – jede mit Skizze, Formeln, Rechenschema, Casio-Hilfe, Musterbeispiel und Fallen. Taschenrechner: Casio fx-991DE X ClassWiz.</p>' +
     '<p class="printhint noprint">Drucken: Knopf „🖨 Drucken / PDF“ → Ziel „Als PDF speichern“ oder Drucker, Papier A4, <b>Hintergrundgrafiken an</b>, Ränder „Standard“. Jede Karte beginnt auf einer neuen Seite; die farbigen Register am rechten Rand zeigen das Heft.</p>' +
     '<div class="how"><div><b>1</b>Aufgabe lesen – auf <b style="display:inline;font-size:inherit">Wörter, Symbole</b> und auf <b style="display:inline;font-size:inherit">„gegeben → gesucht“</b> achten.</div>' +
-    '<div><b>2</b>Vorne im <b style="display:inline;font-size:inherit">Aufgaben-Erkenner</b> das Signal suchen → dort steht die Karten-Nummer (z. B. K17).</div>' +
+    '<div><b>2</b>Im <b style="display:inline;font-size:inherit">Wegweiser</b> (nächste Seite): Heft → Themenfamilie → Karte. Unsicher? Im <b style="display:inline;font-size:inherit">Aufgaben-Erkenner</b> das Signal nachschlagen.</div>' +
     '<div><b>3</b>Am farbigen Register das Heft greifen, große Nummer oben links suchen, <b style="display:inline;font-size:inherit">Rechenschema abhaken</b>, Probe aus „Fallen“.</div></div>' +
     '<div class="toc">' + D.hefte.map(function(x){
       var ks = x.karten.map(function(id){ return D.karten[id].nr; });
       return '<a href="#reg-' + x.code + '" style="--hc:' + x.color + '"><b>' + esc(x.label) + '</b> ' + esc(x.title) + '<span>Karten ' + (ks[0] || "–") + ' – ' + (ks[ks.length - 1] || "–") + '</span></a>';
     }).join("") + '<a href="#erkenner" style="--hc:var(--accent)"><b>◎ Erkenner</b><span>Signal → Karte</span></a><a href="#tabellen" style="--hc:var(--ink-soft)"><b>▦ Tabellen</b><span>' + D.tabellen.length + ' Nachschlagetabellen</span></a></div></section>';
+
+  /* ---------- Wegweiser: Aufgabennummer → Heft → Familie → Karte ---------- */
+  var WW = D.wegweiser;
+  function shy(x){ return x.replace(/Differenzialgleichungen/g, "Differenzial&shy;gleichungen").replace(/Anfangswertproblem/g, "Anfangswert&shy;problem").replace(/Wahrscheinlichkeiten/g, "Wahrscheinlich&shy;keiten"); }
+  function famKs(f){ return f.karten.map(function(id){ return D.karten[id].nr; }).join(" · "); }
+  if(WW){
+    h += '<section class="ww-wrap" id="wegweiser"><h2 class="sec">⌖ Wegweiser – in drei Schritten zur Karte</h2>' +
+      '<div class="ww-steps"><div><b>①</b><strong>Aufgabennummer</strong> → wahrscheinliches Heft (Tabelle darunter).</div>' +
+      '<div><b>②</b><strong>Was siehst du?</strong> Das farbige Feld links bestätigt das Heft.</div>' +
+      '<div><b>③</b><strong>Leitfrage</strong> der Familie mit Ja beantworten → nur noch 1–6 Karten.</div></div>' +
+      '<p class="erk-intro" style="margin:.2rem 0 .3rem">Reihenfolge in ' + WW.klausuren_n + ' Altklausuren – welches Heft kam bei welcher Aufgabennummer:</p><div class="ww-ord">' +
+      Object.keys(WW.reihenfolge).map(function(a){
+        var d = WW.reihenfolge[a], tot = 0; Object.keys(d).forEach(function(c){ tot += d[c]; });
+        return '<div><div class="a">A' + a + '</div>' + Object.keys(d).sort(function(x, y){ return d[y] - d[x]; }).map(function(c){
+          var hf = O.heft(c); return '<div class="h" style="--hc:' + hf.color + '"><i style="width:' + Math.round(d[c] / tot * 55) + '%"></i><span>' + esc(hf.label) + '</span> ' + d[c] + '×</div>'; }).join("") + '</div>';
+      }).join("") + '</div>' +
+      D.hefte.map(function(hf){
+        var hw = WW.hefte[hf.code] || {};
+        return (hf.code === "mai13" ? '<h2 class="sec ww-cont">⌖ Wegweiser – Fortsetzung</h2>' : '') + '<div class="ww-h' + (hf.code === "mai13" ? ' brk' : '') + '" style="--hc:' + hf.color + '"><div class="hl"><b>' + esc(hf.label) + '</b>' + shy(esc(hf.title)) + '<br><br>Du siehst: ' + shy(esc(hw.sieht || "")) + '</div><div class="ww-fam">' +
+          WW.familien.filter(function(f){ return f.heft === hf.code; }).map(function(f){
+            return '<div><b>' + esc(f.name) + '</b><em>' + esc(f.frage) + '</em><span class="ks">' + esc(famKs(f)) + '</span></div>'; }).join("") + '</div></div>';
+      }).join("") +
+      '<h3 style="font-family:var(--font-ui);font-size:.9rem;margin:1rem 0 .3rem">Verwechslungsgefahr</h3><table class="erk ww-vw"><tbody>' +
+      WW.verwechslung.map(function(v){ return '<tr><td>' + esc(v[0]) + '</td><td>' + esc(v[1]) + '</td></tr>'; }).join("") + '</tbody></table></section>';
+  }
 
   /* ---------- Casio-Grundlagen (aus der offiziellen Anleitung geprüft) ---------- */
   var K = O.keys;
@@ -194,7 +259,12 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
   /* ---------- Register + Karten ---------- */
   D.hefte.forEach(function(x){
     h += '<section class="divider" id="reg-' + x.code + '" style="--hc:' + x.color + ';--ti:' + x.idx + '"><div class="otab" aria-hidden="true"><span>' + esc(x.label) + '</span></div>' +
-      '<h2>' + esc(x.label) + '</h2><p>' + esc(x.title) + '</p><ol>' + x.karten.map(function(id){ var k = D.karten[id]; return '<li><b>' + esc(k.nr) + '</b>' + esc(k.titel) + (k.prio === 1 ? ' <span style="color:var(--mark)">★</span>' : '') + '</li>'; }).join("") + '</ol></section>';
+      '<h2>' + esc(x.label) + '</h2><p>' + esc(x.title) + '</p>' + (function(){
+        function li(id){ var k = D.karten[id]; return '<li><b>' + esc(k.nr) + '</b>' + esc(k.titel) + (k.prio === 1 ? ' <span style="color:var(--mark)">★</span>' : '') + '</li>'; }
+        if(!WW) return '<ol>' + x.karten.map(li).join("") + '</ol>';
+        return '<div class="dv-grid">' + WW.familien.filter(function(f){ return f.heft === x.code; }).map(function(f){
+          return '<div class="dv-fam"><h4>' + esc(f.name) + '</h4><p>' + esc(f.frage) + '</p><ol>' + f.karten.map(li).join("") + '</ol></div>'; }).join("") + '</div>';
+      })() + '</section>';
     x.karten.forEach(function(id){
       if((window.ORDNER_PAD || []).indexOf(id) >= 0) h += '<div class="notizseite" aria-hidden="true"><p>Notizen – ' + esc(D.karten[id].nr) + ' folgt auf der nächsten Doppelseite</p>' + new Array(26).join('<div class="ln"></div>') + '</div>';
       h += O.cardHtml(D.karten[id]);

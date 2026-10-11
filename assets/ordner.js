@@ -63,6 +63,8 @@
     return h + '</section>';
   }
 
+  function fam(k){ var W = D.wegweiser; if(!W || !k.familie) return null; for(var i = 0; i < W.familien.length; i++) if(W.familien[i].id === k.familie) return W.familien[i]; return null; }
+
   /* Eine Rezeptkarte als HTML */
   function cardHtml(k, opt){
     opt = opt || {};
@@ -71,7 +73,7 @@
     return '<article class="okarte" id="' + esc(k.id) + '" style="--hc:' + h.color + ';--ti:' + h.idx + '">' +
       '<div class="otab" aria-hidden="true"><span>' + esc(h.label) + '</span></div>' +
       '<header class="ok-h"><div class="ok-nr">' + esc(k.nr) + '</div><div class="ok-tt"><div class="ok-heft">' + esc(h.label) + ' · ' + esc(h.title) +
-        (k.prio === 1 ? ' <span class="ok-prio">★ Klausurthema</span>' : '') + '</div>' +
+        (k.prio === 1 ? ' <span class="ok-prio">★ Klausurthema</span>' : '') + (fam(k) ? ' <span class="ok-fam">› ' + esc(fam(k).name) + '</span>' : '') + '</div>' +
         '<h3>' + esc(k.titel) + '</h3>' + (k.untertitel ? '<div class="ok-sub">' + esc(k.untertitel) + '</div>' : '') + '</div></header>' +
       (k.erkennen && k.erkennen.length ? '<section class="ok-sec ok-erk"><h4>Erkennen</h4>' + list(k.erkennen, "chips") + '</section>' : '') +
       (sk.length ? '<section class="ok-sk n' + sk.length + '">' + sk.join("") + '</section>' : '') +
@@ -101,5 +103,5 @@
       '</tbody></table>' + (t.fuss ? '<p class="tf">' + esc(t.fuss) + '</p>' : '') + '</article>';
   }
 
-  window.Ordner = { D: D, esc: esc, keys: keys, casioHtml: casioHtml, heft: heft, karte: karte, kref: kref, cardHtml: cardHtml, tableHtml: tableHtml, sketch: sketch };
+  window.Ordner = { fam: fam, D: D, esc: esc, keys: keys, casioHtml: casioHtml, heft: heft, karte: karte, kref: kref, cardHtml: cardHtml, tableHtml: tableHtml, sketch: sketch };
 })();

@@ -48,6 +48,24 @@
 .kmod.on{display:block}
 .kmod .in{max-width:900px;margin:0 auto}
 .kmod .x{position:sticky;top:0;float:right;font:700 1.3rem var(--font-ui);width:2.2rem;height:2.2rem;border-radius:5px;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);z-index:2}
+.ubung{display:flex;flex-wrap:wrap;gap:.35rem;margin:.2rem 0 .4rem;font-family:var(--font-ui);align-items:center}
+.ubung small{color:var(--ink-faint);font-size:.72rem;margin-left:.3rem}
+.fbx{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.45rem}
+.fbx button{font-family:var(--font-ui);text-align:left;border:1px solid var(--rule);border-top:4px solid var(--hc);background:var(--paper-raised);color:var(--ink);border-radius:6px;padding:.5rem .6rem;font-size:.8rem;line-height:1.35}
+.fbx button b{display:block;font-size:.88rem}
+.fbx button span{display:block;color:var(--ink-soft);font-size:.74rem;margin-top:.15rem}
+.fbx button.ok,.hb button.ok{background:var(--sk-ok-soft);border-color:var(--sk-ok)}
+.fbx button.bad,.hb button.bad{background:var(--mark-soft);border-color:var(--mark)}
+.hb button.ok b,.hb button.ok span{color:var(--ink)}
+.txt mark{background:color-mix(in srgb, var(--hc, #f5c518) 28%, transparent);color:inherit;border-radius:3px;padding:0 .1em;box-shadow:inset 0 -2px 0 var(--hc, #f5c518)}
+.tm{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);margin-left:.4rem}
+.stufen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem;margin:.2rem 0 1rem;font-family:var(--font-ui);font-size:.74rem}
+.stufen div{background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:.4rem .55rem}
+.stufen b{font-size:1rem;color:var(--ink)}
+.stufen .bar{height:5px;background:var(--rule-soft);border-radius:3px;margin-top:.3rem;overflow:hidden}
+.stufen .bar i{display:block;height:100%;background:var(--sk-ok)}
+.stufen .slow{color:var(--mark);font-weight:700}
+.leit{font-family:var(--font-ui);font-size:.82rem;margin:.5rem 0 0;padding:.45rem .6rem;border-left:4px solid var(--hc);background:var(--paper-sunk);border-radius:0 5px 5px 0}
 </style>
 </head>
 <body>
@@ -63,9 +81,11 @@
 
 <div class="wrap">
   <div class="hero"><p class="ey">Aufgaben erkennen · 24.10.</p><h1>Welches Thema ist das?</h1>
-    <p>Aufgabe lesen (ohne Überschrift, wie in der Klausur), dann Heft und Rezeptkarte wählen. Falsch Erkanntes kommt öfter wieder, Sicheres seltener. So findest du in der Prüfung in Sekunden die richtige Karte im Ordner.</p></div>
+    <p>Wie im Wegweiser des Ordners: erst das <b>Heft</b>, dann die <b>Themenfamilie</b> (Leitfrage), dann die <b>Karte</b>. Die Stoppuhr zeigt, wo du Zeit verlierst. Danach siehst du die Signalwörter im Text markiert. Falsch Erkanntes kommt öfter wieder. Tasten: 1–5 für das Heft, 1–6 für Familie und Karte, Enter für weiter.</p></div>
+  <div class="ubung" id="ubung"></div>
   <div class="modes" id="modes"></div>
   <div class="stat" id="stat"></div>
+  <div class="stufen" id="stufen"></div>
   <div id="play"></div>
 </div>
 <div class="kmod" id="kmod"><div class="in"><button class="x" id="kx" aria-label="Schließen">×</button><div id="kbody"></div></div></div>
@@ -83,20 +103,26 @@
 <script>
 (function(){
   "use strict";
-  var O = window.Ordner, D = O.D, esc = O.esc, KEY = "erkenner:state";
-  var store = window.ITISync, st = { b: {}, r: {} }, mode = "alle", cur = null, lastId = null, pickedHeft = null, answered = false;
+  var O = window.Ordner, D = O.D, esc = O.esc, W = D.wegweiser, KEY = "erkenner:state";
+  var store = window.ITISync, st = { b: {}, r: {}, bb: {}, s: {} }, mode = "alle", ub = "trichter";
+  var cur = null, lastId = null, stage = 0, done = false, t0 = 0, times = [], res = {};
 
   function save(){ if(store) store.set(KEY, JSON.stringify(st)); }
-  function load(){ return (store ? store.get(KEY) : Promise.resolve(null)).then(function(raw){ try { var p = JSON.parse(raw || "{}"); st.b = p.b || {}; st.r = p.r || {}; } catch(e) {} }); }
+  function load(){ return (store ? store.get(KEY) : Promise.resolve(null)).then(function(raw){ try { var p = JSON.parse(raw || "{}"); st.b = p.b || {}; st.r = p.r || {}; st.bb = p.bb || {}; st.s = p.s || {}; } catch(e) {} }); }
+
+  function famOf(kid){ var k = D.karten[kid]; return O.fam(k); }
+  function famsOf(code){ return W.familien.filter(function(f){ return f.heft === code; }); }
+  function heftOf(t){ return D.karten[t.karte].heft; }
+  function boxes(){ return ub === "blitz" ? st.bb : st.b; }
+  function box(id){ return boxes()[id] || 0; }
 
   function pool(){
     return D.training.filter(function(t){
       if(mode === "alle") return true;
       if(mode === "klausur") return /UEKL/i.test(t.quelle || "");
-      return t.heft === mode;
+      return heftOf(t) === mode;
     });
   }
-  function box(id){ return st.b[id] || 0; }
   function pick(){
     var p = pool(); if(!p.length) return null;
     var min = Math.min.apply(null, p.map(function(t){ return box(t.id); }));
@@ -106,71 +132,145 @@
     return cand[Math.floor(Math.random() * cand.length)];
   }
 
+  /* ---------- Kopfzeilen ---------- */
+  function renderUbung(){
+    var u = [["trichter", "Trichter: Heft → Familie → Karte"], ["blitz", "Blitz: nur Heft + Familie, auf Zeit"]];
+    document.getElementById("ubung").innerHTML = u.map(function(x){ return '<button class="chip' + (ub === x[0] ? " on" : "") + '" data-u="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join("") +
+      '<small>' + (ub === "blitz" ? "Ziel: Heft in 3 s, Familie in 10 s" : "Ziel: Heft in 3 s, Familie in 10 s, Karte in 20 s") + '</small>';
+  }
   function renderModes(){
     var m = [["alle", "Alle Aufgaben", "var(--accent)"], ["klausur", "Nur Probeklausuren", "var(--mark)"]].concat(D.hefte.map(function(h){ return [h.code, h.label, h.color]; }));
     document.getElementById("modes").innerHTML = m.map(function(x){ return '<button class="chip' + (mode === x[0] ? " on" : "") + '" data-m="' + x[0] + '" style="--hc:' + x[2] + '">' + esc(x[1]) + '</button>'; }).join("");
   }
   document.getElementById("modes").addEventListener("click", function(e){ var b = e.target.closest("[data-m]"); if(!b) return; mode = b.getAttribute("data-m"); try { localStorage.setItem("erkenner:mode", mode); } catch(x) {} renderModes(); next(); });
+  document.getElementById("ubung").addEventListener("click", function(e){ var b = e.target.closest("[data-u]"); if(!b) return; ub = b.getAttribute("data-u"); try { localStorage.setItem("erkenner:ub", ub); } catch(x) {} renderUbung(); next(); });
 
   function renderStat(){
     var p = pool(), c = [0, 0, 0, 0];
     p.forEach(function(t){ c[Math.min(3, box(t.id))]++; });
     var n = p.length || 1, col = ["var(--mark)", "var(--sk-3)", "var(--accent)", "var(--sk-ok)"];
-    document.getElementById("stat").innerHTML = '<span><b>' + p.length + '</b> Aufgaben</span><div class="boxes" title="neu/falsch · 1× richtig · 2× · sicher">' +
+    document.getElementById("stat").innerHTML = '<span><b>' + p.length + '</b> Aufgaben' + (ub === "blitz" ? ' · Blitz' : '') + '</span><div class="boxes" title="neu/falsch · 1× richtig · 2× · sicher">' +
       c.map(function(v, i){ return '<i style="width:' + (v / n * 100) + '%;background:' + col[i] + '"></i>'; }).join("") + '</div>' +
       '<span>sicher erkannt: <b>' + c[3] + '</b> · in Arbeit: ' + (c[1] + c[2]) + ' · offen: ' + c[0] + '</span>';
+    var Z = { h: ["Heft", 3], f: ["Familie", 10], k: ["Karte", 20] };
+    document.getElementById("stufen").innerHTML = ["h", "f", "k"].map(function(k){
+      var v = st.s[k] || { n: 0, ok: 0, t: 0 }, q = v.n ? Math.round(v.ok / v.n * 100) : 0, avg = v.n ? v.t / v.n : 0;
+      return '<div>Stufe ' + Z[k][0] + ': <b>' + (v.n ? q + " %" : "–") + '</b> richtig' + (v.n ? ' · Ø <span class="' + (avg > Z[k][1] ? "slow" : "") + '">' + avg.toFixed(1).replace(".", ",") + ' s</span>' : '') +
+        '<div class="bar"><i style="width:' + q + '%"></i></div></div>';
+    }).join("");
+  }
+  function logStage(k, ok, sec){
+    var v = st.s[k] || { n: 0, ok: 0, t: 0 };
+    if(v.n >= 60){ var f = 59 / 60; v.n *= f; v.ok *= f; v.t *= f; }   // gleitender Schnitt über die letzten ~60
+    v.n++; if(ok) v.ok++; v.t += Math.min(sec, 90); st.s[k] = v;
   }
 
+  /* ---------- Signalwörter markieren ---------- */
+  function rx(w){ var strong = w.charAt(0) === "!"; w = strong ? w.slice(1) : w; if(w.charAt(0) === "^") return null; try { return new RegExp(w, "g"); } catch(e) { return null; } }
+  function marked(text, lists){
+    var hits = [];
+    lists.forEach(function(L){ (L.w || []).forEach(function(w){ var r = rx(w); if(!r) return; var m; while((m = r.exec(text))){ if(!m[0]) { r.lastIndex++; continue; } hits.push([m.index, m.index + m[0].length, L.c]); } }); });
+    hits.sort(function(a, b){ return a[0] - b[0] || b[1] - a[1]; });
+    var out = "", pos = 0;
+    hits.forEach(function(h){ if(h[0] < pos) return; out += esc(text.slice(pos, h[0])) + '<mark style="--hc:' + h[2] + '">' + esc(text.slice(h[0], h[1])) + '</mark>'; pos = h[1]; });
+    return out + esc(text.slice(pos));
+  }
+
+  /* ---------- Ablauf ---------- */
+  function sec(){ return (performance.now() - t0) / 1000; }
+  function fmt(x){ return x.toFixed(1).replace(".", ",") + " s"; }
+
   function next(){
-    cur = pick(); pickedHeft = null; answered = false;
+    cur = pick(); stage = 1; done = false; times = []; res = {};
     renderStat();
     var el = document.getElementById("play");
     if(!cur){ el.innerHTML = '<p class="task">Für diese Auswahl gibt es noch keine Aufgaben.</p>'; return; }
     lastId = cur.id;
-    el.innerHTML = '<div class="task"><div class="k">Aufgabe · zuerst Heft wählen</div><div class="txt">' + esc(cur.text) + '</div>' +
-      '<div class="step"><h3>1 · Welches Heft?</h3><div class="hb">' + D.hefte.map(function(h, i){ return '<button data-h="' + h.code + '" style="--hc:' + h.color + '"><b>' + (i + 1) + ' · ' + esc(h.label) + '</b><span>' + esc(h.title) + '</span></button>'; }).join("") + '</div></div>' +
-      '<div class="step" id="s2"></div><div id="fb"></div></div>';
+    el.innerHTML = '<div class="task"><div class="k">Aufgabe · Stoppuhr läuft</div><div class="txt" id="txt">' + esc(cur.text) + '</div>' +
+      '<div class="step"><h3>1 · Welches Heft? <span class="tm" id="tm1"></span></h3><div class="hb">' + D.hefte.map(function(h, i){ return '<button data-h="' + h.code + '" style="--hc:' + h.color + '"><b>' + (i + 1) + ' · ' + esc(h.label) + '</b><span>' + esc(h.title) + '</span></button>'; }).join("") + '</div></div>' +
+      '<div class="step" id="s2"></div><div class="step" id="s3"></div><div id="fb"></div></div>';
+    t0 = performance.now();
   }
 
-  function showCards(code){
-    setTimeout(function(){ var s2 = document.getElementById("s2"); if(s2) s2.scrollIntoView({ behavior: "smooth", block: "start" }); }, 30);
-    pickedHeft = code;
-    Array.prototype.forEach.call(document.querySelectorAll(".hb button"), function(b){ b.classList.toggle("sel", b.getAttribute("data-h") === code); });
-    var h = O.heft(code);
-    document.getElementById("s2").innerHTML = '<h3>2 · Welche Karte?</h3><div class="kb">' + h.karten.map(function(id){ var k = D.karten[id];
-      return '<button data-k="' + id + '" style="--hc:' + h.color + '"><b>' + esc(k.nr) + '</b> ' + esc(k.titel) + (k.untertitel ? '<small>' + esc(k.untertitel) + '</small>' : '') + '</button>'; }).join("") + '</div>';
+  function chooseHeft(code){
+    if(stage !== 1 || done) return;
+    var right = heftOf(cur), ok = code === right, t = sec(); times[0] = t; res.h = ok;
+    logStage("h", ok, t);
+    document.getElementById("tm1").textContent = fmt(t);
+    Array.prototype.forEach.call(document.querySelectorAll(".hb button"), function(b){ var c = b.getAttribute("data-h"); if(c === right) b.classList.add("ok"); else if(c === code) b.classList.add("bad"); });
+    if(!ok) return finish(false, "h");
+    stage = 2;
+    var h = O.heft(right);
+    document.getElementById("s2").innerHTML = '<h3>2 · Welche Themenfamilie? <span class="tm" id="tm2"></span></h3><div class="fbx">' + famsOf(right).map(function(f, i){
+      return '<button data-f="' + f.id + '" style="--hc:' + h.color + '"><b>' + (i + 1) + ' · ' + esc(f.name) + '</b><span>' + esc(f.frage) + '</span></button>'; }).join("") + '</div>';
+    scrollTo("s2"); t0 = performance.now();
   }
 
-  function answer(kid){
-    if(answered) return; answered = true;
-    var ok = kid === cur.karte, right = D.karten[cur.karte], rh = O.heft(right.heft);
-    st.b[cur.id] = ok ? Math.min(3, box(cur.id) + 1) : 0;
+  function chooseFam(fid){
+    if(stage !== 2 || done) return;
+    var right = famOf(cur.karte), ok = fid === right.id, t = sec(); times[1] = t; res.f = ok;
+    logStage("f", ok, t);
+    document.getElementById("tm2").textContent = fmt(t);
+    Array.prototype.forEach.call(document.querySelectorAll(".fbx button"), function(b){ var c = b.getAttribute("data-f"); if(c === right.id) b.classList.add("ok"); else if(c === fid) b.classList.add("bad"); });
+    if(!ok) return finish(false, "f");
+    if(ub === "blitz") return finish(true);
+    stage = 3;
+    var h = O.heft(right.heft);
+    document.getElementById("s3").innerHTML = '<h3>3 · Welche Karte? <span class="tm" id="tm3"></span></h3><div class="kb">' + right.karten.map(function(id, i){ var k = D.karten[id];
+      return '<button data-k="' + id + '" style="--hc:' + h.color + '"><b>' + (i + 1) + ' · ' + esc(k.nr) + '</b> ' + esc(k.titel) + (k.untertitel ? '<small>' + esc(k.untertitel) + '</small>' : '') + '</button>'; }).join("") + '</div>';
+    scrollTo("s3"); t0 = performance.now();
+  }
+
+  function chooseCard(kid){
+    if(stage !== 3 || done) return;
+    var ok = kid === cur.karte, t = sec(); times[2] = t; res.k = ok;
+    logStage("k", ok, t);
+    document.getElementById("tm3").textContent = fmt(t);
+    Array.prototype.forEach.call(document.querySelectorAll(".kb button"), function(b){ var id = b.getAttribute("data-k"); if(id === cur.karte) b.classList.add("ok"); else if(id === kid) b.classList.add("bad"); });
+    finish(ok, ok ? null : "k", kid);
+  }
+
+  function finish(ok, failAt, kid){
+    done = true;
+    var B = boxes(); B[cur.id] = ok ? Math.min(3, box(cur.id) + 1) : 0;
     var r = st.r[cur.id] || [0, 0]; r[ok ? 0 : 1]++; st.r[cur.id] = r;
     save();
-    Array.prototype.forEach.call(document.querySelectorAll(".kb button"), function(b){
-      var id = b.getAttribute("data-k"); if(id === cur.karte) b.classList.add("ok"); else if(id === kid) b.classList.add("bad");
-    });
-    var sameHeft = pickedHeft === right.heft;
-    document.getElementById("fb").innerHTML = '<div class="fb ' + (ok ? "ok" : "bad") + '"><div class="big">' + (ok ? "✓ Richtig erkannt" : (sameHeft ? "✗ Richtiges Heft, andere Karte" : "✗ Anderes Thema")) + '</div>' +
-      'Richtig: ' + O.kref(cur.karte, { base: "ordner.html" }) + '<div style="margin-top:.4rem"><b>Woran erkennt man es?</b> ' + esc(cur.merkmal || "") + '</div>' +
-      '<div class="src">Quelle: ' + esc(cur.quelle || "") + '</div>' +
+    var right = D.karten[cur.karte], rh = O.heft(right.heft), rf = famOf(cur.karte);
+    // Signalwörter: Heft-Wörter und Familien-Wörter im Text markieren
+    var hw = (W.hefte[right.heft] || {}).woerter || [];
+    document.getElementById("txt").innerHTML = marked(cur.text, [{ w: rf.woerter, c: rh.color }, { w: hw, c: rh.color }]);
+    var big = ok ? "✓ Richtig erkannt" : failAt === "h" ? "✗ Falsches Heft" : failAt === "f" ? "✗ Richtiges Heft, andere Familie" : "✗ Richtige Familie, andere Karte";
+    var tt = times.map(fmt).join(" → ");
+    document.getElementById("fb").innerHTML = '<div class="fb ' + (ok ? "ok" : "bad") + '"><div class="big">' + big + ' <span class="tm">' + tt + '</span></div>' +
+      'Richtig: <b style="color:' + rh.color + '">' + esc(rh.label) + '</b> › <b>' + esc(rf.name) + '</b> › ' + O.kref(cur.karte, { base: "ordner.html" }) +
+      '<div class="leit" style="--hc:' + rh.color + '"><b>Leitfrage:</b> ' + esc(rf.frage) + '<br><b>Signale:</b> ' + esc(rf.signale) + '</div>' +
+      '<div style="margin-top:.4rem"><b>Woran erkennt man es?</b> ' + esc(cur.merkmal || "") + '</div>' +
+      '<div class="src">Quelle: ' + esc(cur.quelle || "") + ' · markiert = Signalwörter</div>' +
       '<div class="row"><button class="go" id="nx">Weiter →</button><button class="go sec" data-open="' + cur.karte + '">Karte ansehen</button>' + (!ok && kid ? '<button class="go sec" data-open="' + kid + '">Meine Wahl ansehen</button>' : '') + '</div></div>';
     renderStat();
     var fbx = document.querySelector(".fb"); if(fbx) fbx.scrollIntoView({ behavior: "smooth", block: "nearest" });
     var nx = document.getElementById("nx"); if(nx) nx.focus({ preventScroll: true });
   }
+  function scrollTo(id){ setTimeout(function(){ var s = document.getElementById(id); if(s) s.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 30); }
 
   document.getElementById("play").addEventListener("click", function(e){
-    var hb = e.target.closest("[data-h]"); if(hb && !answered) return showCards(hb.getAttribute("data-h"));
-    var kb = e.target.closest("[data-k]"); if(kb) return answer(kb.getAttribute("data-k"));
+    var hb = e.target.closest("[data-h]"); if(hb) return chooseHeft(hb.getAttribute("data-h"));
+    var fb = e.target.closest("[data-f]"); if(fb) return chooseFam(fb.getAttribute("data-f"));
+    var kb = e.target.closest("[data-k]"); if(kb) return chooseCard(kb.getAttribute("data-k"));
     if(e.target.closest("#nx")) return next();
     var op = e.target.closest("[data-open]"); if(op) return openCard(op.getAttribute("data-open"));
     var kr = e.target.closest("a.kref"); if(kr){ e.preventDefault(); openCard(kr.getAttribute("data-karte")); }
   });
   document.addEventListener("keydown", function(e){
     if(document.getElementById("kmod").classList.contains("on")){ if(e.key === "Escape") closeCard(); return; }
-    if(/^[1-5]$/.test(e.key) && !answered && D.hefte[+e.key - 1]) showCards(D.hefte[+e.key - 1].code);
-    if(e.key === "Enter" && answered) next();
+    if(e.ctrlKey || e.metaKey || e.altKey) return;
+    var n = /^[1-9]$/.test(e.key) ? +e.key - 1 : -1;
+    if(n >= 0 && !done){
+      if(stage === 1 && D.hefte[n]) chooseHeft(D.hefte[n].code);
+      else if(stage === 2){ var fs = famsOf(heftOf(cur)); if(fs[n]) chooseFam(fs[n].id); }
+      else if(stage === 3){ var ks = famOf(cur.karte).karten; if(ks[n]) chooseCard(ks[n]); }
+    }
+    if(e.key === "Enter" && done){ e.preventDefault(); next(); }
   });
 
   function openCard(id){ var k = D.karten[id]; if(!k) return; document.getElementById("kbody").innerHTML = O.cardHtml(k, { base: "ordner.html" }); document.getElementById("kmod").classList.add("on"); }
@@ -179,10 +279,10 @@
   document.getElementById("kmod").addEventListener("click", function(e){ if(e.target.id === "kmod") closeCard(); var kr = e.target.closest("a.kref"); if(kr){ e.preventDefault(); openCard(kr.getAttribute("data-karte")); } });
 
   var tb = document.getElementById("themeBtn"), th = "light";
-  try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); mode = localStorage.getItem("erkenner:mode") || "alle"; } catch(e) {}
+  try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); mode = localStorage.getItem("erkenner:mode") || "alle"; ub = localStorage.getItem("erkenner:ub") || "trichter"; } catch(e) {}
   function ap(){ document.documentElement.dataset.theme = th; tb.textContent = th === "dark" ? "◑ Hell" : "◐ Dunkel"; }
   tb.addEventListener("click", function(){ th = th === "dark" ? "light" : "dark"; try { localStorage.setItem("ordner:theme", th); } catch(e) {} ap(); });
-  ap(); renderModes();
+  ap(); renderModes(); renderUbung();
   load().then(next);
   if(store && store.onChange) store.onChange(function(){ load().then(renderStat); });
 })();

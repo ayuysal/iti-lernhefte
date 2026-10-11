@@ -41,6 +41,7 @@ button{font-family:var(--font-ui);cursor:pointer}
 .ok-nr.sm{font-size:1rem;padding:.2rem .4rem;min-width:0;vertical-align:.1em}
 .ok-heft{font-family:var(--font-ui);font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--hc)}
 .ok-prio{color:var(--mark);margin-left:.4rem}
+.ok-fam{color:var(--ink-soft);margin-left:.4rem;letter-spacing:.06em}
 .ok-h h3{margin:.1rem 0 0;font-size:1.35rem;line-height:1.2}
 .ok-sub{font-family:var(--font-mono);font-size:.9rem;color:var(--ink-soft);margin-top:.2rem}
 .ok-sec{margin:.75rem 0 0}
