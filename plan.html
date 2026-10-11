@@ -23,32 +23,100 @@
 .bar .s{background:var(--sk-ok)}.bar .v{background:var(--accent)}.bar .u{background:var(--mark)}
 .hrow{display:grid;grid-template-columns:3.6rem minmax(0,1fr) 3.2rem;gap:.4rem;align-items:center;font-size:.72rem}
 .hrow b{color:var(--hc)}
+.next{background:var(--paper-raised);border:2px solid var(--accent);border-radius:9px;padding:.8rem 1rem;margin:.8rem 0;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;box-shadow:0 6px 20px var(--shadow)}
+.next .nx-t{flex:1;min-width:240px}
+.next .nx-t small{display:block;font-family:var(--font-ui);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.next .nx-t b{font-size:1.02rem}
+.next .nx-t span{display:block;color:var(--ink-soft);font-size:.82rem;margin-top:.15rem}
+.go{font-family:var(--font-ui);font-weight:800;font-size:.85rem;border:0;border-radius:6px;padding:.55rem 1.05rem;background:var(--accent);color:#fff;cursor:pointer;text-decoration:none;display:inline-block}
+.go.sec{background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule)}
+.go.warn{background:var(--mark)}
+.go.ok{background:var(--sk-ok)}
+.go:disabled{opacity:.5;cursor:default}
 .method{background:var(--paper-raised);border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:7px;padding:.7rem .9rem;margin:.6rem 0 1.2rem;font-size:.9rem}
 .method h3{margin:0 0 .3rem;font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}
-.method ol{margin:.2rem 0;padding-left:1.3rem}
+.method ol,.method ul{margin:.2rem 0;padding-left:1.3rem}
 .day{background:var(--paper-raised);border:1px solid var(--rule);border-radius:8px;margin:.7rem 0;overflow:hidden}
 .day.today{border:2px solid var(--accent);box-shadow:0 6px 20px var(--shadow)}
-.day.past{opacity:.78}
+.day.past{opacity:.8}
 .dh{display:flex;align-items:center;gap:.6rem;padding:.6rem .85rem;cursor:pointer;font-family:var(--font-ui)}
 .dh .dt{font-weight:900;font-size:1rem;min-width:7.5rem}
 .dh .tt{flex:1;color:var(--ink-soft);font-size:.82rem}
 .dh .pc{font-size:.74rem;font-weight:800;color:var(--ink-soft);white-space:nowrap}
-.dh .tag{font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:#fff;border-radius:3px;padding:.1rem .35rem}
+.dh .pc.hi{color:var(--mark)}
+.tag{font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:#fff;border-radius:3px;padding:.1rem .35rem;font-family:var(--font-ui)}
 .day .db{padding:0 .85rem .7rem;display:none}
 .day.open .db{display:block}
-.task{display:grid;grid-template-columns:1.6rem 2.6rem minmax(0,1fr) auto;gap:.45rem;align-items:start;padding:.45rem 0;border-top:1px solid var(--rule-soft)}
+.task{display:grid;grid-template-columns:1.6rem 2.6rem minmax(0,1fr) auto;gap:.45rem;align-items:start;padding:.5rem 0;border-top:1px solid var(--rule-soft)}
 .task input{width:1.15rem;height:1.15rem;margin-top:.15rem;accent-color:var(--sk-ok)}
 .task .f{font-family:var(--font-ui);font-size:.62rem;font-weight:900;text-align:center;border-radius:3px;padding:.15rem 0;color:#fff;margin-top:.12rem}
-.task .f.M{background:#1F6FB2}.task .f.T{background:#C0392B}.task .f.E{background:#2E8B57}.task .f.P{background:#7B4FC9}.task .f.O{background:var(--ink-soft)}
+.f.M{background:#1F6FB2}.f.T{background:#C0392B}.f.E{background:#2E8B57}.f.P{background:#7B4FC9}.f.O{background:var(--ink-soft)}
 .task .x{font-size:.9rem;line-height:1.45}
 .task .x small{display:block;color:var(--ink-faint);font-size:.76rem}
 .task .x .pr{display:inline-block;font-family:var(--font-ui);font-size:.7rem;font-weight:800;color:var(--accent);margin-left:.3rem}
 .task.done .x{color:var(--ink-faint);text-decoration:line-through}
-.task .r{display:flex;flex-direction:column;align-items:flex-end;gap:.2rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
-.task .r a{font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:4px;padding:.12rem .45rem}
+.task .r{display:flex;flex-direction:column;align-items:flex-end;gap:.25rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.task .r button,.task .r a{font-family:var(--font-ui);font-size:.74rem;font-weight:800;border-radius:4px;padding:.18rem .55rem;cursor:pointer;text-decoration:none}
+.task .r .st{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+.task .r a{color:var(--accent);border:1px solid var(--accent)}
 .legend{display:flex;flex-wrap:wrap;gap:.6rem;font-family:var(--font-ui);font-size:.72rem;color:var(--ink-soft);margin:.3rem 0}
 .legend span{display:inline-flex;align-items:center;gap:.25rem}
 .legend i{display:inline-block;width:.9rem;height:.6rem;border-radius:2px}
+.qs{background:var(--paper-raised);border:1px solid var(--rule);border-left:5px solid var(--mark);border-radius:7px;padding:.7rem .9rem;margin:1rem 0}
+.qs h3{margin:0 0 .4rem;font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mark)}
+.qs .q{display:grid;grid-template-columns:1.4rem minmax(0,1fr);gap:.4rem;padding:.35rem 0;border-top:1px solid var(--rule-soft);font-size:.88rem}
+.qs .q small{display:block;color:var(--ink-faint);font-size:.74rem}
+.qs .q.dn{opacity:.55;text-decoration:line-through}
+/* ---------- Session ---------- */
+.ses{position:fixed;inset:0;z-index:400;background:var(--paper);display:none;flex-direction:column}
+.ses.on{display:flex}
+.sh{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.55rem 1rem;border-bottom:1px solid var(--rule);background:var(--paper-raised);font-family:var(--font-ui)}
+.sh .ttl{flex:1;min-width:200px;font-weight:800;font-size:.9rem}
+.sh .ttl small{display:block;font-weight:600;color:var(--ink-soft);font-size:.74rem}
+.clock{text-align:center;min-width:6.5rem}
+.clock b{display:block;font-size:1.65rem;font-variant-numeric:tabular-nums;line-height:1.05}
+.clock span{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.clock.grace b{color:#c77700}.clock.over b{color:var(--mark)}
+.puf{font-size:.8rem;font-weight:900;padding:.25rem .55rem;border-radius:4px;background:var(--sk-ok-soft);color:var(--sk-ok)}
+.puf.neg{background:var(--mark-soft);color:var(--mark)}
+.sbody{flex:1;display:grid;grid-template-columns:260px minmax(0,1fr);min-height:0}
+@media(max-width:820px){.sbody{grid-template-columns:1fr}.slist{display:none}}
+.slist{border-right:1px solid var(--rule);overflow:auto;padding:.5rem;font-family:var(--font-ui);font-size:.74rem;background:var(--paper-raised)}
+.slist div{display:grid;grid-template-columns:1.1rem minmax(0,1fr) auto;gap:.3rem;padding:.25rem .3rem;border-radius:4px;color:var(--ink-soft)}
+.slist div.cur{background:var(--accent-soft);color:var(--ink);font-weight:800}
+.slist div.ok i{color:var(--sk-ok)}.slist div.u i{color:var(--mark)}
+.slist em{font-style:normal;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.smain{overflow:auto;padding:1rem 1.2rem 6rem}
+.ubar{height:6px;background:var(--rule-soft);border-radius:3px;overflow:hidden;margin:0 0 .8rem}
+.ubar i{display:block;height:100%;background:var(--accent);transition:width .5s linear}
+.ubar.grace i{background:#e08a00}.ubar.over i{background:var(--mark)}
+.uhd{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800;margin:0 0 .3rem}
+.uti{font-size:1.25rem;font-weight:700;margin:0 0 .6rem}
+.skbig{background:var(--paper-raised);border:1px solid var(--rule);border-radius:8px;padding:.6rem;text-align:center}
+.skbig svg{max-width:100%;height:auto;max-height:52vh}
+.lese{margin:.6rem 0;font-size:.95rem;line-height:1.55}
+.ziel{background:var(--accent-soft);border-radius:7px;padding:.6rem .8rem;margin:.7rem 0;font-size:.92rem}
+.ziel b{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);display:block;margin-top:.35rem}
+.ziel b:first-child{margin-top:0}
+.ziel .ans{display:none;margin-top:.3rem;border-left:3px solid var(--sk-ok);padding-left:.5rem}
+.ziel.rev .ans{display:block}
+.zielhint{font-family:var(--font-ui);font-size:.76rem;color:var(--ink-faint);margin:.5rem 0}
+.sfoot{position:fixed;left:0;right:0;bottom:0;display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;padding:.6rem;background:var(--paper-raised);border-top:1px solid var(--rule);z-index:410}
+.ses .okarte{margin:0}
+.u-rez .ok-sk,.u-rez .ok-w,.u-rez .ok-p2,.u-rez .ok-erk{display:none}
+.u-rech>.okarte>*:not(.ok-h):not(.ok-p2){display:none}
+.u-rech .ok-see{display:none}
+.u-rech:not(.rev) .ok-b ol.bl,.u-rech:not(.rev) .ok-b .be,.u-rech:not(.rev) .ok-c{display:none}
+.u-fall .ok-sk,.u-fall .ok-2,.u-fall .ok-p2{display:none}
+.revbtn{margin:.6rem 0}
+.u-rez .ok-stand,.u-rech .ok-stand,.u-uns .ok-stand{display:none}
+.u-rech.rev .revbtn{display:none}
+.notebox{display:none;max-width:640px;margin:0 auto;padding:.4rem 0}
+.notebox.on{display:block}
+.notebox textarea,.defta{width:100%;box-sizing:border-box;font-size:.95rem;padding:.45rem .55rem;border:1px solid var(--rule);border-radius:5px;background:var(--paper-raised);color:var(--ink)}
+.dorig{background:var(--accent-soft);border-radius:6px;padding:.6rem .8rem;margin:.6rem 0;font-size:.95rem;line-height:1.55}
+.summary table{border-collapse:collapse;font-size:.85rem;margin:.6rem 0}
+.summary td,.summary th{border-bottom:1px solid var(--rule-soft);padding:.25rem .5rem;text-align:left}
 </style>
 </head>
 <body>
@@ -65,140 +133,299 @@
 </div>
 
 <div class="wrap">
-  <div class="hero"><p class="ey" id="countdown">Klausurtag Samstag, 24.10.2026</p><h1>Lernplan bis zur Doppelprüfung</h1>
-    <p>12 Lerntage: unter der Woche 3–4 Stunden, am Wochenende 8–10 Stunden. Jede Mathe-Karte wird einmal vollständig durchgearbeitet (nicht nur die aus Altklausuren), jede Skizze angesehen, TGI vollständig geübt, dazu Probeklausuren auf Zeit. Aufgaben abhaken – der Stand ist auf allen Geräten gleich. Die Balken oben zeigen deinen echten Fortschritt aus Ordner, Skizzen und Trainern.</p></div>
+  <div class="hero"><p class="ey" id="countdown">Klausurtag Samstag, 24.10.2026 · beide Klausuren je 120 Minuten</p><h1>Lernplan bis zur Doppelprüfung</h1>
+    <p>Die Tage sind Zielvorgaben, keine Sperre: Du kannst jederzeit die nächste Aufgabe starten – auch schon heute die von morgen. Jede Aufgabe ist in Einheiten mit Zeitbudget zerlegt; „Starten“ öffnet den Session-Navigator mit Uhr, Puffer und Zeitbox-Regel.</p></div>
 
+  <div id="next"></div>
   <div class="dash" id="dash"></div>
+  <div id="fragen"></div>
 
-  <div class="method"><h3>Karten-Durchgang (jede Mathe-Karte, ca. 15 Minuten)</h3><ol>
-    <li><b>Verstehen:</b> Skizze(n) der Karte öffnen und in einem Satz erklären, was sie zeigt; Rezept lesen – warum diese Schritte?</li>
-    <li><b>Selbst rechnen:</b> Musterbeispiel abdecken, mit dem Rezept auf Papier lösen, dann mit Lösung und Casio-Ablauf vergleichen. Wichtigster Schritt – genau so läuft die Prüfung.</li>
-    <li><b>Erkennen:</b> „Erkennen“-Signale und Fallen der Karte lesen; Familie im Wegweiser merken.</li>
-    <li><b>Einstufen:</b> oben auf der Karte „sitzt“ oder „unsicher“ setzen. Unsichere Karten kommen am 18., 20. und 23. noch einmal dran.</li></ol>
-    <div class="legend"><span><i style="background:#1F6FB2"></i>M Mathe</span><span><i style="background:#C0392B"></i>T TGI</span><span><i style="background:#2E8B57"></i>E Erkennen/Navigation</span><span><i style="background:#7B4FC9"></i>P Probeklausur</span><span><i style="background:var(--ink-soft)"></i>O Organisation</span></div></div>
+  <div class="method"><h3>So läuft eine Session</h3><ul>
+    <li><b>Jede Einheit hat ein Budget</b> – neue Skizze 2 Min., schon gesehene ½–1 Min., Rezept 3, Musterbeispiel rechnen 9, Fallen 2, Definition 2. Oben siehst du die Restzeit der Einheit und den <b>Puffer</b> der ganzen Aufgabe.</li>
+    <li><b>Zeitbox-Regel:</b> Ist das Budget um, wird die Uhr orange – 1 Minute Nachfrist. Dann entscheiden: <b>verstanden → weiter</b> oder <b>unsicher → Frage in einem Satz notieren → weiter</b>. Unsicheres kommt in den Wiederholungsterminen wieder, die Fragen sammeln sich hier oben.</li>
+    <li><b>„Verstanden“ heißt bei Mathe-Skizzen:</b> in einem Satz sagen können, was sie zeigt und wofür man sie braucht (der Ordner ist erlaubt). Bei TGI muss es <b>sitzen</b> (ohne Unterlagen).</li>
+    <li>Der Stand wird automatisch gesetzt: Skizze „verstanden“/„unklar“, Karte „sitzt“/„unsicher“, Definition nach deiner Einstufung – und die tatsächliche Zeit wird gespeichert.</li></ul>
+    <div class="legend"><span><i style="background:#1F6FB2"></i>M Mathe</span><span><i style="background:#C0392B"></i>T TGI</span><span><i style="background:#2E8B57"></i>E Erkennen</span><span><i style="background:#7B4FC9"></i>P Probeklausur</span><span><i style="background:var(--ink-soft)"></i>O Organisation</span></div></div>
 
   <div id="days"></div>
 </div>
 
+<div class="ses" id="ses" aria-modal="true" role="dialog">
+  <div class="sh"><div class="ttl" id="sTtl"></div>
+    <div class="clock" id="cUnit"><b>0:00</b><span>Einheit</span></div>
+    <div class="clock" id="cTot"><b>0:00</b><span>Aufgabe noch</span></div>
+    <span class="puf" id="sPuf">±0</span>
+    <button class="go sec" id="sBell" title="Ton am Ende der Einheit">🔔</button>
+    <button class="go sec" id="sPause">⏸ Pause</button>
+    <button class="go sec" id="sClose">Schließen</button></div>
+  <div class="sbody"><div class="slist" id="sList"></div><div class="smain" id="sMain"></div></div>
+  <div class="sfoot" id="sFoot"></div>
+</div>
+
 <script src="assets/config.js"></script>
 <script src="assets/sync.js"></script>
-<script src="assets/ordner-data.js"></script>
+<script src="assets/sketch-kit.js"></script>
 <script src="assets/sketches/mai06.js"></script>
 <script src="assets/sketches/mai09.js"></script>
 <script src="assets/sketches/mai11.js"></script>
 <script src="assets/sketches/mai13.js"></script>
 <script src="assets/sketches/mai14c.js"></script>
+<script src="assets/sketch-stats.js"></script>
+<script src="assets/ordner-data.js"></script>
+<script src="assets/ordner.js"></script>
+<script src="assets/lernziele.js"></script>
 <script src="assets/tgi-a12.js"></script>
 <script src="assets/tgi-a5.js"></script>
 <script src="assets/tgi-a67.js"></script>
 <script src="assets/tgi-a8.js"></script>
 <script src="assets/tgi-kern.js"></script>
+<script src="assets/plan-session.js"></script>
 <script>
 (function(){
   "use strict";
-  var D = window.ITI_ORDNER, S = window.ITI_SKETCHES || {}, TP = window.TGI_PARTS || {}, store = window.ITISync, KEY = "plan:done";
+  var D = window.ITI_ORDNER, S = window.ITI_SKETCHES || {}, TP = window.TGI_PARTS || {}, U = window.PlanUnits, O = window.Ordner, store = window.ITISync, LZ = window.LERNZIELE || {};
+  var DEFS = (TP._defs && TP._defs.list) || [];
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function C(h, a, b){ var r = []; for(var i = a; i <= b; i++) r.push(h + "-" + (i < 10 ? "0" : "") + i); return r; }
-  function K(ids){ return ids.map(function(id){ return D.karten[id].nr; }); }
-  function range(ids){ var n = K(ids); return n[0] + "–" + n[n.length - 1]; }
-  var GEN = { a1: ["rel", "op"], a2: ["eig", "algtxt"], a3: ["bubble", "insertion", "quick", "selection"], a4: ["hash", "turnier", "bm"], a5: ["master", "chip", "onot", "code"], a6: ["spr", "gtyp"], a7: ["acc", "pot", "min"], a8: ["ll1", "cnfq", "hier"], k: ["k-d2b", "k-b2d", "k-hex", "k-okt", "k-add", "k-sub", "k-logic", "k-va", "k-stack", "k-term", "k-trav", "k-adjm", "k-bin"] };
-  var TAB = { a1: "1 · Relationen & Operationen", a2: "2 · Algorithmusbegriff", a3: "3 · Sortieren", a4: "4 · Hashing, Turnier, Boyer-Moore", a5: "5 · Analyse", a6: "6 · Chomsky", a7: "7 · Automaten", a8: "8 · Parsing", k: "Kernthemen" };
-  function mathe(h, a, b, extra){ var ids = C(h, a, b); return { f: "M", m: ids.length * 15, t: "Karten " + range(ids) + " (" + h.toUpperCase() + ") im Karten-Durchgang" + (extra ? " · " + extra : ""), s: "je Karte: Skizze erklären → Musterbeispiel abdecken und selbst rechnen → mit Casio prüfen → Stand setzen", l: "ordner.html#" + ids[0], cards: ids }; }
-  function heft(h, label){ return { f: "M", m: 30, t: label + "-Lernheft: Kapitel überfliegen, jede Skizze öffnen und Stand setzen (unklar · verstanden · sitzt)", s: "Ziel: das Thema als Ganzes sehen, bevor die Rezeptkarten kommen", l: label + "_Lernheft.html", sk: h }; }
-  function tgi(sec, m){ return { f: "T", m: m || 75, t: "TGI " + TAB[sec] + ": Definitionen aus dem Kopf (aufschreiben, aufdecken, einstufen), dann Musterlösungen nachvollziehen und je Übungsart 3 Aufgaben auf Papier", l: "tgi.html#" + (sec === "k" ? "kern" : sec), defs: sec, gen: GEN[sec] }; }
-  function blitz(txt, m){ return { f: "E", m: m || 15, t: txt || "Erkenner-Training, Modus „Blitz“ – nur die schon durchgearbeiteten Hefte", l: "erkenner.html", erk: true }; }
+  function nr(ids){ var n = ids.map(function(id){ return D.karten[id].nr; }); return n[0] + (n.length > 1 ? "–" + n[n.length - 1] : ""); }
+
+  /* ---------- Aufgaben-Bausteine ---------- */
+  function ov(h){ return { type: "ov", h: h, f: "M", t: h.toUpperCase() + ": Überblick – Lernheft-Kapitel und die Grundlagen-Skizzen ohne eigene Karte", l: h.toUpperCase() + "_Lernheft.html", prog: "ov" }; }
+  function cards(h, a, b){ var ids = C(h, a, b); return { type: "cards", ids: ids, f: "M", t: "Karten " + nr(ids) + " (" + h.toUpperCase() + ") im Karten-Durchgang", s: "je Karte: Skizzen → Rezept → Musterbeispiel selbst rechnen → Fallen → Stand", l: "ordner.html#" + ids[0], prog: "cards" }; }
+  var GN = { a1: ["Relation prüfen", "Operation prüfen"], a2: ["Eigenschaft einordnen", "Ist das ein Algorithmus?"], a3: ["BubbleSort", "InsertionSort", "QuickSort", "SelectionSort"], a4: ["Hashing", "Turnier", "Boyer-Moore"], a5: ["Master-Theorem", "Chip and Conquer", "O-Aussagen", "Code lesen"], a6: ["Sprache → Klasse", "Grammatik → Typ"], a7: ["Wort akzeptiert?", "Potenzmenge", "Minimieren"], a8: ["LL(1) + FIRST", "CNF-Schritt", "Hierarchie"] };
+  var TN = { a1: "1 · Relationen & Operationen", a2: "2 · Algorithmusbegriff", a3: "3 · Sortieren", a4: "4 · Hashing, Turnier, Boyer-Moore", a5: "5 · Analyse", a6: "6 · Chomsky", a7: "7 · Automaten", a8: "8 · Parsing" };
+  var GKEY = { a1: ["rel", "op"], a2: ["eig", "algtxt"], a3: ["bubble", "insertion", "quick", "selection"], a4: ["hash", "turnier", "bm"], a5: ["master", "chip", "onot", "code"], a6: ["spr", "gtyp"], a7: ["acc", "pot", "min"], a8: ["ll1", "cnfq", "hier"],
+    k1: ["k-d2b", "k-b2d", "k-hex", "k-okt", "k-add", "k-sub", "k-logic", "k-va"], k2: ["k-stack", "k-term", "k-trav", "k-adjm", "k-bin"] };
+  var EXTRA = { a3: [["Erklär-Texte der 4 Sortierverfahren: lesen, abdecken, laut aufsagen", 12]], a4: [["Hashing-Eigenschaften, Turnier- und Boyer-Moore-Regeln auswendig", 10]] };
+  function tgi(sec){ return { type: "tgi", sec: sec, f: "T", gen: GN[sec], extra: EXTRA[sec], gk: GKEY[sec], t: "TGI " + TN[sec] + ": Definitionen aus dem Kopf, Musterlösungen, Übungen auf Papier", l: "tgi.html#" + sec, prog: "tgi" }; }
+  function kern(part){ return part === 1 ? { type: "tgi", sec: "k", f: "T", gen: ["Dez → Dual", "Dual → Dez", "Hex", "Oktal", "Addition", "Zweierkomplement", "Schaltung", "Volladdierer"], gk: GKEY.k1, noMuster: true, t: "TGI Kernthemen I: Definitionen + Zahlensysteme und Schaltungen", l: "tgi.html#kern", prog: "tgi" }
+    : { type: "tgi", sec: "k", f: "T", gen: ["Stack/Queue", "Keller-Terme", "Baumdurchläufe", "Adjazenzmatrix", "Binäre Suche"], gk: GKEY.k2, noDefs: true, noMuster: true, extra: [["Merkblöcke Datentypen und Bäume/Graphen lesen und aufsagen", 10]], t: "TGI Kernthemen II: Datentypen, Bäume, Graphen, Suchen", l: "tgi.html#kern", prog: "tgi" }; }
+  function free(f, m, t, l, s){ return { type: "free", f: f, m: m, t: t, l: l, s: s }; }
+  function blitz(t, m){ return free("E", m || 10, t || "Erkenner „Blitz“ – nur bereits durchgearbeitete Hefte", "erkenner.html"); }
 
   var DAYS = [
-    { d: "2026-10-12", t: "MAI06 Teil 1 · TGI Relationen", x: [heft("mai06", "MAI06"), mathe("mai06", 1, 7), tgi("a1", 60), blitz("Erkenner „Blitz“, Heft-Filter MAI06", 10)] },
-    { d: "2026-10-13", t: "MAI06 Teil 2 · TGI Algorithmusbegriff · Ordner drucken", x: [mathe("mai06", 8, 14), tgi("a2", 60), { f: "O", m: 30, t: "Prüfungsordner farbig drucken (beidseitig, Hintergrundgrafiken an) und mit Registern abheften", s: "PDF: Pruefungsordner_WMAPS.pdf – je Karte eine Doppelseite; Notizseiten sind schon eingeplant", l: "ordner.html" }, blitz("Erkenner „Blitz“, Heft-Filter MAI06", 10)] },
-    { d: "2026-10-14", t: "MAI09 Teil 1 · TGI Sortieren", x: [heft("mai09", "MAI09"), mathe("mai09", 1, 7), tgi("a3", 60), blitz("Erkenner „Blitz“: MAI06 + MAI09", 10)] },
-    { d: "2026-10-15", t: "MAI09 Teil 2 · TGI Hashing, Turnier, Boyer-Moore", x: [mathe("mai09", 8, 13), tgi("a4", 75), { f: "E", m: 20, t: "Schlüsselwörter-Übersicht: Filter MAI06 und MAI09, Spalten Familie und Karte ausblenden, selbst abfragen", l: "schluesselwoerter.html" }] },
-    { d: "2026-10-16", t: "MAI11 Teil 1 · TGI Analyse", x: [heft("mai11", "MAI11"), mathe("mai11", 1, 7), tgi("a5", 60), blitz("Erkenner „Blitz“: MAI06, MAI09, MAI11", 10)] },
-    { d: "2026-10-17", t: "Samstag · MAI11 Teil 2 · MAI13 Teil 1 · TGI Chomsky · TGI-Probeklausur", we: 1, x: [mathe("mai11", 8, 13), heft("mai13", "MAI13"), mathe("mai13", 1, 7), tgi("a6", 75),
-      { f: "P", m: 160, t: "TGI-Übungsklausur 2020/1 auf Papier: 120 Minuten, ohne Unterlagen, nur Taschenrechner – danach mit den Musterlösungen im TGI-Trainer vergleichen (40 Min.)", s: "Datei: Desktop/Studium/Faecher/UEKL_TII_1_2020.pdf · Punkte notieren, Fehler als „unsicher“-Definitionen markieren", l: "tgi.html" },
-      { f: "E", m: 30, t: "Erkenner „Trichter“: alle bisherigen Hefte – Stoppuhr beachten (Heft < 3 s, Familie < 10 s)", l: "erkenner.html", erk: true }] },
-    { d: "2026-10-18", t: "Sonntag · MAI13 Teil 2 · MAI14C Teil 1 · TGI Automaten · Wiederholung", we: 1, x: [mathe("mai13", 8, 14), heft("mai14c", "MAI14C"), mathe("mai14c", 1, 7), tgi("a7", 90),
-      { f: "M", m: 90, t: "Wiederholung: alle Karten mit Stand „unsicher“ (Seitenleiste des Ordners: rote Punkte) noch einmal voll durcharbeiten", l: "ordner.html", unsure: true },
-      { f: "M", m: 30, t: "Skizzen-Übersicht: Filter „unklar“ – jede noch einmal ansehen und neu einstufen", l: "skizzen.html", sk: "all" }] },
-    { d: "2026-10-19", t: "MAI14C Teil 2 · TGI Parsing", x: [mathe("mai14c", 8, 14), tgi("a8", 75), blitz("Erkenner „Blitz“: alle Hefte", 15)] },
-    { d: "2026-10-20", t: "TGI Kernthemen · Mathe-Wiederholung", x: [tgi("k", 90), { f: "M", m: 90, t: "Wiederholung: alle „unsicher“-Karten – Musterbeispiel jetzt ohne Rezept rechnen", l: "ordner.html", unsure: true }, { f: "E", m: 20, t: "Erkenner „Trichter“: Nur Probeklausuren", l: "erkenner.html", erk: true }] },
-    { d: "2026-10-21", t: "Mathe-Probeklausur auf Zeit", x: [{ f: "P", m: 165, t: "Mathe-Probeklausur mit dem gedruckten Ordner und dem Casio, auf Zeit wie in der Prüfung – danach mit der Musterlösung vergleichen (45 Min.)", s: "Datei: Desktop/LUEKL_WMAPS_2024_3.pdf – die Musterlösung steht mit drin: vorher abdecken bzw. erst nachher öffnen. Für jede Aufgabe notieren: Welche Karte? Wie lange gesucht?", l: "ordner.html#wegweiser" },
-      { f: "M", m: 30, t: "Jede Aufgabe, bei der die Suche > 2 Minuten dauerte oder der Ansatz falsch war: Karte als „unsicher“ setzen und ihre Signale in den Schlüsselwörtern nachlesen", l: "schluesselwoerter.html" }, blitz("Erkenner „Blitz“: alle Hefte", 15)] },
-    { d: "2026-10-22", t: "TGI-Probeklausur auf Zeit", x: [{ f: "P", m: 150, t: "TGI-Übungsklausur 2020/2 auf Papier: 120 Minuten ohne Unterlagen – danach vergleichen (30 Min.)", s: "Datei: Desktop/Studium/Faecher/UEKL_TII_2_2020.pdf", l: "tgi.html" },
-      { f: "T", m: 45, t: "TGI: alle Definitionen mit Stand „nicht gewusst“ oder „teilweise“ – Reiter für Reiter", l: "tgi.html", defs: "all" }, blitz("Erkenner „Blitz“: alle Hefte", 15)] },
-    { d: "2026-10-23", t: "Freitag · leichter Abschluss + Tasche packen", x: [
-      { f: "P", m: 45, t: "Erkennen-Durchgang ohne Rechnen: Desktop/LUEKL_WMAPS_2024_4.pdf – für jede Aufgabe nur Heft → Familie → Karte bestimmen und den Ansatz in 2 Zeilen notieren", l: "ordner.html#wegweiser" },
-      { f: "M", m: 60, t: "Letzte Runde „unsicher“-Karten: nur Rezept und Fallen lesen, nicht mehr alles rechnen", l: "ordner.html", unsure: true },
-      { f: "T", m: 45, t: "TGI-Endrunde: die Gerüste laut aufsagen – F-D-D + P-Z, Relationseigenschaften, Sortier-Erklärungen, Master-Theorem, Chomsky-Tabelle, CNF-Schritte, LL(1)-Forderungen", l: "tgi.html" },
-      { f: "O", m: 20, t: "Tasche: Ordner, Casio fx-991DE X (Setup prüfen: Dezimalpräfixe aus, kein E oben; Ersatzbatterie), Stifte, Lineal, Ausweis, Wasser. Früh schlafen.", l: "ordner.html#casio" }] },
-    { d: "2026-10-24", t: "Prüfungstag", exam: 1, x: [
-      { f: "O", m: 20, t: "Morgens: TGI-Gerüste einmal durchgehen (keine neuen Themen!) und den Mathe-Wegweiser ansehen", l: "tgi.html" },
-      { f: "O", m: 5, t: "Vor der Mathe-Klausur: Casio [SHIFT] [9] [1] (Setupdaten) – dann Standard, kein E oben; Ordner am Wegweiser aufschlagen", l: "ordner.html#casio" },
-      { f: "O", m: 10, t: "Zwischen den Prüfungen: kurz essen, trinken; TGI-Hierarchie und Master-Theorem einmal ansehen – dann Unterlagen weg", l: "tgi.html" }] }
+    { d: "2026-10-12", t: "MAI06 K1–K6 · TGI Algorithmusbegriff", x: [ov("mai06"), cards("mai06", 1, 6), tgi("a2"), blitz("Erkenner „Blitz“, Filter MAI06")] },
+    { d: "2026-10-13", t: "MAI06 K7–K14 · TGI Relationen", x: [cards("mai06", 7, 14), tgi("a1")] },
+    { d: "2026-10-14", t: "MAI09 K15–K22 · TGI Sortieren", x: [ov("mai09"), cards("mai09", 1, 8), tgi("a3")] },
+    { d: "2026-10-15", t: "MAI09 K23–K27 · MAI11 K28–K30 · TGI Hashing", x: [cards("mai09", 9, 13), ov("mai11"), cards("mai11", 1, 3), tgi("a4")] },
+    { d: "2026-10-16", t: "MAI11 K31–K38 · TGI Analyse", x: [cards("mai11", 4, 11), tgi("a5"), blitz("Erkenner „Blitz“: MAI06, MAI09, MAI11")] },
+    { d: "2026-10-17", t: "Samstag · MAI11 Rest · MAI13 komplett · TGI-Probeklausur", we: 1, x: [cards("mai11", 12, 13), ov("mai13"), cards("mai13", 1, 14),
+      free("O", 30, "Prüfungsordner farbig drucken (beidseitig, Hintergrundgrafiken an) und mit Registern abheften", "ordner.html", "PDF: Pruefungsordner_WMAPS.pdf"),
+      free("P", 160, "TGI-Übungsklausur 2020/1 auf Papier: 120 Minuten ohne Unterlagen, dann 40 Min. mit den Musterlösungen vergleichen", "tgi.html", "Datei: Desktop/Studium/Faecher/UEKL_TII_1_2020.pdf"),
+      free("E", 20, "Erkenner „Trichter“: alle Aufgaben", "erkenner.html")] },
+    { d: "2026-10-18", t: "Sonntag · MAI14C komplett · TGI Chomsky + Automaten · Wiederholung", we: 1, x: [ov("mai14c"), cards("mai14c", 1, 14), tgi("a6"), tgi("a7"),
+      { type: "unsure", f: "M", per: 600, t: "Wiederholung: alle Karten mit Stand „unsicher“ – Musterbeispiel noch einmal selbst rechnen", l: "ordner.html", prog: "unsure" },
+      { type: "skunsure", f: "M", t: "Wiederholung: alle Mathe-Skizzen mit Stand „unklar“", l: "skizzen.html", prog: "skunsure" }] },
+    { d: "2026-10-19", t: "TGI Parsing + Kernthemen I · Mathe-Wiederholung", x: [tgi("a8"), kern(1), { type: "unsure", f: "M", per: 480, how: "Rezept abdecken, Musterbeispiel rechnen", t: "Wiederholung „unsicher“-Karten (ohne Rezept)", l: "ordner.html", prog: "unsure" }, free("E", 15, "Erkenner „Trichter“: alle Hefte", "erkenner.html")] },
+    { d: "2026-10-20", t: "TGI Kernthemen II · Mathe-Wiederholung", x: [kern(2), { type: "unsure", f: "M", per: 480, how: "Rezept abdecken, Musterbeispiel rechnen", t: "Wiederholung „unsicher“-Karten", l: "ordner.html", prog: "unsure" }, free("E", 20, "Schlüsselwörter-Übersicht: gemischt, Spalten Familie + Karte ausgeblendet, selbst abfragen", "schluesselwoerter.html"), blitz("Erkenner „Blitz“: alle Hefte", 10)] },
+    { d: "2026-10-21", t: "Mathe-Probeklausur auf Zeit", x: [free("P", 165, "Mathe-Probeklausur mit gedrucktem Ordner + Casio, 120 Minuten – danach 45 Min. mit der Musterlösung vergleichen", "ordner.html#wegweiser", "Datei: Desktop/LUEKL_WMAPS_2024_3.pdf – die Musterlösung steht mit drin: vorher abdecken. Je Aufgabe notieren: welche Karte, wie lange gesucht?"),
+      free("M", 30, "Aufgaben mit Suchzeit > 2 Min. oder falschem Ansatz: Karte auf „unsicher“ setzen, Signale in den Schlüsselwörtern nachlesen", "schluesselwoerter.html"), blitz("Erkenner „Blitz“: alle Hefte", 10)] },
+    { d: "2026-10-22", t: "TGI-Probeklausur auf Zeit", x: [free("P", 150, "TGI-Übungsklausur 2020/2 auf Papier: 120 Minuten ohne Unterlagen, dann 30 Min. vergleichen", "tgi.html", "Datei: Desktop/Studium/Faecher/UEKL_TII_2_2020.pdf"),
+      { type: "defsweak", f: "T", t: "TGI: alle Definitionen, die noch nicht „sitzen“", l: "tgi.html", prog: "defsweak" }, blitz("Erkenner „Blitz“: alle Hefte", 10)] },
+    { d: "2026-10-23", t: "Freitag · leichter Abschluss + Tasche", x: [free("P", 45, "Erkennen-Durchgang ohne Rechnen: Desktop/LUEKL_WMAPS_2024_4.pdf – je Aufgabe nur Heft → Familie → Karte und Ansatz in 2 Zeilen", "ordner.html#wegweiser"),
+      { type: "unsure", f: "M", per: 300, how: "nur Rezept und Fallen lesen", t: "Letzte Runde „unsicher“-Karten (nur lesen)", l: "ordner.html", prog: "unsure" },
+      free("T", 45, "TGI-Gerüste laut aufsagen: F-D-D + P-Z, Relationseigenschaften, Sortier-Erklärungen, Master-Theorem, Chomsky-Tabelle, CNF-Schritte, LL(1)-Forderungen", "tgi.html"),
+      free("O", 20, "Tasche: Ordner, Casio (Dezimalpräfixe aus, kein E; Ersatzbatterie), Stifte, Lineal, Ausweis, Wasser – früh schlafen", "ordner.html#casio")] },
+    { d: "2026-10-24", t: "Prüfungstag (2 × 120 Min.)", exam: 1, x: [free("O", 20, "Morgens: TGI-Gerüste einmal durchgehen (nichts Neues!) und den Mathe-Wegweiser ansehen", "tgi.html"),
+      free("O", 5, "Vor Mathe: Casio [SHIFT] [9] [1] – Standard, kein E oben; Ordner am Wegweiser aufschlagen", "ordner.html#casio"),
+      free("O", 10, "Zwischen den Prüfungen: essen, trinken; TGI-Hierarchie und Master-Theorem einmal ansehen – dann Unterlagen weg", "tgi.html")] }
   ];
+  DAYS.forEach(function(d){ d.x.forEach(function(t, i){ t.id = d.d + ":" + i; t.day = d.d; }); });
+  var ALL = []; DAYS.forEach(function(d){ ALL = ALL.concat(d.x); });
 
-  /* ---------- Stand lesen ---------- */
-  var done = {};
+  /* ---------- Daten ---------- */
   function lsj(k){ try { return JSON.parse(localStorage.getItem(k) || "{}") || {}; } catch(e) { return {}; } }
-  function load(){ return (store ? store.get(KEY) : Promise.resolve(localStorage.getItem(KEY))).then(function(r){ try { done = JSON.parse(r || "{}") || {}; } catch(e) { done = {}; } }); }
-  function save(){ var s = JSON.stringify(done); if(store) store.set(KEY, s); else try { localStorage.setItem(KEY, s); } catch(e) {} }
-  function stats(){
-    var ks = lsj("ordner:karten"), sk = lsj("skizzen:state"), tg = lsj("tgi:gen"), er = lsj("erkenner:state");
-    return { ks: ks, sks: sk.s || {}, tg: tg, er: er };
-  }
-  function cardsInfo(ids, st){ var s = 0, u = 0; ids.forEach(function(id){ if(st.ks[id] === "s") s++; else if(st.ks[id] === "u") u++; }); return { s: s, u: u, n: ids.length }; }
-  function skIds(h){ return Object.keys(S).filter(function(id){ return h === "all" ? /^mai/.test(id) : id.indexOf(h + "-") === 0; }); }
-  function defIds(sec){ var L = (TP._defs && TP._defs.list) || []; return L.filter(function(d){ return sec === "all" || d.a === sec; }).map(function(d){ return d.id; }); }
-  function bar(s, v, u, n){ n = n || 1; return '<div class="bar"><i class="s" style="width:' + (s / n * 100) + '%"></i><i class="v" style="width:' + (v / n * 100) + '%"></i><i class="u" style="width:' + (u / n * 100) + '%"></i></div>'; }
+  function lsa(k){ try { var v = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(v) ? v : (v && v.list) || []; } catch(e) { return []; } }
+  function put(k, obj){ var s = JSON.stringify(obj); if(store) store.set(k, s); else try { localStorage.setItem(k, s); } catch(e) {} }
+  function stat(){ var sk = lsj("skizzen:state"); return { ks: lsj("ordner:karten"), sks: sk.s || {}, skv: sk.v || {}, tg: lsj("tgi:gen"), er: lsj("erkenner:state") }; }
+  function ctx(){ return { D: D, S: S, defs: DEFS, st: stat() }; }
+  function done(){ return lsj("plan:done"); }
+  function units(t){ return U.units(t, ctx()); }
+  function mins(t){ return Math.round(U.total(units(t)) / 60); }
+  function fmtH(m){ return m >= 60 ? (m / 60).toFixed(1).replace(".", ",") + " h" : m + " min"; }
+  function fragen(){ var f = lsj("plan:fragen"); return f.list || []; }
 
+  function cardsInfo(ids, st){ var s = 0, u = 0; ids.forEach(function(id){ if(st.ks[id] === "s") s++; else if(st.ks[id] === "u") u++; }); return { s: s, u: u, n: ids.length }; }
+  function bar(s, v, u, n){ n = n || 1; return '<div class="bar"><i class="s" style="width:' + (s / n * 100) + '%"></i><i class="v" style="width:' + (v / n * 100) + '%"></i><i class="u" style="width:' + (u / n * 100) + '%"></i></div>'; }
   function renderDash(){
-    var st = stats(), all = Object.keys(D.karten), ci = cardsInfo(all, st);
+    var st = stat(), all = Object.keys(D.karten), ci = cardsInfo(all, st);
     var h = '<div><h3>Mathe-Karten (68)</h3><div class="big">' + ci.s + ' <span class="sub" style="font-size:.8rem">sitzen · ' + ci.u + ' unsicher · ' + (ci.n - ci.s - ci.u) + ' offen</span></div>' + bar(ci.s, 0, ci.u, ci.n) +
       D.hefte.map(function(x){ var c = cardsInfo(x.karten, st); return '<div class="hrow" style="--hc:' + x.color + '"><b>' + esc(x.label) + '</b>' + bar(c.s, 0, c.u, c.n) + '<span>' + c.s + '/' + c.n + '</span></div>'; }).join("") + '</div>';
-    var sk = skIds("all"), sv = 0, ss = 0, su = 0; sk.forEach(function(id){ var v = st.sks[id]; if(v === "s") ss++; else if(v === "v") sv++; else if(v === "u") su++; });
-    var dl = defIds("all"), d3 = 0, d2 = 0, d1 = 0; dl.forEach(function(id){ var v = st.tg["def:" + id]; if(v === 3) d3++; else if(v === 2) d2++; else if(v === 1) d1++; });
-    var gt = 0, go = 0; Object.keys(st.tg).forEach(function(k){ if(/^def:/.test(k)) return; var v = st.tg[k]; if(Array.isArray(v)){ go += v[0]; gt += v[1]; } });
-    var eb = (st.er.b || {}), esic = Object.keys(eb).filter(function(k){ return eb[k] >= 3; }).length, etot = D.training.length;
-    h += '<div><h3>Mathe-Skizzen (' + sk.length + ')</h3><div class="big">' + (ss + sv) + ' <span class="sub" style="font-size:.8rem">verstanden/sitzen · ' + su + ' unklar</span></div>' + bar(ss, sv, su, sk.length) +
-      '<h3 style="margin-top:.6rem">Erkenner (' + etot + ' Aufgaben)</h3><div class="big">' + esic + ' <span class="sub" style="font-size:.8rem">sicher erkannt</span></div>' + bar(esic, 0, 0, etot) + '</div>';
-    h += '<div><h3>TGI-Definitionen (' + dl.length + ')</h3><div class="big">' + d3 + ' <span class="sub" style="font-size:.8rem">sitzen · ' + d2 + ' teilweise · ' + d1 + ' nicht gewusst</span></div>' + bar(d3, d2, d1, dl.length) +
+    var sk = Object.keys(S).filter(function(id){ return /^mai/.test(id); }), sv = 0, ss = 0, su = 0; sk.forEach(function(id){ var v = st.sks[id]; if(v === "s") ss++; else if(v === "v") sv++; else if(v === "u") su++; });
+    var d3 = 0, d2 = 0, d1 = 0; DEFS.forEach(function(d){ var v = st.tg["def:" + d.id]; if(v === 3) d3++; else if(v === 2) d2++; else if(v === 1) d1++; });
+    var gt = 0, go = 0; Object.keys(st.tg).forEach(function(k){ var v = st.tg[k]; if(!/^def:/.test(k) && Array.isArray(v)){ go += v[0]; gt += v[1]; } });
+    var eb = (st.er.b || {}), esic = Object.keys(eb).filter(function(k){ return eb[k] >= 3; }).length;
+    h += '<div><h3>Mathe-Skizzen (' + sk.length + ')</h3><div class="big">' + (ss + sv) + ' <span class="sub" style="font-size:.8rem">verstanden · ' + su + ' unklar</span></div>' + bar(ss, sv, su, sk.length) +
+      '<h3 style="margin-top:.6rem">Erkenner (' + D.training.length + ' Aufgaben)</h3><div class="big">' + esic + ' <span class="sub" style="font-size:.8rem">sicher erkannt</span></div>' + bar(esic, 0, 0, D.training.length) + '</div>';
+    h += '<div><h3>TGI-Definitionen (' + DEFS.length + ')</h3><div class="big">' + d3 + ' <span class="sub" style="font-size:.8rem">sitzen · ' + d2 + ' teilweise · ' + d1 + ' nicht gewusst</span></div>' + bar(d3, d2, d1, DEFS.length) +
       '<h3 style="margin-top:.6rem">TGI-Übungsaufgaben</h3><div class="big">' + gt + ' <span class="sub" style="font-size:.8rem">gerechnet · ' + (gt ? Math.round(go / gt * 100) : 0) + ' % richtig</span></div></div>';
     document.getElementById("dash").innerHTML = h;
   }
-
   function prog(t, st){
-    if(t.cards){ var c = cardsInfo(t.cards, st); return c.s + " sitzen · " + c.u + " unsicher von " + c.n; }
-    if(t.sk){ var ids = skIds(t.sk), n = 0, u = 0; ids.forEach(function(id){ var v = st.sks[id]; if(v === "s" || v === "v") n++; else if(v === "u") u++; }); return n + " von " + ids.length + " Skizzen verstanden" + (u ? " · " + u + " unklar" : ""); }
-    if(t.unsure){ var uu = Object.keys(st.ks).filter(function(k){ return st.ks[k] === "u"; }); return uu.length ? uu.length + " unsicher: " + K(uu.filter(function(id){ return D.karten[id]; })).join(", ") : "keine unsicheren Karten"; }
-    var out = [];
-    if(t.defs){ var dl = defIds(t.defs), ok = dl.filter(function(id){ return st.tg["def:" + id] === 3; }).length; out.push(ok + "/" + dl.length + " Definitionen sitzen"); }
-    if(t.gen){ var a = 0; t.gen.forEach(function(k){ var v = st.tg[k]; if(Array.isArray(v)) a += v[1]; }); out.push(a + " Aufgaben gerechnet"); }
-    return out.join(" · ");
+    if(t.prog === "cards"){ var c = cardsInfo(t.ids, st); return c.s + " sitzen · " + c.u + " unsicher von " + c.n; }
+    if(t.prog === "ov"){ var us = units(t).filter(function(u){ return u.k === "sk"; }), n = us.filter(function(u){ var v = st.sks[u.id]; return v === "v" || v === "s"; }).length; return n + " von " + us.length + " Grundlagen-Skizzen verstanden"; }
+    if(t.prog === "unsure"){ var uu = Object.keys(st.ks).filter(function(k){ return st.ks[k] === "u" && D.karten[k]; }); return uu.length ? uu.length + " unsicher: " + uu.map(function(id){ return D.karten[id].nr; }).join(", ") : "keine unsicheren Karten"; }
+    if(t.prog === "skunsure"){ var n2 = Object.keys(st.sks).filter(function(k){ return st.sks[k] === "u" && /^mai/.test(k); }).length; return n2 + " unklare Skizzen"; }
+    if(t.prog === "defsweak"){ return DEFS.filter(function(d){ return st.tg["def:" + d.id] !== 3; }).length + " Definitionen noch nicht sicher"; }
+    if(t.prog === "tgi"){ var dl = DEFS.filter(function(d){ return d.a === t.sec; }), ok = dl.filter(function(d){ return st.tg["def:" + d.id] === 3; }).length, a = 0; (t.gk || []).forEach(function(k){ var v = st.tg[k]; if(Array.isArray(v)) a += v[1]; }); return (t.noDefs ? "" : ok + "/" + dl.length + " Definitionen sitzen · ") + a + " Übungsaufgaben gerechnet"; }
+    return "";
   }
 
   function today(){ var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function nextTask(){ var dn = done(); for(var i = 0; i < ALL.length; i++) if(!dn[ALL[i].id]) return ALL[i]; return null; }
+  function sessOf(id){ try { return JSON.parse(localStorage.getItem("plan:sess:" + id) || "null"); } catch(e) { return null; } }
   var openSet = {};
+  function renderNext(){
+    var t = nextTask(), el = document.getElementById("next");
+    if(!t){ el.innerHTML = '<div class="next"><div class="nx-t"><small>Alles erledigt</small><b>Alle Aufgaben abgehakt – stark!</b></div></div>'; return; }
+    var td = today(), when = t.day === td ? "heute geplant" : t.day > td ? "vorgezogen – geplant für " + new Date(t.day + "T12:00:00").toLocaleDateString("de-CH", { weekday: "long", day: "numeric", month: "numeric" }) : "überfällig seit " + new Date(t.day + "T12:00:00").toLocaleDateString("de-CH", { day: "numeric", month: "numeric" });
+    var ss = sessOf(t.id);
+    el.innerHTML = '<div class="next"><div class="nx-t"><small>Als Nächstes · ' + esc(when) + '</small><b>' + esc(t.t) + '</b><span>' + fmtH(mins(t)) + ' · ' + esc(prog(t, stat()) || t.s || "") + '</span></div><button class="go" data-start="' + t.id + '">' + (ss && !ss.fin ? "▶ Fortsetzen" : "▶ Starten") + '</button></div>';
+  }
+  function renderFragen(){
+    var F = fragen(), open = F.filter(function(q){ return !q.done; });
+    document.getElementById("fragen").innerHTML = F.length ? '<div class="qs"><h3>Meine Fragen (' + open.length + ' offen)</h3>' + F.slice().reverse().map(function(q){ var i = F.indexOf(q);
+      return '<div class="q' + (q.done ? " dn" : "") + '"><input type="checkbox" data-q="' + i + '"' + (q.done ? " checked" : "") + '><div>' + esc(q.q || "(ohne Text)") + '<small>' + esc(q.u) + ' · ' + esc(q.when || "") + '</small></div></div>'; }).join("") + '<p style="font-size:.78rem;color:var(--ink-faint);margin:.4rem 0 0">Tipp: offene Fragen in den Wiederholungsterminen klären – oder mir im Chat stellen.</p></div>' : "";
+  }
   function renderDays(){
-    var st = stats(), td = today(), WD = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
-    document.getElementById("days").innerHTML = DAYS.map(function(day, di){
+    var st = stat(), td = today(), dn = done(), WD = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"], nt = nextTask();
+    document.getElementById("days").innerHTML = DAYS.map(function(day){
       var dt = new Date(day.d + "T12:00:00"), lab = WD[dt.getDay()] + " " + dt.getDate() + "." + (dt.getMonth() + 1) + ".";
-      var tot = day.x.reduce(function(a, t){ return a + t.m; }, 0), dn = day.x.filter(function(t, ti){ return done[day.d + ":" + ti]; }).length;
-      var cls = "day" + (day.d === td ? " today" : day.d < td ? " past" : "") + ((openSet[day.d] !== undefined ? openSet[day.d] : day.d >= td && di === DAYS.findIndex(function(x){ return x.d >= td; })) ? " open" : "");
-      return '<div class="' + cls + '" data-d="' + day.d + '"><div class="dh"><span class="dt">' + lab + '</span>' + (day.d === td ? '<span class="tag">heute</span>' : '') + (day.exam ? '<span class="tag" style="background:var(--mark)">Prüfung</span>' : '') +
-        '<span class="tt">' + esc(day.t) + '</span><span class="pc">' + dn + '/' + day.x.length + ' · ' + (tot >= 60 ? (tot / 60).toFixed(1).replace(".", ",") + " h" : tot + " min") + '</span></div><div class="db">' +
-        day.x.map(function(t, ti){ var id = day.d + ":" + ti, p = prog(t, st);
-          return '<div class="task' + (done[id] ? " done" : "") + '"><input type="checkbox" data-id="' + id + '"' + (done[id] ? " checked" : "") + ' aria-label="erledigt"><span class="f ' + t.f + '">' + t.f + '</span><div class="x">' + esc(t.t) + (p ? '<span class="pr">' + esc(p) + '</span>' : '') + (t.s ? '<small>' + esc(t.s) + '</small>' : '') + '</div><div class="r">' + (t.l ? '<a href="' + esc(t.l) + '">öffnen</a>' : '') + '<span>' + t.m + ' min</span></div></div>'; }).join("") + '</div></div>';
+      var tot = day.x.reduce(function(a, t){ return a + mins(t); }, 0), nd = day.x.filter(function(t){ return dn[t.id]; }).length;
+      var cap = day.we ? 600 : day.exam ? 999 : 240, isOpen = openSet[day.d] !== undefined ? openSet[day.d] : (nt && nt.day === day.d) || day.d === td;
+      return '<div class="day' + (day.d === td ? " today" : day.d < td ? " past" : "") + (isOpen ? " open" : "") + '" data-d="' + day.d + '"><div class="dh"><span class="dt">' + lab + '</span>' + (day.d === td ? '<span class="tag">heute</span>' : '') + (day.exam ? '<span class="tag" style="background:var(--mark)">Prüfung</span>' : '') +
+        '<span class="tt">' + esc(day.t) + '</span><span class="pc' + (tot > cap ? " hi" : "") + '">' + nd + '/' + day.x.length + ' · ' + fmtH(tot) + '</span></div><div class="db">' +
+        day.x.map(function(t){ var p = prog(t, st), ss = sessOf(t.id), m = mins(t);
+          return '<div class="task' + (dn[t.id] ? " done" : "") + '"><input type="checkbox" data-id="' + t.id + '"' + (dn[t.id] ? " checked" : "") + ' aria-label="erledigt"><span class="f ' + t.f + '">' + t.f + '</span><div class="x">' + esc(t.t) + (p ? '<span class="pr">' + esc(p) + '</span>' : '') + (t.s ? '<small>' + esc(t.s) + '</small>' : '') + '</div>' +
+            '<div class="r"><button class="st" data-start="' + t.id + '">' + (ss && !ss.fin ? "▶ weiter" : "▶ Start") + '</button>' + (t.l ? '<a href="' + esc(t.l) + '" target="_blank" rel="noopener">öffnen</a>' : '') + '<span>' + m + ' min</span></div></div>'; }).join("") + '</div></div>';
     }).join("");
     var days = Math.ceil((new Date("2026-10-24T08:00:00") - new Date()) / 864e5);
-    document.getElementById("countdown").textContent = days > 0 ? "Noch " + days + " Tage bis zum Klausurtag · Samstag, 24.10.2026" : "Klausurtag – viel Erfolg!";
+    document.getElementById("countdown").textContent = (days > 0 ? "Noch " + days + " Tage" : "Klausurtag") + " · Samstag, 24.10.2026 · Mathe und TGI je 120 Minuten";
   }
-  function render(){ renderDash(); renderDays(); }
+  function render(){ renderNext(); renderDash(); renderFragen(); renderDays(); }
 
-  document.getElementById("days").addEventListener("click", function(e){
-    var cb = e.target.closest("input[type=checkbox]");
-    if(cb){ var id = cb.getAttribute("data-id"); if(cb.checked) done[id] = 1; else delete done[id]; save(); cb.closest(".task").classList.toggle("done", cb.checked); renderDays(); return; }
+  document.addEventListener("click", function(e){
+    var st = e.target.closest("[data-start]"); if(st){ startSession(st.getAttribute("data-start")); return; }
+    var cb = e.target.closest("#days input[type=checkbox]"); if(cb){ var dn = done(); if(cb.checked) dn[cb.getAttribute("data-id")] = 1; else delete dn[cb.getAttribute("data-id")]; put("plan:done", dn); render(); return; }
+    var qb = e.target.closest("#fragen input[type=checkbox]"); if(qb){ var F = fragen(); F[+qb.getAttribute("data-q")].done = qb.checked; put("plan:fragen", { list: F }); renderFragen(); return; }
     var dh = e.target.closest(".dh"); if(dh){ var day = dh.parentNode, d = day.getAttribute("data-d"); openSet[d] = !day.classList.contains("open"); day.classList.toggle("open"); }
   });
+
+  /* ---------- Session-Navigator ---------- */
+  var SES = null, timer = null, bell = true;
+  try { bell = localStorage.getItem("plan:bell") !== "0"; } catch(e) {}
+  function mmss(s){ var neg = s < 0; s = Math.abs(Math.round(s)); return (neg ? "−" : "") + Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
+  function beep(f){ if(!bell) return; try { var A = window.AudioContext || window.webkitAudioContext, ac = beep.ac || (beep.ac = new A()), o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f || 660; g.gain.value = .06; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + .18); } catch(e) {} }
+  function saveSes(){ try { localStorage.setItem("plan:sess:" + SES.tid, JSON.stringify(SES)); } catch(e) {} }
+  function curEl(){ return SES.el[SES.i] + (SES.run ? (Date.now() - SES.run) / 1000 : 0); }
+  function startSession(tid){
+    var t = ALL.filter(function(x){ return x.id === tid; })[0]; if(!t) return;
+    var old = sessOf(tid);
+    if(old && !old.fin){ SES = old; }
+    else { var us = units(t); SES = { tid: tid, title: t.t, f: t.f, units: us, i: 0, el: us.map(function(){ return 0; }), mk: us.map(function(){ return ""; }), cardU: {}, run: null, fin: false, beeped: {} }; }
+    document.getElementById("ses").classList.add("on"); document.body.style.overflow = "hidden";
+    SES.run = Date.now(); saveSes(); showUnit(); tick();
+    clearInterval(timer); timer = setInterval(tick, 1000);
+  }
+  function stopRun(){ if(SES && SES.run){ SES.el[SES.i] += (Date.now() - SES.run) / 1000; SES.run = null; } }
+  function closeSession(){ stopRun(); if(SES) saveSes(); clearInterval(timer); document.getElementById("ses").classList.remove("on"); document.body.style.overflow = ""; SES = null; render(); }
+  function tick(){
+    if(!SES) return;
+    var u = SES.units[SES.i], el = curEl(), rem = u.b - el, cu = document.getElementById("cUnit"), ub = document.querySelector(".ubar");
+    cu.querySelector("b").textContent = rem >= 0 ? mmss(rem) : (rem > -60 ? "+" + mmss(-rem) : mmss(rem));
+    cu.querySelector("span").textContent = rem >= 0 ? "Einheit" : rem > -60 ? "Nachfrist" : "Zeit um – entscheiden";
+    cu.className = "clock" + (rem < 0 ? (rem > -60 ? " grace" : " over") : "");
+    if(ub){ ub.className = "ubar" + (rem < 0 ? (rem > -60 ? " grace" : " over") : ""); ub.querySelector("i").style.width = Math.min(100, el / u.b * 100) + "%"; }
+    if(rem < 0 && !SES.beeped[SES.i + "a"]){ SES.beeped[SES.i + "a"] = 1; beep(660); }
+    if(rem < -60 && !SES.beeped[SES.i + "b"]){ SES.beeped[SES.i + "b"] = 1; beep(520); setTimeout(function(){ beep(520); }, 260); }
+    var plannedLeft = 0; for(var j = SES.i; j < SES.units.length; j++) plannedLeft += SES.units[j].b;
+    var totRem = plannedLeft - el, puf = 0; for(j = 0; j < SES.i; j++) puf += SES.units[j].b - SES.el[j]; puf -= Math.max(0, el - u.b);
+    var tr = Math.max(0, totRem); document.querySelector("#cTot b").textContent = tr >= 3600 ? Math.floor(tr / 3600) + " h " + ("0" + Math.floor(tr % 3600 / 60)).slice(-2) : mmss(tr);
+    var pf = document.getElementById("sPuf"); pf.textContent = (puf >= 0 ? "+" : "−") + Math.round(Math.abs(puf) / 60) + " min " + (puf >= 0 ? "voraus" : "hinten"); pf.className = "puf" + (puf < 0 ? " neg" : "");
+    document.getElementById("sPause").textContent = SES.run ? "⏸ Pause" : "▶ Weiter";
+    if(Math.floor(Date.now() / 1000) % 5 === 0) saveSes();
+    var li = document.querySelector('#sList [data-i="' + SES.i + '"] em'); if(li) li.textContent = mmss(el) + " / " + mmss(u.b);
+  }
+  function listHtml(){
+    return SES.units.map(function(u, i){ var m = SES.mk[i];
+      return '<div data-i="' + i + '" class="' + (i === SES.i ? "cur " : "") + (m === "ok" ? "ok" : m === "u" ? "u" : "") + '"><i>' + (m === "ok" ? "✓" : m === "u" ? "?" : i === SES.i ? "▸" : "·") + '</i><span>' + esc(u.t) + '</span><em>' + (m ? mmss(SES.el[i]) : mmss(u.b)) + '</em></div>'; }).join("");
+  }
+  function cardBox(id, cls){ var k = D.karten[id]; return '<div class="' + cls + '">' + O.cardHtml(k, { base: "ordner.html" }) + (cls === "u-rech" ? '' : '') + '</div>'; }
+  function showUnit(){
+    var u = SES.units[SES.i], m = document.getElementById("sMain"), h = "";
+    document.getElementById("sTtl").innerHTML = esc(SES.title) + '<small>Einheit ' + (SES.i + 1) + ' von ' + SES.units.length + '</small>';
+    document.getElementById("sList").innerHTML = listHtml();
+    h += '<div class="ubar"><i style="width:0"></i></div>';
+    if(u.k === "sk"){
+      var d = S[u.id], lz = LZ[u.id], card = u.card ? D.karten[u.card] : null;
+      h += '<p class="uhd">Skizze · ' + esc(u.sub) + (card ? ' · gehört zu ' + esc(card.nr) + ' ' + esc(card.titel) : '') + '</p><h2 class="uti">' + esc(d.t) + '</h2>' +
+        '<div class="skbig">' + (typeof d.svg === "function" ? d.svg(window.SK) : d.svg) + '</div><div class="lese">' + (d.c || "") + '</div>' +
+        (lz ? '<div class="ziel" id="zl"><b>Ziel – das sollst du verstanden haben</b>' + esc(lz.ziel) + '<b>Prüffrage – erst selbst beantworten</b>' + esc(lz.frage) + ' <button class="go sec" id="zlr" style="padding:.15rem .5rem;font-size:.74rem">Antwort zeigen</button><div class="ans">' + esc(lz.antwort) + '</div><b>Brauchst du für</b>' + esc(lz.fuer) + '</div>'
+          : '<p class="zielhint">Ziel: in einem Satz sagen können, was die Skizze zeigt und wofür du sie brauchst.</p>');
+    } else if(u.k === "rez"){
+      h += '<p class="uhd">Rezept · Formeln · Rechenschema</p><h2 class="uti">' + esc(u.t) + '</h2><p class="zielhint">Ziel: jeden Schritt begründen können („warum kommt das jetzt?“) – nicht auswendig lernen, der Ordner liegt in der Prüfung dabei.</p>' + cardBox(u.card, "u-rez");
+    } else if(u.k === "rech" || u.k === "uns"){
+      h += '<p class="uhd">Selbst rechnen</p><h2 class="uti">' + esc(u.t) + '</h2><p class="zielhint">Aufgabe auf Papier lösen' + (u.k === "uns" ? "" : " (Rezept darf offen liegen)") + ', dann aufdecken und vergleichen – auch den Casio-Ablauf durchtippen.</p>' + cardBox(u.card, "u-rech") + '<button class="go sec revbtn" id="rev">Lösung und Casio-Ablauf aufdecken</button>';
+    } else if(u.k === "fall"){
+      h += '<p class="uhd">Erkennen & Fallen</p><h2 class="uti">' + esc(u.t) + '</h2><p class="zielhint">Ziel: die Signalwörter so kennen, dass du die Karte in einer Aufgabe wiedererkennst. „Verstanden“ setzt die Karte auf „sitzt“, „unsicher“ auf „unsicher“.</p>' + cardBox(u.card, "u-fall");
+    } else if(u.k === "def"){
+      var df = DEFS.filter(function(x){ return x.id === u.id; })[0];
+      h += '<p class="uhd">Definition · ' + esc(u.sub) + '</p><h2 class="uti">' + esc(df.t) + '</h2><textarea class="defta" rows="4" placeholder="Aus dem Kopf aufschreiben (oder auf Papier) …"></textarea><div style="margin:.5rem 0"><button class="go sec" id="drev">Original aufdecken</button></div><div id="dout"></div>';
+    } else if(u.k === "tgi" || u.k === "lh" || u.k === "free"){
+      h += '<p class="uhd">' + (u.k === "lh" ? "Lernheft" : u.k === "tgi" ? "TGI-Trainer" : "Aufgabe") + '</p><h2 class="uti">' + esc(u.t) + '</h2>' + (u.href ? '<p><a class="go" href="' + esc(u.href) + '" target="_blank" rel="noopener">In neuem Tab öffnen ↗</a></p><p class="zielhint">Die Uhr läuft weiter, während du im anderen Tab arbeitest. Danach hierher zurück und „erledigt“ drücken.</p>' : '');
+    }
+    m.innerHTML = h; m.scrollTop = 0;
+    if(window.Ordner && O.paintStand) O.paintStand(m);
+    var rv = document.getElementById("rev"); if(rv) rv.onclick = function(){ m.querySelector(".u-rech").classList.add("rev"); };
+    var zr = document.getElementById("zlr"); if(zr) zr.onclick = function(){ document.getElementById("zl").classList.add("rev"); zr.remove(); };
+    var dr = document.getElementById("drev"); if(dr) dr.onclick = function(){
+      var df = DEFS.filter(function(x){ return x.id === u.id; })[0];
+      document.getElementById("dout").innerHTML = '<div class="dorig">' + esc(df.d) + '<br><small style="color:var(--ink-faint)">' + esc(df.q) + '</small></div><div style="display:flex;gap:.4rem;flex-wrap:wrap"><button class="go warn" data-g="1">nicht gewusst</button><button class="go sec" data-g="2">teilweise</button><button class="go ok" data-g="3">sitzt</button></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("#dout [data-g]"), function(b){ b.onclick = function(){ var g = +b.getAttribute("data-g"), tg = lsj("tgi:gen"); tg["def:" + u.id] = g; put("tgi:gen", tg); finishUnit(g === 3 ? "ok" : "u", g === 3); }; });
+      dr.remove();
+    };
+    renderFoot();
+  }
+  function renderFoot(){
+    var u = SES.units[SES.i], f = document.getElementById("sFoot");
+    if(u.k === "def"){ f.innerHTML = '<button class="go sec" id="bSkip">überspringen</button>'; document.getElementById("bSkip").onclick = function(){ finishUnit("", true); }; return; }
+    var okTxt = u.k === "sk" ? "✓ verstanden – weiter" : u.k === "fall" || u.k === "uns" ? "✓ sitzt – weiter" : u.k === "rech" ? "✓ selbst gelöst – weiter" : "✓ erledigt – weiter";
+    f.innerHTML = '<button class="go ok" id="bOk">' + okTxt + '</button>' + (u.k === "free" || u.k === "lh" || u.k === "tgi" ? '' : '<button class="go warn" id="bU">? unsicher – Frage notieren</button>') +
+      '<div class="notebox" id="nb"><textarea rows="2" placeholder="Was genau ist unklar? (ein Satz, optional)"></textarea><div style="display:flex;gap:.4rem;margin-top:.4rem;justify-content:center"><button class="go warn" id="bUs">Speichern & weiter</button><button class="go sec" id="bUc">zurück</button></div></div>';
+    document.getElementById("bOk").onclick = function(){ finishUnit("ok"); };
+    var bu = document.getElementById("bU"); if(bu) bu.onclick = function(){ document.getElementById("nb").classList.add("on"); bu.style.display = "none"; document.getElementById("bOk").style.display = "none"; document.querySelector("#nb textarea").focus(); };
+    var bus = document.getElementById("bUs"); if(bus) bus.onclick = function(){ var q = document.querySelector("#nb textarea").value.trim(); finishUnit("u", false, q); };
+    var buc = document.getElementById("bUc"); if(buc) buc.onclick = renderFoot;
+  }
+  function finishUnit(mark, skipNote, q){
+    var u = SES.units[SES.i];
+    stopRun(); SES.mk[SES.i] = mark;
+    // Stand setzen
+    if(u.k === "sk" && mark && window.SketchStats){ var cur = (window.SketchStats.get().s || {})[u.id]; if(mark === "u") window.SketchStats.status(u.id, "u"); else if(cur !== "s") window.SketchStats.status(u.id, "v"); }
+    if(u.card && mark === "u") SES.cardU[u.card] = 1;
+    if(u.card && u.last){ var ks = lsj("ordner:karten"); ks[u.card] = (mark === "u" || SES.cardU[u.card]) ? "u" : "s"; put("ordner:karten", ks); }
+    if(mark === "u" && (q || !skipNote)){ var F = fragen(); F.push({ q: q || "", u: u.t + (u.card ? " (" + D.karten[u.card].nr + ")" : ""), when: new Date().toLocaleDateString("de-CH"), done: false }); put("plan:fragen", { list: F }); }
+    // Tempo lernen: geplante vs. tatsächliche Zeit je Einheitstyp
+    var tp = lsj("plan:tempo"), r = tp[u.k] || [0, 0, 0]; r[0] += u.b; r[1] += Math.round(SES.el[SES.i]); r[2]++; tp[u.k] = r; put("plan:tempo", tp);
+    if(SES.i < SES.units.length - 1){ SES.i++; SES.run = Date.now(); saveSes(); showUnit(); tick(); }
+    else { SES.fin = true; saveSes(); var dn = done(); dn[SES.tid] = 1; put("plan:done", dn); showSummary(); }
+  }
+  function showSummary(){
+    clearInterval(timer);
+    var plan = 0, act = 0; SES.units.forEach(function(u, i){ plan += u.b; act += SES.el[i]; });
+    var uns = SES.units.filter(function(u, i){ return SES.mk[i] === "u"; });
+    document.getElementById("sList").innerHTML = listHtml();
+    document.getElementById("sMain").innerHTML = '<div class="summary"><p class="uhd">Fertig</p><h2 class="uti">' + esc(SES.title) + '</h2><p>Geplant ' + Math.round(plan / 60) + ' min · gebraucht ' + Math.round(act / 60) + ' min · ' + (act <= plan ? '<b style="color:var(--sk-ok)">' + Math.round((plan - act) / 60) + ' min Puffer gewonnen</b>' : '<b style="color:var(--mark)">' + Math.round((act - plan) / 60) + ' min länger</b>') + '</p>' +
+      (uns.length ? '<p><b>Unsicher (' + uns.length + '):</b> ' + uns.map(function(u){ return esc(u.t); }).join(" · ") + ' – kommt in den Wiederholungsterminen wieder.</p>' : '<p>Alles als verstanden markiert.</p>') + '<p>Die Aufgabe ist im Plan abgehakt.</p></div>';
+    document.getElementById("sFoot").innerHTML = '<button class="go" id="bEnd">Zurück zum Plan</button>';
+    document.getElementById("bEnd").onclick = closeSession;
+    document.querySelector("#cUnit b").textContent = "✓"; document.querySelector("#cTot b").textContent = "0:00";
+  }
+  document.getElementById("sPause").onclick = function(){ if(!SES || SES.fin) return; if(SES.run) stopRun(); else SES.run = Date.now(); saveSes(); tick(); };
+  document.getElementById("sClose").onclick = closeSession;
+  document.getElementById("sBell").onclick = function(){ bell = !bell; try { localStorage.setItem("plan:bell", bell ? "1" : "0"); } catch(e) {} this.textContent = bell ? "🔔" : "🔕"; };
+  document.getElementById("sBell").textContent = bell ? "🔔" : "🔕";
+  document.addEventListener("keydown", function(e){ if(SES && e.key === "Escape") closeSession(); });
 
   var tb = document.getElementById("themeBtn"), th = "light";
   try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); } catch(e) {}
@@ -206,9 +433,11 @@
   tb.addEventListener("click", function(){ th = th === "dark" ? "light" : "dark"; try { localStorage.setItem("ordner:theme", th); } catch(e) {} ap(); });
   ap();
   render();
-  Promise.all([load(), store ? store.get("ordner:karten") : 0, store ? store.get("skizzen:state") : 0, store ? store.get("tgi:gen") : 0, store ? store.get("erkenner:state") : 0]).then(function(){ render(); var t = document.querySelector(".day.today"); if(t) setTimeout(function(){ t.scrollIntoView({ behavior: "smooth", block: "start" }); }, 200); });
-  if(store && store.onChange) store.onChange(function(){ load().then(render); });
-  window.addEventListener("focus", render);
+  var keys = ["plan:done", "plan:fragen", "plan:tempo", "ordner:karten", "skizzen:state", "tgi:gen", "erkenner:state"];
+  Promise.all(keys.map(function(k){ return store ? store.get(k) : 0; })).then(function(){ if(!SES) render(); });
+  if(store && store.onChange) store.onChange(function(){ if(!SES) render(); });
+  window.addEventListener("focus", function(){ if(!SES) render(); });
+  window.PlanDebug = { DAYS: DAYS, units: units, mins: mins };
 })();
 </script>
 <script src="assets/auth-ui.js"></script>
