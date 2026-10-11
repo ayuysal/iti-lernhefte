@@ -81,6 +81,28 @@ details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;fo
 .bm{font-family:var(--font-mono);font-size:.85rem;line-height:1.35;white-space:pre;overflow-x:auto;background:var(--paper);border:1px solid var(--rule-soft);border-radius:5px;padding:.5rem .6rem}
 .bm .m{color:var(--sk-ok);font-weight:800}.bm .x{color:var(--mark);font-weight:800;text-decoration:underline}
 .later{color:var(--ink-faint);font-family:var(--font-ui);font-size:.85rem}
+.defs{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.4rem}
+.defc{border:1px solid var(--rule);border-radius:6px;background:var(--paper)}
+.defc .dh{display:flex;justify-content:space-between;align-items:center;gap:.4rem;padding:.45rem .6rem;cursor:pointer;font-family:var(--font-ui);font-size:.84rem}
+.defc .db:not(:empty){padding:0 .6rem .6rem}
+.defc textarea,.gen textarea{width:100%;font-family:var(--font-body,inherit);font-size:.9rem;padding:.4rem .5rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper-raised);color:var(--ink);box-sizing:border-box}
+.defc .od{margin-top:.5rem;background:var(--accent-soft);border-radius:5px;padding:.5rem .6rem;font-size:.9rem;line-height:1.5}
+.defc .od small{display:block;color:var(--ink-faint);font-size:.72rem;margin-top:.2rem}
+.pill{font-family:var(--font-ui);font-size:.66rem;font-weight:800;border-radius:999px;padding:.1rem .5rem;background:var(--rule-soft);color:var(--ink-soft);white-space:nowrap}
+.pill.p1{background:var(--mark-soft);color:var(--mark)}.pill.p2{background:#f6e7c8;color:#8a5a00}.pill.p3{background:var(--sk-ok-soft);color:var(--sk-ok)}
+.ptab{border-collapse:collapse;width:100%;font-size:.86rem}
+.ptab td,.ptab th{border-bottom:1px solid var(--rule-soft);padding:.32rem .45rem;vertical-align:top;text-align:left}
+.ptab th{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.ptab td:first-child{white-space:nowrap;font-family:var(--font-ui);width:10rem}
+.ptab td:nth-child(2){width:5rem}
+.ptab b.yes{color:var(--sk-ok)}.ptab b.no{color:var(--mark)}.ptab b.mid{color:var(--sk-3)}
+.ynr{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.ynr label{display:flex;flex-direction:column;gap:.15rem;font-family:var(--font-ui);font-size:.74rem;border:1px solid var(--rule);border-radius:5px;padding:.3rem .45rem;background:var(--paper)}
+.ynr label.okk{border-color:var(--sk-ok);background:var(--sk-ok-soft)}.ynr label.badd{border-color:var(--mark);background:var(--mark-soft)}
+.ynr select{font-family:var(--font-ui);font-size:.85rem;padding:.2rem;background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule);border-radius:3px}
+pre.txtb{white-space:pre-wrap;font-family:var(--font-mono);font-size:.82rem;background:var(--paper);border:1px solid var(--rule-soft);border-radius:5px;padding:.5rem .6rem;margin:.4rem 0}
+h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin:1.2rem 0 .3rem}
+.go:disabled{opacity:.5;cursor:default}
 @media print{.tabs,.gen,.plan{display:none!important} .pane{display:block!important}}
 </style>
 </head>
@@ -111,6 +133,7 @@ details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;fo
 <script src="assets/config.js"></script>
 <script src="assets/sync.js"></script>
 <script src="assets/tgi-algo.js"></script>
+<script src="assets/tgi-a12.js"></script>
 <script>
 (function(){
   "use strict";
@@ -125,8 +148,8 @@ details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;fo
 
   /* ---------- Gliederung der Klausur ---------- */
   var AUFG = [
-    { n: 1, t: "Mathematische Grundlagen", s: "Relation, Operation, Eigenschaften" },
-    { n: 2, t: "Algorithmusbegriff", s: "Definition, Eigenschaften, „ist das ein Algorithmus?“" },
+    { n: 1, t: "Mathematische Grundlagen", s: "Relation, Operation, Eigenschaften", id: "a1" },
+    { n: 2, t: "Algorithmusbegriff", s: "Definition, Eigenschaften, „ist das ein Algorithmus?“", id: "a2" },
     { n: 3, t: "Algorithmen I", s: "Sortieren", id: "a3" },
     { n: 4, t: "Algorithmen II", s: "Hashing, Turnier, Boyer-Moore", id: "a4" },
     { n: 5, t: "Algorithmus-Analyse", s: "Kostentabelle, Zeitfunktion, O" },
@@ -350,8 +373,13 @@ details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;fo
   }
 
   /* ---------- Reiter ---------- */
-  var TABS = [["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"]], cur = "a3";
-  try { cur = localStorage.getItem("tgi:tab") || "a3"; } catch(e) {}
+  var PARTS = window.TGI_PARTS || {};
+  function getDef(id){ var v = gst["def:" + id]; return v || 0; }
+  function setDef(id, v){ gst["def:" + id] = v; gsave(); }
+  var UI = { esc: esc, glog: glog, gscore: gscore, getDef: getDef, setDef: setDef };
+  ["a1", "a2"].forEach(function(k){ if(PARTS[k]) P[k] = PARTS[k].html(UI); });
+  var TABS = [["a1", "1 · Relationen & Operationen"], ["a2", "2 · Algorithmusbegriff"], ["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"]].filter(function(t){ return P[t[0]]; }), cur = "a1";
+  try { cur = localStorage.getItem("tgi:tab") || "a1"; } catch(e) {}
   if(location.hash && P[location.hash.slice(1)]) cur = location.hash.slice(1);
   document.getElementById("panes").innerHTML = TABS.map(function(t){ return '<div class="pane" data-p="' + t[0] + '">' + P[t[0]] + '</div>'; }).join("");
   function show(id){
@@ -362,7 +390,7 @@ details.sol summary{cursor:pointer;font-family:var(--font-ui);font-size:.8rem;fo
   document.getElementById("tabs").addEventListener("click", function(e){ var b = e.target.closest("[data-t]"); if(b){ show(b.getAttribute("data-t")); window.scrollTo({ top: document.getElementById("tabs").offsetTop - 60, behavior: "smooth" }); } });
   document.getElementById("plan").addEventListener("click", function(e){ var a = e.target.closest("[data-go]"); if(a){ e.preventDefault(); show(a.getAttribute("data-go")); document.getElementById("tabs").scrollIntoView({ behavior: "smooth" }); } else if(e.target.closest("a")) e.preventDefault(); });
   show(cur);
-  gload().then(function(){ renderGen("a3"); renderGen("a4"); });
+  gload().then(function(){ renderGen("a3"); renderGen("a4"); ["a1", "a2"].forEach(function(k){ if(PARTS[k]) PARTS[k].init(document.querySelector('.pane[data-p="' + k + '"]'), UI); }); });
   if(store && store.onChange) store.onChange(function(){ gload().then(function(){ Array.prototype.forEach.call(document.querySelectorAll(".gen"), function(box){ var k = box.getAttribute("data-g"), s = box.querySelector(".score"); if(s) s.textContent = gscore(k); }); }); });
 
   var tb = document.getElementById("themeBtn"), th = "light";
