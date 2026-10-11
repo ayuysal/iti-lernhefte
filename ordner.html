@@ -16,6 +16,8 @@
 .side .sg{margin:.7rem 0 .2rem;font-weight:800;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;border-left:4px solid var(--hc);padding-left:.4rem;color:var(--ink)}
 .side a b{color:var(--hc);display:inline-block;min-width:2.3rem}
 .side a.hid{display:none}
+.side a .sdot{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;margin-left:.35rem;background:var(--rule)}
+.side a.ds .sdot{background:var(--sk-ok)}.side a.du .sdot{background:var(--mark)}
 .omain{padding:1rem 0 4rem;min-width:0}
 .deck{padding:1.6rem 0 1rem}
 .deck .ey{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:800;margin:0 0 .5rem}
@@ -106,6 +108,7 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
   <div class="topbar-in">
     <div class="brand">Prüfungsordner <span>· WMAPS · 24.10.</span></div>
     <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="plan.html">▦ Plan</a>
     <a class="btn" href="erkenner.html">◎ Erkenner-Training</a>
     <a class="btn" href="schluesselwoerter.html">⌗ Schlüsselwörter</a>
     <a class="btn" href="skizzen.html">◩ Skizzen</a>
@@ -292,15 +295,19 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
   });
   h += '<div class="idx-wrap" id="index"><h2 class="sec">Stichwortverzeichnis</h2><div class="idx">' + ih + '</div></div>';
   main.innerHTML = h;
+  O.paintStand(main);
   Array.prototype.forEach.call(document.querySelectorAll(".idx b"), function(b){ b.style.color = getComputedStyle(b).getPropertyValue("--hc"); });
 
   /* ---------- Seitenleiste + Suche ---------- */
   var sl = "";
   D.hefte.forEach(function(x){
     sl += '<div class="sg" style="--hc:' + x.color + '"><a href="#reg-' + x.code + '" style="padding:0;color:inherit">' + esc(x.label) + '</a></div>' +
-      x.karten.map(function(id){ var k = D.karten[id]; return '<a href="#' + id + '" data-id="' + id + '" style="--hc:' + x.color + '"><b>' + esc(k.nr) + '</b>' + esc(k.titel) + '</a>'; }).join("");
+      x.karten.map(function(id){ var k = D.karten[id]; return '<a href="#' + id + '" data-id="' + id + '" style="--hc:' + x.color + '"><b>' + esc(k.nr) + '</b>' + esc(k.titel) + '<i class="sdot"></i></a>'; }).join("");
   });
   document.getElementById("sideList").innerHTML = sl;
+  function sideDots(){ var st = O.cardStand(); Array.prototype.forEach.call(document.querySelectorAll(".side a[data-id]"), function(a){ var v = st[a.getAttribute("data-id")]; a.classList.toggle("ds", v === "s"); a.classList.toggle("du", v === "u"); }); }
+  sideDots(); document.addEventListener("click", function(e){ if(e.target.closest(".ok-stand button")) setTimeout(sideDots, 0); });
+  if(window.ITISync && window.ITISync.onChange) window.ITISync.onChange(function(){ setTimeout(sideDots, 0); });
   var TXT = {};
   Object.keys(D.karten).forEach(function(id){ TXT[id] = JSON.stringify(D.karten[id]).toLowerCase(); });
   document.getElementById("q").addEventListener("input", function(){

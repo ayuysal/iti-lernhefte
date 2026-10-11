@@ -73,6 +73,7 @@
   <div class="topbar-in">
     <div class="brand">Erkenner-Training <span>· WMAPS</span></div>
     <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="plan.html">▦ Plan</a>
     <a class="btn" href="ordner.html">▤ Prüfungsordner</a>
     <a class="btn" href="schluesselwoerter.html">⌗ Schlüsselwörter</a>
     <div class="topbar-spacer"></div>
@@ -274,7 +275,7 @@
     if(e.key === "Enter" && done){ e.preventDefault(); next(); }
   });
 
-  function openCard(id){ var k = D.karten[id]; if(!k) return; document.getElementById("kbody").innerHTML = O.cardHtml(k, { base: "ordner.html" }); document.getElementById("kmod").classList.add("on"); }
+  function openCard(id){ var k = D.karten[id]; if(!k) return; document.getElementById("kbody").innerHTML = O.cardHtml(k, { base: "ordner.html" }); O.paintStand(document.getElementById("kbody")); document.getElementById("kmod").classList.add("on"); }
   function closeCard(){ document.getElementById("kmod").classList.remove("on"); }
   document.getElementById("kx").addEventListener("click", closeCard);
   document.getElementById("kmod").addEventListener("click", function(e){ if(e.target.id === "kmod") closeCard(); var kr = e.target.closest("a.kref"); if(kr){ e.preventDefault(); openCard(kr.getAttribute("data-karte")); } });

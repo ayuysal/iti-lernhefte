@@ -74,7 +74,8 @@
       '<div class="otab" aria-hidden="true"><span>' + esc(h.label) + '</span></div>' +
       '<header class="ok-h"><div class="ok-nr">' + esc(k.nr) + '</div><div class="ok-tt"><div class="ok-heft">' + esc(h.label) + ' · ' + esc(h.title) +
         (k.prio === 1 ? ' <span class="ok-prio">★ Klausurthema</span>' : '') + (fam(k) ? ' <span class="ok-fam">› ' + esc(fam(k).name) + '</span>' : '') + '</div>' +
-        '<h3>' + esc(k.titel) + '</h3>' + (k.untertitel ? '<div class="ok-sub">' + esc(k.untertitel) + '</div>' : '') + '</div></header>' +
+        '<h3>' + esc(k.titel) + '</h3>' + (k.untertitel ? '<div class="ok-sub">' + esc(k.untertitel) + '</div>' : '') +
+        '<div class="ok-stand noprint" data-ks="' + esc(k.id) + '"><span>Mein Stand:</span><button type="button" data-s="">offen</button><button type="button" data-s="u">unsicher</button><button type="button" data-s="s">sitzt</button></div></div></header>' +
       (k.erkennen && k.erkennen.length ? '<section class="ok-sec ok-erk"><h4>Erkennen</h4>' + list(k.erkennen, "chips") + '</section>' : '') +
       (sk.length ? '<section class="ok-sk n' + sk.length + '">' + sk.join("") + '</section>' : '') +
       '<div class="ok-2">' +
@@ -103,5 +104,26 @@
       '</tbody></table>' + (t.fuss ? '<p class="tf">' + esc(t.fuss) + '</p>' : '') + '</article>';
   }
 
-  window.Ordner = { fam: fam, D: D, esc: esc, keys: keys, casioHtml: casioHtml, heft: heft, karte: karte, kref: kref, cardHtml: cardHtml, tableHtml: tableHtml, sketch: sketch };
+  /* ---------- Lernstand je Karte (offen / unsicher / sitzt) – synchronisiert unter "ordner:karten" ---------- */
+  var KS_KEY = "ordner:karten", ks = {};
+  function ksRead(){ try { ks = JSON.parse(localStorage.getItem(KS_KEY) || "{}") || {}; } catch(e) { ks = {}; } return ks; }
+  function paintStand(root){
+    ksRead();
+    Array.prototype.forEach.call((root || document).querySelectorAll(".ok-stand"), function(el){
+      var v = ks[el.getAttribute("data-ks")] || "";
+      Array.prototype.forEach.call(el.querySelectorAll("button"), function(b){ b.classList.toggle("on", b.getAttribute("data-s") === v); });
+      var art = el.closest(".okarte"); if(art){ art.classList.toggle("st-s", v === "s"); art.classList.toggle("st-u", v === "u"); }
+    });
+  }
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest(".ok-stand button"); if(!b) return;
+    var id = b.parentNode.getAttribute("data-ks"), v = b.getAttribute("data-s");
+    ksRead(); if(v) ks[id] = v; else delete ks[id];
+    var str = JSON.stringify(ks);
+    if(window.ITISync) window.ITISync.set(KS_KEY, str); else try { localStorage.setItem(KS_KEY, str); } catch(x) {}
+    paintStand();
+  });
+  if(window.ITISync){ if(window.ITISync.onChange) window.ITISync.onChange(function(){ paintStand(); }); window.ITISync.get(KS_KEY).then(function(){ paintStand(); }); }
+
+  window.Ordner = { paintStand: paintStand, cardStand: function(){ return ksRead(); }, fam: fam, D: D, esc: esc, keys: keys, casioHtml: casioHtml, heft: heft, karte: karte, kref: kref, cardHtml: cardHtml, tableHtml: tableHtml, sketch: sketch };
 })();
