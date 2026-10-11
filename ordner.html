@@ -78,6 +78,7 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
   <aside class="side noprint">
     <input type="search" id="q" placeholder="Suchen: Begriff, Formel …" aria-label="Karten durchsuchen">
     <a href="#deckblatt">Deckblatt &amp; Anleitung</a>
+    <a href="#casio">⌨ Casio-Grundlagen</a>
     <a href="#erkenner">◎ Aufgaben-Erkenner</a>
     <div id="sideList"></div>
     <a href="#tabellen" style="margin-top:.6rem">▦ Tabellen</a>
@@ -95,6 +96,7 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
 <script src="assets/sketches/mai13.js"></script>
 <script src="assets/sketches/mai14c.js"></script>
 <script src="assets/ordner-data.js"></script>
+<script src="assets/ordner-druck.js"></script>
 <script src="assets/ordner.js"></script>
 <script>
 (function(){
@@ -114,6 +116,36 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
       var ks = x.karten.map(function(id){ return D.karten[id].nr; });
       return '<a href="#reg-' + x.code + '" style="--hc:' + x.color + '"><b>' + esc(x.label) + '</b> ' + esc(x.title) + '<span>Karten ' + (ks[0] || "–") + ' – ' + (ks[ks.length - 1] || "–") + '</span></a>';
     }).join("") + '<a href="#erkenner" style="--hc:var(--accent)"><b>◎ Erkenner</b><span>Signal → Karte</span></a><a href="#tabellen" style="--hc:var(--ink-soft)"><b>▦ Tabellen</b><span>' + D.tabellen.length + ' Nachschlagetabellen</span></a></div></section>';
+
+  /* ---------- Casio-Grundlagen (aus der offiziellen Anleitung geprüft) ---------- */
+  var K = O.keys;
+  var GRIFFE = [
+    ["Anwendung wählen", "[MENU] + Ziffer: [1] Berechnungen · [4] Matrizen · [5] Vektorrechnung · [6] Statistik · [7] Verteilungsfkt. · [8] Tabellenkalk. · [9] Tabellen. Gleichung/Funkt. (Symbol A): [MENU], mit [▶] [▼] hinfahren, [=]"],
+    ["Zurück zum normalen Rechnen", "[MENU] [1]"],
+    ["Einstellungen (SETUP)", "[SHIFT] [MENU] (SETUP)"],
+    ["Bogenmaß (für sin, cos, e^…, Integrale, Iterationen)", "[SHIFT] [MENU] (SETUP) [2] (Winkeleinheit) [2] (Bogenmaß) – oben im Display steht dann R"],
+    ["Gradmaß (Winkel in °)", "[SHIFT] [MENU] (SETUP) [2] (Winkeleinheit) [1] (Gradmaß) – Display: D"],
+    ["Feste Nachkommastellen (z. B. 5)", "[SHIFT] [MENU] (SETUP) [3] (Zahlenformat) [1] (Fix) [5] · zurück: … [3] (Zahlenformat) [3] (Norm) [1]"],
+    ["Dezimalzahl statt Bruch/Wurzel", "[S⇔D] nach dem Ergebnis – oder gleich [SHIFT] [=]"],
+    ["Negative Zahl", "[(−)] (Vorzeichen) – NICHT [−] (Rechenzeichen)"],
+    ["Variable x im Term", "[x]"],
+    ["Gleichheitszeichen in einer Gleichung", "[ALPHA] [CALC] ( = )"],
+    ["Letztes Ergebnis weiterverwenden", "[Ans]"],
+    ["π und e", "[SHIFT] [×10ˣ] (π) · [ALPHA] [×10ˣ] (e)"],
+    ["Term für einen Wert auswerten", "Term mit [x] eingeben, [CALC], Wert eintippen, [=]"],
+    ["Gleichung lösen (Newton im Rechner)", "Gleichung mit [ALPHA] [CALC] (=) eingeben, [SHIFT] [CALC] (SOLVE), Startwert, [=] → x = … (L−R = 0 heißt genau)"],
+    ["Integral · Ableitung · Summe", "[∫■] · [SHIFT] [∫■] (d/dx) · [SHIFT] [x] (Σ) – jeweils mit [▶] ins nächste Feld"],
+    ["Wiederholte Formel (Newton, Euler)", "Startwert [=], dann Formel mit [Ans] statt x eingeben, [=] – jedes weitere [=] ist ein Schritt"],
+    ["Einstellungen zurücksetzen", "[SHIFT] [9] [1] (Setupdaten), dann bestätigen"]
+  ];
+  h += '<section class="erk-wrap" id="casio"><h2 class="sec">Casio fx-991DE X – Grundlagen</h2>' +
+    '<p class="erk-intro">Tasten sind wie am Gerät gefärbt: ' + K("[SHIFT]") + ' gelb = die <b>gelbe</b> Beschriftung über einer Taste · ' + K("[ALPHA]") + ' rot = die <b>rote</b> Beschriftung · ' +
+      K("[MENU] [OPTN] [CALC]") + ' Funktionstasten · ' + K("[AC]") + ' löschen · ' + K("[=]") + ' ausführen · ' + K("[▲] [▼] [◀] [▶]") + ' Cursor. ' +
+      'Klein gedruckt hinter einer Taste steht, was sie im Menü bedeutet, z. B. ' + K("[SHIFT] [CALC] (SOLVE)") + '. Quelle: offizielle Casio-Bedienungsanleitung.</p>' +
+    '<table class="erk"><tbody>' + GRIFFE.map(function(g){ return '<tr><td style="width:34%"><b>' + esc(g[0]) + '</b></td><td style="font-family:var(--font-ui);font-size:.84rem;line-height:2">' + K(g[1]) + '</td></tr>'; }).join("") + '</tbody></table>' +
+    '<div class="how" style="margin-top:1rem"><div><b>✓</b>Vor der Klausur: ' + K("[SHIFT] [9] [1] (Setupdaten)") + ' – dann ist alles Standard (Gradmaß, Math-Darstellung).</div>' +
+    '<div><b>R</b>Analysis-Aufgaben (sin, cos, Newton mit cos x, Integrale): zuerst <b style="display:inline;font-size:inherit">Bogenmaß</b> einstellen – Display zeigt R.</div>' +
+    '<div><b>[=]</b>Jede Karte zeigt die Tastenfolge am <b style="display:inline;font-size:inherit">Musterbeispiel</b> und was das Display am Ende zeigen muss – so prüfst du dich selbst.</div></div></section>';
 
   /* ---------- Aufgaben-Erkenner ---------- */
   var ART = [["wort", "Signalwörter in der Aufgabe"], ["symbol", "Symbole, Formeln & Datenformen"], ["gegeben", "Gegeben → Gesucht"]];
@@ -136,7 +168,10 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
   D.hefte.forEach(function(x){
     h += '<section class="divider" id="reg-' + x.code + '" style="--hc:' + x.color + ';--ti:' + x.idx + '"><div class="otab" aria-hidden="true"><span>' + esc(x.label) + '</span></div>' +
       '<h2>' + esc(x.label) + '</h2><p>' + esc(x.title) + '</p><ol>' + x.karten.map(function(id){ var k = D.karten[id]; return '<li><b>' + esc(k.nr) + '</b>' + esc(k.titel) + (k.prio === 1 ? ' <span style="color:var(--mark)">★</span>' : '') + '</li>'; }).join("") + '</ol></section>';
-    x.karten.forEach(function(id){ h += O.cardHtml(D.karten[id]); });
+    x.karten.forEach(function(id){
+      if((window.ORDNER_PAD || []).indexOf(id) >= 0) h += '<div class="notizseite" aria-hidden="true"><p>Notizen – ' + esc(D.karten[id].nr) + ' folgt auf der nächsten Doppelseite</p>' + new Array(26).join('<div class="ln"></div>') + '</div>';
+      h += O.cardHtml(D.karten[id]);
+    });
   });
 
   /* ---------- Tabellen ---------- */

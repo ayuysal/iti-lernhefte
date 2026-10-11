@@ -75,6 +75,38 @@ ol.bl li{font-family:var(--font-mono);font-size:.8rem;margin:.12rem 0}
 ul.warn{margin:0;padding-left:1.1rem;font-size:.86rem}
 .ok-see{font-size:.8rem;margin:.7rem 0 0;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.3rem;align-items:center}
 
+/* ---------- Casio-Tasten ---------- */
+kbd.ck{display:inline-block;min-width:1.7em;text-align:center;font-family:var(--font-ui);font-size:.74rem;font-weight:800;line-height:1;padding:.22em .4em .2em;margin:.08em .08em;border-radius:.45em;border:1px solid #2a2f2d;border-bottom-width:3px;vertical-align:.05em;white-space:nowrap}
+kbd.kn{background:#F4F5F4;color:#111}                    /* Ziffern */
+kbd.kg{background:#E4E7E6;color:#111}                    /* Rechenzeichen / Funktionen */
+kbd.kf{background:#3B4245;color:#fff}                    /* MENU, OPTN, CALC, Ans … */
+kbd.ks{background:#F2C200;color:#1d1a00;border-color:#8a6d00}  /* SHIFT (gelb wie am Gerät) */
+kbd.ka{background:#C8102E;color:#fff;border-color:#6d0919}     /* ALPHA (rot) */
+kbd.kc{background:#E46A1A;color:#fff;border-color:#7a3608}     /* AC / DEL */
+kbd.ke{background:#2D6CDF;color:#fff;border-color:#163a7a}     /* = */
+kbd.kr{background:#cfd6d4;color:#111;border-radius:50%;min-width:1.6em}  /* Cursor */
+.kl{font-family:var(--font-ui);font-size:.7rem;font-weight:700;color:#8a6d00;margin:0 .25em 0 .1em}
+html[data-theme="dark"] .kl{color:#F2C200}
+.ok-c .cv{background:color-mix(in srgb,#F2C200 18%,var(--paper-raised));border:1px dashed #b38f00;border-radius:5px;padding:.35rem .5rem;margin:.2rem 0 .45rem;font-family:var(--font-ui);font-size:.8rem}
+.ok-c .cv b{display:block;font-size:.72rem;margin-bottom:.15rem}
+.ok-c .cs{margin:.1rem 0}
+.ok-c .ca{margin:.35rem 0 .2rem}
+.ok-c .ct{font-family:var(--font-ui);font-size:.78rem;font-weight:800;color:var(--sk-4);margin-bottom:.1rem}
+ol.csteps{margin:0;padding-left:1.3rem;font-family:var(--font-ui);font-size:.8rem;line-height:1.9}
+ol.csteps li::marker{font-weight:800;color:var(--sk-4)}
+.ok-c .cr{font-family:var(--font-ui);font-size:.76rem;margin:.15rem 0 0 1.3rem;color:var(--ink-soft)}
+.ok-c .cr b{font-family:var(--font-mono);color:var(--ink);background:#dfe7d8;border:1px solid #9fb39a;border-radius:3px;padding:.05em .35em}
+html[data-theme="dark"] .ok-c .cr b{background:#22301f;border-color:#4d6b47}
+.ok-c .chw{font-family:var(--font-ui);font-size:.74rem;color:var(--ink-soft);margin-top:.35rem;border-top:1px dashed var(--rule);padding-top:.25rem}
+
+.ok-p2{margin-top:.9rem}
+.ok-p2h{display:none;font-family:var(--font-ui);font-weight:800;font-size:1rem;color:var(--ink);margin-bottom:.4rem}
+.ok-p2h small{font-weight:600;color:var(--ink-faint)}
+.ok-p2 ol.csteps{columns:1}
+.notizseite{display:none}
+.otab2{display:none}
+.p2nr{color:var(--hc);font-weight:900;margin-right:.3rem}
+
 /* ---------- Tabellen ---------- */
 .otabelle h3{margin:0 0 .5rem;font-size:1.05rem}
 .otabelle h3 small{font-family:var(--font-ui);font-size:.66rem;color:var(--hc);letter-spacing:.08em}
@@ -95,6 +127,20 @@ ul.warn{margin:0;padding-left:1.1rem;font-size:.86rem}
   .ok-h h3{font-size:15pt}.ok-nr{font-size:20pt}
   ul.chips li{font-size:8pt;padding:.5mm 2mm}
   ul.casio,ul.warn{font-size:8.6pt}
+  kbd.ck{font-size:7.4pt;padding:.6mm 1.1mm .5mm}
+  .ok-p2{break-before:page;margin-top:0;position:relative}
+  .okarte>.otab{display:none}
+  .ok-p2 .otab2{display:flex;right:-24mm}
+  .p2nr{font-size:13pt}
+  .ok-p2h{display:block;border-bottom:2px solid var(--hc);padding-bottom:1.5mm;margin-bottom:2mm}
+  .ok-p2 .ok-c{margin-top:3mm}
+  .ok-c .cr b{background:#dfe7d8!important;border-color:#9fb39a!important;color:#111!important}
+  .kl{color:#8a6d00!important}
+  .notizseite{display:block;break-before:page;min-height:250mm;position:relative}
+  .notizseite p{font-family:var(--font-ui);font-size:9pt;color:#999;margin:0 0 4mm}
+  .notizseite .ln{border-bottom:1px solid #e3e3e3;height:9mm}
+  ol.csteps{font-size:8.4pt;line-height:1.75}
+  .ok-c .cv{font-size:8.2pt}
   .ok-b .ba{font-size:9pt}
   .ok-sec h4{margin-bottom:1mm}
   .topbar,.noprint,.side,#authBtn,.sync-pop{display:none!important}

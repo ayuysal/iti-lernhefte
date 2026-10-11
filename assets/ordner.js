@@ -24,6 +24,29 @@
     return (ordered ? '<ol class="' + cls + '">' : '<ul class="' + cls + '">') + arr.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + (ordered ? "</ol>" : "</ul>");
   }
 
+  /* ---------- Casio-Tasten: "[SHIFT] [CALC] (SOLVE)" → gezeichnete Tasten ---------- */
+  var KCLASS = { "SHIFT": "ks", "ALPHA": "ka", "MENU": "kf", "OPTN": "kf", "CALC": "kf", "AC": "kc", "DEL": "kc", "=": "ke",
+    "Ans": "kf", "S⇔D": "kf", "STO": "kf", "▲": "kr", "▼": "kr", "◀": "kr", "▶": "kr", "∫■": "kf", "x": "kf", "ENG": "kf" };
+  function keys(str){
+    var t = esc(str);
+    t = t.replace(/\[([^\[\]]{1,6})\]/g, function(m, k){ return '<kbd class="ck ' + (KCLASS[k] || (/^[0-9.]$/.test(k) ? "kn" : "kg")) + '">' + k + '</kbd>'; });
+    t = t.replace(/(<\/kbd>)\s*\(([^()]{1,24})\)/g, '$1<span class="kl">$2</span>');
+    return t;
+  }
+  function casioHtml(c){
+    if(!c) return "";
+    if(Array.isArray(c)) return c.length ? '<section class="ok-sec ok-c"><h4>Casio fx-991DE X</h4>' + list(c, "casio") + '</section>' : "";
+    var h = '<section class="ok-sec ok-c"><h4>Casio fx-991DE X – Tasten</h4>';
+    if(c.vorher && c.vorher.length) h += '<div class="cv"><b>⚙ Vorher einstellen</b>' + c.vorher.map(function(x){ return '<div class="cs">' + keys(x) + '</div>'; }).join("") + '</div>';
+    (c.ablaeufe || []).forEach(function(a){
+      h += '<div class="ca">' + (a.titel ? '<div class="ct">' + esc(a.titel) + '</div>' : '') + '<ol class="csteps">' +
+        (a.schritte || []).map(function(x){ return "<li>" + keys(x) + "</li>"; }).join("") + '</ol>' +
+        (a.anzeige ? '<div class="cr">Display: <b>' + esc(a.anzeige) + '</b></div>' : '') + '</div>';
+    });
+    if(c.hinweis) h += '<div class="chw">' + keys(c.hinweis) + '</div>';
+    return h + '</section>';
+  }
+
   /* Eine Rezeptkarte als HTML */
   function cardHtml(k, opt){
     opt = opt || {};
@@ -40,14 +63,15 @@
         '<section class="ok-sec ok-f"><h4>Formeln</h4>' + list(k.formeln, "forms") + '</section>' +
         '<section class="ok-sec ok-s"><h4>Rechenschema</h4>' + list(k.schritte, "steps") + '</section>' +
       '</div>' +
-
-      (b ? '<section class="ok-sec ok-b"><h4>Musterbeispiel' + (b.quelle ? ' <span class="q">' + esc(b.quelle) + '</span>' : '') + '</h4>' +
-        '<p class="ba">' + esc(b.aufgabe) + '</p>' + list(b.loesung, "bl", true) + (b.ergebnis ? '<p class="be">⇒ ' + esc(b.ergebnis) + '</p>' : '') + '</section>' : '') +
-      '<div class="ok-2 ok-cw">' +
-        (k.casio && k.casio.length ? '<section class="ok-sec ok-c"><h4>Casio fx-991DE X</h4>' + list(k.casio, "casio") + '</section>' : '<div></div>') +
-        (k.fallen && k.fallen.length ? '<section class="ok-sec ok-w"><h4>Fallen &amp; Probe</h4>' + list(k.fallen, "warn") + '</section>' : '<div></div>') +
+      (k.fallen && k.fallen.length ? '<section class="ok-sec ok-w"><h4>Fallen &amp; Probe</h4>' + list(k.fallen, "warn") + '</section>' : '') +
+      '<div class="ok-p2">' +
+        '<div class="otab otab2" aria-hidden="true"><span>' + esc(h.label) + '</span></div>' +
+        '<div class="ok-p2h"><b class="p2nr">' + esc(k.nr) + '</b> ' + esc(k.titel) + ' <small>– rechnen &amp; Taschenrechner</small></div>' +
+        (b ? '<section class="ok-sec ok-b"><h4>Musterbeispiel' + (b.quelle ? ' <span class="q">' + esc(b.quelle) + '</span>' : '') + '</h4>' +
+          '<p class="ba">' + esc(b.aufgabe) + '</p>' + list(b.loesung, "bl", true) + (b.ergebnis ? '<p class="be">⇒ ' + esc(b.ergebnis) + '</p>' : '') + '</section>' : '') +
+        casioHtml(k.casio) +
+        (k.siehe && k.siehe.length ? '<p class="ok-see">Siehe auch: ' + k.siehe.map(function(id){ return kref(id, { base: opt.base }); }).join(" · ") + '</p>' : '') +
       '</div>' +
-      (k.siehe && k.siehe.length ? '<p class="ok-see">Siehe auch: ' + k.siehe.map(function(id){ return kref(id, { base: opt.base }); }).join(" · ") + '</p>' : '') +
     '</article>';
   }
 
@@ -61,5 +85,5 @@
       '</tbody></table>' + (t.fuss ? '<p class="tf">' + esc(t.fuss) + '</p>' : '') + '</article>';
   }
 
-  window.Ordner = { D: D, esc: esc, heft: heft, karte: karte, kref: kref, cardHtml: cardHtml, tableHtml: tableHtml, sketch: sketch };
+  window.Ordner = { D: D, esc: esc, keys: keys, casioHtml: casioHtml, heft: heft, karte: karte, kref: kref, cardHtml: cardHtml, tableHtml: tableHtml, sketch: sketch };
 })();
