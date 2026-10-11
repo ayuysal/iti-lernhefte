@@ -265,6 +265,7 @@ footer{border-top:1px solid var(--rule);margin-top:3rem;padding:1.6rem 0 4rem;fo
       <a class="btn" href="index.html" title="Zur Heftübersicht">☰ Übersicht</a>
       <a class="btn" href="wiederholen.html" title="Definitionen, Abkürzungen &amp; Schnellcheck üben">✎ Üben</a>
       <a class="btn" href="skizzen.html" title="Skizzen-Übersicht: Aufrufe, Lernstand, Prüfungsrelevanz">◩ Skizzen</a>
+      <a class="btn" id="ordnerLink" href="ordner.html" title="Prüfungsordner Mathe mit Rezeptkarten" style="display:none">▤ Ordner</a>
       <a class="btn icon" id="navPrev" title="Vorheriges Heft" aria-label="Vorheriges Heft">‹</a>
       <a class="btn icon" id="navNext" title="Nächstes Heft" aria-label="Nächstes Heft">›</a>
     </nav>
@@ -829,6 +830,9 @@ Max. Blätter = kᵐ = 3⁴ = 81</div>
       box.appendChild(b);
     });
   })();
+
+  /* Prüfungsordner-Link nur in den Mathe-Heften */
+  (function(){ var l = document.getElementById("ordnerLink"); if(l && /^mai/.test(KEY)) l.style.display = ""; })();
 
   /* ---------- Skizzen: Marker → Icons, Großansicht, Aufrufzähler (assets/sketch-*.js) ---------- */
   (function(){

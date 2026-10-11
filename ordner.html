@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/gate.js"></script>
+<title>Prüfungsordner WMAPS</title>
+<link rel="stylesheet" href="assets/ordner.css">
+<style>
+.wrap{max-width:1240px;margin:0 auto;padding:0 1.1rem;display:grid;grid-template-columns:250px minmax(0,1fr);gap:1.6rem}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.side{position:static!important;max-height:none!important}}
+.side{position:sticky;top:3.6rem;align-self:start;max-height:calc(100vh - 4.2rem);overflow:auto;padding:1rem 0 2rem;font-family:var(--font-ui);font-size:.78rem}
+.side input{width:100%;font-family:var(--font-ui);font-size:.85rem;padding:.45rem .6rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper-raised);color:var(--ink);margin-bottom:.7rem}
+.side a{display:block;color:var(--ink-soft);text-decoration:none;padding:.16rem .35rem;border-radius:3px}
+.side a:hover{background:var(--paper-sunk);color:var(--ink)}
+.side .sg{margin:.7rem 0 .2rem;font-weight:800;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;border-left:4px solid var(--hc);padding-left:.4rem;color:var(--ink)}
+.side a b{color:var(--hc);display:inline-block;min-width:2.3rem}
+.side a.hid{display:none}
+.omain{padding:1rem 0 4rem;min-width:0}
+.deck{padding:1.6rem 0 1rem}
+.deck .ey{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:800;margin:0 0 .5rem}
+.deck h1{font-size:2.3rem;line-height:1.1;margin:0 0 .4rem;font-weight:600}
+.deck .sub{color:var(--ink-soft);margin:0 0 1rem;max-width:68ch}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin:1rem 0}
+@media(max-width:700px){.how{grid-template-columns:1fr}}
+.how div{background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:.7rem .8rem;font-size:.88rem}
+.how b{display:block;font-family:var(--font-ui);font-size:1.5rem;color:var(--accent);line-height:1}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.6rem;margin:1rem 0}
+.toc a{display:block;text-decoration:none;color:var(--ink);background:var(--paper-raised);border:1px solid var(--rule);border-left:6px solid var(--hc);border-radius:5px;padding:.55rem .7rem;font-family:var(--font-ui);font-size:.8rem}
+.toc a b{color:var(--hc);font-size:.95rem}
+.toc a span{display:block;color:var(--ink-soft);font-size:.72rem;margin-top:.15rem}
+h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800;margin:2.2rem 0 .6rem;border-bottom:2px solid var(--ink);padding-bottom:.35rem}
+.erk-intro{font-size:.9rem;color:var(--ink-soft);margin:.2rem 0 .8rem;max-width:75ch}
+.erk-grp h3{font-family:var(--font-ui);font-size:.95rem;margin:1.2rem 0 .4rem}
+.erk{border-collapse:collapse;width:100%;font-size:.84rem;background:var(--paper-raised)}
+.erk td{border-bottom:1px solid var(--rule-soft);padding:.32rem .45rem;vertical-align:top}
+.erk td:first-child{width:58%}
+.erk tr:nth-child(even) td{background:var(--paper-sunk)}
+.erk .hint{display:block;font-size:.74rem;color:var(--ink-faint)}
+.erk td .kref{margin:.08rem .2rem .08rem 0}
+.divider{background:var(--paper-raised);border:1px solid var(--rule);border-left:14px solid var(--hc);border-radius:6px;padding:1rem 1.2rem;margin:2.2rem 0 .6rem;position:relative}
+.divider h2{margin:0;font-size:1.6rem;color:var(--hc);font-family:var(--font-ui);font-weight:900}
+.divider p{margin:.2rem 0 .6rem;color:var(--ink-soft)}
+.divider ol{margin:0;padding-left:0;list-style:none;columns:2;column-gap:1.5rem;font-family:var(--font-ui);font-size:.82rem}
+.divider li{break-inside:avoid;padding:.12rem 0}
+.divider li b{color:var(--hc);display:inline-block;min-width:2.6rem}
+.idx{columns:3;column-gap:1.4rem;font-family:var(--font-ui);font-size:.78rem}
+@media(max-width:700px){.idx{columns:1}}
+.idx div{break-inside:avoid;padding:.1rem 0;border-bottom:1px dotted var(--rule-soft)}
+.idx .l{font-weight:900;font-size:1rem;color:var(--accent);margin-top:.5rem;border:0}
+.idx b{color:var(--hc)}
+.printhint{font-family:var(--font-ui);font-size:.78rem;background:var(--accent-soft);border:1px solid var(--rule);border-radius:5px;padding:.55rem .75rem;color:var(--ink)}
+@media print{
+  .wrap{display:block;padding:0}
+  .deck{padding-top:0}
+  .divider{break-before:page;border-radius:0;margin:0;border-top:0;border-right:0;border-bottom:0;min-height:60mm;padding-right:24mm;margin-right:-12mm}
+  .divider .otab{position:absolute;right:0}
+  .erk-wrap,.idx-wrap,.tab-wrap{break-before:page}
+  .erk{font-size:9pt}.erk td{padding:1.2mm 1.6mm}
+  .erk tr{break-inside:avoid}
+  .printhint{display:none}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Prüfungsordner <span>· WMAPS · 24.10.</span></div>
+    <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="erkenner.html">◎ Erkenner-Training</a>
+    <a class="btn" href="skizzen.html">◩ Skizzen</a>
+    <div class="topbar-spacer"></div>
+    <div class="ctl"><button class="btn" id="printBtn" title="Als PDF speichern oder drucken">🖨 Drucken / PDF</button><button class="btn" id="themeBtn">◐ Dunkel</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <aside class="side noprint">
+    <input type="search" id="q" placeholder="Suchen: Begriff, Formel …" aria-label="Karten durchsuchen">
+    <a href="#deckblatt">Deckblatt &amp; Anleitung</a>
+    <a href="#erkenner">◎ Aufgaben-Erkenner</a>
+    <div id="sideList"></div>
+    <a href="#tabellen" style="margin-top:.6rem">▦ Tabellen</a>
+    <a href="#index">Stichwortverzeichnis</a>
+  </aside>
+  <main class="omain" id="main"></main>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/sketch-kit.js"></script>
+<script src="assets/sketches/mai06.js"></script>
+<script src="assets/sketches/mai09.js"></script>
+<script src="assets/sketches/mai11.js"></script>
+<script src="assets/sketches/mai13.js"></script>
+<script src="assets/sketches/mai14c.js"></script>
+<script src="assets/ordner-data.js"></script>
+<script src="assets/ordner.js"></script>
+<script>
+(function(){
+  "use strict";
+  var O = window.Ordner, D = O.D, esc = O.esc;
+  var main = document.getElementById("main"), h = "";
+  var nK = Object.keys(D.karten).length;
+
+  /* ---------- Deckblatt ---------- */
+  h += '<section class="deck" id="deckblatt"><p class="ey">Klausur Weiterführende Mathematik · 24.10.2026</p><h1>Prüfungsordner WMAPS</h1>' +
+    '<p class="sub">' + nK + ' Rezeptkarten zu MAI06 · MAI09 · MAI11 · MAI13 · MAI14C – jede mit Skizze, Formeln, Rechenschema, Casio-Hilfe, Musterbeispiel und Fallen. Taschenrechner: Casio fx-991DE X ClassWiz.</p>' +
+    '<p class="printhint noprint">Drucken: Knopf „🖨 Drucken / PDF“ → Ziel „Als PDF speichern“ oder Drucker, Papier A4, <b>Hintergrundgrafiken an</b>, Ränder „Standard“. Jede Karte beginnt auf einer neuen Seite; die farbigen Register am rechten Rand zeigen das Heft.</p>' +
+    '<div class="how"><div><b>1</b>Aufgabe lesen – auf <b style="display:inline;font-size:inherit">Wörter, Symbole</b> und auf <b style="display:inline;font-size:inherit">„gegeben → gesucht“</b> achten.</div>' +
+    '<div><b>2</b>Vorne im <b style="display:inline;font-size:inherit">Aufgaben-Erkenner</b> das Signal suchen → dort steht die Karten-Nummer (z. B. K17).</div>' +
+    '<div><b>3</b>Am farbigen Register das Heft greifen, große Nummer oben links suchen, <b style="display:inline;font-size:inherit">Rechenschema abhaken</b>, Probe aus „Fallen“.</div></div>' +
+    '<div class="toc">' + D.hefte.map(function(x){
+      var ks = x.karten.map(function(id){ return D.karten[id].nr; });
+      return '<a href="#reg-' + x.code + '" style="--hc:' + x.color + '"><b>' + esc(x.label) + '</b> ' + esc(x.title) + '<span>Karten ' + (ks[0] || "–") + ' – ' + (ks[ks.length - 1] || "–") + '</span></a>';
+    }).join("") + '<a href="#erkenner" style="--hc:var(--accent)"><b>◎ Erkenner</b><span>Signal → Karte</span></a><a href="#tabellen" style="--hc:var(--ink-soft)"><b>▦ Tabellen</b><span>' + D.tabellen.length + ' Nachschlagetabellen</span></a></div></section>';
+
+  /* ---------- Aufgaben-Erkenner ---------- */
+  var ART = [["wort", "Signalwörter in der Aufgabe"], ["symbol", "Symbole, Formeln & Datenformen"], ["gegeben", "Gegeben → Gesucht"]];
+  h += '<div class="erk-wrap" id="erkenner"><h2 class="sec">◎ Aufgaben-Erkenner</h2><p class="erk-intro">Was siehst du in der Aufgabe? Hier nachschlagen → Karten-Nummer → Karte. Alphabetisch sortiert; mehrere Karten = alle prüfen, die erste ist die wahrscheinlichste.</p>';
+  ART.forEach(function(a){
+    var rows = {}, order = [];
+    D.erkenner.filter(function(e){ return e.art === a[0]; }).forEach(function(e){
+      var key = e.signal.trim();
+      if(!rows[key]){ rows[key] = { signal: key, ziele: [], hint: e.hinweis || "" }; order.push(key); }
+      if(rows[key].ziele.indexOf(e.ziel) < 0) rows[key].ziele.push(e.ziel);
+    });
+    order.sort(function(x, y){ return x.replace(/^[„"“»(]+/, "").localeCompare(y.replace(/^[„"“»(]+/, ""), "de"); });
+    h += '<div class="erk-grp"><h3>' + a[1] + ' <small style="color:var(--ink-faint);font-weight:600">(' + order.length + ')</small></h3><table class="erk"><tbody>' +
+      order.map(function(k){ var r = rows[k]; return '<tr><td>' + esc(r.signal) + (r.hint ? '<span class="hint">' + esc(r.hint) + '</span>' : '') + '</td><td>' + r.ziele.map(function(z){ return O.kref(z); }).join(" ") + '</td></tr>'; }).join("") +
+      '</tbody></table></div>';
+  });
+  h += '</div>';
+
+  /* ---------- Register + Karten ---------- */
+  D.hefte.forEach(function(x){
+    h += '<section class="divider" id="reg-' + x.code + '" style="--hc:' + x.color + ';--ti:' + x.idx + '"><div class="otab" aria-hidden="true"><span>' + esc(x.label) + '</span></div>' +
+      '<h2>' + esc(x.label) + '</h2><p>' + esc(x.title) + '</p><ol>' + x.karten.map(function(id){ var k = D.karten[id]; return '<li><b>' + esc(k.nr) + '</b>' + esc(k.titel) + (k.prio === 1 ? ' <span style="color:var(--mark)">★</span>' : '') + '</li>'; }).join("") + '</ol></section>';
+    x.karten.forEach(function(id){ h += O.cardHtml(D.karten[id]); });
+  });
+
+  /* ---------- Tabellen ---------- */
+  h += '<div class="tab-wrap" id="tabellen"><h2 class="sec">▦ Nachschlagetabellen</h2></div>' + D.tabellen.map(O.tableHtml).join("");
+
+  /* ---------- Stichwortverzeichnis ---------- */
+  var idx = [];
+  Object.keys(D.karten).forEach(function(id){
+    var k = D.karten[id];
+    idx.push([k.titel, k]);
+    (k.erkennen || []).forEach(function(t){ if(t.length < 60) idx.push([t.replace(/^[„"“»]+|[“"«]+$/g, ""), k]); });
+  });
+  D.tabellen.forEach(function(t){ idx.push([t.titel + " (Tabelle)", { nr: t.nr, heft: t.heft }]); });
+  idx.sort(function(a, b){ return a[0].localeCompare(b[0], "de", { sensitivity: "base" }); });
+  var last = "", ih = "";
+  idx.forEach(function(e){
+    var L = e[0].charAt(0).toUpperCase(); if(/[^A-ZÄÖÜ]/.test(L)) L = "#";
+    if(L !== last){ ih += '<div class="l">' + L + '</div>'; last = L; }
+    ih += '<div>' + esc(e[0]) + ' <b style="--hc:' + O.heft(e[1].heft).color + '">' + esc(e[1].nr) + '</b></div>';
+  });
+  h += '<div class="idx-wrap" id="index"><h2 class="sec">Stichwortverzeichnis</h2><div class="idx">' + ih + '</div></div>';
+  main.innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll(".idx b"), function(b){ b.style.color = getComputedStyle(b).getPropertyValue("--hc"); });
+
+  /* ---------- Seitenleiste + Suche ---------- */
+  var sl = "";
+  D.hefte.forEach(function(x){
+    sl += '<div class="sg" style="--hc:' + x.color + '"><a href="#reg-' + x.code + '" style="padding:0;color:inherit">' + esc(x.label) + '</a></div>' +
+      x.karten.map(function(id){ var k = D.karten[id]; return '<a href="#' + id + '" data-id="' + id + '" style="--hc:' + x.color + '"><b>' + esc(k.nr) + '</b>' + esc(k.titel) + '</a>'; }).join("");
+  });
+  document.getElementById("sideList").innerHTML = sl;
+  var TXT = {};
+  Object.keys(D.karten).forEach(function(id){ TXT[id] = JSON.stringify(D.karten[id]).toLowerCase(); });
+  document.getElementById("q").addEventListener("input", function(){
+    var q = this.value.trim().toLowerCase();
+    Array.prototype.forEach.call(document.querySelectorAll(".side a[data-id]"), function(a){ a.classList.toggle("hid", !!q && TXT[a.getAttribute("data-id")].indexOf(q) < 0); });
+    Array.prototype.forEach.call(document.querySelectorAll("article.okarte"), function(c){ c.style.display = q && TXT[c.id].indexOf(q) < 0 ? "none" : ""; });
+  });
+
+  /* ---------- Druck + Theme ---------- */
+  document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+  var tb = document.getElementById("themeBtn"), th = "light";
+  try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); } catch(e) {}
+  function ap(){ document.documentElement.dataset.theme = th; tb.textContent = th === "dark" ? "◑ Hell" : "◐ Dunkel"; }
+  tb.addEventListener("click", function(){ th = th === "dark" ? "light" : "dark"; try { localStorage.setItem("ordner:theme", th); } catch(e) {} ap(); });
+  ap();
+  if(location.hash){ var t = document.getElementById(location.hash.slice(1)); if(t) setTimeout(function(){ t.scrollIntoView(); }, 50); }
+})();
+</script>
+<script src="assets/auth-ui.js"></script>
+</body>
+</html>

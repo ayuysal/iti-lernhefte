@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/gate.js"></script>
+<title>Erkenner-Training WMAPS</title>
+<link rel="stylesheet" href="assets/ordner.css">
+<style>
+.wrap{max-width:920px;margin:0 auto;padding:0 1.1rem 4rem}
+.hero{padding:1.8rem 0 .8rem}
+.hero .ey{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:800;margin:0 0 .5rem}
+.hero h1{font-size:2rem;margin:0 0 .4rem;font-weight:600}
+.hero p{color:var(--ink-soft);margin:0;max-width:66ch}
+.modes{display:flex;flex-wrap:wrap;gap:.35rem;margin:1rem 0 .4rem;font-family:var(--font-ui)}
+.chip{font-size:.74rem;font-weight:700;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink-soft);border-radius:999px;padding:.35rem .7rem}
+.chip.on{border-color:var(--hc,var(--accent));color:#fff;background:var(--hc,var(--accent))}
+.stat{font-family:var(--font-ui);font-size:.78rem;color:var(--ink-soft);display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:.4rem 0 1rem}
+.boxes{display:flex;height:10px;width:220px;border-radius:5px;overflow:hidden;background:var(--rule-soft)}
+.boxes i{display:block;height:100%}
+.task{background:var(--paper-raised);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.2rem;box-shadow:0 6px 20px var(--shadow)}
+.task .k{font-family:var(--font-ui);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--ink-faint)}
+.task .txt{font-size:1.02rem;line-height:1.55;white-space:pre-wrap;margin:.5rem 0 0}
+.step{margin:1.1rem 0 0}
+.step h3{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .45rem}
+.hb{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.45rem}
+@media(max-width:620px){.hb{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hb button{font-family:var(--font-ui);border:2px solid var(--hc);background:var(--paper-raised);color:var(--ink);border-radius:7px;padding:.55rem .4rem;text-align:left}
+.hb button b{display:block;color:var(--hc);font-size:.95rem}
+.hb button span{font-size:.7rem;color:var(--ink-soft)}
+.hb button.sel{background:var(--hc);color:#fff}.hb button.sel b,.hb button.sel span{color:#fff}
+.kb{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.4rem}
+.kb button{font-family:var(--font-ui);text-align:left;border:1px solid var(--rule);border-left:5px solid var(--hc);background:var(--paper-raised);color:var(--ink);border-radius:5px;padding:.45rem .6rem;font-size:.82rem}
+.kb button b{color:var(--hc)}
+.kb button small{display:block;color:var(--ink-faint);font-family:var(--font-mono);font-size:.72rem;margin-top:.1rem}
+.kb button:hover,.hb button:hover{box-shadow:0 2px 8px var(--shadow)}
+.kb button.ok{background:var(--sk-ok-soft);border-color:var(--sk-ok)}
+.kb button.bad{background:var(--mark-soft);border-color:var(--mark)}
+.fb{margin:1rem 0 0;border-radius:7px;padding:.8rem 1rem;font-family:var(--font-ui);font-size:.88rem}
+.fb.ok{background:var(--sk-ok-soft);border:1px solid var(--sk-ok)}
+.fb.bad{background:var(--mark-soft);border:1px solid var(--mark)}
+.fb .big{font-size:1.05rem;font-weight:800;margin-bottom:.3rem}
+.fb .row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
+.fb .src{color:var(--ink-faint);font-size:.75rem;margin-top:.3rem}
+.go{font-family:var(--font-ui);font-weight:800;font-size:.85rem;border:0;border-radius:5px;padding:.55rem 1rem;background:var(--accent);color:#fff}
+.go.sec{background:var(--paper-raised);color:var(--ink);border:1px solid var(--rule)}
+.kmod{position:fixed;inset:0;z-index:300;display:none;background:rgba(10,14,12,.55);padding:16px;overflow:auto}
+.kmod.on{display:block}
+.kmod .in{max-width:900px;margin:0 auto}
+.kmod .x{position:sticky;top:0;float:right;font:700 1.3rem var(--font-ui);width:2.2rem;height:2.2rem;border-radius:5px;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);z-index:2}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Erkenner-Training <span>· WMAPS</span></div>
+    <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="ordner.html">▤ Prüfungsordner</a>
+    <div class="topbar-spacer"></div>
+    <div class="ctl"><button class="btn" id="themeBtn">◐ Dunkel</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero"><p class="ey">Aufgaben erkennen · 24.10.</p><h1>Welches Thema ist das?</h1>
+    <p>Aufgabe lesen (ohne Überschrift, wie in der Klausur), dann Heft und Rezeptkarte wählen. Falsch Erkanntes kommt öfter wieder, Sicheres seltener. So findest du in der Prüfung in Sekunden die richtige Karte im Ordner.</p></div>
+  <div class="modes" id="modes"></div>
+  <div class="stat" id="stat"></div>
+  <div id="play"></div>
+</div>
+<div class="kmod" id="kmod"><div class="in"><button class="x" id="kx" aria-label="Schließen">×</button><div id="kbody"></div></div></div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/sketch-kit.js"></script>
+<script src="assets/sketches/mai06.js"></script>
+<script src="assets/sketches/mai09.js"></script>
+<script src="assets/sketches/mai11.js"></script>
+<script src="assets/sketches/mai13.js"></script>
+<script src="assets/sketches/mai14c.js"></script>
+<script src="assets/ordner-data.js"></script>
+<script src="assets/ordner.js"></script>
+<script>
+(function(){
+  "use strict";
+  var O = window.Ordner, D = O.D, esc = O.esc, KEY = "erkenner:state";
+  var store = window.ITISync, st = { b: {}, r: {} }, mode = "alle", cur = null, lastId = null, pickedHeft = null, answered = false;
+
+  function save(){ if(store) store.set(KEY, JSON.stringify(st)); }
+  function load(){ return (store ? store.get(KEY) : Promise.resolve(null)).then(function(raw){ try { var p = JSON.parse(raw || "{}"); st.b = p.b || {}; st.r = p.r || {}; } catch(e) {} }); }
+
+  function pool(){
+    return D.training.filter(function(t){
+      if(mode === "alle") return true;
+      if(mode === "klausur") return /UEKL/i.test(t.quelle || "");
+      return t.heft === mode;
+    });
+  }
+  function box(id){ return st.b[id] || 0; }
+  function pick(){
+    var p = pool(); if(!p.length) return null;
+    var min = Math.min.apply(null, p.map(function(t){ return box(t.id); }));
+    var cand = p.filter(function(t){ return box(t.id) <= min + (Math.random() < .25 ? 1 : 0) && t.id !== lastId; });
+    if(!cand.length) cand = p.filter(function(t){ return t.id !== lastId; });
+    if(!cand.length) cand = p;
+    return cand[Math.floor(Math.random() * cand.length)];
+  }
+
+  function renderModes(){
+    var m = [["alle", "Alle Aufgaben", "var(--accent)"], ["klausur", "Nur Probeklausuren", "var(--mark)"]].concat(D.hefte.map(function(h){ return [h.code, h.label, h.color]; }));
+    document.getElementById("modes").innerHTML = m.map(function(x){ return '<button class="chip' + (mode === x[0] ? " on" : "") + '" data-m="' + x[0] + '" style="--hc:' + x[2] + '">' + esc(x[1]) + '</button>'; }).join("");
+  }
+  document.getElementById("modes").addEventListener("click", function(e){ var b = e.target.closest("[data-m]"); if(!b) return; mode = b.getAttribute("data-m"); try { localStorage.setItem("erkenner:mode", mode); } catch(x) {} renderModes(); next(); });
+
+  function renderStat(){
+    var p = pool(), c = [0, 0, 0, 0];
+    p.forEach(function(t){ c[Math.min(3, box(t.id))]++; });
+    var n = p.length || 1, col = ["var(--mark)", "var(--sk-3)", "var(--accent)", "var(--sk-ok)"];
+    document.getElementById("stat").innerHTML = '<span><b>' + p.length + '</b> Aufgaben</span><div class="boxes" title="neu/falsch · 1× richtig · 2× · sicher">' +
+      c.map(function(v, i){ return '<i style="width:' + (v / n * 100) + '%;background:' + col[i] + '"></i>'; }).join("") + '</div>' +
+      '<span>sicher erkannt: <b>' + c[3] + '</b> · in Arbeit: ' + (c[1] + c[2]) + ' · offen: ' + c[0] + '</span>';
+  }
+
+  function next(){
+    cur = pick(); pickedHeft = null; answered = false;
+    renderStat();
+    var el = document.getElementById("play");
+    if(!cur){ el.innerHTML = '<p class="task">Für diese Auswahl gibt es noch keine Aufgaben.</p>'; return; }
+    lastId = cur.id;
+    el.innerHTML = '<div class="task"><div class="k">Aufgabe · zuerst Heft wählen</div><div class="txt">' + esc(cur.text) + '</div>' +
+      '<div class="step"><h3>1 · Welches Heft?</h3><div class="hb">' + D.hefte.map(function(h, i){ return '<button data-h="' + h.code + '" style="--hc:' + h.color + '"><b>' + (i + 1) + ' · ' + esc(h.label) + '</b><span>' + esc(h.title) + '</span></button>'; }).join("") + '</div></div>' +
+      '<div class="step" id="s2"></div><div id="fb"></div></div>';
+  }
+
+  function showCards(code){
+    setTimeout(function(){ var s2 = document.getElementById("s2"); if(s2) s2.scrollIntoView({ behavior: "smooth", block: "start" }); }, 30);
+    pickedHeft = code;
+    Array.prototype.forEach.call(document.querySelectorAll(".hb button"), function(b){ b.classList.toggle("sel", b.getAttribute("data-h") === code); });
+    var h = O.heft(code);
+    document.getElementById("s2").innerHTML = '<h3>2 · Welche Karte?</h3><div class="kb">' + h.karten.map(function(id){ var k = D.karten[id];
+      return '<button data-k="' + id + '" style="--hc:' + h.color + '"><b>' + esc(k.nr) + '</b> ' + esc(k.titel) + (k.untertitel ? '<small>' + esc(k.untertitel) + '</small>' : '') + '</button>'; }).join("") + '</div>';
+  }
+
+  function answer(kid){
+    if(answered) return; answered = true;
+    var ok = kid === cur.karte, right = D.karten[cur.karte], rh = O.heft(right.heft);
+    st.b[cur.id] = ok ? Math.min(3, box(cur.id) + 1) : 0;
+    var r = st.r[cur.id] || [0, 0]; r[ok ? 0 : 1]++; st.r[cur.id] = r;
+    save();
+    Array.prototype.forEach.call(document.querySelectorAll(".kb button"), function(b){
+      var id = b.getAttribute("data-k"); if(id === cur.karte) b.classList.add("ok"); else if(id === kid) b.classList.add("bad");
+    });
+    var sameHeft = pickedHeft === right.heft;
+    document.getElementById("fb").innerHTML = '<div class="fb ' + (ok ? "ok" : "bad") + '"><div class="big">' + (ok ? "✓ Richtig erkannt" : (sameHeft ? "✗ Richtiges Heft, andere Karte" : "✗ Anderes Thema")) + '</div>' +
+      'Richtig: ' + O.kref(cur.karte, { base: "ordner.html" }) + '<div style="margin-top:.4rem"><b>Woran erkennt man es?</b> ' + esc(cur.merkmal || "") + '</div>' +
+      '<div class="src">Quelle: ' + esc(cur.quelle || "") + '</div>' +
+      '<div class="row"><button class="go" id="nx">Weiter →</button><button class="go sec" data-open="' + cur.karte + '">Karte ansehen</button>' + (!ok && kid ? '<button class="go sec" data-open="' + kid + '">Meine Wahl ansehen</button>' : '') + '</div></div>';
+    renderStat();
+    var fbx = document.querySelector(".fb"); if(fbx) fbx.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    var nx = document.getElementById("nx"); if(nx) nx.focus({ preventScroll: true });
+  }
+
+  document.getElementById("play").addEventListener("click", function(e){
+    var hb = e.target.closest("[data-h]"); if(hb && !answered) return showCards(hb.getAttribute("data-h"));
+    var kb = e.target.closest("[data-k]"); if(kb) return answer(kb.getAttribute("data-k"));
+    if(e.target.closest("#nx")) return next();
+    var op = e.target.closest("[data-open]"); if(op) return openCard(op.getAttribute("data-open"));
+    var kr = e.target.closest("a.kref"); if(kr){ e.preventDefault(); openCard(kr.getAttribute("data-karte")); }
+  });
+  document.addEventListener("keydown", function(e){
+    if(document.getElementById("kmod").classList.contains("on")){ if(e.key === "Escape") closeCard(); return; }
+    if(/^[1-5]$/.test(e.key) && !answered && D.hefte[+e.key - 1]) showCards(D.hefte[+e.key - 1].code);
+    if(e.key === "Enter" && answered) next();
+  });
+
+  function openCard(id){ var k = D.karten[id]; if(!k) return; document.getElementById("kbody").innerHTML = O.cardHtml(k, { base: "ordner.html" }); document.getElementById("kmod").classList.add("on"); }
+  function closeCard(){ document.getElementById("kmod").classList.remove("on"); }
+  document.getElementById("kx").addEventListener("click", closeCard);
+  document.getElementById("kmod").addEventListener("click", function(e){ if(e.target.id === "kmod") closeCard(); var kr = e.target.closest("a.kref"); if(kr){ e.preventDefault(); openCard(kr.getAttribute("data-karte")); } });
+
+  var tb = document.getElementById("themeBtn"), th = "light";
+  try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); mode = localStorage.getItem("erkenner:mode") || "alle"; } catch(e) {}
+  function ap(){ document.documentElement.dataset.theme = th; tb.textContent = th === "dark" ? "◑ Hell" : "◐ Dunkel"; }
+  tb.addEventListener("click", function(){ th = th === "dark" ? "light" : "dark"; try { localStorage.setItem("ordner:theme", th); } catch(e) {} ap(); });
+  ap(); renderModes();
+  load().then(next);
+  if(store && store.onChange) store.onChange(function(){ load().then(renderStat); });
+})();
+</script>
+<script src="assets/auth-ui.js"></script>
+</body>
+</html>

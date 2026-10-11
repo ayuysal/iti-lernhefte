@@ -1,0 +1,113 @@
+/* Prüfungsordner WMAPS – Karten, Erkenner, Tabellen (Bildschirm + Druck A4) */
+:root{
+  --paper:#EFF2F0;--paper-raised:#F9FBFA;--paper-sunk:#E4E9E6;
+  --ink:#17201D;--ink-soft:#5A6663;--ink-faint:#8A9490;--rule:#CBD4D0;--rule-soft:#DDE4E1;
+  --accent:#0E5F63;--accent-soft:#D5E6E5;--mark:#8E2436;--mark-soft:#F0DEE1;--shadow:rgba(23,32,29,.10);
+  --sk-3:#A86412;--sk-4:#5B4AA6;--sk-ok:#2E7D4F;--sk-ok-soft:#DCEFE3;--sk-fill:rgba(14,95,99,.10);--sk-fill2:rgba(142,36,54,.10);
+  --font-body:"Charter","Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+}
+html[data-theme="dark"]{
+  --paper:#121614;--paper-raised:#1B211E;--paper-sunk:#0C100E;--ink:#E3EAE7;--ink-soft:#9FADA8;--ink-faint:#6F7C78;--rule:#2C3733;--rule-soft:#222B28;
+  --accent:#54C3C6;--accent-soft:#123033;--mark:#E38294;--mark-soft:#33191F;--shadow:rgba(0,0,0,.45);
+  --sk-3:#E2A65A;--sk-4:#AFA2F2;--sk-ok:#6BCB8B;--sk-ok-soft:#173222;--sk-fill:rgba(84,195,198,.14);--sk-fill2:rgba(227,130,148,.14);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:var(--font-ui);cursor:pointer}
+.btn{font-family:var(--font-ui);font-size:.72rem;font-weight:650;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink-soft);border:1px solid var(--rule);border-radius:3px;padding:.4rem .65rem;line-height:1;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1240px;margin:0 auto;padding:.55rem 1.1rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.brand{font-family:var(--font-ui);font-weight:800;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.brand span{color:var(--ink-faint);font-weight:600}
+.topbar-spacer{flex:1 1 auto}
+.ctl{display:flex;gap:.3rem;align-items:center}
+
+/* ---------- Kartenverweise ---------- */
+.kref{display:inline-flex;align-items:baseline;gap:.3rem;font-family:var(--font-ui);font-size:.82em;font-weight:600;color:var(--ink);text-decoration:none;border:1px solid var(--rule);border-left:4px solid var(--hc);border-radius:3px;padding:.08rem .4rem;background:var(--paper-raised);white-space:nowrap}
+.kref b{color:var(--hc);font-weight:800}
+.fb .kref,.ok-see .kref{white-space:normal;max-width:100%}
+.kref .kh{font-size:.82em;font-weight:800;color:var(--hc);letter-spacing:.04em}
+.kref:hover{border-color:var(--hc)}
+
+/* ---------- Rezeptkarte ---------- */
+.okarte,.otabelle{position:relative;background:var(--paper-raised);border:1px solid var(--rule);border-top:5px solid var(--hc);border-radius:6px;padding:1rem 3.2rem 1rem 1.2rem;margin:1.2rem 0;scroll-margin-top:4.5rem}
+.otab{position:absolute;right:-1px;top:calc(.6rem + var(--ti) * 3.6rem);width:2.2rem;height:3.2rem;background:var(--hc);border-radius:5px 0 0 5px;display:flex;align-items:center;justify-content:center}
+.otab span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--font-ui);font-weight:800;font-size:.66rem;letter-spacing:.08em;color:#fff}
+.ok-h{display:flex;gap:.9rem;align-items:flex-start}
+.ok-nr{flex:0 0 auto;font-family:var(--font-ui);font-weight:900;font-size:1.9rem;line-height:1;color:#fff;background:var(--hc);border-radius:6px;padding:.35rem .55rem;min-width:3.6rem;text-align:center}
+.ok-nr.sm{font-size:1rem;padding:.2rem .4rem;min-width:0;vertical-align:.1em}
+.ok-heft{font-family:var(--font-ui);font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--hc)}
+.ok-prio{color:var(--mark);margin-left:.4rem}
+.ok-h h3{margin:.1rem 0 0;font-size:1.35rem;line-height:1.2}
+.ok-sub{font-family:var(--font-mono);font-size:.9rem;color:var(--ink-soft);margin-top:.2rem}
+.ok-sec{margin:.75rem 0 0}
+.ok-sec h4{font-family:var(--font-ui);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--hc);margin:0 0 .3rem}
+.ok-sec h4 .q{color:var(--ink-faint);font-weight:700;letter-spacing:.04em;text-transform:none}
+ul.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.3rem}
+ul.chips li{font-family:var(--font-ui);font-size:.78rem;background:color-mix(in srgb,var(--hc) 12%,var(--paper-raised));border:1px solid color-mix(in srgb,var(--hc) 35%,var(--rule));border-radius:999px;padding:.15rem .6rem}
+.ok-sk{display:grid;gap:.6rem;margin:.8rem 0 0}
+.ok-sk.n1{grid-template-columns:minmax(0,1fr)}.ok-sk.n1 .osk{max-width:70%;margin:0 auto}
+.ok-sk.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ok-sk.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.osk{margin:0;background:var(--paper);border:1px solid var(--rule-soft);border-radius:5px;padding:.3rem}
+.osk svg{display:block;width:100%;height:auto}
+.osk figcaption{font-family:var(--font-ui);font-size:.66rem;color:var(--ink-soft);text-align:center;padding:.15rem .2rem 0}
+.ok-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:1rem}
+@media screen and (max-width:760px){.ok-2{grid-template-columns:1fr}.ok-sk.n3,.ok-sk.n2{grid-template-columns:1fr}.ok-sk.n1 .osk{max-width:100%}}
+ul.forms{list-style:none;margin:0;padding:0}
+ul.forms li{font-family:var(--font-mono);font-size:.86rem;background:var(--paper-sunk);border-left:3px solid var(--hc);padding:.3rem .5rem;margin:.25rem 0;border-radius:0 3px 3px 0;white-space:pre-wrap}
+ul.steps,ol.bl{margin:0;padding-left:1.1rem;font-size:.9rem}
+ul.steps{list-style:none;padding-left:0}
+ul.steps li{padding:.18rem 0 .18rem 1.5rem;position:relative;border-bottom:1px dashed var(--rule-soft)}
+ul.steps li::before{content:"☐";position:absolute;left:0;top:.12rem;color:var(--hc);font-family:var(--font-ui)}
+.ok-c{background:color-mix(in srgb,var(--sk-4) 9%,var(--paper-raised));border:1px solid color-mix(in srgb,var(--sk-4) 30%,var(--rule));border-radius:5px;padding:.5rem .7rem}
+.ok-c h4{color:var(--sk-4)}
+ul.casio{margin:0;padding-left:1.1rem;font-family:var(--font-ui);font-size:.8rem}
+.ok-b{background:var(--paper);border:1px solid var(--rule);border-radius:5px;padding:.5rem .7rem}
+.ok-b .ba{margin:0 0 .3rem;font-style:italic;font-size:.9rem}
+ol.bl li{font-family:var(--font-mono);font-size:.8rem;margin:.12rem 0}
+.ok-b .be{margin:.35rem 0 0;font-weight:700;color:var(--hc)}
+.ok-w{background:var(--mark-soft);border-left:3px solid var(--mark);border-radius:0 5px 5px 0;padding:.45rem .7rem}
+.ok-w h4{color:var(--mark)}
+ul.warn{margin:0;padding-left:1.1rem;font-size:.86rem}
+.ok-see{font-size:.8rem;margin:.7rem 0 0;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.3rem;align-items:center}
+
+/* ---------- Tabellen ---------- */
+.otabelle h3{margin:0 0 .5rem;font-size:1.05rem}
+.otabelle h3 small{font-family:var(--font-ui);font-size:.66rem;color:var(--hc);letter-spacing:.08em}
+.otabelle table{border-collapse:collapse;width:100%;font-size:.84rem}
+.otabelle th,.otabelle td{border:1px solid var(--rule);padding:.32rem .5rem;text-align:left;vertical-align:top;font-family:var(--font-mono)}
+.otabelle th{font-family:var(--font-ui);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;background:color-mix(in srgb,var(--hc) 14%,var(--paper-raised));color:var(--ink)}
+.otabelle .tf{font-size:.78rem;color:var(--ink-soft);margin:.4rem 0 0}
+
+/* ---------- Druck A4 ---------- */
+@media print{
+  @page{size:A4;margin:11mm 0 11mm 12mm}
+  .omain{padding-right:12mm!important}
+  html,html[data-theme="dark"]{--paper:#fff;--paper-raised:#fff;--paper-sunk:#F1F4F2;--ink:#111;--ink-soft:#444;--ink-faint:#777;--rule:#BFC8C4;--rule-soft:#DCE2DF;
+    --accent:#0E5F63;--accent-soft:#D5E6E5;--mark:#A3203A;--mark-soft:#FBE9EC;--sk-3:#B5650B;--sk-4:#5B4AA6;--sk-ok:#2E7D4F;--sk-fill:rgba(14,95,99,.10);--sk-fill2:rgba(163,32,58,.10)}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-size:9.4pt;line-height:1.38;background:#fff}
+  .ok-2.ok-cw{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:3mm}
+  .ok-h h3{font-size:15pt}.ok-nr{font-size:20pt}
+  ul.chips li{font-size:8pt;padding:.5mm 2mm}
+  ul.casio,ul.warn{font-size:8.6pt}
+  .ok-b .ba{font-size:9pt}
+  .ok-sec h4{margin-bottom:1mm}
+  .topbar,.noprint,.side,#authBtn,.sync-pop{display:none!important}
+  .okarte,.otabelle{break-before:page;border-radius:0;border-left:0;border-right:0;border-bottom:0;margin:0 -12mm 0 0;padding:0 24mm 0 0;min-height:auto}
+  .otab{right:0;top:calc(var(--ti) * 32mm);width:12mm;height:28mm;border-radius:2mm 0 0 2mm;position:absolute}
+  .otab span{font-size:8pt}
+  .okarte .ok-sec,.osk,.ok-2>section{break-inside:avoid}
+  .ok-sk.n1 .osk{max-width:58%}
+  .ok-2{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)!important}
+  .ok-sk.n2{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ok-sk.n3{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .osk svg{max-height:54mm}
+  .ok-sk{gap:3mm}.ok-sec{margin-top:2.6mm}
+  ul.forms li{font-size:9pt;padding:1mm 2mm}ul.steps li{font-size:9.5pt}ol.bl li{font-size:8.6pt}
+  a{color:inherit}
+  .print-break{break-before:page}
+}
