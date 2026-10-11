@@ -76,17 +76,17 @@ ul.warn{margin:0;padding-left:1.1rem;font-size:.86rem}
 .ok-see{font-size:.8rem;margin:.7rem 0 0;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.3rem;align-items:center}
 
 /* ---------- Casio-Tasten ---------- */
-kbd.ck{display:inline-block;min-width:1.7em;text-align:center;font-family:var(--font-ui);font-size:.74rem;font-weight:800;line-height:1;padding:.22em .4em .2em;margin:.08em .08em;border-radius:.45em;border:1px solid #2a2f2d;border-bottom-width:3px;vertical-align:.05em;white-space:nowrap}
-kbd.kn{background:#F4F5F4;color:#111}                    /* Ziffern */
-kbd.kg{background:#E4E7E6;color:#111}                    /* Rechenzeichen / Funktionen */
-kbd.kf{background:#3B4245;color:#fff}                    /* MENU, OPTN, CALC, Ans … */
-kbd.ks{background:#F2C200;color:#1d1a00;border-color:#8a6d00}  /* SHIFT (gelb wie am Gerät) */
-kbd.ka{background:#C8102E;color:#fff;border-color:#6d0919}     /* ALPHA (rot) */
-kbd.kc{background:#E46A1A;color:#fff;border-color:#7a3608}     /* AC / DEL */
-kbd.ke{background:#2D6CDF;color:#fff;border-color:#163a7a}     /* = */
-kbd.kr{background:#cfd6d4;color:#111;border-radius:50%;min-width:1.6em}  /* Cursor */
-.kl{font-family:var(--font-ui);font-size:.7rem;font-weight:700;color:#8a6d00;margin:0 .25em 0 .1em}
-html[data-theme="dark"] .kl{color:#F2C200}
+kbd.ck{display:inline-block;min-width:1.75em;text-align:center;font-family:var(--font-ui);font-size:.74rem;font-weight:700;line-height:1;padding:.26em .42em .22em;margin:.08em .08em;border-radius:.38em;vertical-align:.05em;white-space:nowrap;box-shadow:0 1.5px 0 rgba(0,0,0,.45)}
+kbd.kw{background:#fbfbfb;color:#111;border:1px solid #9aa0a3}                 /* weiße Tasten: Ziffern , + − × ÷ ×10ˣ Ans = */
+kbd.kk{background:#26292b;color:#fff;border:1px solid #000}                    /* schwarze Funktionstasten */
+kbd.kb{background:#1f5fbf;color:#fff;border:1px solid #0d3577}                 /* DEL, AC (blau) */
+kbd.kr0{background:#3a3e40;color:#fff;border:1px solid #111;border-radius:999px;padding:.26em .6em .22em}  /* runde Knöpfe */
+kbd.kys{color:#F2C200}                                                         /* SHIFT – gelbe Schrift */
+kbd.kya{color:#ff6b7f}                                                         /* ALPHA – rote Schrift */
+kbd.kcur{background:#cfd4d6;color:#111;border:1px solid #8a9194;border-radius:50%;min-width:1.65em;padding:.26em .3em .22em}
+.kl{font-family:var(--font-ui);font-size:.7rem;font-weight:800;margin:0 .25em 0 .1em}
+.kls{color:#9a7600}.kla{color:#c8102e}.klm{color:var(--ink-soft)}
+html[data-theme="dark"] .kls{color:#F2C200}html[data-theme="dark"] .kla{color:#ff7d8f}
 .ok-c .cv{background:color-mix(in srgb,#F2C200 18%,var(--paper-raised));border:1px dashed #b38f00;border-radius:5px;padding:.35rem .5rem;margin:.2rem 0 .45rem;font-family:var(--font-ui);font-size:.8rem}
 .ok-c .cv b{display:block;font-size:.72rem;margin-bottom:.15rem}
 .ok-c .cs{margin:.1rem 0}
@@ -106,6 +106,24 @@ html[data-theme="dark"] .ok-c .cr b{background:#22301f;border-color:#4d6b47}
 .notizseite{display:none}
 .otab2{display:none}
 .p2nr{color:var(--hc);font-weight:900;margin-right:.3rem}
+
+/* ---------- Tastatur-Karte ---------- */
+.kbwrap{display:flex;justify-content:center;margin:.4rem 0 1rem}
+.kbmap{background:#1c1f20;border-radius:14px;padding:.7rem .7rem .8rem;display:inline-flex;flex-direction:column;gap:.18rem;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.kbrow{display:grid;gap:.25rem .35rem;align-items:end}
+.kb4{grid-template-columns:repeat(2,minmax(0,1fr)) 1fr repeat(2,minmax(0,1fr))}
+.kbtop{grid-template-columns:1fr 1fr 2.2fr 1fr 1fr;margin-bottom:.2rem}
+.kb5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kb6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.kbc{display:flex;flex-direction:column;align-items:center;min-width:3.3rem}
+.kbc kbd.ck{width:100%;margin:0;font-size:.78rem;padding:.42em .2em .36em}
+.kbc kbd.kr0{width:auto;padding:.5em .65em}
+.kbl{display:flex;justify-content:space-between;width:100%;min-height:1em;font-family:var(--font-ui);font-size:.56rem;font-weight:800;gap:.2rem;white-space:nowrap}
+.kbmap .kls{color:#F2C200}.kbmap .kla{color:#ff6b7f}
+.kbpad{flex-direction:column;justify-content:center;gap:.05rem}
+.kbpad span{display:flex;gap:1.4rem}
+.kbpad kbd.ck{width:auto}
+@media(max-width:560px){.kbc{min-width:2.6rem}.kbl{font-size:.48rem}}
 
 /* ---------- Tabellen ---------- */
 .otabelle h3{margin:0 0 .5rem;font-size:1.05rem}
@@ -135,7 +153,8 @@ html[data-theme="dark"] .ok-c .cr b{background:#22301f;border-color:#4d6b47}
   .ok-p2h{display:block;border-bottom:2px solid var(--hc);padding-bottom:1.5mm;margin-bottom:2mm}
   .ok-p2 .ok-c{margin-top:3mm}
   .ok-c .cr b{background:#dfe7d8!important;border-color:#9fb39a!important;color:#111!important}
-  .kl{color:#8a6d00!important}
+  .kls{color:#8a6a00!important}.kla{color:#b0102a!important}
+  .kbmap .kls{color:#F2C200!important}.kbmap .kla{color:#ff6b7f!important}
   .notizseite{display:block;break-before:page;min-height:250mm;position:relative}
   .notizseite p{font-family:var(--font-ui);font-size:9pt;color:#999;margin:0 0 4mm}
   .notizseite .ln{border-bottom:1px solid #e3e3e3;height:9mm}

@@ -25,13 +25,29 @@
   }
 
   /* ---------- Casio-Tasten: "[SHIFT] [CALC] (SOLVE)" → gezeichnete Tasten ---------- */
-  var KCLASS = { "SHIFT": "ks", "ALPHA": "ka", "MENU": "kf", "OPTN": "kf", "CALC": "kf", "AC": "kc", "DEL": "kc", "=": "ke",
-    "Ans": "kf", "S⇔D": "kf", "STO": "kf", "▲": "kr", "▼": "kr", "◀": "kr", "▶": "kr", "∫■": "kf", "x": "kf", "ENG": "kf" };
+  /* Tastenarten wie am fx-991DE X: weiß (Ziffern, + − × ÷ , ×10ˣ Ans =), schwarz (Funktionstasten),
+     blau (DEL, AC), rund (SHIFT gelb, ALPHA rot, MENU), Cursor. Beschriftung hinter SHIFT gelb, hinter ALPHA rot. */
+  var KCLASS = { "SHIFT": "kr0 kys", "ALPHA": "kr0 kya", "MENU": "kr0", "ON": "kr0", "DEL": "kb", "AC": "kb",
+    "▲": "kcur", "▼": "kcur", "◀": "kcur", "▶": "kcur" };
+  var WHITE = /^([0-9]|,|\.|\+|−|×|÷|×10ˣ|Ans|=)$/;
   function keys(str){
-    var t = esc(str);
-    t = t.replace(/\[([^\[\]]{1,6})\]/g, function(m, k){ return '<kbd class="ck ' + (KCLASS[k] || (/^[0-9.]$/.test(k) ? "kn" : "kg")) + '">' + k + '</kbd>'; });
-    t = t.replace(/(<\/kbd>)\s*\(([^()]{1,24})\)/g, '$1<span class="kl">$2</span>');
-    return t;
+    var out = "", re = /\[([^\[\]]{1,6})\]|\(([^()]{1,24})\)/g, last = 0, m, prevKey = null, prev2 = null, afterKey = false;
+    while((m = re.exec(str))){
+      var between = str.slice(last, m.index);
+      if(between.trim()) afterKey = false;
+      out += esc(between);
+      if(m[1] !== undefined){
+        var k = m[1], cls = KCLASS[k] || (WHITE.test(k) ? "kw" : "kk");
+        out += '<kbd class="ck ' + cls + '">' + esc(k) + '</kbd>';
+        prev2 = prevKey; prevKey = k; afterKey = true;
+      } else if(afterKey){
+        var col = prev2 === "ALPHA" ? "kla" : (prev2 === "SHIFT" ? "kls" : "klm");
+        out += '<span class="kl ' + col + '">' + esc(m[2]) + '</span>';
+        afterKey = false;
+      } else out += esc(m[0]);
+      last = re.lastIndex;
+    }
+    return out + esc(str.slice(last));
   }
   function casioHtml(c){
     if(!c) return "";

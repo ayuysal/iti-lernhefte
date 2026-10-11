@@ -132,16 +132,40 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
     ["Gleichheitszeichen in einer Gleichung", "[ALPHA] [CALC] ( = )"],
     ["Letztes Ergebnis weiterverwenden", "[Ans]"],
     ["π und e", "[SHIFT] [×10ˣ] (π) · [ALPHA] [×10ˣ] (e)"],
+    ["eˣ und 10ˣ", "[SHIFT] [ln] (eˣ) · [SHIFT] [log■] (10ˣ)"],
+    ["Dezimalzahl eintippen", "Komma-Taste: 0 [,] 5 = 0,5"],
     ["Term für einen Wert auswerten", "Term mit [x] eingeben, [CALC], Wert eintippen, [=]"],
     ["Gleichung lösen (Newton im Rechner)", "Gleichung mit [ALPHA] [CALC] (=) eingeben, [SHIFT] [CALC] (SOLVE), Startwert, [=] → x = … (L−R = 0 heißt genau)"],
     ["Integral · Ableitung · Summe", "[∫■] · [SHIFT] [∫■] (d/dx) · [SHIFT] [x] (Σ) – jeweils mit [▶] ins nächste Feld"],
     ["Wiederholte Formel (Newton, Euler)", "Startwert [=], dann Formel mit [Ans] statt x eingeben, [=] – jedes weitere [=] ist ein Schritt"],
     ["Einstellungen zurücksetzen", "[SHIFT] [9] [1] (Setupdaten), dann bestätigen"]
   ];
+  /* Tastatur nach Foto des fx-991DE X: [Taste, gelb (SHIFT), rot (ALPHA), Art] – Art: k schwarz, w weiß, b blau */
+  var KB = [
+    [["OPTN","QR","","k"],["CALC","SOLVE","=","k"],["∫■","d/dx",":","k"],["x","Σ","Π","k"]],
+    [["■/■","■ ■/■","÷R","k"],["√■","∛■","","k"],["x²","x³","","k"],["x■","■√■","","k"],["log■","10■","","k"],["ln","e■","","k"]],
+    [["(−)","log","A","k"],["°’”","FACT","B","k"],["x⁻¹","x!","C","k"],["sin","sin⁻¹","D","k"],["cos","cos⁻¹","E","k"],["tan","tan⁻¹","F","k"]],
+    [["STO","RECALL","","k"],["ENG","∠","i","k"],["(","Abs","","k"],[")",";","X","k"],["S⇔D","a b/c⇔d/c","Y","k"],["M+","M−","M","k"]],
+    [["7","CONST","","w"],["8","CONV","","w"],["9","RESET","","w"],["DEL","INS","UNDO","b"],["AC","OFF","","b"]],
+    [["4","","","w"],["5","","","w"],["6","","","w"],["×","nPr","GCD","w"],["÷","nCr","LCM","w"]],
+    [["1","","","w"],["2","","","w"],["3","","","w"],["+","Pol","Int","w"],["−","Rec","Intg","w"]],
+    [["0","Rnd","RndFix","w"],[",","Ran#","RanInt","w"],["×10ˣ","π","e","w"],["Ans","%","","w"],["=","≈","","w"]]
+  ];
+  function kbHtml(){
+    var top = '<div class="kbrow kbtop"><div class="kbc"><div class="kbl"></div><kbd class="ck kr0 kys">SHIFT</kbd></div><div class="kbc"><div class="kbl"></div><kbd class="ck kr0 kya">ALPHA</kbd></div>' +
+      '<div class="kbc kbpad"><kbd class="ck kcur">▲</kbd><span><kbd class="ck kcur">◀</kbd><kbd class="ck kcur">▶</kbd></span><kbd class="ck kcur">▼</kbd></div>' +
+      '<div class="kbc"><div class="kbl"><span class="kls">SETUP</span></div><kbd class="ck kr0">MENU</kbd></div><div class="kbc"><div class="kbl"></div><kbd class="ck kr0">ON</kbd></div></div>';
+    return '<div class="kbmap">' + top + KB.map(function(r, ri){
+      return '<div class="kbrow' + (ri === 0 ? ' kb4' : (r.length === 6 ? ' kb6' : ' kb5')) + '">' + r.map(function(k){
+        return '<div class="kbc"><div class="kbl"><span class="kls">' + esc(k[1]) + '</span><span class="kla">' + esc(k[2]) + '</span></div><kbd class="ck ' + (k[3] === "w" ? "kw" : k[3] === "b" ? "kb" : "kk") + '">' + esc(k[0]) + '</kbd></div>';
+      }).join("") + '</div>';
+    }).join("") + '</div>';
+  }
   h += '<section class="erk-wrap" id="casio"><h2 class="sec">Casio fx-991DE X – Grundlagen</h2>' +
     '<p class="erk-intro">Tasten sind wie am Gerät gefärbt: ' + K("[SHIFT]") + ' gelb = die <b>gelbe</b> Beschriftung über einer Taste · ' + K("[ALPHA]") + ' rot = die <b>rote</b> Beschriftung · ' +
       K("[MENU] [OPTN] [CALC]") + ' Funktionstasten · ' + K("[AC]") + ' löschen · ' + K("[=]") + ' ausführen · ' + K("[▲] [▼] [◀] [▶]") + ' Cursor. ' +
       'Klein gedruckt hinter einer Taste steht, was sie im Menü bedeutet, z. B. ' + K("[SHIFT] [CALC] (SOLVE)") + '. Quelle: offizielle Casio-Bedienungsanleitung.</p>' +
+    '<div class="kbwrap"><div><h3 style="font-family:var(--font-ui);font-size:.95rem;margin:.6rem 0 .3rem">Tastatur – wo liegt was?</h3><p style="font-size:.82rem;margin:0 0 .5rem;color:var(--ink-soft)"><span class="kls"><b>Gelb</b></span> über einer Taste = erst ' + K("[SHIFT]") + ' drücken, <span class="kla"><b>rot</b></span> = erst ' + K("[ALPHA]") + '. Dezimalkomma ist die Taste ' + K("[,]") + ' unten links.</p>' + kbHtml() + '</div></div>' +
     '<table class="erk"><tbody>' + GRIFFE.map(function(g){ return '<tr><td style="width:34%"><b>' + esc(g[0]) + '</b></td><td style="font-family:var(--font-ui);font-size:.84rem;line-height:2">' + K(g[1]) + '</td></tr>'; }).join("") + '</tbody></table>' +
     '<div class="how" style="margin-top:1rem"><div><b>✓</b>Vor der Klausur: ' + K("[SHIFT] [9] [1] (Setupdaten)") + ' – dann ist alles Standard (Gradmaß, Math-Darstellung).</div>' +
     '<div><b>R</b>Analysis-Aufgaben (sin, cos, Newton mit cos x, Integrale): zuerst <b style="display:inline;font-size:inherit">Bogenmaß</b> einstellen – Display zeigt R.</div>' +
