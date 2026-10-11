@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/gate.js"></script>
+<title>Schlüsselwörter WMAPS</title>
+<link rel="stylesheet" href="assets/ordner.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:0 1.1rem 4rem}
+.hero{padding:1.6rem 0 .6rem}
+.hero .ey{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mark);font-weight:800;margin:0 0 .5rem}
+.hero h1{font-size:2rem;margin:0 0 .4rem;font-weight:600}
+.hero p{color:var(--ink-soft);margin:0;max-width:72ch}
+.bar{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin:.5rem 0;font-family:var(--font-ui)}
+.bar .lb{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);min-width:6.2rem}
+.chip{font-family:var(--font-ui);font-size:.74rem;font-weight:700;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink-soft);border-radius:999px;padding:.32rem .7rem;cursor:pointer}
+.chip.on{border-color:var(--hc,var(--accent));color:#fff;background:var(--hc,var(--accent))}
+.chip.eye::before{content:"◉ ";}
+.chip.eye:not(.on)::before{content:"○ ";}
+.bar input{font-family:var(--font-ui);font-size:.82rem;padding:.38rem .6rem;border:1px solid var(--rule);border-radius:4px;background:var(--paper-raised);color:var(--ink);min-width:220px}
+.dl{display:flex;flex-wrap:wrap;gap:.4rem;margin:.8rem 0 1rem}
+.dl a,.dl button{font-family:var(--font-ui);font-weight:800;font-size:.8rem;border-radius:5px;padding:.5rem .85rem;text-decoration:none;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);cursor:pointer}
+.dl a.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cnt{font-family:var(--font-ui);font-size:.76rem;color:var(--ink-soft);margin:.2rem 0 .5rem}
+table.sw{border-collapse:collapse;width:100%;background:var(--paper-raised);font-size:.86rem}
+table.sw th{font-family:var(--font-ui);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:.4rem .45rem;position:sticky;top:3.3rem;background:var(--paper-raised);z-index:1}
+table.sw td{border-bottom:1px solid var(--rule-soft);padding:.38rem .45rem;vertical-align:top}
+table.sw td.n{color:var(--ink-faint);font-family:var(--font-mono);font-size:.72rem;width:2.2rem}
+table.sw td.sig .art{display:inline-block;font-family:var(--font-ui);font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);border:1px solid var(--rule);border-radius:3px;padding:0 .25rem;margin-right:.35rem;vertical-align:1px}
+table.sw td.sig .hw{display:block;font-size:.74rem;color:var(--ink-faint);margin-top:.1rem}
+table.sw td.h{width:7.5rem;font-family:var(--font-ui);font-weight:900;color:var(--hc)}
+table.sw td.f{width:13rem;font-family:var(--font-ui);font-size:.8rem}
+table.sw td.k{width:15rem;font-family:var(--font-ui);font-size:.8rem}
+table.sw td.k b{color:var(--hc)}
+table.sw td.k a{color:inherit;text-decoration:none}
+table.sw tr.grp td{background:var(--paper-sunk);border-left:6px solid var(--hc);font-family:var(--font-ui);padding:.5rem .6rem}
+table.sw tr.grp b{color:var(--hc)}
+table.sw tr.grp span{display:block;font-size:.76rem;color:var(--ink-soft);font-weight:400;margin-top:.1rem}
+.hide-h td.h:not(.rev) .v,.hide-f td.f:not(.rev) .v,.hide-k td.k:not(.rev) .v,table.sw.hide-hw td.sig .hw{display:none}
+td .q{display:none;font-family:var(--font-ui);font-size:.72rem;font-weight:800;color:var(--ink-faint);border:1px dashed var(--rule);border-radius:4px;padding:.15rem .5rem;background:transparent;cursor:pointer}
+.hide-h td.h:not(.rev) .q,.hide-f td.f:not(.rev) .q,.hide-k td.k:not(.rev) .q{display:inline-block}
+.hide-h th.h,.hide-f th.f,.hide-k th.k{color:var(--mark)}
+.ptitle{display:none}
+@media print{
+  .topbar,.noprint,.bar,.dl,.cnt,.hero{display:none!important}
+  .wrap{max-width:none;padding:0 12mm 0 0}
+  .ptitle{display:block;font-family:var(--font-ui);margin:0 0 3mm}
+  .ptitle b{font-size:13pt}.ptitle span{font-size:8pt;color:#666;margin-left:2mm}
+  table.sw{font-size:8.6pt}
+  table.sw th{position:static;font-size:7pt}
+  table.sw td{padding:1.3mm 1.6mm}
+  table.sw tr{break-inside:avoid}
+  table.sw tr.grp{break-after:avoid}
+  td .q{display:none!important}
+  .hide-h td.h:not(.rev),.hide-f td.f:not(.rev),.hide-k td.k:not(.rev){border-bottom:1px solid #999}
+  table.sw td.h{width:22mm}table.sw td.f{width:40mm}table.sw td.k{width:48mm}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Schlüsselwörter <span>· WMAPS</span></div>
+    <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="erkenner.html">◎ Erkenner-Training</a>
+    <a class="btn" href="ordner.html">▤ Prüfungsordner</a>
+    <div class="topbar-spacer"></div>
+    <div class="ctl"><button class="btn" id="themeBtn">◐ Dunkel</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero"><p class="ey">Signal → Heft → Familie → Karte</p><h1>Schlüsselwörter aus den Prüfungsfragen</h1>
+    <p>Alle Signale aus dem Aufgaben-Erkenner mit Heft, Themenfamilie und Rezeptkarte. Spalten ausblenden, um dich selbst abzufragen: ein Klick auf <b>?</b> deckt ein einzelnes Feld auf. „Gemischt“ ordnet zufällig, damit du nicht an der Reihenfolge erkennst, welches Heft dran ist.</p></div>
+
+  <div class="bar"><span class="lb">Einblenden</span><span id="eyes"></span><button class="chip" id="revAll">Aufgedeckte zurücksetzen</button></div>
+  <div class="bar"><span class="lb">Ordnung</span><span id="sorts"></span></div>
+  <div class="bar"><span class="lb">Heft</span><span id="hefte"></span></div>
+  <div class="bar"><span class="lb">Art</span><span id="arten"></span><input type="search" id="q" placeholder="Suchen …" aria-label="Schlüsselwörter durchsuchen"></div>
+  <div class="dl">
+    <a class="pri" href="assets/pdf/Schluesselwoerter_Loesung.pdf" download>⤓ PDF mit Lösung</a>
+    <a class="pri" href="assets/pdf/Schluesselwoerter_Uebung.pdf" download>⤓ PDF zum Üben (Heft, Familie, Karte leer)</a>
+    <button id="printBtn">🖨 Aktuelle Ansicht als PDF / drucken</button>
+  </div>
+  <div class="cnt" id="cnt"></div>
+  <div class="ptitle" id="ptitle"></div>
+  <table class="sw" id="tab"></table>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/ordner-data.js"></script>
+<script src="assets/ordner.js"></script>
+<script>
+(function(){
+  "use strict";
+  var O = window.Ordner, D = O.D, esc = O.esc, W = D.wegweiser;
+  var ART = { wort: "Wort", symbol: "Symbol", gegeben: "Gegeben → Gesucht" };
+  var cfg = { show: { h: true, f: true, k: true, hw: true }, sort: "heft", heft: "alle", art: "alle", seed: 7 };
+  try { var sv = JSON.parse(localStorage.getItem("schluessel:cfg") || "null"); if(sv) cfg = Object.assign(cfg, sv); } catch(e) {}
+  // URL-Parameter (für die erzeugten PDFs): ?ohne=hfk&sort=mix
+  var P = new URLSearchParams(location.search || location.hash.slice(1));
+  if(P.has("ohne")){ var o = P.get("ohne"); cfg.show = { h: o.indexOf("h") < 0, f: o.indexOf("f") < 0, k: o.indexOf("k") < 0, hw: o.indexOf("w") < 0 }; }
+  if(P.has("sort")) cfg.sort = P.get("sort");
+  if(P.has("ohne") || P.has("sort")){ cfg.heft = "alle"; cfg.art = "alle"; }
+  var rev = {};
+  function save(){ if(P.has("ohne") || P.has("sort")) return; try { localStorage.setItem("schluessel:cfg", JSON.stringify(cfg)); } catch(e) {} }
+
+  var famIdx = {}; (W ? W.familien : []).forEach(function(f, i){ famIdx[f.id] = i; });
+  var rows = D.erkenner.map(function(e, i){
+    var k = D.karten[e.ziel], f = O.fam(k), h = O.heft(k.heft);
+    return { i: i, sig: e.signal.trim(), art: e.art, hw: e.hinweis || "", k: k, f: f, h: h, key: e.ziel + "|" + i };
+  });
+
+  function rnd(seed){ var x = seed; return function(){ x = (x * 9301 + 49297) % 233280; return x / 233280; }; }
+  function chips(el, list, val, set, eye){
+    document.getElementById(el).innerHTML = list.map(function(x){ var on = eye ? cfg.show[x[0]] : val === x[0];
+      return '<button class="chip' + (eye ? " eye" : "") + (on ? " on" : "") + '" data-v="' + x[0] + '"' + (x[2] ? ' style="--hc:' + x[2] + '"' : '') + '>' + esc(x[1]) + '</button>'; }).join(" ");
+    document.getElementById(el).onclick = function(e){ var b = e.target.closest("[data-v]"); if(!b) return; set(b.getAttribute("data-v")); save(); render(); };
+  }
+
+  function render(){
+    chips("eyes", [["h", "Heft"], ["f", "Familie"], ["k", "Karte"], ["hw", "Hinweise"]], null, function(v){ cfg.show[v] = !cfg.show[v]; rev = {}; }, true);
+    chips("sorts", [["heft", "nach Heft & Familie"], ["mix", "gemischt (zum Üben)"], ["abc", "alphabetisch"]], cfg.sort, function(v){ if(v === "mix" && cfg.sort === "mix") cfg.seed++; cfg.sort = v; });
+    chips("hefte", [["alle", "Alle", "var(--accent)"]].concat(D.hefte.map(function(h){ return [h.code, h.label, h.color]; })), cfg.heft, function(v){ cfg.heft = v; });
+    chips("arten", [["alle", "Alle"], ["wort", "Wörter"], ["symbol", "Symbole"], ["gegeben", "Gegeben → Gesucht"]], cfg.art, function(v){ cfg.art = v; });
+
+    var q = document.getElementById("q").value.trim().toLowerCase();
+    var list = rows.filter(function(r){
+      return (cfg.heft === "alle" || r.h.code === cfg.heft) && (cfg.art === "alle" || r.art === cfg.art) &&
+        (!q || (r.sig + " " + r.hw + " " + r.k.titel + " " + r.k.nr + " " + (r.f ? r.f.name : "")).toLowerCase().indexOf(q) >= 0);
+    });
+    if(cfg.sort === "heft") list.sort(function(a, b){ return a.h.idx - b.h.idx || (famIdx[a.f && a.f.id] || 0) - (famIdx[b.f && b.f.id] || 0) || parseInt(a.k.nr.slice(1)) - parseInt(b.k.nr.slice(1)) || a.i - b.i; });
+    else if(cfg.sort === "abc") list.sort(function(a, b){ return a.sig.replace(/^[„"“»(…\s]+/, "").localeCompare(b.sig.replace(/^[„"“»(…\s]+/, ""), "de"); });
+    else { var r = rnd(cfg.seed); list = list.map(function(x){ return [r(), x]; }).sort(function(a, b){ return a[0] - b[0]; }).map(function(x){ return x[1]; }); }
+
+    var t = document.getElementById("tab");
+    t.className = "sw" + (cfg.show.h ? "" : " hide-h") + (cfg.show.f ? "" : " hide-f") + (cfg.show.k ? "" : " hide-k") + (cfg.show.hw ? "" : " hide-hw");
+    var html = '<thead><tr><th>#</th><th>Schlüsselwort in der Aufgabe</th><th class="h">Heft</th><th class="f">Familie</th><th class="k">Karte</th></tr></thead><tbody>';
+    var lastF = null, n = 0, grouped = cfg.sort === "heft" && cfg.show.h && cfg.show.f;
+    list.forEach(function(r){
+      if(grouped && r.f && r.f.id !== lastF){ lastF = r.f.id;
+        html += '<tr class="grp" style="--hc:' + r.h.color + '"><td colspan="5"><b>' + esc(r.h.label) + ' › ' + esc(r.f.name) + '</b><span>' + esc(r.f.frage) + '</span></td></tr>'; }
+      n++;
+      var q = '<button class="q" type="button">?</button>';
+      html += '<tr style="--hc:' + r.h.color + '"><td class="n">' + n + '</td>' +
+        '<td class="sig"><span class="art">' + esc(ART[r.art] || r.art) + '</span>' + esc(r.sig) + (r.hw ? '<span class="hw">' + esc(r.hw) + '</span>' : '') + '</td>' +
+        '<td class="h' + (rev[r.key + "h"] ? " rev" : "") + '" data-r="' + r.key + 'h">' + q + '<span class="v">' + esc(r.h.label) + '</span></td>' +
+        '<td class="f' + (rev[r.key + "f"] ? " rev" : "") + '" data-r="' + r.key + 'f">' + q + '<span class="v">' + esc(r.f ? r.f.name : "") + '</span></td>' +
+        '<td class="k' + (rev[r.key + "k"] ? " rev" : "") + '" data-r="' + r.key + 'k">' + q + '<span class="v"><a href="ordner.html#' + esc(r.k.id) + '"><b>' + esc(r.k.nr) + '</b> ' + esc(r.k.titel) + '</a></span></td></tr>';
+    });
+    t.innerHTML = html + '</tbody>';
+    var off = [cfg.show.h ? "" : "Heft", cfg.show.f ? "" : "Familie", cfg.show.k ? "" : "Karte"].filter(Boolean);
+    document.getElementById("cnt").textContent = list.length + " Schlüsselwörter" + (off.length ? " · ausgeblendet: " + off.join(", ") : "");
+    document.getElementById("ptitle").innerHTML = '<b>Schlüsselwörter WMAPS – Signal → Heft → Familie → Karte</b><span>' + list.length + ' Einträge · ' +
+      (off.length ? "zum Üben: " + off.join(", ") + " selbst eintragen" : "mit Lösung") + ' · ' + (cfg.sort === "mix" ? "gemischt" : cfg.sort === "abc" ? "alphabetisch" : "nach Heft & Familie") + '</span>';
+  }
+
+  document.getElementById("tab").addEventListener("click", function(e){
+    var b = e.target.closest(".q"); if(!b) return;
+    var td = b.closest("td"); rev[td.getAttribute("data-r")] = 1; td.classList.add("rev");
+  });
+  document.getElementById("revAll").addEventListener("click", function(){ rev = {}; render(); });
+  document.getElementById("q").addEventListener("input", render);
+  document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+
+  var tb = document.getElementById("themeBtn"), th = "light";
+  try { th = localStorage.getItem("ordner:theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); } catch(e) {}
+  if(P.has("ohne") || P.has("sort")) th = "light";
+  function ap(){ document.documentElement.dataset.theme = th; tb.textContent = th === "dark" ? "◑ Hell" : "◐ Dunkel"; }
+  tb.addEventListener("click", function(){ th = th === "dark" ? "light" : "dark"; try { localStorage.setItem("ordner:theme", th); } catch(e) {} ap(); });
+  ap(); render();
+})();
+</script>
+<script src="assets/auth-ui.js"></script>
+</body>
+</html>
