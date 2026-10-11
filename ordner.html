@@ -126,7 +126,9 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
     ["Bogenmaß (für sin, cos, e^…, Integrale, Iterationen)", "[SHIFT] [MENU] (SETUP) [2] (Winkeleinheit) [2] (Bogenmaß) – oben im Display steht dann R"],
     ["Gradmaß (Winkel in °)", "[SHIFT] [MENU] (SETUP) [2] (Winkeleinheit) [1] (Gradmaß) – Display: D"],
     ["Feste Nachkommastellen (z. B. 5)", "[SHIFT] [MENU] (SETUP) [3] (Zahlenformat) [1] (Fix) [5] · zurück: … [3] (Zahlenformat) [3] (Norm) [1]"],
+    ["Dezimalpräfixe AUS (sonst steht z. B. „500m“ statt 0,5)", "[SHIFT] [MENU] (SETUP) [4] (Dezimalpräfixe) [2] (Aus) – oben im Display darf kein E stehen"],
     ["Dezimalzahl statt Bruch/Wurzel", "[S⇔D] nach dem Ergebnis – oder gleich [SHIFT] [=]"],
+    ["Lösungen im Polynom-Modus ablesen (am Gerät getestet)", "Grad 2: größere reelle Lösung zuerst, bei komplexen zuerst „+ i“; ein weiteres [▼] zeigt nur den Scheitelpunkt · Grad 3: Reihenfolge beliebig – mit [▼] alle ansehen · doppelte Lösung erscheint nur einmal"],
     ["Negative Zahl", "[(−)] (Vorzeichen) – NICHT [−] (Rechenzeichen)"],
     ["Variable x im Term", "[x]"],
     ["Gleichheitszeichen in einer Gleichung", "[ALPHA] [CALC] ( = )"],
@@ -137,6 +139,7 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
     ["Term für einen Wert auswerten", "Term mit [x] eingeben, [CALC], Wert eintippen, [=]"],
     ["Gleichung lösen (Newton im Rechner)", "Gleichung mit [ALPHA] [CALC] (=) eingeben, [SHIFT] [CALC] (SOLVE), Startwert, [=] → x = … (L−R = 0 heißt genau)"],
     ["Integral · Ableitung · Summe", "[∫■] · [SHIFT] [∫■] (d/dx) · [SHIFT] [x] (Σ) – jeweils mit [▶] ins nächste Feld"],
+    ["Cursor-Regel (am Gerät getestet)", "Jede Vorlage (Wurzel [√■], Exponent [x■] / eˣ, Bruch [■/■]) verlässt man mit einem eigenen [▶]. Erst das nächste [▶] springt ins nächste Feld (x =, Grenzen). Beispiel d/dx √x an 4: [SHIFT] [∫■] (d/dx) [√■] [x] [▶] [▶] 4 [=] → 1/4. Im Bruch: [▼] Zähler → Nenner"],
     ["Wiederholte Formel (Newton, Euler)", "Startwert [=], dann Formel mit [Ans] statt x eingeben, [=] – jedes weitere [=] ist ein Schritt"],
     ["Einstellungen zurücksetzen", "[SHIFT] [9] [1] (Setupdaten), dann bestätigen"]
   ];
@@ -167,7 +170,7 @@ h2.sec{font-family:var(--font-ui);font-size:.8rem;letter-spacing:.14em;text-tran
       'Klein gedruckt hinter einer Taste steht, was sie im Menü bedeutet, z. B. ' + K("[SHIFT] [CALC] (SOLVE)") + '. Quelle: offizielle Casio-Bedienungsanleitung.</p>' +
     '<div class="kbwrap"><div><h3 style="font-family:var(--font-ui);font-size:.95rem;margin:.6rem 0 .3rem">Tastatur – wo liegt was?</h3><p style="font-size:.82rem;margin:0 0 .5rem;color:var(--ink-soft)"><span class="kls"><b>Gelb</b></span> über einer Taste = erst ' + K("[SHIFT]") + ' drücken, <span class="kla"><b>rot</b></span> = erst ' + K("[ALPHA]") + '. Dezimalkomma ist die Taste ' + K("[,]") + ' unten links.</p>' + kbHtml() + '</div></div>' +
     '<table class="erk"><tbody>' + GRIFFE.map(function(g){ return '<tr><td style="width:34%"><b>' + esc(g[0]) + '</b></td><td style="font-family:var(--font-ui);font-size:.84rem;line-height:2">' + K(g[1]) + '</td></tr>'; }).join("") + '</tbody></table>' +
-    '<div class="how" style="margin-top:1rem"><div><b>✓</b>Vor der Klausur: ' + K("[SHIFT] [9] [1] (Setupdaten)") + ' – dann ist alles Standard (Gradmaß, Math-Darstellung).</div>' +
+    '<div class="how" style="margin-top:1rem"><div><b>✓</b>Vor der Klausur: ' + K("[SHIFT] [9] [1] (Setupdaten)") + ' – dann ist alles Standard (Gradmaß, Math-Darstellung, Dezimalpräfixe aus). Oben im Display darf kein <b style="display:inline;font-size:inherit">E</b> stehen.</div>' +
     '<div><b>R</b>Analysis-Aufgaben (sin, cos, Newton mit cos x, Integrale): zuerst <b style="display:inline;font-size:inherit">Bogenmaß</b> einstellen – Display zeigt R.</div>' +
     '<div><b>[=]</b>Jede Karte zeigt die Tastenfolge am <b style="display:inline;font-size:inherit">Musterbeispiel</b> und was das Display am Ende zeigen muss – so prüfst du dich selbst.</div></div></section>';
 
