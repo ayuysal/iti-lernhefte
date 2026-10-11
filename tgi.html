@@ -162,6 +162,7 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
 <script src="assets/tgi-a5.js"></script>
 <script src="assets/tgi-auto.js"></script>
 <script src="assets/tgi-a67.js"></script>
+<script src="assets/tgi-a8.js"></script>
 <script>
 (function(){
   "use strict";
@@ -183,7 +184,7 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
     { n: 5, t: "Algorithmus-Analyse", s: "Kostentabelle, Zeitfunktion, O", id: "a5" },
     { n: 6, t: "Berechenbarkeit", s: "Chomsky-Klasse zuordnen + beweisen", id: "a6" },
     { n: 7, t: "Formale Sprachen", s: "Automaten lesen, bauen, minimieren", id: "a7" },
-    { n: 8, t: "Parsing", s: "Chomsky-NF, LL(1), Hierarchie" }
+    { n: 8, t: "Parsing", s: "Chomsky-NF, LL(1), Hierarchie", id: "a8" }
   ];
   document.getElementById("plan").innerHTML = AUFG.map(function(a){
     return '<a href="#' + (a.id || "") + '"' + (a.id ? ' class="on" data-go="' + a.id + '"' : '') + '><b>' + a.n + ' · ' + esc(a.t) + '</b>' + esc(a.s) + '<br><small>' + (a.id ? "✓ bereit" : "folgt") + '</small></a>';
@@ -405,8 +406,8 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
   function getDef(id){ var v = gst["def:" + id]; return v || 0; }
   function setDef(id, v){ gst["def:" + id] = v; gsave(); }
   var UI = { esc: esc, glog: glog, gscore: gscore, getDef: getDef, setDef: setDef };
-  ["a1", "a2", "a5", "a6", "a7"].forEach(function(k){ if(PARTS[k]) P[k] = PARTS[k].html(UI); });
-  var TABS = [["a1", "1 · Relationen & Operationen"], ["a2", "2 · Algorithmusbegriff"], ["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"], ["a5", "5 · Analyse"], ["a6", "6 · Chomsky"], ["a7", "7 · Automaten"]].filter(function(t){ return P[t[0]]; }), cur = "a1";
+  ["a1", "a2", "a5", "a6", "a7", "a8"].forEach(function(k){ if(PARTS[k]) P[k] = PARTS[k].html(UI); });
+  var TABS = [["a1", "1 · Relationen & Operationen"], ["a2", "2 · Algorithmusbegriff"], ["a3", "3 · Sortieren"], ["a4", "4 · Hashing, Turnier, Boyer-Moore"], ["a5", "5 · Analyse"], ["a6", "6 · Chomsky"], ["a7", "7 · Automaten"], ["a8", "8 · Parsing"]].filter(function(t){ return P[t[0]]; }), cur = "a1";
   try { cur = localStorage.getItem("tgi:tab") || "a1"; } catch(e) {}
   if(location.hash && P[location.hash.slice(1)]) cur = location.hash.slice(1);
   document.getElementById("panes").innerHTML = TABS.map(function(t){ return '<div class="pane" data-p="' + t[0] + '">' + P[t[0]] + '</div>'; }).join("");
@@ -418,7 +419,7 @@ h3.genh{font-family:var(--font-ui);font-size:.72rem;letter-spacing:.13em;text-tr
   document.getElementById("tabs").addEventListener("click", function(e){ var b = e.target.closest("[data-t]"); if(b){ show(b.getAttribute("data-t")); window.scrollTo({ top: document.getElementById("tabs").offsetTop - 60, behavior: "smooth" }); } });
   document.getElementById("plan").addEventListener("click", function(e){ var a = e.target.closest("[data-go]"); if(a){ e.preventDefault(); show(a.getAttribute("data-go")); document.getElementById("tabs").scrollIntoView({ behavior: "smooth" }); } else if(e.target.closest("a")) e.preventDefault(); });
   show(cur);
-  gload().then(function(){ renderGen("a3"); renderGen("a4"); ["a1", "a2", "a5", "a6", "a7"].forEach(function(k){ if(PARTS[k]) PARTS[k].init(document.querySelector('.pane[data-p="' + k + '"]'), UI); }); });
+  gload().then(function(){ renderGen("a3"); renderGen("a4"); ["a1", "a2", "a5", "a6", "a7", "a8"].forEach(function(k){ if(PARTS[k]) PARTS[k].init(document.querySelector('.pane[data-p="' + k + '"]'), UI); }); });
   if(store && store.onChange) store.onChange(function(){ gload().then(function(){ Array.prototype.forEach.call(document.querySelectorAll(".gen"), function(box){ var k = box.getAttribute("data-g"), s = box.querySelector(".score"); if(s) s.textContent = gscore(k); }); }); });
 
   var tb = document.getElementById("themeBtn"), th = "light";
