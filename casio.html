@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/gate.js"></script>
+<title>Casio-Spickzettel WMAPS</title>
+<link rel="stylesheet" href="assets/ordner.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:1rem 1.1rem 3rem}
+h1{font-family:var(--font-ui);font-size:1.15rem;margin:.2rem 0 .1rem}
+.sub{font-family:var(--font-ui);font-size:.74rem;color:var(--ink-soft);margin:0 0 .5rem}
+.cols{columns:2;column-gap:1.1rem}
+@media screen and (max-width:760px){.cols{columns:1}}
+.sec{break-inside:avoid-column;margin:0 0 .55rem;border:1px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--paper-raised)}
+.sec h2{margin:0;font-family:var(--font-ui);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--hc,#0E5F63);padding:.22rem .5rem}
+.r{padding:.22rem .5rem .26rem;border-top:1px solid var(--rule-soft);break-inside:avoid}
+.r:first-of-type{border-top:0}
+.r .w{font-family:var(--font-ui);font-size:.74rem;font-weight:800;color:var(--ink)}
+.r .w i{font-style:normal;font-weight:600;color:var(--ink-faint);margin-left:.3rem}
+.r .k{font-family:var(--font-ui);font-size:.74rem;line-height:1.75;color:var(--ink-soft)}
+.r .k em{font-style:normal;color:var(--accent);font-weight:700}
+.r .h{font-family:var(--font-ui);font-size:.68rem;color:var(--ink-faint);line-height:1.3}
+.r .h b{color:var(--mark)}
+.noprint{margin:.4rem 0 .8rem}
+@media print{
+  @page{size:A4;margin:7mm 7mm 7mm 7mm}
+  .wrap{max-width:none;padding:0}
+  .topbar,.noprint{display:none!important}
+  body{font-size:8pt}
+  h1{font-size:10.5pt;margin:0}
+  .sub{font-size:6.8pt;margin:0 0 1.5mm}
+  .cols{column-gap:3.5mm}
+  .sec{margin:0 0 1.6mm;border-radius:1mm}
+  .sec h2{font-size:6.6pt;padding:.5mm 1.6mm}
+  .r{padding:.55mm 1.6mm .7mm}
+  .r .w{font-size:6.9pt}
+  .r .k{font-size:6.8pt;line-height:1.62}
+  .r .h{font-size:6.2pt}
+  kbd.ck{font-size:6.1pt!important;padding:.35mm .75mm .3mm!important;margin:.05mm .1mm!important;box-shadow:0 .5px 0 rgba(0,0,0,.45)!important}
+  .kl{font-size:5.9pt;margin:0 .6mm 0 .2mm}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Casio-Spickzettel <span>· fx-991DE X · WMAPS</span></div>
+    <a class="btn" href="index.html">☰ Übersicht</a>
+    <a class="btn" href="ordner.html">▤ Ordner</a>
+    <a class="btn" href="plan.html">▦ Plan</a>
+    <div class="topbar-spacer"></div>
+    <div class="ctl"><button class="btn" onclick="window.print()">🖨 Drucken / PDF</button></div>
+  </div>
+</div>
+<div class="wrap">
+  <h1>Casio fx-991DE X – welche Tasten für welche Aufgabe</h1>
+  <p class="sub">Jeder Ablauf steht nur einmal; „Für“ nennt Aufgabe und Ordner-Karte. <em style="font-style:normal;color:var(--accent);font-weight:700">Blau</em> = deine Zahlen einsetzen. Gelbe Beschriftung = erst SHIFT, rote = erst ALPHA. Vorlagen (√, xⁿ, eˣ, Bruch) verlässt man mit je einem eigenen ▶.</p>
+  <p class="noprint"><a class="btn" href="assets/pdf/Casio_Spickzettel.pdf" download>⤓ PDF herunterladen (2 Seiten)</a></p>
+  <div class="cols" id="cols"></div>
+</div>
+<script src="assets/ordner-data.js"></script>
+<script src="assets/ordner.js"></script>
+<script>
+(function(){
+  "use strict";
+  var K = window.Ordner.keys;
+  function E(t){ return '<em>' + t + '</em>'; }
+  /* [Titel, Farbe, Zeilen: [Wofür, Tasten (Token-Schreibweise), Hinweis/Für] ] */
+  var SEC = [
+    ["Vor der Klausur · Einstellungen", "#555", [
+      ["Alles auf Standard", "[SHIFT] [9] [1] (Setupdaten) [=] (Ja)", "danach: Gradmaß D, Math→Math, oben kein <b>E</b> (sonst Dezimalpräfixe aus: [SHIFT] [MENU] (SETUP) [4] [2])"],
+      ["Bogenmaß R", "[SHIFT] [MENU] (SETUP) [2] (Winkeleinheit) [2] (Bogenmaß)", "Für: sin/cos/e-Funktionen – Fourier K23–24, Reihen K18, Taylor K22, Fixpunkt/Newton K57–58, DGL cos/sin K49"],
+      ["Gradmaß D", "[SHIFT] [MENU] (SETUP) [2] (Winkeleinheit) [1] (Gradmaß)", "Für: Winkel zwischen Vektoren/Geraden/Ebenen K3, K14"],
+      ["Feste Nachkommastellen n", "[SHIFT] [MENU] (SETUP) [3] (Zahlenformat) [1] (Fix) " + "n", "Für: „auf n Stellen“, Regression K33 · zurück: … [3] [3] (Norm) [1]"],
+      ["Nur Dezimalzahlen (Iterationen)", "[SHIFT] [MENU] (SETUP) [1] (Eingabe/Ausgabe) [2] (Math→Dezim.)", "Für: Bisektion K56, Newton-Extrem K59, Euler/Heun/RK4 K66–68 · zurück: … [1] [1]"],
+      ["Häufigkeitsspalte Freq ein", "[SHIFT] [MENU] (SETUP) [▼] [3] (Statistik) [1] (Ein)", "Für: Verteilungstabellen mit Wahrscheinlichkeiten K28–29"]
+    ]],
+    ["Grundgriffe · [MENU] [1] Berechnungen", "#0E5F63", [
+      ["Bruch/Wurzel/π ↔ Dezimalzahl", "[S⇔D] · sofort dezimal: [SHIFT] [=] statt [=]", ""],
+      ["π · e · eˣ · Potenz · Wurzel", "[SHIFT] [×10ˣ] (π) · [ALPHA] [×10ˣ] (e) · [SHIFT] [ln] (eˣ) " + E("Exponent") + " [▶] · " + E("Basis") + " [x■] " + E("Exponent") + " [▶] · [√■] " + E("Zahl") + " [▶]", "Vorzeichen-Minus [(−)], Rechen-Minus [−] · Komma [,] · Variable x: [x]"],
+      ["Term für einen Wert auswerten (CALC)", E("Term mit") + " [x] [CALC] " + E("Wert") + " [=] · nächster Wert: [CALC] " + E("Wert") + " [=]", "Für: Proben, Grenzwert „großes k“ (CALC 1000) K15–19, Taylor-Fehler K20–22, Bisektion f(m) K56, Lagrange-Probe K60, Spline-Werte K64"],
+      ["Gleichung lösen (SOLVE)", E("linke Seite") + " [ALPHA] [CALC] (=) " + E("rechte Seite") + " [SHIFT] [CALC] (SOLVE) " + E("Startwert") + " [=]", "Für: Parameter t Gerade∩Ebene K12, K14 · n aus σ/√n K40 · Kontrolle Nullstelle/Fixpunkt K56–59 · Anzeige x = …, L−R = 0"],
+      ["Ableitung an einer Stelle", "[SHIFT] [∫■] (d/dx) " + E("f(x)") + " [▶] " + E("Stelle") + " [=]", "Steht f in einer Vorlage (√, Bruch, eˣ): erst je ein [▶] zum Verlassen! Für: Taylor c₁ K20–22 · DGL-Proben K41–54 · p′(k) bei Resonanz K50 · Spline-Übergänge K62–65 · f′ für Newton K58"],
+      ["Bestimmtes Integral", "[∫■] " + E("f(x)") + " [▶] " + E("untere") + " [▶] " + E("obere Grenze") + " [SHIFT] [=]", "Für: Fourier aₖ, bₖ K23–24 (Bogenmaß!, abschnittsweise addieren) · Laplace numerisch K25 (∞ → 30) · ∫ in DGL K43"],
+      ["Summe Σ (Partialsumme)", "[SHIFT] [x] (Σ) " + E("Term mit x") + " [▶] " + E("Start") + " [▶] " + E("Ende") + " [SHIFT] [=]", "Für: Konvergenz prüfen K15–19 (Ende 50 → 100: Wert bleibt stehen?) · Fourier-Kontrolle K24"],
+      ["Wiederholte Formel (Ans-Iteration)", E("Startwert") + " [=] · " + E("Formel mit") + " [Ans] [=] · jedes weitere [=] = ein Schritt", "Kommt ein Bruch: erstes Mal [SHIFT] [=]. Für: Fixpunkt xₙ₊₁ = φ(xₙ) K57 · Newton Ans − f(Ans) ÷ f′(Ans) K58–59 · Euler K66 · Mittelpunkt/Heun K67 · RK4-k-Werte K68"]
+    ]],
+    ["Vektoren · [MENU] [5]", "#1F6FB2", [
+      ["Vektor A und B eingeben", "[MENU] [5] [1] (VctA) [3] " + E("a₁") + " [=] " + E("a₂") + " [=] " + E("a₃") + " [=] [AC] · [OPTN] [1] (Vek. definieren) [2] (VctB) [3] " + E("b₁ b₂ b₃") + " [AC]", "Im Term: [OPTN] [3] = VctA · [OPTN] [4] = VctB · [OPTN] [▼] [1] = VctAns (letztes Ergebnis)"],
+      ["Vektor AB = B − A", "[AC] [OPTN] [4] (VctB) [−] [OPTN] [3] (VctA) [=]", "Für: Richtungsvektoren aus Punkten K1, K9–K14"],
+      ["Betrag |a| · Einheitsvektor", "[SHIFT] [(] (Abs) [OPTN] [3] [)] [=] · [OPTN] [▼] [4] (Einheitsvektor) [OPTN] [3] [)] [=]", "Für: Länge, Abstand zweier Punkte, normieren K1"],
+      ["Skalarprodukt ⟨a, b⟩", "[OPTN] [3] [OPTN] [▼] [2] (Skalarprodukt) [OPTN] [4] [=]", "Für: senkrecht? (= 0) K3 · D = ⟨n, A⟩ der Ebene K9–10 · Punktprobe K9"],
+      ["Kreuzprodukt a × b", "[OPTN] [3] [×] [OPTN] [4] [=]", "Für: Normalenvektor K4, K9–11 · Richtung Schnittgerade K13"],
+      ["Fläche |a × b|", "[SHIFT] [(] (Abs) [OPTN] [3] [×] [OPTN] [4] [)] [=] · Dreieck: dann [÷] 2 [=]", "Für: Parallelogramm/Dreieck K4"],
+      ["Winkel zwischen a und b (Gradmaß!)", "[OPTN] [▼] [3] (Winkel) [OPTN] [3] [SHIFT] [)] ( ; ) [OPTN] [4] [)] [=]", "Für: K3, K14 · Gerade/Ebene: mit Richtungs- und Normalenvektor, dann 90° − Ergebnis (bzw. Ergebnis − 90°)"],
+      ["Abstand Punkt P – Ebene (n in A, P in B)", "[SHIFT] [(] (Abs) [OPTN] [3] [OPTN] [▼] [2] [OPTN] [4] [−] " + E("D") + " [)] [÷] [SHIFT] [(] (Abs) [OPTN] [3] [)] [=]", "Für: Lotfußpunkt/Abstand K12"]
+    ]],
+    ["Matrizen · [MENU] [4] – Determinante", "#1F6FB2", [
+      ["3×3-Matrix eingeben", "[MENU] [4] [1] (MatA) [3] [3] " + E("9 Werte zeilenweise je") + " [=] [AC] · zweite: [OPTN] [1] (Mat. definieren) [2] (MatB) [3] [3] …", "Vektoren als Zeilen oder Spalten – det ist gleich"],
+      ["Determinante", "[AC] [OPTN] [▼] [2] (Determinante) [OPTN] [3] (MatA) [)] [=] · MatB: [OPTN] [4]", "Für: linear (un)abhängig? (det = 0 ⇔ abhängig) K2, K6–7 · Spatprodukt/Volumen |det| K5, K8 · komplanar K10 · windschief? K11 · Parameterwert prüfen K6–8"]
+    ]],
+    ["Gleichungen · Symbol A", "#2E8B57", [
+      ["Menü öffnen", "[MENU] · mit [▶] [▼] auf Symbol A (Gleichung/Funkt.) · [=]", "Zurück in den Koeffizienten-Editor: [AC]"],
+      ["Lineares Gleichungssystem (n = 2, 3, 4)", "[1] (Gleichungssyst.) " + E("n") + " · je Zeile: " + E("Koeffizienten") + " [=] … " + E("rechte Seite") + " [=] · [=] lösen · [▼] nächste Unbekannte", "Für: Linearkombination K2 · Schnittpunkt Geraden K11 · Stützpunkt K13 · Partialbrüche A, B, C K26 · DGL: Koeffizientenvergleich, Konstanten aus Anfangswerten K46–52 · Polynom/Spline durch Punkte K60–63 (Unbekannte x, y, z, t = a, b, c, d)"],
+      ["Polynom-Nullstellen Grad 2 oder 3", "[2] (Polynom-Gleich.) [2] bzw. [3] · " + E("a") + " [=] " + E("b") + " [=] " + E("c") + " [=] · bei Grad 3 noch " + E("d") + " [=] · [=] lösen · [▼] weitere", "Für: charakteristisches Polynom DGL K45–54 · Nenner von F(s) K26–27 · Parameter x aus det K7–8. Lesen: Grad 2 größere Lösung zuerst, komplex „+i“ zuerst, letztes [▼] = Scheitelpunkt (egal) · Grad 3 unsortiert · doppelte Lösung nur einmal"]
+    ]],
+    ["Statistik · [MENU] [6]", "#7B4FC9", [
+      ["Eine Messreihe: x̄, s, σ, Σx, Σx²", "[MENU] [6] [1] (1 Variable) · " + E("Werte je") + " [=] · [OPTN] [3] (1-Variab-Berech) · [▼] blättern", "s = sx (Stichprobe, n − 1) · σx (n) · Für: Lage-/Streumaße K32 · x̄ und s für Konfidenzintervalle K37–38"],
+      ["Median", "[AC] [OPTN] [▼] [3] (Minimum/Maximum) [3] (Med) [=]", "Für: K32"],
+      ["Wertepaare: Regressionsgerade, r", "[MENU] [6] [2] (y=a+bx) · x-Werte [=] … · [▲] bis Zeile 1, [▶] · y-Werte [=] … · [OPTN] [4] (Regression)", "Anzeige a (Achsenabschnitt), b (Steigung), r · Für: K33–34 · x auf y (K35): Spalten vertauscht eingeben"],
+      ["Summen Σx, Σxy, sx, sy", "[AC] [OPTN] [2] (2-Variab-Berech) · [▼] blättern", "Für: Rechenweg der Regression K33–34"],
+      ["Schätzwert ŷ zu x", "[AC] " + E("x") + " [OPTN] [▼] [4] (Regressionen) [5] (ŷ) [=]", "Für: Vorhersage K33"],
+      ["Tabelle mit Wahrscheinlichkeiten", "Freq ein (oben) · x-Werte · [▶] in Freq: " + E("P · gemeinsamer Nenner") + " · [OPTN] [3] bzw. [4]", "Für: E, σ als Kontrolle K28 · ρ als r K29"]
+    ]],
+    ["Verteilungen · [MENU] [7]", "#7B4FC9", [
+      ["P(a ≤ X ≤ b) bei Normalverteilung", "[MENU] [7] [2] (Kumul. Normal-V) · Untere " + E("a") + " [=] · Obere " + E("b") + " [=] · σ [=] · μ [=] · [=]", "Untere = −∞: [(−)] 1 [×10ˣ] 99 · Φ(z): σ = 1, μ = 0 · Für: ZGWS mit μ = n·μ, σ = σ·√n K31"],
+      ["Quantil c (z-Wert)", "[MENU] [7] [3] (Inv. Normal-V.) · Fläche " + E("(1 + γ)/2 bzw. 1 − α/2") + " [=] · σ 1 [=] · μ 0 [=] · [=]", "z. B. 0,975 → 1,96 · Für: Konfidenzintervall σ bekannt K36 · Test K39 · t- und χ²-Quantile: <b>nur aus der Tabelle</b> (K37–38)"]
+    ]],
+    ["Tabellen · [MENU] [9] und [MENU] [8]", "#C0392B", [
+      ["Wertetabelle f(x)", "[MENU] [9] · f(x) = " + E("Term mit") + " [x] [=] · g(x) leer [=] · Start [=] · Ende [=] · Schritt [=]", "Für: Glieder einer Folge (Nullfolge?) K18 · Vorzeichenwechsel K56 · Probe an Stützstellen K61 · Verlauf K53"],
+      ["Tabellenkalkulation: Formel füllen", "[MENU] [8] · A1: " + E("Startwert") + " [=] · [OPTN] [1] (Formel füllen) " + E("Formel mit") + " [ALPHA] [(−)] (A) 1 … [=] · Bereich A2:A" + E("n") + " ändern · [=]", "Für: Euler/Mittelpunkt als Tabelle K66–67 (alternativ: Ans-Iteration)"]
+    ]]
+  ];
+  document.getElementById("cols").innerHTML = SEC.map(function(s){
+    return '<div class="sec" style="--hc:' + s[1] + '"><h2>' + s[0].replace(/\[[^\]]+\]/g, function(m){ return K(m); }) + '</h2>' + s[2].map(function(r){
+      return '<div class="r"><div class="w">' + r[0] + '</div><div class="k">' + K(r[1]).replace(/&lt;em&gt;|&lt;\/em&gt;/g, function(t){ return t === "&lt;em&gt;" ? "<em>" : "</em>"; }) + '</div>' + (r[2] ? '<div class="h">' + K(r[2]).replace(/&lt;(\/?)b&gt;/g, "<$1b>") + '</div>' : '') + '</div>';
+    }).join("") + '</div>';
+  }).join("");
+})();
+</script>
+<script src="assets/auth-ui.js"></script>
+</body>
+</html>
